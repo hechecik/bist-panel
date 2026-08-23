@@ -234,8 +234,28 @@ def takvim_cek(gun_sayisi: int = 7) -> list:
     return temiz[:25]
 
 
+def _onceki_is_gunu(tarih_str: str) -> str:
+    """PPK karar tarihi: repo uygulama tarihinden 1 iş günü gerisi.
+
+    TCMB yapısal kuralı: PPK kararları Perşembe 14:00'te açıklanır,
+    1 hafta repo oranı ertesi iş günü (Cuma) uygulanır. Yani 1 Hafta Repo
+    tablosundaki tarih UYGULAMA tarihidir; karar tarihi 1 iş günü öncesidir.
+    """
+    try:
+        d = dt.datetime.strptime(tarih_str, '%d.%m.%Y').date() - dt.timedelta(days=1)
+        while d.weekday() >= 5:  # hafta sonunu atla
+            d -= dt.timedelta(days=1)
+        return d.strftime('%d.%m.%Y')
+    except Exception:
+        return tarih_str
+
+
 def tcmb_faizi() -> dict:
-    """TCMB 1 Hafta Repo — resmi tablo, SON satır (en güncel karar)."""
+    """TCMB 1 Hafta Repo — resmi tablo, SON satır (en güncel karar).
+
+    Tablodaki tarih UYGULAMA tarihidir (ör. 23.01.2026); PPK kararı bir
+    önceki iş günü açıklanır (ör. 22.01.2026) → karar_tarihi alanı.
+    """
     try:
         import httpx
         from bs4 import BeautifulSoup
@@ -248,7 +268,8 @@ def tcmb_faizi() -> dict:
             satir = ' '.join(td.get_text(strip=True) for td in tr.find_all('td'))
             m = re.match(r'(\d{1,2}\.\d{1,2}\.\d{4})\D+([\d,\.]+)\s*$', satir)
             if m:
-                en_guncel = {'tarih': m.group(1), 'faiz': float(m.group(2).replace(',', '.'))}
+                en_guncel = {'tarih': m.group(1), 'faiz': float(m.group(2).replace(',', '.')),
+                             'karar_tarihi': _onceki_is_gunu(m.group(1))}
         return en_guncel or {}
     except Exception as e:
         log(f"TCMB hata: {str(e)[:50]}")
@@ -293,6 +314,12 @@ def sinyalleri_hesapla(hisse_veri: dict) -> dict:
             for anahtar in ('sweep', 'fvg', 'momentum'):
                 if anahtar in ict:
                     nedenler.append(f"ICT: {ict[anahtar][1]}")
+            # 1 aylık getiri: 22 iş günü önceki kapanışa göre (yeterli bar yoksa None)
+            ay_oncesi = None
+            if len(ind) >= 23:
+                gecen_fiyat = float(ind['HGDG_KAPANIS'].iloc[-23])
+                if gecen_fiyat and gecen_fiyat > 0:
+                    ay_oncesi = round((float(son['HGDG_KAPANIS']) / gecen_fiyat - 1) * 100, 2)
             sonuclar.append({
                 'sembol': sembol,
                 'fiyat': round(float(son['HGDG_KAPANIS']), 2),
@@ -305,6 +332,7 @@ def sinyalleri_hesapla(hisse_veri: dict) -> dict:
                 's1': pv['s1'], 'r1': pv['r1'],
                 'stop': s['stop_loss'], 'hedef': s['hedef'],
                 'squeeze': son.get('SQUEEZE', 'NORMAL'),
+                'ay_oncesi': ay_oncesi,
                 'nedenler': nedenler[:5],
                 'tarih': str(son['HGDG_TARIH'].date()),
             })
