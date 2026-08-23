@@ -34,6 +34,13 @@ jobs:
           git add -A
           if ! git diff --cached --quiet; then
             git commit -m "veri guncelle $(date -u +'%d.%m %H:%M') UTC"
+            git fetch origin
+            git rebase origin/main --autostash || {
+              echo "rebase çakışması — veriyi koruyorum"
+              git checkout --theirs data/piyasa.json 2>/dev/null || true
+              git add -A
+              git -c core.editor=true rebase --continue
+            }
             git push
             echo "✅ push edildi"
           else
