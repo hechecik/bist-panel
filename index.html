@@ -9,7 +9,6 @@
 <title>BIST Panel</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📈</text></svg>">
-<link rel="manifest" href="manifest.json">
 <meta name="description" content="BIST piyasa paneli — sinyaller, makro, test senaryoları. 15 dk gecikmeli, seans boyunca canlı.">
 <style>
 :root {
@@ -29,7 +28,7 @@ header { position:sticky; top:0; z-index:50; background:rgba(11,14,20,.92); back
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.35} }
 .stale .dot { background:var(--warn); }
 /* ── ENDEKS KARTI ── */
-.hero { padding:16px; }
+.hero { padding:16px 16px 4px; }
 .ex-card { background:linear-gradient(135deg,#141b2d 0%,#1a1233 100%); border:1px solid var(--bd); border-radius:16px; padding:18px; position:relative; overflow:hidden; }
 .ex-card::after { content:''; position:absolute; right:-40px; top:-40px; width:140px; height:140px; background:radial-gradient(circle,rgba(124,92,255,.25),transparent 70%); }
 .ex-label { font-size:12px; color:var(--tx2); text-transform:uppercase; letter-spacing:1px; }
@@ -38,7 +37,7 @@ header { position:sticky; top:0; z-index:50; background:rgba(11,14,20,.92); back
 .up { color:var(--up); } .down { color:var(--down); }
 .ex-sub { display:flex; gap:16px; margin-top:10px; font-size:11px; color:var(--tx2); flex-wrap:wrap; }
 /* ── MAKRO ŞERİT ── */
-.makro { display:grid; grid-template-columns:repeat(auto-fit,minmax(105px,1fr)); gap:8px; padding:0 16px 4px; }
+.makro { display:grid; grid-template-columns:repeat(auto-fit,minmax(105px,1fr)); gap:8px; padding:10px 16px 4px; }
 .mk { background:var(--bg2); border:1px solid var(--bd); border-radius:10px; padding:10px; }
 .mk .t { font-size:10px; color:var(--tx2); text-transform:uppercase; }
 .mk .v { font-size:15px; font-weight:700; margin-top:2px; font-variant-numeric:tabular-nums; }
@@ -53,27 +52,49 @@ nav.tabs { position:fixed; bottom:0; left:0; right:0; z-index:50; display:flex; 
 main { padding:0 16px; }
 .sec { display:none; } .sec.active { display:block; animation:fade .25s; }
 @keyframes fade { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:none} }
-h2 { font-size:15px; margin:18px 0 10px; display:flex; align-items:center; gap:8px; }
+h2 { font-size:15px; margin:18px 0 10px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
 h2 .cnt { font-size:11px; background:var(--bg3); border:1px solid var(--bd); padding:2px 8px; border-radius:20px; color:var(--tx2); }
-table { width:100%; border-collapse:collapse; font-size:12.5px; }
-th { color:var(--tx2); text-align:left; padding:8px 6px; border-bottom:1px solid var(--bd); font-size:10px; text-transform:uppercase; letter-spacing:.5px; }
-td { padding:9px 6px; border-bottom:1px solid #1a2030; font-variant-numeric:tabular-nums; }
+/* ── ARAÇ ÇUBUĞU ── */
+.toolbar { display:flex; gap:8px; flex-wrap:wrap; margin:12px 0; }
+.toolbar input, .toolbar select { background:var(--bg2); border:1px solid var(--bd); color:var(--tx); border-radius:10px; padding:9px 12px; font-size:13px; outline:none; }
+.toolbar input { flex:1; min-width:140px; }
+.toolbar input:focus, .toolbar select:focus { border-color:var(--accent); }
+.toolbar select { cursor:pointer; }
+/* ── TABLO ── */
+.twrap { overflow-x:auto; border:1px solid var(--bd); border-radius:12px; background:var(--bg2); }
+table { width:100%; border-collapse:collapse; font-size:12px; min-width:980px; }
+th { color:var(--tx2); text-align:left; padding:9px 6px; border-bottom:1px solid var(--bd); font-size:9.5px; text-transform:uppercase; letter-spacing:.4px; white-space:nowrap; background:var(--bg3); position:sticky; top:0; }
+td { padding:9px 6px; border-bottom:1px solid #1a2030; font-variant-numeric:tabular-nums; white-space:nowrap; }
 tr:active { background:var(--bg3); }
-.sym { font-weight:700; }
-.badge { display:inline-block; padding:2px 8px; border-radius:20px; font-size:10.5px; font-weight:700; }
+tbody tr { cursor:pointer; }
+tbody tr:hover { background:rgba(124,92,255,.06); }
+.sym { font-weight:700; position:sticky; left:0; background:var(--bg2); z-index:1; }
+th.sym { left:0; z-index:2; }
+.badge { display:inline-block; padding:2px 8px; border-radius:20px; font-size:10px; font-weight:700; }
 .b-AL { background:rgba(46,204,113,.15); color:var(--up); }
 .b-DİKKAT_AL { background:rgba(240,185,11,.15); color:var(--warn); }
 .b-TUT { background:rgba(139,149,169,.15); color:var(--tx2); }
 .b-DİKKAT_SAT { background:rgba(255,92,92,.12); color:var(--warn); }
 .b-SAT { background:rgba(255,92,92,.18); color:var(--down); }
-.ned { font-size:10.5px; color:var(--tx2); max-width:260px; line-height:1.45; }
+.ned { font-size:10px; color:var(--tx2); max-width:240px; white-space:normal; line-height:1.45; }
 .ned b { color:var(--tx); }
+/* detay satırı */
+tr.detail td { background:var(--bg3); padding:12px; white-space:normal; }
+.det-ic { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:8px 14px; font-size:11.5px; line-height:1.6; }
+.det-ic .k { color:var(--tx2); font-size:10px; text-transform:uppercase; letter-spacing:.4px; }
+.det-ic ul { list-style:none; margin-top:2px; }
+.det-ic li { padding:2px 0 2px 14px; position:relative; color:var(--tx); }
+.det-ic li::before { content:'▸'; position:absolute; left:0; color:var(--accent); }
+/* tazelik rozeti */
+.fresh { display:inline-block; padding:2px 8px; border-radius:20px; font-size:10px; font-weight:700; background:rgba(240,185,11,.12); color:var(--warn); margin-left:8px; }
+.fresh.ok { background:rgba(46,204,113,.12); color:var(--up); }
 /* ── SENARYO KARTLARI ── */
 .scn { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
 .sc { background:var(--bg2); border:1px solid var(--bd); border-radius:14px; padding:14px; }
 .sc .t { font-size:11px; color:var(--tx2); }
 .sc .o { font-size:26px; font-weight:800; margin-top:4px; }
 .sc .m { font-size:11px; color:var(--tx2); margin-top:6px; line-height:1.5; }
+.sc .m b { color:var(--tx); }
 .sc.wide { grid-column:1/-1; }
 .bar { height:6px; border-radius:4px; background:#1a2030; margin-top:8px; overflow:hidden; display:flex; }
 .bar i { display:block; height:100%; }
@@ -143,13 +164,91 @@ function badge(s) {
   return `<span class="badge ${m[s]||'b-TUT'}">${s}</span>`;
 }
 
-function tabloBaslik(kolonlar) {
-  return '<table><tr>' + kolonlar.map(k => `<th>${k}</th>`).join('') + '</tr>';
+/* ── YORUMLAR (kural bazlı, uydurma değil) ── */
+function rsiYorum(r) {
+  if (r.rsi == null) return '';
+  if (r.rsi < 30) return `<span style="color:var(--info)">${fmt(r.rsi,0)} aşırı satım</span>`;
+  if (r.rsi > 70) return `<span style="color:var(--down)">${fmt(r.rsi,0)} aşırı alım</span>`;
+  if (r.rsi >= 55) return `<span style="color:var(--up)">${fmt(r.rsi,0)} güçlü</span>`;
+  if (r.rsi >= 45) return `<span style="color:var(--tx)">${fmt(r.rsi,0)} nötr</span>`;
+  return `<span style="color:var(--warn)">${fmt(r.rsi,0)} zayıf</span>`;
+}
+function mfiYorum(r) {
+  if (r.mfi == null) return '—';
+  const renk = r.para === 'GİRİŞ' ? 'var(--up)' : (r.para === 'ÇIKIŞ' ? 'var(--down)' : 'var(--tx)');
+  return `<span style="color:${renk}">${fmt(r.mfi,0)} ${r.para || ''}</span>`;
+}
+function trendHtml(r) {
+  if (r.trend === 'YUKARI') return '▲ <span class="up">YUKARI</span>';
+  if (r.trend === 'AŞAĞI') return '▼ <span class="down">AŞAĞI</span>';
+  return '▶ <span style="color:var(--tx2)">YATAY</span>';
+}
+function squeezeHtml(r) {
+  const s = (r.squeeze || '').toUpperCase();
+  if (s.includes('YUKARI')) return '🚀 <span class="up">KIRILIM ↑</span>';
+  if (s.includes('AŞAĞI')) return '🕳️ <span class="down">KIRILIM ↓</span>';
+  if (s.includes('SIKIŞMA')) return '🧲 <span style="color:var(--warn)">SIKIŞMA</span>';
+  return '—';
+}
+
+/* ── VERİ TAZELİĞİ ── */
+function tazelik(veriTarihi) {
+  if (!veriTarihi) return '';
+  const gun = Math.floor((Date.now() - new Date(veriTarihi + 'T18:00:00').getTime()) / 86400000);
+  if (gun <= 1) return '<span class="fresh ok">BUGÜN</span>';
+  return `<span class="fresh">${gun} GÜN ESKİ</span>`;
+}
+
+/* ── TABLO ÜRETİMİ ── */
+const KOLONLAR = ['Hisse','Fiyat','1A','Skor','Sinyal','Trend','Para','RSI','MFI','Squeeze','S1/R1','SL/Hdf','Neden'];
+
+function hisseSatir(r, durum) {
+  const onceki = durum.detay.get(r.sembol);
+  let html = `<tr data-sym="${r.sembol}">` +
+    `<td class="sym">${r.sembol}</td>` +
+    `<td>${fmt(r.fiyat)}</td>` +
+    `<td class="${ok(r.ay_oncesi)}">${r.ay_oncesi == null ? '—' : yuzde(r.ay_oncesi)}</td>` +
+    `<td style="color:${r.skor>=3?'var(--up)':r.skor<=-3?'var(--down)':'var(--warn)'};font-weight:700">${r.skor>0?'+':''}${r.skor}</td>` +
+    `<td>${badge(r.sinyal)}</td>` +
+    `<td>${trendHtml(r)}</td>` +
+    `<td>${mfiYorum(r)}</td>` +
+    `<td>${rsiYorum(r)}</td>` +
+    `<td>${r.mfi == null ? '—' : fmt(r.mfi,0)}</td>` +
+    `<td>${squeezeHtml(r)}</td>` +
+    `<td>${r.s1 == null ? '—' : `<span style="color:var(--down)">${fmt(r.s1)}</span> / <span style="color:var(--up)">${fmt(r.r1)}</span>`}</td>` +
+    `<td>${r.stop == null ? '—' : `${fmt(r.stop)} / ${fmt(r.hedef)}`}</td>` +
+    `<td class="ned">${(r.nedenler||[]).slice(0,2).map(n=>'▸ '+n).join('<br>')}</td></tr>`;
+  if (onceki) {
+    html += `<tr class="detail" data-det="${r.sembol}"><td colspan="${KOLONLAR.length}"><div class="det-ic">` +
+      `<div><div class="k">📋 Tüm Nedenler</div><ul>${(r.nedenler||[]).map(n=>`<li>${n}</li>`).join('')}</ul></div>` +
+      `<div><div class="k">🎯 Seviyeler</div><ul>` +
+      `<li>1. Destek (S1): <b>${r.s1 == null ? '—' : fmt(r.s1)}</b></li>` +
+      `<li>1. Direnç (R1): <b>${r.r1 == null ? '—' : fmt(r.r1)}</b></li>` +
+      `<li>Stop-loss: <b>${r.stop == null ? '—' : fmt(r.stop)}</b></li>` +
+      `<li>Hedef: <b>${r.hedef == null ? '—' : fmt(r.hedef)}</b></li></ul></div>` +
+      `<div><div class="k">📅 Veri</div><ul>` +
+      `<li>Son bar: <b>${r.tarih || '—'}</b></li>` +
+      `<li>1A getiri: <b class="${ok(r.ay_oncesi)}">${r.ay_oncesi == null ? '—' : yuzde(r.ay_oncesi)}</b></li>` +
+      `<li>Analiz: <b>${durum.hesapTarihi || '—'}</b></li></ul></div>` +
+      `</div></td></tr>`;
+  }
+  return html;
+}
+
+let durum = { detay: new Map(), hesapTarihi: '' };
+
+function tabloBolum(baslik, ikon, liste, durum) {
+  let html = `<h2>${ikon} ${baslik} <span class="cnt">${liste.length}</span></h2>`;
+  if (!liste.length) return html + '<div class="empty">Sonuç yok</div>';
+  html += `<div class="twrap"><table><tr>` + KOLONLAR.map(k => `<th class="${k==='Hisse'?'sym':''}">${k}</th>`).join('') + '</tr><tbody>';
+  liste.forEach(r => html += hisseSatir(r, durum));
+  return html + '</tbody></table></div>';
 }
 
 async function yukle() {
   try {
     const d = await (await fetch('data/piyasa.json?v=' + Date.now())).json();
+    durum.hesapTarihi = (d.sinyaller && d.sinyaller.hesap_tarihi) || '';
     renderPiyasa(d); renderSenaryo(d); renderHaber(d); renderFon(d);
     // Canlılık: veri üretim zamanı
     const ure = new Date(d.uretildi);
@@ -164,7 +263,9 @@ async function yukle() {
 }
 
 /* ══════════ PİYASA ══════════ */
+let PIYASA_VERI = null;
 function renderPiyasa(d) {
+  PIYASA_VERI = d;
   const e = d.endeks;
   if (e) {
     document.getElementById('exVal').textContent = fmt(e.deger, 2);
@@ -183,41 +284,39 @@ function renderPiyasa(d) {
   });
   document.getElementById('makroRow').innerHTML = mk;
 
-  // TCMB + TÜFE
+  // TCMB + TÜFE (karar tarihi + uygulama tarihi)
   let tcmb = '';
   if (m.faiz && m.faiz.faiz) {
     const reel = m.faiz.faiz - (m.tufe ? m.tufe.yillik : 0);
     const yorum = reel > 0 ? 'POZİTİF reel faiz → altına baskı, TL mevduat cazip' : 'NEGATİF reel faiz → altın/döviz talebi güçlü';
-    tcmb = `<h2>🏛️ Merkez Bankası</h2><div class="tcmb">Politika faizi <b>%${m.faiz.faiz.toFixed(2)}</b> (${m.faiz.tarih}) · ` +
+    const karar = m.faiz.karar_tarihi ? `Karar ${m.faiz.karar_tarihi} · uygulama ${m.faiz.tarih}` : `Tarih ${m.faiz.tarih}`;
+    tcmb = `<h2>🏛️ Merkez Bankası</h2><div class="tcmb">Politika faizi <b>%${m.faiz.faiz.toFixed(2)}</b> (${karar}) · ` +
            `TÜFE yıllık <b>%${m.tufe ? m.tufe.yillik.toFixed(2) : '?'}</b> · Reel faiz <b class="${ok(reel)}">%${reel >= 0 ? '+' : ''}${reel.toFixed(2)}</b> → ${yorum}</div>`;
   }
 
-  // AL / TUT / SAT tabloları
   const s = d.sinyaller;
   let html = tcmb;
-  html += '<h2>🟢 AL ADAYLARI <span class="cnt">' + (s.al ? s.al.length : 0) + '</span></h2>';
-  if (s.al && s.al.length) {
-    html += tabloBaslik(['Hisse','Fiyat','Skor','Sinyal','RSI','MFI','Neden']) + '<tbody>';
-    s.al.forEach(r => {
-      html += `<tr><td class="sym">${r.sembol}</td><td>${fmt(r.fiyat)}</td>` +
-        `<td style="color:${r.skor>=3?'var(--up)':r.skor<=-3?'var(--down)':'var(--warn)'}">${r.skor>0?'+':''}${r.skor}</td>` +
-        `<td>${badge(r.sinyal)}</td><td>${r.rsi}</td><td>${r.mfi}</td>` +
-        `<td class="ned">${r.nedenler.slice(0,2).map(n=>'▸ '+n).join('<br>')}</td></tr>`;
-    });
-    html += '</tbody></table>';
-  } else html += '<div class="empty">Şu an AL sinyali yok</div>';
+  html += `<div class="toolbar">
+    <input id="arama" type="search" placeholder="🔍 Hisse ara (örn. THYAO)…" oninput="filtrele()">
+    <select id="fSinyal" onchange="filtrele()">
+      <option value="">Sinyal: Tümü</option>
+      <option value="AL">AL</option><option value="DİKKAT_AL">DİKKAT AL</option>
+      <option value="TUT">TUT</option><option value="DİKKAT_SAT">DİKKAT SAT</option>
+      <option value="SAT">SAT</option>
+    </select>
+    <select id="fTrend" onchange="filtrele()">
+      <option value="">Trend: Tümü</option>
+      <option value="YUKARI">YUKARI</option><option value="YATAY">YATAY</option><option value="AŞAĞI">AŞAĞI</option>
+    </select>
+    <select id="fSqueeze" onchange="filtrele()">
+      <option value="">Squeeze: Tümü</option>
+      <option value="SIKIŞMA">🧲 SIKIŞMA</option><option value="KIRILIM">🚀 KIRILIM</option>
+    </select>
+  </div>`;
 
-  html += '<h2>🔴 SAT / DİKKAT <span class="cnt">' + (s.sat ? s.sat.length : 0) + '</span></h2>';
-  if (s.sat && s.sat.length) {
-    html += tabloBaslik(['Hisse','Fiyat','Skor','Sinyal','RSI','MFI','Neden']) + '<tbody>';
-    s.sat.forEach(r => {
-      html += `<tr><td class="sym">${r.sembol}</td><td>${fmt(r.fiyat)}</td>` +
-        `<td style="color:${r.skor>=3?'var(--up)':r.skor<=-3?'var(--down)':'var(--warn)'}">${r.skor>0?'+':''}${r.skor}</td>` +
-        `<td>${badge(r.sinyal)}</td><td>${r.rsi}</td><td>${r.mfi}</td>` +
-        `<td class="ned">${r.nedenler.slice(0,2).map(n=>'▸ '+n).join('<br>')}</td></tr>`;
-    });
-    html += '</tbody></table>';
-  } else html += '<div class="empty">SAT sinyali yok</div>';
+  html += tabloBolum('AL ADAYLARI', '🟢', s.al || [], durum);
+  html += tabloBolum('İZLEME / TUT', '🟡', s.tut || [], durum);
+  html += tabloBolum('SAT / DİKKAT', '🔴', s.sat || [], durum);
 
   // Takvim
   html += '<h2>📅 Ekonomik Takvim</h2>';
@@ -229,7 +328,54 @@ function renderPiyasa(d) {
     });
   } else html += '<div class="empty">Takvim verisi yok</div>';
 
+  html += '<div class="note">' +
+    (s.toplam ? `📊 ${s.toplam} hisse analiz edildi · veri ${s.al && s.al[0] && s.al[0].tarih ? s.al[0].tarih : ''} ${s.al && s.al[0] ? tazelik(s.al[0].tarih) : ''} · ` : '') +
+    'Yatırım tavsiyesi değildir. Sinyaller teknik indikatör kombinasyonlarıdır.</div>';
   document.getElementById('sec-piyasa').innerHTML = html;
+  durum.detay = new Map();
+  document.querySelectorAll('#sec-piyasa tbody tr[data-sym]').forEach(tr => {
+    tr.addEventListener('click', () => {
+      const sym = tr.dataset.sym;
+      const det = document.querySelector(`tr.detail[data-det="${sym}"]`);
+      if (det) det.style.display = det.style.display === 'none' ? '' : 'none';
+    });
+  });
+}
+
+/* ══════════ FİLTRE ══════════ */
+function filtrele() {
+  const q = (document.getElementById('arama').value || '').toUpperCase().trim();
+  const fs = document.getElementById('fSinyal').value;
+  const ft = document.getElementById('fTrend').value;
+  const fq = document.getElementById('fSqueeze').value;
+  document.querySelectorAll('#sec-piyasa tbody tr[data-sym]').forEach(tr => {
+    const sym = tr.dataset.sym;
+    const r = PIYASA_VERI && [...(PIYASA_VERI.sinyaller.al||[]), ...(PIYASA_VERI.sinyaller.tut||[]), ...(PIYASA_VERI.sinyaller.sat||[])].find(x => x.sembol === sym);
+    if (!r) return;
+    const okS = !fs || r.sinyal === fs;
+    const okT = !ft || r.trend === ft;
+    const okQ = !fq || (fq === 'SIKIŞMA' ? (r.squeeze||'').toUpperCase().includes('SIKIŞMA') : (r.squeeze||'').toUpperCase().includes('KIRILIM'));
+    const okA = !q || sym.includes(q);
+    tr.style.display = (okS && okT && okQ && okA) ? '' : 'none';
+    const det = document.querySelector(`tr.detail[data-det="${sym}"]`);
+    if (det) det.style.display = 'none';
+  });
+  // Boş bölüm uyarısı
+  document.querySelectorAll('#sec-piyasa h2').forEach(h => {
+    const sonraki = h.nextElementSibling;
+    if (sonraki && sonraki.tagName === 'DIV' && sonraki.classList.contains('twrap')) {
+      const gorunen = [...sonraki.querySelectorAll('tbody tr[data-sym]')].filter(t => t.style.display !== 'none').length;
+      if (gorunen === 0) {
+        if (!sonraki.querySelector('.empty-f')) {
+          const e = document.createElement('div');
+          e.className = 'empty empty-f'; e.textContent = 'Filtreye uyan hisse yok';
+          sonraki.appendChild(e);
+        }
+      } else {
+        const e = sonraki.querySelector('.empty-f'); if (e) e.remove();
+      }
+    }
+  });
 }
 
 /* ══════════ SENARYO ══════════ */
@@ -238,12 +384,14 @@ function renderSenaryo(d) {
   if (!t) { document.getElementById('sec-senaryo').innerHTML = '<div class="empty">Senaryo verisi bekleniyor</div>'; return; }
   let html = '<h2>🧪 Test Senaryoları — 6 Aylık Gerçek Veri</h2><div class="scn">';
   const karti = (s, acik) => {
+    if (!s) return;
     const renk = s.ortalama >= 0 ? 'var(--up)' : 'var(--down)';
     const poz = Math.max(0, Math.min(100, 50 + s.ortalama * 2));
+    const basari = s.islem ? Math.round(s.kazanan / s.islem * 100) : 0;
     html += `<div class="sc ${acik?'wide':''}"><div class="t">${s.ad}</div>` +
       `<div class="o" style="color:${renk}">${s.ortalama >= 0 ? '+' : ''}%${s.ortalama.toFixed(1)}</div>` +
       `<div class="bar"><i style="width:${poz}%;background:${s.ortalama>=0?'var(--up)':'var(--down)'}"></i></div>` +
-      `<div class="m">${s.islem} işlem · 🟢 ${s.kazanan} kazanan · 🔴 ${s.kaybeden} kaybeden</div>`;
+      `<div class="m">${s.islem} işlem · 🟢 ${s.kazanan} kazanan · 🔴 ${s.kaybeden} kaybeden · <b>%${basari} başarı</b></div>`;
     if (s.en_iyi) html += `<div class="m">🏆 En iyi: <b>${s.en_iyi.sembol}</b> %${s.en_iyi.getiri_yuzde >= 0 ? '+' : ''}${s.en_iyi.getiri_yuzde} (${s.en_iyi.tarih})</div>`;
     if (s.en_kotu) html += `<div class="m">💀 En kötü: <b>${s.en_kotu.sembol}</b> %${s.en_kotu.getiri_yuzde >= 0 ? '+' : ''}${s.en_kotu.getiri_yuzde} (${s.en_kotu.tarih})</div>`;
     html += '</div>';
@@ -256,12 +404,12 @@ function renderSenaryo(d) {
   // En iyi 10 işlem
   const ilk = (t.ertesi_gun_acilis && t.ertesi_gun_acilis.islemler) || [];
   if (ilk.length) {
-    html += '<h2>🏆 En Kârlı Sinyaller (son 6 ay)</h2>' + tabloBaslik(['Hisse','Sinyal Tarihi','Giriş','Bugün','Getiri']) + '<tbody>';
+    html += '<h2>🏆 En Kârlı Sinyaller (son 6 ay)</h2><div class="twrap"><table><tr><th>Hisse</th><th>Sinyal Tarihi</th><th>Giriş</th><th>Bugün</th><th>Getiri</th></tr><tbody>';
     ilk.slice(0, 10).forEach(x => {
       html += `<tr><td class="sym">${x.sembol}</td><td>${x.sinyal_tarih}</td><td>${fmt(x.giris)}</td>` +
         `<td>${fmt(x.bugun)}</td><td class="${ok(x.getiri_yuzde)}">${yuzde(x.getiri_yuzde)}</td></tr>`;
     });
-    html += '</tbody></table>';
+    html += '</tbody></table></div>';
   }
   document.getElementById('sec-senaryo').innerHTML = html;
 }
@@ -295,6 +443,7 @@ function renderFon(d) {
       html += '<div class="scn">' +
         `<div class="sc"><div class="t">İncelenen Fon</div><div class="o">${f.ozet.fon_sayisi}</div><div class="m">TEFAS hisse ağırlıklı fonlar</div></div>` +
         `<div class="sc"><div class="t">Ortalama Hisse Ağırlığı</div><div class="o ${f.ozet.ort_hisse_agirlik >= 50 ? 'up' : 'down'}">%${f.ozet.ort_hisse_agirlik}</div><div class="m">Fon portföylerinin hisse payı</div></div>` +
+        (f.ozet.max_hisse_agirlik != null ? `<div class="sc"><div class="t">En Riskli Fon (Hisse)</div><div class="o up">%${f.ozet.max_hisse_agirlik}</div><div class="m">En yüksek hisse ağırlıklı fon</div></div>` : '') +
         '</div>';
     }
     html += '<h2>📋 Fon Dağılımları</h2>';
