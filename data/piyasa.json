@@ -1,5 +1,5 @@
 {
- "uretildi": "2026-08-23T17:31:33",
+ "uretildi": "2026-08-24T01:36:05",
  "kaynak": "yfinance",
  "endeks": {
   "deger": 14514.8,
@@ -362,28 +362,6 @@
     "tarih": "2026-08-21"
    },
    {
-    "sembol": "KTLEV",
-    "fiyat": 63.5,
-    "skor": 3,
-    "sinyal": "DİKKAT_AL",
-    "trend": "YATAY",
-    "rsi": 55.4,
-    "mfi": 73.7,
-    "para": "GİRİŞ",
-    "s1": 61.23,
-    "r1": 65.53,
-    "stop": 45.87,
-    "hedef": 89.94,
-    "squeeze": "NORMAL",
-    "nedenler": [
-     "RSI 55 trend YATAY",
-     "MFI 74 (GİRİŞ)",
-     "PİVOT: fiyat pivot (63.27 TL) üzerinde, 1. Direnç (R1) 65.53 TL'ye marj var",
-     "ICT: fiyat 2 bar önceki yükseğin (59.95 TL) üzerinde boşluk bıraktı — kurumsal alım izi"
-    ],
-    "tarih": "2026-08-21"
-   },
-   {
     "sembol": "MPARK",
     "fiyat": 445.0,
     "skor": 3,
@@ -551,6 +529,28 @@
      "RSI 61 trend YATAY",
      "MFI 64 (GİRİŞ)",
      "PİVOT: fiyat pivot (473.92 TL) üzerinde, 1. Direnç (R1) 484.08 TL'ye marj var"
+    ],
+    "tarih": "2026-08-21"
+   },
+   {
+    "sembol": "SAHOL",
+    "fiyat": 92.4,
+    "skor": 2,
+    "sinyal": "DİKKAT_AL",
+    "trend": "YATAY",
+    "rsi": 61.4,
+    "mfi": 69.2,
+    "para": "GİRİŞ",
+    "s1": 90.85,
+    "r1": 93.4,
+    "stop": 87.92,
+    "hedef": 99.12,
+    "squeeze": "SQUEEZE",
+    "nedenler": [
+     "RSI 61 trend YATAY",
+     "MFI 69 (GİRİŞ)",
+     "PİVOT: fiyat pivot (91.85 TL) üzerinde, 1. Direnç (R1) 93.40 TL'ye marj var",
+     "ICT: kapanış son 20 barın zirvesini (91.70 TL) geçti"
     ],
     "tarih": "2026-08-21"
    }
@@ -988,7 +988,7 @@
    }
   ],
   "toplam": 100,
-  "hesap_tarihi": "23.08.2026 17:31"
+  "hesap_tarihi": "24.08.2026 01:35"
  },
  "test_senaryolari": {
   "pazartesi_acilis": {
@@ -1172,9 +1172,9 @@
   },
   "ertesi_gun_acilis": {
    "ad": "Sinyal ertesi gün açılışında al",
-   "islem": 516,
-   "ortalama": -1.6,
-   "kazanan": 227,
+   "islem": 514,
+   "ortalama": -1.7,
+   "kazanan": 225,
    "kaybeden": 289,
    "en_iyi": {
     "sembol": "PASEU",
@@ -1351,9 +1351,9 @@
   },
   "stop_losslu": {
    "ad": "Ertesi gün açılış + %5 stop-loss",
-   "islem": 516,
-   "ortalama": -0.6,
-   "kazanan": 114,
+   "islem": 514,
+   "ortalama": -0.7,
+   "kazanan": 112,
    "kaybeden": 402,
    "en_iyi": {
     "sembol": "PASEU",
@@ -1529,5 +1529,313 @@
    ]
   },
   "aciklama": "Senaryolar GERÇEK veriyle hesaplanır: sinyal günü kapanışında AL/DİKKAT_AL üreten hisse, ertesi gün açılıştan alınır ve bugünkü kapanışla kar/zarar ölçülür. Stop-loss senaryosu giriş sonrası -%5 düşüşte çıkış varsayar."
+ },
+ "haberler": [
+  {
+   "sembol": "TUPRS",
+   "baslik": "Tupras-Turkiye Petrol Rafineleri AS (IST:TUPRS) (Q2 2026) Earnings Call Highlights: Record ...",
+   "yayinci": "GuruFocus.com",
+   "tarih": "2026-08-08",
+   "etiket": "⚪ Nötr",
+   "yon": "notr"
+  },
+  {
+   "sembol": "KCHOL",
+   "baslik": "Koc Holding AS (KHOLY) (Q2 2026) Earnings Call Highlights: Net Income Soars 147% on Energy ...",
+   "yayinci": "GuruFocus.com",
+   "tarih": "2026-08-07",
+   "etiket": "⚪ Nötr",
+   "yon": "notr"
+  },
+  {
+   "sembol": "ISCTR",
+   "baslik": "Turkiye Is Bankasi AS (IST:ISBTR) (Q2 2026) Earnings Call Highlights: Strong Fee Growth and ...",
+   "yayinci": "GuruFocus.com",
+   "tarih": "2026-08-03",
+   "etiket": "🟢 Pozitif",
+   "yon": "pozitif"
+  },
+  {
+   "sembol": "AKBNK",
+   "baslik": "Akbank TAS (AKBTY) (Q2 2026) Earnings Call Highlights: Strong Profit Growth Tempered by Revised ...",
+   "yayinci": "GuruFocus.com",
+   "tarih": "2026-07-31",
+   "etiket": "🟢 Pozitif",
+   "yon": "pozitif"
+  },
+  {
+   "sembol": "AKBNK",
+   "baslik": "Akbank TAS (AKBTY) (Q2 2026) Earnings Call Highlights: Strong Net Income Growth Offset by ...",
+   "yayinci": "GuruFocus.com",
+   "tarih": "2026-07-30",
+   "etiket": "🟢 Pozitif",
+   "yon": "pozitif"
+  },
+  {
+   "sembol": "GARAN",
+   "baslik": "Middle Eastern Dividend Stocks To Consider In June 2026",
+   "yayinci": "Simply Wall St.",
+   "tarih": "2026-06-15",
+   "etiket": "🟢 Pozitif",
+   "yon": "pozitif"
+  },
+  {
+   "sembol": "GARAN",
+   "baslik": "Middle Eastern Dividend Stocks To Consider For Your Portfolio",
+   "yayinci": "Simply Wall St.",
+   "tarih": "2026-06-12",
+   "etiket": "🟢 Pozitif",
+   "yon": "pozitif"
+  },
+  {
+   "sembol": "GARAN",
+   "baslik": "Middle Eastern Dividend Stocks Including Abu Dhabi Islamic Bank PJSC",
+   "yayinci": "Simply Wall St.",
+   "tarih": "2026-06-11",
+   "etiket": "🟢 Pozitif",
+   "yon": "pozitif"
+  },
+  {
+   "sembol": "GARAN",
+   "baslik": "Middle Eastern Dividend Stocks Featuring ENBD REIT (CEIC) And 2 More",
+   "yayinci": "Simply Wall St.",
+   "tarih": "2026-06-10",
+   "etiket": "🟢 Pozitif",
+   "yon": "pozitif"
+  },
+  {
+   "sembol": "AKBNK",
+   "baslik": "Top Middle Eastern Dividend Stocks To Consider In June 2026",
+   "yayinci": "Simply Wall St.",
+   "tarih": "2026-06-03",
+   "etiket": "🟢 Pozitif",
+   "yon": "pozitif"
+  },
+  {
+   "sembol": "THYAO",
+   "baslik": "Air Transat Launches New Non-Stop Service Between Montreal and Istanbul",
+   "yayinci": "MT Newswires",
+   "tarih": "2026-05-29",
+   "etiket": "⚪ Nötr",
+   "yon": "notr"
+  },
+  {
+   "sembol": "AKBNK",
+   "baslik": "Middle Eastern Dividend Stocks To Consider In May 2026",
+   "yayinci": "Simply Wall St.",
+   "tarih": "2026-05-04",
+   "etiket": "🟢 Pozitif",
+   "yon": "pozitif"
+  },
+  {
+   "sembol": "THYAO",
+   "baslik": "Turk Hava Yollari AO (TKHVY) Q4 2025 Earnings Call Highlights: Strong Passenger Growth Amid ...",
+   "yayinci": "GuruFocus.com",
+   "tarih": "2026-03-14",
+   "etiket": "🟢 Pozitif",
+   "yon": "pozitif"
+  },
+  {
+   "sembol": "ISCTR",
+   "baslik": "Turkiye Is Bankasi AS (IST:ISBTR) Q4 2025 Earnings Call Highlights: Robust Growth in Net Profit ...",
+   "yayinci": "GuruFocus.com",
+   "tarih": "2026-02-09",
+   "etiket": "🟢 Pozitif",
+   "yon": "pozitif"
+  },
+  {
+   "sembol": "THYAO",
+   "baslik": "Struggling airline files for Chapter 11 bankruptcy",
+   "yayinci": "TheStreet",
+   "tarih": "2025-12-24",
+   "etiket": "🔴 Negatif",
+   "yon": "negatif"
+  },
+  {
+   "sembol": "THYAO",
+   "baslik": "National airline cancels flights, strands passengers, no bankruptcy",
+   "yayinci": "TheStreet",
+   "tarih": "2025-12-21",
+   "etiket": "🔴 Negatif",
+   "yon": "negatif"
+  },
+  {
+   "sembol": "SAHOL",
+   "baslik": "Haci Omer Sabanci Holding AS (IST:SAHOL) Q3 2025 Earnings Call Highlights: Strategic Growth ...",
+   "yayinci": "GuruFocus.com",
+   "tarih": "2025-11-13",
+   "etiket": "🟢 Pozitif",
+   "yon": "pozitif"
+  },
+  {
+   "sembol": "ISCTR",
+   "baslik": "Turkiye Is Bankasi AS (IST:ISBTR) Q3 2025 Earnings Call Highlights: Strong Net Interest Income ...",
+   "yayinci": "GuruFocus.com",
+   "tarih": "2025-11-03",
+   "etiket": "⚪ Nötr",
+   "yon": "notr"
+  }
+ ],
+ "fonlar": {
+  "fonlar": [
+   {
+    "kod": "TTE",
+    "tarih": "2026-08-21",
+    "hisse_agirlik": 85.4,
+    "varliklar": [
+     {
+      "sinif": "Stocks",
+      "agirlik": 85.4
+     },
+     {
+      "sinif": "Reverse Repo",
+      "agirlik": 14.05
+     },
+     {
+      "sinif": "Fund Shares",
+      "agirlik": 0.55
+     }
+    ]
+   },
+   {
+    "kod": "TMS",
+    "tarih": "2026-08-21",
+    "hisse_agirlik": 101.9,
+    "varliklar": [
+     {
+      "sinif": "Stocks",
+      "agirlik": 70.9
+     },
+     {
+      "sinif": "Foreign Stocks",
+      "agirlik": 30.98
+     },
+     {
+      "sinif": "Futures Margin",
+      "agirlik": 14.8
+     },
+     {
+      "sinif": "Borsa Istanbul Money Market",
+      "agirlik": -14.61
+     },
+     {
+      "sinif": "Repo",
+      "agirlik": -3.62
+     },
+     {
+      "sinif": "Other",
+      "agirlik": 1.29
+     },
+     {
+      "sinif": "Fund Shares",
+      "agirlik": 0.22
+     },
+     {
+      "sinif": "TL Deposits",
+      "agirlik": 0.03
+     }
+    ]
+   },
+   {
+    "kod": "TTA",
+    "tarih": "2026-08-21",
+    "hisse_agirlik": 0.0,
+    "varliklar": [
+     {
+      "sinif": "Precious Metals",
+      "agirlik": 58.37
+     },
+     {
+      "sinif": "nan",
+      "agirlik": 22.57
+     },
+     {
+      "sinif": "Precious-Metal Denominated Government Sukuk",
+      "agirlik": 6.95
+     },
+     {
+      "sinif": "Foreign ETFs",
+      "agirlik": 5.34
+     },
+     {
+      "sinif": "Precious-Metal Denominated Government Debt",
+      "agirlik": 4.16
+     },
+     {
+      "sinif": "Futures Margin",
+      "agirlik": 1.84
+     },
+     {
+      "sinif": "VC Fund Shares",
+      "agirlik": 0.35
+     },
+     {
+      "sinif": "REIF Shares",
+      "agirlik": 0.29
+     }
+    ]
+   },
+   {
+    "kod": "TTP",
+    "tarih": "2026-08-21",
+    "hisse_agirlik": 0.0,
+    "varliklar": [
+     {
+      "sinif": "Government Eurobonds",
+      "agirlik": 96.71
+     },
+     {
+      "sinif": "Corporate Eurobonds",
+      "agirlik": 2.21
+     },
+     {
+      "sinif": "Fund Shares",
+      "agirlik": 1.08
+     }
+    ]
+   },
+   {
+    "kod": "AVT",
+    "tarih": "2026-08-21",
+    "hisse_agirlik": 0.0,
+    "varliklar": [
+     {
+      "sinif": "Government Bonds",
+      "agirlik": 37.74
+     },
+     {
+      "sinif": "Corporate Bonds",
+      "agirlik": 24.02
+     },
+     {
+      "sinif": "Commercial Paper",
+      "agirlik": 19.48
+     },
+     {
+      "sinif": "Reverse Repo",
+      "agirlik": 8.31
+     },
+     {
+      "sinif": "TL Deposits",
+      "agirlik": 7.08
+     },
+     {
+      "sinif": "Corporate Sukuk",
+      "agirlik": 2.54
+     },
+     {
+      "sinif": "Government Sukuk (TRY)",
+      "agirlik": 0.83
+     }
+    ]
+   }
+  ],
+  "ozet": {
+   "fon_sayisi": 5,
+   "ort_hisse_agirlik": 37.5,
+   "max_hisse_agirlik": 101.9
+  },
+  "tarih": "2026-08-21",
+  "not": "TEFAS varlık sınıfı bazlı dağılım verir (hisse senedi, ters-repo, eurobond…). Hisse BAZLI dağılım (hangi hisse ne kadar) TEFAS API anahtarı gerektirir."
  }
 }

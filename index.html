@@ -269,27 +269,43 @@ function renderSenaryo(d) {
 /* ══════════ HABER ══════════ */
 function renderHaber(d) {
   let html = '<h2>📰 Haberler & Duyurular</h2>';
-  if (d.haberler && d.haberler.length) {
-    d.haberler.forEach(h => {
+  const hb = d.haberler;
+  if (hb && hb.length) {
+    hb.forEach(h => {
+      const cls = h.yon === 'pozitif' ? 'b-AL' : (h.yon === 'negatif' ? 'b-SAT' : 'b-TUT');
       html += `<div class="ev"><div class="dt">${h.tarih || ''}</div><div class="nm">` +
-        (h.etiket ? `<span class="badge ${h.yon==='pozitif'?'b-AL':h.yon==='negatif'?'b-SAT':'b-TUT'}">${h.etiket}</span> ` : '') +
-        `${h.baslik || h.duyuru || ''}</div></div>`;
+        `<span class="badge ${cls}">${h.etiket}</span> <b>${h.sembol}</b> ${h.baslik}` +
+        (h.yayinci ? `<br><small style="color:var(--tx2)">${h.yayinci}</small>` : '') +
+        `</div></div>`;
     });
+    html += '<div class="note">Kaynak: Yahoo Finance — BIST öne çıkan hisseler. Etiketler anahtar kelime kurallarıyla otomatik: pozitif (kar, temettü, sözleşme…) / negatif (zarar, dava, ceza…). Yatırım tavsiyesi değildir.</div>';
   } else {
-    html += '<div class="empty">📡 KAP duyuruları entegrasyonu kuruluyor — yakında</div>';
+    html += '<div class="empty">📡 Haber akışı kuruluyor — yakında</div>';
   }
   document.getElementById('sec-haber').innerHTML = html;
 }
 
 /* ══════════ FON ══════════ */
 function renderFon(d) {
+  const f = d.fonlar;
   let html = '<h2>🏦 Fonlar & Kurumsal</h2>';
-  if (d.fonlar && d.fonlar.length) {
-    d.fonlar.forEach(f => {
-      html += `<div class="ev"><div class="nm"><b>${f.ad}</b> — ${f.detay || ''}</div></div>`;
+  if (f && f.fonlar && f.fonlar.length) {
+    if (f.ozet && f.ozet.fon_sayisi) {
+      html += `<h2>📊 Fonların Risk İştahı <span class="cnt">${f.tarih}</span></h2>`;
+      html += '<div class="scn">' +
+        `<div class="sc"><div class="t">İncelenen Fon</div><div class="o">${f.ozet.fon_sayisi}</div><div class="m">TEFAS hisse ağırlıklı fonlar</div></div>` +
+        `<div class="sc"><div class="t">Ortalama Hisse Ağırlığı</div><div class="o ${f.ozet.ort_hisse_agirlik >= 50 ? 'up' : 'down'}">%${f.ozet.ort_hisse_agirlik}</div><div class="m">Fon portföylerinin hisse payı</div></div>` +
+        '</div>';
+    }
+    html += '<h2>📋 Fon Dağılımları</h2>';
+    f.fonlar.forEach(fn => {
+      const renk = fn.hisse_agirlik >= 50 ? 'var(--up)' : 'var(--warn)';
+      html += `<div class="ev"><div class="nm"><b>${fn.kod}</b> · ${fn.tarih} · <span style="color:${renk}">Hisse %${fn.hisse_agirlik}</span><br>` +
+        `<small style="color:var(--tx2)">${fn.varliklar.map(v=>`${v.sinif} %${v.agirlik}`).join(' · ')}</small></div></div>`;
     });
+    html += '<div class="note">' + (f.not || '') + '</div>';
   } else {
-    html += '<div class="empty">🏦 TEFAS fon portföy verisi kuruluyor — yakında</div>';
+    html += '<div class="empty">🏦 TEFAS fon verisi şu an yok — bir sonraki güncellemede</div>';
   }
   document.getElementById('sec-fon').innerHTML = html;
 }
