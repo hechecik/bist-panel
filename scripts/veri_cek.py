@@ -308,12 +308,37 @@ def sinyalleri_hesapla(hisse_veri: dict) -> dict:
             pv = pivot_seviyeler(ind['HGDG_MAX'], ind['HGDG_MIN'], ind['HGDG_KAPANIS'])
             pv['durum'] = seviye_durumu(son['HGDG_KAPANIS'], pv)
             ict = ict_sinyalleri(ind)
-            nedenler = [f"RSI {son['RSI14']:.0f} trend {s['trend']}",
-                        f"MFI {son['MFI14']:.0f} ({s['para_akis']})",
-                        f"PİVOT: {pv['durum']}"]
+            # 2.1 — Zengin açıklamalar (kural bazlı, uydurma yok)
+            nedenler = []
+            r_rsi = float(son['RSI14'])
+            if r_rsi > 70:
+                nedenler.append(f"RSI {r_rsi:.0f} → AŞIRI ALIM bölgesi, düzeltme riski")
+            elif r_rsi > 55:
+                nedenler.append(f"RSI {r_rsi:.0f} → güçlü ama aşırı değil, sağlıklı bölge")
+            elif r_rsi < 30:
+                nedenler.append(f"RSI {r_rsi:.0f} → AŞIRI SATIM, dip fırsatı olabilir")
+            else:
+                nedenler.append(f"RSI {r_rsi:.0f} → nötr, yön belirsiz")
+            hist = float(son.get('MACD_HIST', 0) or 0)
+            if hist > 0:
+                nedenler.append(f"MACD sinyal çizgisinin üzerinde (hist {hist:.3f}) → alım momentumu")
+            else:
+                nedenler.append(f"MACD sinyal çizgisinin altında (hist {hist:.3f}) → satış baskısı")
+            r_mfi = float(son['MFI14'])
+            if r_mfi > 55:
+                nedenler.append(f"MFI {r_mfi:.0f} → net PARA GİRİŞİ (kurumsal alım izi)")
+            elif r_mfi < 45:
+                nedenler.append(f"MFI {r_mfi:.0f} → PARA ÇIKIŞI, satış baskısı hakim")
+            else:
+                nedenler.append(f"MFI {r_mfi:.0f} → nötr para akışı")
+            nedenler.append(f"PİVOT: {pv['durum']}")
             for anahtar in ('sweep', 'fvg', 'momentum'):
                 if anahtar in ict:
                     nedenler.append(f"ICT: {ict[anahtar][1]}")
+            if str(son.get('SQUEEZE', '')).upper().startswith('SIKIŞMA'):
+                nedenler.append("Bollinger sıkışma → kırılım öncesi birikme")
+            # 3.3 — spark: son 30 kapanış (SVG mini grafik için)
+            spark = [round(float(x), 2) for x in ind['HGDG_KAPANIS'].iloc[-30:].tolist()]
             # 1 aylık getiri: 22 iş günü önceki kapanışa göre (yeterli bar yoksa None)
             ay_oncesi = None
             if len(ind) >= 23:
@@ -333,16 +358,29 @@ def sinyalleri_hesapla(hisse_veri: dict) -> dict:
                 'stop': s['stop_loss'], 'hedef': s['hedef'],
                 'squeeze': son.get('SQUEEZE', 'NORMAL'),
                 'ay_oncesi': ay_oncesi,
+                'macd_hist': round(hist, 3),
+                'spark': spark,
                 'nedenler': nedenler[:5],
                 'tarih': str(son['HGDG_TARIH'].date()),
             })
         except Exception:
             continue
     sonuclar.sort(key=lambda x: x['skor'], reverse=True)
+    # 2.5 — Aşırı alım/satım taraması (mevcut hesaplardan filtreleme)
+    tarama = {
+        'asiri_satim': [{'sembol': r['sembol'], 'fiyat': r['fiyat'], 'rsi': r['rsi'],
+                         'sinyal': r['sinyal'], 'skor': r['skor']} for r in sonuclar if r['rsi'] < 30][:15],
+        'asiri_alim': [{'sembol': r['sembol'], 'fiyat': r['fiyat'], 'rsi': r['rsi'],
+                        'sinyal': r['sinyal'], 'skor': r['skor']} for r in sonuclar if r['rsi'] > 75][:15],
+        'macd_guclu': [{'sembol': r['sembol'], 'fiyat': r['fiyat'], 'rsi': r['rsi'],
+                        'sinyal': r['sinyal'], 'skor': r['skor']} for r in sonuclar
+                       if r.get('macd_hist', 0) > 0 and r['skor'] >= 2][:15],
+    }
     return {
         'al': [r for r in sonuclar if r['sinyal'] in ('AL', 'DİKKAT_AL')][:15],
         'tut': [r for r in sonuclar if r['sinyal'] == 'TUT'][:10],
         'sat': [r for r in sonuclar if r['sinyal'] in ('SAT', 'DİKKAT_SAT')][:10],
+        'tarama': tarama,
         'toplam': len(sonuclar),
         'hesap_tarihi': dt.datetime.now().strftime('%d.%m.%Y %H:%M'),
     }
@@ -422,10 +460,27 @@ def test_senaryolari(hisse_veri: dict) -> dict:
                 'en_kotu': min(islemler, key=lambda x: x['stop_getiri_yuzde'] if stop_mu else x['getiri_yuzde']),
                 'islemler': sorted(islemler, key=lambda x: x['stop_getiri_yuzde'] if stop_mu else x['getiri_yuzde'], reverse=True)[:15]}
 
+    # 2.3 — Hisse bazlı backtest özeti (hangi hisse kaç kez sinyal verdi, toplam getiri)
+    hisse_grup = {}
+    for islem in gunluk_islemler:
+        hisse_grup.setdefault(islem['sembol'], []).append(islem)
+    hisse_ozet = []
+    for s, islemler in hisse_grup.items():
+        getiriler = [x['getiri_yuzde'] for x in islemler]
+        hisse_ozet.append({
+            'sembol': s,
+            'toplam_getiri': round(sum(getiriler), 1),
+            'islem_sayisi': len(islemler),
+            'basari_orani': round(sum(1 for g in getiriler if g > 0) / len(getiriler) * 100),
+            'max_dusus': round(min(getiriler), 1),
+        })
+    hisse_ozet.sort(key=lambda x: x['toplam_getiri'], reverse=True)
+
     return {
         'pazartesi_acilis': ozetle(pazartesi_islemleri, 'Pazartesi açılışında al'),
         'ertesi_gun_acilis': ozetle(gunluk_islemler, 'Sinyal ertesi gün açılışında al'),
         'stop_losslu': ozetle(gunluk_islemler, 'Ertesi gün açılış + %5 stop-loss', stop_mu=True),
+        'hisse_bazli': hisse_ozet[:20],
         'aciklama': ('Senaryolar GERÇEK veriyle hesaplanır: sinyal günü kapanışında AL/DİKKAT_AL üreten '
                      'hisse, ertesi gün açılıştan alınır ve bugünkü kapanışla kar/zarar ölçülür. '
                      'Stop-loss senaryosu giriş sonrası -%5 düşüşte çıkış varsayar.'),
@@ -512,8 +567,15 @@ def fonlar_cek() -> dict:
             if not satirlar:
                 continue
             tarih = str(df.iloc[0].get('Date', ''))[:10]
+            # 3.5 — Fon getirileri (TEFAS resmi: 1A/3A/1Y)
+            try:
+                p = f.performance or {}
+                getiri = {'1A': p.get('return_1m'), '3A': p.get('return_3m'),
+                          '6A': p.get('return_6m'), '1Y': p.get('return_1y')}
+            except Exception:
+                getiri = {}
             sonuc['fonlar'].append({'kod': kod, 'tarih': tarih, 'hisse_agirlik': round(hs_agirlik, 1),
-                                    'varliklar': satirlar[:8]})
+                                    'varliklar': satirlar[:8], 'getiri': getiri})
             sonuc['tarih'] = tarih
             hisse_agirliklari.append(hs_agirlik)
         except Exception:
@@ -527,6 +589,63 @@ def fonlar_cek() -> dict:
     sonuc['not'] = ('TEFAS varlık sınıfı bazlı dağılım verir (hisse senedi, ters-repo, eurobond…). '
                     'Hisse BAZLI dağılım (hangi hisse ne kadar) TEFAS API anahtarı gerektirir.')
     return sonuc
+
+
+def sektor_dagilimi(bist_list: list) -> dict:
+    """Sektör haritası — scripts/sektorler.json (yfinance resmi sınıflandırma).
+
+    Cache dosyası sektor_cek.py ile üretilir; eksik hisse sonraki çalıştırmada
+    doldurulur. Sinyal skorlarıyla birleştirme main()'de yapılır.
+    """
+    try:
+        sektor_map = json.loads((Path(__file__).resolve().parent / 'sektorler.json').read_text())
+    except Exception:
+        return {'map': {}}
+    return {'map': sektor_map}
+
+
+def temel_analiz(bist_list: list, limit: int = 30) -> list:
+    """F/K, PD/DD, temettü — yfinance .info (Yahoo resmi). BIST 30 ile sınırlı.
+
+    Skor: F/K<5 (+2), <10 (+1); PD/DD<1 (+2), <1.5 (+1); temettü>%3 (+1).
+    """
+    import yfinance as yf
+    import warnings
+    warnings.filterwarnings('ignore')
+    sonuclar = []
+    for sym in bist_list[:limit]:
+        try:
+            t = yf.Ticker(f"{sym}.IS")
+            info = t.info or {}
+            fk = info.get('trailingPE')
+            pddd = info.get('priceToBook')
+            dy = info.get('dividendYield')
+            # Yahoo dividendYield bazen oran (0.03) bazen yüzde (3.0) döner — normalize
+            temettu = None
+            if dy:
+                temettu = round(dy, 1) if dy > 1 else round(dy * 100, 1)
+            if fk is None and pddd is None:
+                continue
+            skor = 0
+            if fk is not None:
+                if fk < 5:
+                    skor += 2
+                elif fk < 10:
+                    skor += 1
+            if pddd is not None:
+                if pddd < 1:
+                    skor += 2
+                elif pddd < 1.5:
+                    skor += 1
+            if temettu and temettu > 3:
+                skor += 1
+            sonuclar.append({'sembol': sym, 'fk': round(fk, 1) if fk else None,
+                             'pddd': round(pddd, 2) if pddd else None,
+                             'temettu': temettu, 'skor': skor})
+        except Exception:
+            continue
+    sonuclar.sort(key=lambda x: x['skor'], reverse=True)
+    return sonuclar[:15]
 
 
 def main():
@@ -565,6 +684,32 @@ def main():
     # 5c. Fonlar
     fonlar = fonlar_cek()
 
+    # 5d. Sektör dağılımı (sektorler.json cache + sinyal skorları)
+    sektor_cache = sektor_dagilimi(liste)
+    sektor_map = sektor_cache.get('map', {})
+    sektor_ozet = {}
+    for r in sinyaller.get('al', []) + sinyaller.get('tut', []) + sinyaller.get('sat', []):
+        sek = sektor_map.get(r['sembol'], 'Bilinmeyen')
+        o = sektor_ozet.setdefault(sek, {'hisse_sayisi': 0, 'skor_toplam': 0, 'al': 0, 'sat': 0})
+        o['hisse_sayisi'] += 1
+        o['skor_toplam'] += r['skor']
+        if r['sinyal'] in ('AL', 'DİKKAT_AL'):
+            o['al'] += 1
+        if r['sinyal'] in ('SAT', 'DİKKAT_SAT'):
+            o['sat'] += 1
+    sektor_list = []
+    for sek, o in sektor_ozet.items():
+        sektor_list.append({'sektor': sek, 'hisse_sayisi': o['hisse_sayisi'],
+                            'ort_skor': round(o['skor_toplam'] / max(o['hisse_sayisi'], 1), 2),
+                            'al': o['al'], 'sat': o['sat']})
+    sektor_list.sort(key=lambda x: x['hisse_sayisi'], reverse=True)
+
+    # 5e. Temel analiz (BIST 30 — F/K, PD/DD, temettü)
+    temel = temel_analiz(liste)
+
+    log(f"Haberler: {len(haberler)} | Fonlar: {len(fonlar.get('fonlar', []))} | "
+        f"Sektör: {len(sektor_list)} | Temel analiz: {len(temel)}")
+
     # 6. JSON yaz
     paket = {
         'uretildi': dt.datetime.now().strftime('%Y-%m-%dT%H:%M:%S'),
@@ -576,6 +721,8 @@ def main():
         'test_senaryolari': senaryolar,
         'haberler': haberler,
         'fonlar': fonlar,
+        'sektorler': sektor_list,
+        'temel_analiz': temel,
     }
     (DATA_DIR / 'piyasa.json').write_text(json.dumps(paket, ensure_ascii=False, indent=1), encoding='utf-8')
     log(f"piyasa.json yazıldı: {os.path.getsize(DATA_DIR / 'piyasa.json')} byte")
