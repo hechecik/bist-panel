@@ -315,7 +315,8 @@ function renderPiyasa(d) {
     const chg = document.getElementById('exChg');
     chg.innerHTML = `<span class="${ok(e.degisim_yuzde)}">${yuzde(e.degisim_yuzde)}</span> gün`;
     document.getElementById('exSub').innerHTML =
-      `<span>📅 ${e.tarih}</span><span>🔍 ${d.sinyaller.toplam} hisse</span><span>📡 ${d.kaynak}</span>`;
+      `<span>📅 ${e.tarih}</span><span>🔍 ${d.sinyaller.toplam} hisse</span><span>📡 ${d.kaynak}</span>` +
+      (d.saglik ? `<span class="${d.saglik.durum === 'OK' ? 'up' : 'down'}">🩺 ${d.saglik.durum}${d.saglik.sorunlar.length ? ' · ' + d.saglik.sorunlar.join(', ') : ''}</span>` : '');
   }
   const s = d.sinyaller;
   const alSay = (s.al||[]).length, tutSay = (s.tut||[]).length, satSay = (s.sat||[]).length;
