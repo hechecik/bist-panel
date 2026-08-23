@@ -2,39 +2,301 @@
 <html lang="tr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b0e14">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>BIST Panel</title>
 <link rel="manifest" href="manifest.json">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📈</text></svg>">
+<link rel="manifest" href="manifest.json">
+<meta name="description" content="BIST piyasa paneli — sinyaller, makro, test senaryoları. 15 dk gecikmeli, seans boyunca canlı.">
 <style>
-:root { color-scheme: dark; }
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { background:#0d1117; color:#c9d1d9; font-family:'Segoe UI',system-ui,sans-serif; padding:16px; }
-h1 { color:#f0f6fc; font-size:20px; margin-bottom:8px; }
-.meta { color:#8b949e; font-size:12px; margin-bottom:16px; }
-.card { background:#161b22; border:1px solid #30363d; border-radius:8px; padding:16px; margin-bottom:12px; }
-.card .label { color:#8b949e; font-size:11px; text-transform:uppercase; }
-.card .val { font-size:24px; font-weight:bold; margin-top:4px; }
-.up { color:#3fb950; } .down { color:#f85149; }
+:root {
+  color-scheme: dark;
+  --bg:#0b0e14; --bg2:#11151f; --bg3:#161b27; --bd:#232a3b; --tx:#d7dde8; --tx2:#8b95a9;
+  --up:#2ecc71; --down:#ff5c5c; --warn:#f0b90b; --info:#4da3ff; --accent:#7c5cff;
+}
+* { box-sizing:border-box; margin:0; padding:0; }
+html { -webkit-tap-highlight-color:transparent; }
+body { background:var(--bg); color:var(--tx); font-family:-apple-system,'Segoe UI',Roboto,system-ui,sans-serif; padding-bottom:70px; }
+/* ── ÜST BAR ── */
+header { position:sticky; top:0; z-index:50; background:rgba(11,14,20,.92); backdrop-filter:blur(12px); border-bottom:1px solid var(--bd); padding:12px 16px; display:flex; align-items:center; gap:10px; }
+.logo { font-size:22px; font-weight:800; letter-spacing:-.5px; }
+.logo span { color:var(--accent); }
+.live { margin-left:auto; display:flex; align-items:center; gap:6px; font-size:11px; color:var(--tx2); }
+.dot { width:8px; height:8px; border-radius:50%; background:var(--up); animation:pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.35} }
+.stale .dot { background:var(--warn); }
+/* ── ENDEKS KARTI ── */
+.hero { padding:16px; }
+.ex-card { background:linear-gradient(135deg,#141b2d 0%,#1a1233 100%); border:1px solid var(--bd); border-radius:16px; padding:18px; position:relative; overflow:hidden; }
+.ex-card::after { content:''; position:absolute; right:-40px; top:-40px; width:140px; height:140px; background:radial-gradient(circle,rgba(124,92,255,.25),transparent 70%); }
+.ex-label { font-size:12px; color:var(--tx2); text-transform:uppercase; letter-spacing:1px; }
+.ex-val { font-size:34px; font-weight:800; margin-top:4px; font-variant-numeric:tabular-nums; }
+.ex-chg { font-size:14px; font-weight:600; margin-top:2px; }
+.up { color:var(--up); } .down { color:var(--down); }
+.ex-sub { display:flex; gap:16px; margin-top:10px; font-size:11px; color:var(--tx2); flex-wrap:wrap; }
+/* ── MAKRO ŞERİT ── */
+.makro { display:grid; grid-template-columns:repeat(auto-fit,minmax(105px,1fr)); gap:8px; padding:0 16px 4px; }
+.mk { background:var(--bg2); border:1px solid var(--bd); border-radius:10px; padding:10px; }
+.mk .t { font-size:10px; color:var(--tx2); text-transform:uppercase; }
+.mk .v { font-size:15px; font-weight:700; margin-top:2px; font-variant-numeric:tabular-nums; }
+.mk .d { font-size:10px; font-weight:600; }
+/* ── SEKMELER ── */
+nav.tabs { position:fixed; bottom:0; left:0; right:0; z-index:50; display:flex; background:rgba(11,14,20,.95); backdrop-filter:blur(12px); border-top:1px solid var(--bd); padding-bottom:env(safe-area-inset-bottom); }
+.tab { flex:1; padding:10px 4px 8px; text-align:center; font-size:10px; color:var(--tx2); cursor:pointer; border:none; background:none; transition:color .2s; }
+.tab .ic { display:block; font-size:19px; margin-bottom:2px; }
+.tab.active { color:var(--up); }
+.tab.active .ic { transform:scale(1.1); }
+/* ── İÇERİK ── */
+main { padding:0 16px; }
+.sec { display:none; } .sec.active { display:block; animation:fade .25s; }
+@keyframes fade { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:none} }
+h2 { font-size:15px; margin:18px 0 10px; display:flex; align-items:center; gap:8px; }
+h2 .cnt { font-size:11px; background:var(--bg3); border:1px solid var(--bd); padding:2px 8px; border-radius:20px; color:var(--tx2); }
+table { width:100%; border-collapse:collapse; font-size:12.5px; }
+th { color:var(--tx2); text-align:left; padding:8px 6px; border-bottom:1px solid var(--bd); font-size:10px; text-transform:uppercase; letter-spacing:.5px; }
+td { padding:9px 6px; border-bottom:1px solid #1a2030; font-variant-numeric:tabular-nums; }
+tr:active { background:var(--bg3); }
+.sym { font-weight:700; }
+.badge { display:inline-block; padding:2px 8px; border-radius:20px; font-size:10.5px; font-weight:700; }
+.b-AL { background:rgba(46,204,113,.15); color:var(--up); }
+.b-DİKKAT_AL { background:rgba(240,185,11,.15); color:var(--warn); }
+.b-TUT { background:rgba(139,149,169,.15); color:var(--tx2); }
+.b-DİKKAT_SAT { background:rgba(255,92,92,.12); color:var(--warn); }
+.b-SAT { background:rgba(255,92,92,.18); color:var(--down); }
+.ned { font-size:10.5px; color:var(--tx2); max-width:260px; line-height:1.45; }
+.ned b { color:var(--tx); }
+/* ── SENARYO KARTLARI ── */
+.scn { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.sc { background:var(--bg2); border:1px solid var(--bd); border-radius:14px; padding:14px; }
+.sc .t { font-size:11px; color:var(--tx2); }
+.sc .o { font-size:26px; font-weight:800; margin-top:4px; }
+.sc .m { font-size:11px; color:var(--tx2); margin-top:6px; line-height:1.5; }
+.sc.wide { grid-column:1/-1; }
+.bar { height:6px; border-radius:4px; background:#1a2030; margin-top:8px; overflow:hidden; display:flex; }
+.bar i { display:block; height:100%; }
+/* ── TAKVİM ── */
+.ev { display:flex; gap:10px; padding:10px 0; border-bottom:1px solid #1a2030; align-items:flex-start; }
+.ev .tm { min-width:44px; font-size:11px; color:var(--tx2); font-variant-numeric:tabular-nums; padding-top:2px; }
+.ev .dt { font-size:11px; color:var(--tx2); min-width:44px; }
+.ev .nm { font-size:12.5px; line-height:1.4; }
+.hi { color:var(--down); font-weight:700; } .mi { color:var(--warn); }
+/* ── TCMB ── */
+.tcmb { background:var(--bg2); border:1px solid var(--bd); border-radius:14px; padding:14px; font-size:13px; line-height:1.6; }
+.tcmb b { color:var(--tx); }
+/* ── FOOTER / BİLGİ ── */
+.note { font-size:10.5px; color:var(--tx2); line-height:1.5; margin:14px 0 8px; }
+.empty { color:var(--tx2); font-size:12.5px; padding:18px 0; text-align:center; }
 </style>
 </head>
 <body>
-<h1>📊 BIST Panel</h1>
-<div class="meta" id="meta">Yükleniyor...</div>
-<div id="icerik"><p>Veri bekleniyor — ilk Actions çalışması tamamlanınca buraya gelecek.</p></div>
+
+<header>
+  <div class="logo">BIST<span>·PANEL</span></div>
+  <div class="live" id="liveInfo"><span class="dot"></span><span id="liveText">bekleniyor</span></div>
+</header>
+
+<div class="hero">
+  <div class="ex-card">
+    <div class="ex-label">BIST 100 · XU100</div>
+    <div class="ex-val" id="exVal">—</div>
+    <div class="ex-chg" id="exChg"></div>
+    <div class="ex-sub" id="exSub"></div>
+  </div>
+</div>
+
+<div class="makro" id="makroRow"></div>
+
+<main>
+  <!-- ══════════ SEKMELER ══════════ -->
+  <section class="sec active" id="sec-piyasa"></section>
+  <section class="sec" id="sec-senaryo"></section>
+  <section class="sec" id="sec-haber"></section>
+  <section class="sec" id="sec-fon"></section>
+</main>
+
+<nav class="tabs">
+  <button class="tab active" data-sec="piyasa"><span class="ic">📊</span>Piyasa</button>
+  <button class="tab" data-sec="senaryo"><span class="ic">🧪</span>Senaryo</button>
+  <button class="tab" data-sec="haber"><span class="ic">📰</span>Haberler</button>
+  <button class="tab" data-sec="fon"><span class="ic">🏦</span>Fonlar</button>
+</nav>
+
 <script>
-fetch('data/piyasa.json').then(r => r.json()).then(d => {
-  document.getElementById('meta').textContent = 'Son güncelleme: ' + d.uretildi + ' · Kaynak: ' + d.kaynak;
+const SEC = document.querySelectorAll('.tab');
+SEC.forEach(t => t.addEventListener('click', () => {
+  SEC.forEach(x => x.classList.remove('active'));
+  t.classList.add('active');
+  document.querySelectorAll('.sec').forEach(s => s.classList.remove('active'));
+  document.getElementById('sec-' + t.dataset.sec).classList.add('active');
+}));
+
+const fmt = (n, d=2) => n == null ? '—' : Number(n).toLocaleString('tr-TR', {minimumFractionDigits:d, maximumFractionDigits:d});
+const yuzde = n => n == null ? '' : (n >= 0 ? '+' : '') + n.toFixed(2) + '%';
+const ok = n => n >= 0 ? 'up' : 'down';
+const okIcon = n => n >= 0 ? '🟢' : '🔴';
+
+function badge(s) {
+  const m = {'AL':'b-AL','DİKKAT_AL':'b-DİKKAT_AL','TUT':'b-TUT','DİKKAT_SAT':'b-DİKKAT_SAT','SAT':'b-SAT'};
+  return `<span class="badge ${m[s]||'b-TUT'}">${s}</span>`;
+}
+
+function tabloBaslik(kolonlar) {
+  return '<table><tr>' + kolonlar.map(k => `<th>${k}</th>`).join('') + '</tr>';
+}
+
+async function yukle() {
+  try {
+    const d = await (await fetch('data/piyasa.json?v=' + Date.now())).json();
+    renderPiyasa(d); renderSenaryo(d); renderHaber(d); renderFon(d);
+    // Canlılık: veri üretim zamanı
+    const ure = new Date(d.uretildi);
+    const fark = Math.floor((Date.now() - ure.getTime()) / 60000);
+    document.getElementById('liveText').textContent = fark <= 20
+      ? (fark <= 1 ? 'CANLI' : fark + ' dk önce') + ' · ' + ure.toLocaleTimeString('tr-TR', {hour:'2-digit',minute:'2-digit'})
+      : '⏳ ' + fark + ' dk önce · ' + ure.toLocaleTimeString('tr-TR', {hour:'2-digit',minute:'2-digit'});
+    if (fark > 30) document.querySelector('header').classList.add('stale');
+  } catch(e) {
+    document.getElementById('sec-piyasa').innerHTML = '<div class="empty">Veri yüklenemedi: ' + e.message + '</div>';
+  }
+}
+
+/* ══════════ PİYASA ══════════ */
+function renderPiyasa(d) {
   const e = d.endeks;
-  let html = '<div class="card"><div class="label">BIST 100 (XU100)</div>' +
-    '<div class="val ' + (e && e.degisim_yuzde >= 0 ? 'up' : 'down') + '">' +
-    (e ? e.deger.toLocaleString('tr-TR') + ' <small>%' + e.degisim_yuzde.toFixed(2) + '</small>' : '—') + '</div></div>';
+  if (e) {
+    document.getElementById('exVal').textContent = fmt(e.deger, 2);
+    const chg = document.getElementById('exChg');
+    chg.innerHTML = `<span class="${ok(e.degisim_yuzde)}">${yuzde(e.degisim_yuzde)}</span> gün`;
+    document.getElementById('exSub').innerHTML =
+      `<span>📅 ${e.tarih}</span><span>🔍 ${d.sinyaller.toplam} hisse analiz</span><span>📡 ${d.kaynak}</span>`;
+  }
+  // Makro şerit
+  const m = d.makro || {};
+  let mk = '';
+  Object.values(m.fiyatlar || {}).forEach(f => {
+    const renk = f.degisim == null ? '' : (f.degisim >= 0 ? 'up' : 'down');
+    mk += `<div class="mk"><div class="t">${f.ad}</div><div class="v">${fmt(f.fiyat)}</div>` +
+          `<div class="d ${renk}">${f.degisim == null ? f.birim : yuzde(f.degisim)}</div></div>`;
+  });
+  document.getElementById('makroRow').innerHTML = mk;
+
+  // TCMB + TÜFE
+  let tcmb = '';
+  if (m.faiz && m.faiz.faiz) {
+    const reel = m.faiz.faiz - (m.tufe ? m.tufe.yillik : 0);
+    const yorum = reel > 0 ? 'POZİTİF reel faiz → altına baskı, TL mevduat cazip' : 'NEGATİF reel faiz → altın/döviz talebi güçlü';
+    tcmb = `<h2>🏛️ Merkez Bankası</h2><div class="tcmb">Politika faizi <b>%${m.faiz.faiz.toFixed(2)}</b> (${m.faiz.tarih}) · ` +
+           `TÜFE yıllık <b>%${m.tufe ? m.tufe.yillik.toFixed(2) : '?'}</b> · Reel faiz <b class="${ok(reel)}">%${reel >= 0 ? '+' : ''}${reel.toFixed(2)}</b> → ${yorum}</div>`;
+  }
+
+  // AL / TUT / SAT tabloları
   const s = d.sinyaller;
-  html += '<div class="card"><div class="label">🟢 AL</div><div class="val up">' + (s.al ? s.al.length : 0) + '</div></div>';
-  html += '<div class="card"><div class="label">🔴 SAT</div><div class="val down">' + (s.sat ? s.sat.length : 0) + '</div></div>';
-  document.getElementById('icerik').innerHTML = html;
-}).catch(err => {
-  document.getElementById('icerik').innerHTML = '<p>Veri yok: ' + err.message + '</p>';
-});
+  let html = tcmb;
+  html += '<h2>🟢 AL ADAYLARI <span class="cnt">' + (s.al ? s.al.length : 0) + '</span></h2>';
+  if (s.al && s.al.length) {
+    html += tabloBaslik(['Hisse','Fiyat','Skor','Sinyal','RSI','MFI','Neden']) + '<tbody>';
+    s.al.forEach(r => {
+      html += `<tr><td class="sym">${r.sembol}</td><td>${fmt(r.fiyat)}</td>` +
+        `<td style="color:${r.skor>=3?'var(--up)':r.skor<=-3?'var(--down)':'var(--warn)'}">${r.skor>0?'+':''}${r.skor}</td>` +
+        `<td>${badge(r.sinyal)}</td><td>${r.rsi}</td><td>${r.mfi}</td>` +
+        `<td class="ned">${r.nedenler.slice(0,2).map(n=>'▸ '+n).join('<br>')}</td></tr>`;
+    });
+    html += '</tbody></table>';
+  } else html += '<div class="empty">Şu an AL sinyali yok</div>';
+
+  html += '<h2>🔴 SAT / DİKKAT <span class="cnt">' + (s.sat ? s.sat.length : 0) + '</span></h2>';
+  if (s.sat && s.sat.length) {
+    html += tabloBaslik(['Hisse','Fiyat','Skor','Sinyal','RSI','MFI','Neden']) + '<tbody>';
+    s.sat.forEach(r => {
+      html += `<tr><td class="sym">${r.sembol}</td><td>${fmt(r.fiyat)}</td>` +
+        `<td style="color:${r.skor>=3?'var(--up)':r.skor<=-3?'var(--down)':'var(--warn)'}">${r.skor>0?'+':''}${r.skor}</td>` +
+        `<td>${badge(r.sinyal)}</td><td>${r.rsi}</td><td>${r.mfi}</td>` +
+        `<td class="ned">${r.nedenler.slice(0,2).map(n=>'▸ '+n).join('<br>')}</td></tr>`;
+    });
+    html += '</tbody></table>';
+  } else html += '<div class="empty">SAT sinyali yok</div>';
+
+  // Takvim
+  html += '<h2>📅 Ekonomik Takvim</h2>';
+  if (d.takvim && d.takvim.length) {
+    d.takvim.slice(0, 12).forEach(ev => {
+      const cls = ev.onem === 'high' ? 'hi' : (ev.onem === 'mid' ? 'mi' : '');
+      html += `<div class="ev"><div class="dt">${ev.tarih}</div><div class="tm">${ev.saat}</div>` +
+              `<div class="nm"><span class="${cls}">${ev.ulke}</span> · ${ev.olay}</div></div>`;
+    });
+  } else html += '<div class="empty">Takvim verisi yok</div>';
+
+  document.getElementById('sec-piyasa').innerHTML = html;
+}
+
+/* ══════════ SENARYO ══════════ */
+function renderSenaryo(d) {
+  const t = d.test_senaryolari;
+  if (!t) { document.getElementById('sec-senaryo').innerHTML = '<div class="empty">Senaryo verisi bekleniyor</div>'; return; }
+  let html = '<h2>🧪 Test Senaryoları — 6 Aylık Gerçek Veri</h2><div class="scn">';
+  const karti = (s, acik) => {
+    const renk = s.ortalama >= 0 ? 'var(--up)' : 'var(--down)';
+    const poz = Math.max(0, Math.min(100, 50 + s.ortalama * 2));
+    html += `<div class="sc ${acik?'wide':''}"><div class="t">${s.ad}</div>` +
+      `<div class="o" style="color:${renk}">${s.ortalama >= 0 ? '+' : ''}%${s.ortalama.toFixed(1)}</div>` +
+      `<div class="bar"><i style="width:${poz}%;background:${s.ortalama>=0?'var(--up)':'var(--down)'}"></i></div>` +
+      `<div class="m">${s.islem} işlem · 🟢 ${s.kazanan} kazanan · 🔴 ${s.kaybeden} kaybeden</div>`;
+    if (s.en_iyi) html += `<div class="m">🏆 En iyi: <b>${s.en_iyi.sembol}</b> %${s.en_iyi.getiri_yuzde >= 0 ? '+' : ''}${s.en_iyi.getiri_yuzde} (${s.en_iyi.tarih})</div>`;
+    if (s.en_kotu) html += `<div class="m">💀 En kötü: <b>${s.en_kotu.sembol}</b> %${s.en_kotu.getiri_yuzde >= 0 ? '+' : ''}${s.en_kotu.getiri_yuzde} (${s.en_kotu.tarih})</div>`;
+    html += '</div>';
+  };
+  karti(t.pazartesi_acilis);
+  karti(t.ertesi_gun_acilis);
+  karti(t.stop_losslu, true);
+  html += '</div><div class="note">' + (t.aciklama || '') + '</div>';
+
+  // En iyi 10 işlem
+  const ilk = (t.ertesi_gun_acilis && t.ertesi_gun_acilis.islemler) || [];
+  if (ilk.length) {
+    html += '<h2>🏆 En Kârlı Sinyaller (son 6 ay)</h2>' + tabloBaslik(['Hisse','Sinyal Tarihi','Giriş','Bugün','Getiri']) + '<tbody>';
+    ilk.slice(0, 10).forEach(x => {
+      html += `<tr><td class="sym">${x.sembol}</td><td>${x.sinyal_tarih}</td><td>${fmt(x.giris)}</td>` +
+        `<td>${fmt(x.bugun)}</td><td class="${ok(x.getiri_yuzde)}">${yuzde(x.getiri_yuzde)}</td></tr>`;
+    });
+    html += '</tbody></table>';
+  }
+  document.getElementById('sec-senaryo').innerHTML = html;
+}
+
+/* ══════════ HABER ══════════ */
+function renderHaber(d) {
+  let html = '<h2>📰 Haberler & Duyurular</h2>';
+  if (d.haberler && d.haberler.length) {
+    d.haberler.forEach(h => {
+      html += `<div class="ev"><div class="dt">${h.tarih || ''}</div><div class="nm">` +
+        (h.etiket ? `<span class="badge ${h.yon==='pozitif'?'b-AL':h.yon==='negatif'?'b-SAT':'b-TUT'}">${h.etiket}</span> ` : '') +
+        `${h.baslik || h.duyuru || ''}</div></div>`;
+    });
+  } else {
+    html += '<div class="empty">📡 KAP duyuruları entegrasyonu kuruluyor — yakında</div>';
+  }
+  document.getElementById('sec-haber').innerHTML = html;
+}
+
+/* ══════════ FON ══════════ */
+function renderFon(d) {
+  let html = '<h2>🏦 Fonlar & Kurumsal</h2>';
+  if (d.fonlar && d.fonlar.length) {
+    d.fonlar.forEach(f => {
+      html += `<div class="ev"><div class="nm"><b>${f.ad}</b> — ${f.detay || ''}</div></div>`;
+    });
+  } else {
+    html += '<div class="empty">🏦 TEFAS fon portföy verisi kuruluyor — yakında</div>';
+  }
+  document.getElementById('sec-fon').innerHTML = html;
+}
+
+yukle();
+setInterval(yukle, 900000); // 15 dk'da bir tazele
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
 </script>
 </body>
 </html>
