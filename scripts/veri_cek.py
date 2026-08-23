@@ -648,6 +648,86 @@ def temel_analiz(bist_list: list, limit: int = 30) -> list:
     return sonuclar[:15]
 
 
+def sinyal_gecmisi_guncelle(sinyaller: dict) -> dict:
+    """4 — Sinyal doğruluk takibi: her run'da bugünün sinyallerini günlük dosyaya yaz.
+
+    data/sinyal_gecmisi.json: {'YYYY-MM-DD': {SEMBOL: {sinyal, skor, fiyat}}}
+    Aynı gün içinde tekrar yazılırsa üzerine yazılır (dedupe). 45 günden
+    eski kayıtlar temizlenir. Dosya repo'ya commit edilir (Actions).
+    """
+    GECMIS = DATA_DIR / 'sinyal_gecmisi.json'
+    try:
+        gecmis = json.loads(GECMIS.read_text())
+    except Exception:
+        gecmis = {}
+    bugun = dt.date.today().strftime('%Y-%m-%d')
+    bugunun = {}
+    for grp in ('al', 'tut', 'sat'):
+        for r in sinyaller.get(grp, []):
+            bugunun[r['sembol']] = {'sinyal': r['sinyal'], 'skor': r['skor'],
+                                    'fiyat': r['fiyat'], 'tarih': bugun}
+    if bugunun:
+        gecmis[bugun] = bugunun
+    eski = (dt.date.today() - dt.timedelta(days=45)).strftime('%Y-%m-%d')
+    for k in [k for k in gecmis if k < eski]:
+        del gecmis[k]
+    GECMIS.write_text(json.dumps(gecmis, ensure_ascii=False), encoding='utf-8')
+    log(f"Sinyal geçmişi: {len(gecmis)} gün kayıtlı")
+    return gecmis
+
+
+def sinyal_gecmisi_ozet(gecmis: dict, guncel_fiyatlar: dict) -> dict:
+    """4 — Son 7 gün AL/DİKKAT_AL sinyalleri: giriş fiyatı vs bugünkü fiyat → getiri.
+
+    Doğruluk = pozitif getirili sinyal / toplam sinyal (uygulanabilir kayıtlar).
+    """
+    sonuc = []
+    gunler = sorted(gecmis.keys())[-7:]
+    for gun in gunler:
+        for sembol, info in gecmis[gun].items():
+            if info.get('sinyal') not in ('AL', 'DİKKAT_AL'):
+                continue
+            guncel = guncel_fiyatlar.get(sembol)
+            giris = info.get('fiyat')
+            getiri = round((guncel / giris - 1) * 100, 1) if guncel and giris else None
+            sonuc.append({'tarih': gun, 'sembol': sembol, 'sinyal': info.get('sinyal'),
+                          'skor': info.get('skor'), 'giris': giris,
+                          'guncel': guncel, 'getiri': getiri})
+    poz = sum(1 for x in sonuc if x['getiri'] is not None and x['getiri'] > 0)
+    toplam = sum(1 for x in sonuc if x['getiri'] is not None)
+    return {
+        'kayitlar': sorted(sonuc, key=lambda x: x['tarih'], reverse=True)[:40],
+        'basari_orani': round(poz / toplam * 100) if toplam else None,
+        'toplam': toplam, 'pozitif': poz,
+    }
+
+
+def gece_analizi(sinyaller: dict, takvim: list) -> dict:
+    """5 — Kapanış sonrası özet: yarının kritik seviyeleri + güçlü/zayıf adaylar.
+
+    Tüm veri mevcut hesaplardan türetilir (uydurma yok):
+    - En güçlü AL (skor ≥ 3) ve en zayıf SAT (skor ≤ -3) adayları
+    - Bollinger sıkışmadakiler (kırılım izlenecek)
+    - Aşırı satımlar (RSI < 30)
+    - Yarının yüksek önemli makro olayları
+    """
+    hepsi = sinyaller.get('al', []) + sinyaller.get('tut', []) + sinyaller.get('sat', [])
+    guclu = sorted([r for r in hepsi if r.get('skor', 0) >= 3], key=lambda x: -x.get('skor', 0))[:5]
+    zayif = sorted([r for r in hepsi if r.get('skor', 0) <= -3], key=lambda x: x.get('skor', 0))[:5]
+    squeeze = [r for r in hepsi if 'SIKIŞMA' in str(r.get('squeeze', '')).upper()]
+    asiri_satim = [r for r in hepsi if r.get('rsi', 50) < 30]
+    yarin = (dt.date.today() + dt.timedelta(days=1)).strftime('%d.%m')
+    yarin_olaylar = [o for o in takvim if o.get('tarih') == yarin and o.get('onem') == 'high'][:5]
+    return {
+        'tarih': dt.datetime.now().strftime('%d.%m.%Y %H:%M'),
+        'guclu_al': [{'sembol': r['sembol'], 'skor': r['skor'], 'fiyat': r['fiyat']} for r in guclu],
+        'zayif_sat': [{'sembol': r['sembol'], 'skor': r['skor'], 'fiyat': r['fiyat']} for r in zayif],
+        'squeeze': [{'sembol': r['sembol'], 'fiyat': r['fiyat'], 'squeeze': r['squeeze']} for r in squeeze[:8]],
+        'asiri_satim': [{'sembol': r['sembol'], 'fiyat': r['fiyat'], 'rsi': r['rsi']} for r in asiri_satim[:8]],
+        'yarin_yuksek_onem': yarin_olaylar,
+    }
+
+
 def main():
     log("=== BIST PANEL veri çekme başladı ===")
     liste = bist100_listesi()
@@ -707,8 +787,18 @@ def main():
     # 5e. Temel analiz (BIST 30 — F/K, PD/DD, temettü)
     temel = temel_analiz(liste)
 
+    # 5f. Sinyal doğruluk geçmişi (madde 4)
+    gecmis = sinyal_gecmisi_guncelle(sinyaller)
+    guncel_fiyatlar = {r['sembol']: r['fiyat'] for r in
+                       sinyaller.get('al', []) + sinyaller.get('tut', []) + sinyaller.get('sat', [])}
+    sinyal_gecmisi = sinyal_gecmisi_ozet(gecmis, guncel_fiyatlar)
+
+    # 5g. Gece analizi (madde 5)
+    gece = gece_analizi(sinyaller, takvim)
+
     log(f"Haberler: {len(haberler)} | Fonlar: {len(fonlar.get('fonlar', []))} | "
-        f"Sektör: {len(sektor_list)} | Temel analiz: {len(temel)}")
+        f"Sektör: {len(sektor_list)} | Temel analiz: {len(temel)} | "
+        f"Doğruluk: {sinyal_gecmisi.get('toplam')} sinyal")
 
     # 6. JSON yaz
     paket = {
@@ -723,6 +813,8 @@ def main():
         'fonlar': fonlar,
         'sektorler': sektor_list,
         'temel_analiz': temel,
+        'sinyal_gecmisi': sinyal_gecmisi,
+        'gece_analizi': gece,
     }
     (DATA_DIR / 'piyasa.json').write_text(json.dumps(paket, ensure_ascii=False, indent=1), encoding='utf-8')
     log(f"piyasa.json yazıldı: {os.path.getsize(DATA_DIR / 'piyasa.json')} byte")
