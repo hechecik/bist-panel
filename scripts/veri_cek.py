@@ -51,12 +51,12 @@ def cek_isyatirim(bist_list: list) -> list | None:
         r = requests.post(url, json=payload, timeout=30,
                           headers={**HEADERS, 'Content-Type': 'application/json'})
         if r.status_code != 200:
-            log(f"İş Yatırım: HTTP {r.status_code} — yfinance'a geçilecek")
+            log(f"İş Yatırım: HTTP {r.status_code} — borsapy deneniyor")
             return None
         data = r.json()
         satirlar = data.get('HisseTekil', {}).get('HisseTekil', [])
         if not satirlar:
-            log("İş Yatırım: boş yanıt — yfinance'a geçilecek")
+            log("İş Yatırım: boş yanıt — borsapy deneniyor")
             return None
         # {sembol: [tarih, kapanis, min, max, hacim, PD...]}
         semboller = set(bist_list)
@@ -82,6 +82,89 @@ def cek_isyatirim(bist_list: list) -> list | None:
     except Exception as e:
         log(f"İş Yatırım hata: {str(e)[:60]} — yfinance'a geçilecek")
         return None
+
+
+def cek_borsapy(bist_list: list) -> dict:
+    """2. KADEME — borsapy TradingView provider (İş Yatırım'dan BAĞIMSIZ).
+
+    borsapy Ticker.history() kendi calendar.py çakışması yüzünden bug'li —
+    provider doğrudan kullanılır. TradingView global olduğu için Actions
+    ABD IP'sinde de çalışır. Tek istek/hisse (~1 sn) — 100 hisse ~2 dk.
+    """
+    try:
+        from borsapy._providers.tradingview import get_tradingview_provider
+        import pandas as pd
+    except Exception:
+        return {}
+    veri = {}
+    try:
+        p = get_tradingview_provider()
+        for sym in bist_list:
+            try:
+                df = p.get_history(sym, interval='1d', period='6mo')
+                if df is None or len(df) < 60:
+                    continue
+                rows = []
+                for idx, row in df.iterrows():
+                    k = float(row['Close'])
+                    if k != k or k <= 0:  # NaN/pozitif kontrol
+                        continue
+                    rows.append({
+                        'tarih': str(pd.Timestamp(idx).date()),
+                        'kapanis': round(k, 4),
+                        'acilis': round(float(row['Open']), 4),
+                        'min': round(float(row['Low']), 4),
+                        'max': round(float(row['High']), 4),
+                        'hacim': int(row['Volume']) if row['Volume'] == row['Volume'] else None,
+                    })
+                if rows:
+                    veri[sym] = rows
+            except Exception:
+                continue
+    except Exception as e:
+        log(f"borsapy (TradingView) hata: {str(e)[:60]}")
+    log(f"borsapy (TradingView) OK: {len(veri)} hisse")
+    return veri
+
+
+def veri_saglik_kontrolu(hisse_veri: dict, endeks: dict | None, kaynak: str) -> dict:
+    """Veri sağlık kontrolü — çapraz doğrulama (anti-hallüsinasyon).
+
+    - Hisse sayısı yeterli mi (beklenen 100'e ne kadar yakın)
+    - Yeterli barı olan hisse sayısı (>= 60 bar = indikatör hesabı mümkün)
+    - Fiyat pozitifliği (0/negatif fiyat varsa bozuk veri)
+    - Endeks mantıklı aralıkta mı (XU100 ~10K-100K bandı)
+    """
+    beklenen = 100
+    toplam = len(hisse_veri)
+    yeterli_bar = sum(1 for rows in hisse_veri.values() if len(rows) >= 60)
+    bozuk_fiyat = sum(1 for rows in hisse_veri.values()
+                      if rows and (rows[-1]['kapanis'] is None or rows[-1]['kapanis'] <= 0))
+    endeks_ok = bool(endeks and 1000 <= endeks.get('deger', 0) <= 100000)
+    durum = 'OK'
+    sorunlar = []
+    if toplam < 50:
+        durum = 'KRİTİK'
+        sorunlar.append(f"sadece {toplam}/{beklenen} hisse")
+    elif toplam < 80:
+        durum = 'UYARI'
+        sorunlar.append(f"{toplam}/{beklenen} hisse")
+    if yeterli_bar < 50:
+        durum = 'UYARI' if durum == 'OK' else durum
+        sorunlar.append(f"{yeterli_bar} hissede yeterli bar")
+    if bozuk_fiyat:
+        sorunlar.append(f"{bozuk_fiyat} bozuk fiyat")
+    if not endeks_ok:
+        sorunlar.append("endeks aralık dışı")
+    return {
+        'durum': durum,
+        'kaynak': kaynak,
+        'hisse': toplam,
+        'yeterli_bar': yeterli_bar,
+        'bozuk_fiyat': bozuk_fiyat,
+        'endeks_ok': endeks_ok,
+        'sorunlar': sorunlar,
+    }
 
 
 def cek_yfinance(bist_list: list) -> dict:
@@ -733,18 +816,31 @@ def main():
     liste = bist100_listesi()
     log(f"BIST 100 listesi: {len(liste)} hisse")
 
-    # 1. Hisse verisi: İş Yatırım → yfinance yedeği
+    # 1. Hisse verisi — 3 kademeli failover (patron önerisi):
+    #    1) İş Yatırım (TR IP — en hızlı, gerçek zamanlı)
+    #    2) borsapy TradingView provider (İş Yatırım'dan bağımsız, global)
+    #    3) yfinance (garanti fallback)
     hisse_veri = cek_isyatirim(liste)
     kaynak = "isyatirim"
     if not hisse_veri:
+        log("İş Yatırım başarısız → borsapy (TradingView) deneniyor")
+        hisse_veri = cek_borsapy(liste)
+        kaynak = "borsapy-tv"
+    if not hisse_veri:
+        log("borsapy başarısız → yfinance deneniyor")
         hisse_veri = cek_yfinance(liste)
         kaynak = "yfinance"
     if not hisse_veri:
-        log("KRİTİK: hisse verisi alınamadı")
+        log("KRİTİK: TÜM KAYNAKLAR BAŞARISIZ")
         hisse_veri = {}
 
     # 2. Endeks
     endeks = endeks_verisi()
+
+    # 2b. Veri sağlık kontrolü (çapraz doğrulama)
+    saglik = veri_saglik_kontrolu(hisse_veri or {}, endeks, kaynak)
+    log(f"SAĞLIK: {saglik['durum']} | kaynak={kaynak} | hisse={saglik['hisse']} | "
+        f"yeterli_bar={saglik['yeterli_bar']} | sorunlar={saglik['sorunlar']}")
 
     # 3. Makro
     fiyatlar = makro_fiyatlar()
@@ -804,6 +900,7 @@ def main():
     paket = {
         'uretildi': dt.datetime.now().strftime('%Y-%m-%dT%H:%M:%S'),
         'kaynak': kaynak,
+        'saglik': saglik,
         'endeks': endeks,
         'makro': {'fiyatlar': fiyatlar, 'faiz': faiz, 'tufe': tufe},
         'takvim': takvim,
