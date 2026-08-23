@@ -135,6 +135,13 @@ tr.detail td { background:var(--bg3); padding:11px; white-space:normal; }
 .tcmb b { color:var(--tx); }
 .note { font-size:10px; color:var(--tx2); line-height:1.5; margin:12px 0 6px; }
 .empty { color:var(--tx2); font-size:12px; padding:16px 0; text-align:center; }
+/* ── MUM GRAFİK MODALI ── */
+.gbtn { background:none; border:none; cursor:pointer; font-size:15px; padding:2px 6px; border-radius:6px; }
+.gbtn:hover { background:var(--bg3); }
+.modal { position:fixed; inset:0; background:rgba(0,0,0,.75); z-index:200; display:none; align-items:center; justify-content:center; padding:12px; }
+.modal-box { width:100%; max-width:680px; height:75vh; background:var(--bg2); border:1px solid var(--bd); border-radius:16px; padding:12px; display:flex; flex-direction:column; }
+.modal-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; font-size:15px; font-weight:700; }
+.modal-head .x { font-size:18px; padding:2px 10px; }
 </style>
 </head>
 <body>
@@ -171,6 +178,14 @@ tr.detail td { background:var(--bg3); padding:11px; white-space:normal; }
   <button class="tab" data-sec="haber"><span class="ic">📰</span>Haberler</button>
   <button class="tab" data-sec="fon"><span class="ic">🏦</span>Fonlar</button>
 </nav>
+
+<!-- MUM GRAFİK MODALI -->
+<div class="modal" id="grafikModal" onclick="if(event.target===this)grafikKapat()">
+  <div class="modal-box">
+    <div class="modal-head"><span id="modalSym">—</span><button class="gbtn x" onclick="grafikKapat()">✕</button></div>
+    <div id="modalWidget" style="flex:1;min-height:0"></div>
+  </div>
+</div>
 
 <script>
 const SEC = document.querySelectorAll('.tab');
@@ -236,7 +251,7 @@ function tazelik(veriTarihi) {
 }
 
 /* ── TABLO ── */
-const KOLONLAR = ['Hisse','Grafik','Fiyat','1A','Skor','Sinyal','Trend','Para','RSI','MFI','Squeeze','S1/R1','SL/Hdf','Neden'];
+const KOLONLAR = ['Hisse','Grafik','Fiyat','1A','Skor','Sinyal','Trend','Para','RSI','MFI','Squeeze','S1/R1','SL/Hdf','Neden','📈'];
 
 function hisseSatir(r, durum) {
   const onceki = durum.detay.get(r.sembol);
@@ -254,7 +269,8 @@ function hisseSatir(r, durum) {
     `<td>${squeezeHtml(r)}</td>` +
     `<td>${r.s1 == null ? '—' : `<span style="color:var(--down)">${fmt(r.s1)}</span> / <span style="color:var(--up)">${fmt(r.r1)}</span>`}</td>` +
     `<td>${r.stop == null ? '—' : `${fmt(r.stop)} / ${fmt(r.hedef)}`}</td>` +
-    `<td class="ned">${(r.nedenler||[]).slice(0,2).map(n=>'▸ '+n).join('<br>')}</td></tr>`;
+    `<td class="ned">${(r.nedenler||[]).slice(0,2).map(n=>'▸ '+n).join('<br>')}</td>` +
+    `<td><button class="gbtn" onclick="event.stopPropagation();grafikModal('${r.sembol}')" title="Mum grafiği aç">📈</button></td></tr>`;
   if (onceki) {
     html += `<tr class="detail" data-det="${r.sembol}"><td colspan="${KOLONLAR.length}"><div class="det-ic">` +
       `<div><div class="k">📋 Tüm Nedenler</div><ul>${(r.nedenler||[]).map(n=>`<li>${n}</li>`).join('')}</ul></div>` +
@@ -331,7 +347,9 @@ function renderPiyasa(d) {
   const m = d.makro || {};
   let mk = '';
   Object.values(m.fiyatlar || {}).forEach(f => {
-    const renk = f.degisim == null ? '' : (f.degisim >= 0 ? 'up' : 'down');
+    // ters: VIX gibi endekslerde artış negatiftir (korku) → renk ters
+    const ts = f.ters ? -1 : 1;
+    const renk = f.degisim == null ? '' : ((f.degisim * ts) >= 0 ? 'up' : 'down');
     mk += `<div class="mk"><div class="t">${f.ad}</div><div class="v">${fmt(f.fiyat)}</div>` +
           `<div class="d ${renk}">${f.degisim == null ? f.birim : yuzde(f.degisim)}</div></div>`;
   });
@@ -403,6 +421,29 @@ function renderPiyasa(d) {
       if (det) det.style.display = det.style.display === 'none' ? '' : 'none';
     });
   });
+}
+
+/* ══════════ MUM GRAFİK MODALI (TradingView) ══════════ */
+function grafikModal(sym) {
+  document.getElementById('modalSym').textContent = sym + ' · 15 dk mum';
+  const m = document.getElementById('grafikModal');
+  m.style.display = 'flex';
+  const el = document.getElementById('modalWidget');
+  el.innerHTML = '';
+  const s = document.createElement('script');
+  s.src = 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
+  s.async = true;
+  s.innerHTML = JSON.stringify({
+    autosize: true, symbol: 'BIST:' + sym, interval: '15', timezone: 'Europe/Istanbul',
+    theme: 'dark', style: '1', locale: 'tr', hide_side_toolbar: false,
+    allow_symbol_change: false, save_image: false,
+    studies: ['Volume@tv-basicstudies'], container_id: 'modalWidget'
+  });
+  el.appendChild(s);
+}
+function grafikKapat() {
+  document.getElementById('grafikModal').style.display = 'none';
+  document.getElementById('modalWidget').innerHTML = '';
 }
 
 /* ══════════ GRAFİK (2 — TradingView, saniyelik canlı) ══════════ */
