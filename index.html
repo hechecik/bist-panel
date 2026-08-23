@@ -586,24 +586,26 @@ function alarmKontrol() {
 function renderSenaryo(d) {
   const t = d.test_senaryolari;
   if (!t) { document.getElementById('sec-senaryo').innerHTML = '<div class="empty">Senaryo verisi bekleniyor</div>'; return; }
-  let html = '<h2>🧪 Test Senaryoları — 6 Aylık Gerçek Veri</h2><div class="scn">';
-  const karti = (s, acik) => {
+  let html = '<h2>🧪 Test Senaryoları — 6 Aylık Gerçek Veri · 💵 100K TL Simülasyon</h2><div class="scn">';
+  const karti = (s, sermaye, acik) => {
     if (!s) return;
     const renk = s.ortalama >= 0 ? 'var(--up)' : 'var(--down)';
     const poz = Math.max(0, Math.min(100, 50 + s.ortalama * 2));
     const basari = s.islem ? Math.round(s.kazanan / s.islem * 100) : 0;
     const kb = s.islem ? `<div class="bar"><i style="width:${basari}%;background:var(--up)"></i><i style="width:${100-basari}%;background:var(--down)"></i></div>` : '';
+    const tl = sermaye ? `<div class="m">💵 <b>100K TL ile: ${fmt(sermaye.sonuc,0)} TL</b> <span class="${ok(sermaye.kar_zarar)}">(${sermaye.kar_zarar >= 0 ? '+' : ''}${fmt(sermaye.kar_zarar,0)} TL)</span> · ${fmt(sermaye.tahsis,0)} TL/pozisyon</div>` : '';
     html += `<div class="sc ${acik?'wide':''}"><div class="t">${s.ad}</div>` +
       `<div class="o" style="color:${renk}">${s.ortalama >= 0 ? '+' : ''}%${s.ortalama.toFixed(1)}</div>` +
       `<div class="bar"><i style="width:${poz}%;background:${s.ortalama>=0?'var(--up)':'var(--down)'}"></i></div>` +
-      `<div class="m">${s.islem} işlem · 🟢 ${s.kazanan} · 🔴 ${s.kaybeden} · <b>%${basari} başarı</b></div>` + kb;
+      `<div class="m">${s.islem} işlem · 🟢 ${s.kazanan} · 🔴 ${s.kaybeden} · <b>%${basari} başarı</b></div>` + kb + tl;
     if (s.en_iyi) html += `<div class="m">🏆 ${s.en_iyi.sembol} %${s.en_iyi.getiri_yuzde >= 0 ? '+' : ''}${s.en_iyi.getiri_yuzde} (${s.en_iyi.tarih})</div>`;
     if (s.en_kotu) html += `<div class="m">💀 ${s.en_kotu.sembol} %${s.en_kotu.getiri_yuzde >= 0 ? '+' : ''}${s.en_kotu.getiri_yuzde} (${s.en_kotu.tarih})</div>`;
     html += '</div>';
   };
-  karti(t.pazartesi_acilis);
-  karti(t.ertesi_gun_acilis);
-  karti(t.stop_losslu, true);
+  const sm = t.sermaye || {};
+  karti(t.pazartesi_acilis, sm.pazartesi);
+  karti(t.ertesi_gun_acilis, sm.ertesi);
+  karti(t.stop_losslu, sm.stop, true);
   html += '</div><div class="note">' + (t.aciklama || '') + '</div>';
 
   // 4 — Sinyal doğruluk takibi
