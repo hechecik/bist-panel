@@ -404,6 +404,103 @@ def test_senaryolari(hisse_veri: dict) -> dict:
     }
 
 
+def haberler_cek(oncelikli_hisseler=None) -> list:
+    """BIST öne çıkan hisselerden gerçek haberler (Yahoo Finance news) + kural bazlı etiket.
+
+    Etiket kuralları (anahtar kelime → duyuru tipi + yön):
+    - kar/temettü/sözleşme/ihale/yatırım → pozitif
+    - zarar/dava/ceza/soruşturma/istifa → negatif
+    Kural dışı haberler nötr etiketlenir — uydurma yorum yok.
+    """
+    import yfinance as yf
+    import warnings
+    warnings.filterwarnings('ignore')
+    oncelikli = oncelikli_hisseler or ['THYAO', 'AKBNK', 'ASELS', 'GARAN', 'ISCTR', 'KCHOL',
+                                       'SAHOL', 'TUPRS', 'EREGL', 'BIMAS']
+    pozitif_kw = ['kar', 'kâr', 'temettü', 'sözleşme', 'sozlesme', 'ihale', 'yatırım', 'yatirim',
+                  'büyüme', 'buyume', 'rekor', 'anlaşma', 'anlasma', 'artış', 'artis', 'profit',
+                  'dividend', 'contract', 'award', 'growth', 'record', 'agreement', 'increase']
+    negatif_kw = ['zarar', 'dava', 'ceza', 'soruşturma', 'sorusturma', 'istifa', 'iflas', 'borç', 'borc',
+                  'düşüş', 'dusus', 'kayıp', 'kayip', 'loss', 'lawsuit', 'fine', 'investigation',
+                  'resign', 'bankruptcy', 'debt', 'decline', 'probe']
+
+    haberler = []
+    for sym in oncelikli:
+        try:
+            t = yf.Ticker(f"{sym}.IS")
+            for n in (t.news or [])[:4]:
+                c = n.get('content', {})
+                baslik = c.get('title', '')
+                if not baslik:
+                    continue
+                yayinci = (c.get('provider') or {}).get('displayName', '')
+                tarih = (c.get('pubDate') or '')[:10]
+                alt = baslik.lower()
+                poz = sum(1 for k in pozitif_kw if k in alt)
+                neg = sum(1 for k in negatif_kw if k in alt)
+                if poz > neg:
+                    yon, etiket = 'pozitif', '🟢 Pozitif'
+                elif neg > poz:
+                    yon, etiket = 'negatif', '🔴 Negatif'
+                else:
+                    yon, etiket = 'notr', '⚪ Nötr'
+                haberler.append({'sembol': sym, 'baslik': baslik[:160], 'yayinci': yayinci,
+                                 'tarih': tarih, 'etiket': etiket, 'yon': yon})
+        except Exception:
+            continue
+    # Tarihe göre sırala (yeniden eskiye), 30 ile sınırla
+    haberler.sort(key=lambda x: x['tarih'], reverse=True)
+    return haberler[:30]
+
+
+def fonlar_cek() -> dict:
+    """TEFAS fon portföy dağılımları — borsapy Fund.allocation (TEFAS resmi endpoint).
+
+    DİKKAT: TEFAS 'dagilimSiraliGetirT' VARLIK SINIFI bazlı dağılım verir (hisse senedi,
+    ters-repo, eurobond...) — hisse BAZLI değil. Hisse bazlı detay TEFAS API key ister.
+    Bu yüzden: her fonun varlık sınıfı dağılımı + fonların ortalama hisse senedi ağırlığı gösterilir.
+    """
+    import borsapy as bp
+    import pandas as pd
+    # Hisse senedi ağırlıklı fonlar (bilinen A tipi kodlar)
+    aday_kodlar = ['TTE', 'TMS', 'TAH', 'TTA', 'TTP', 'AVT', 'TAI']
+    sonuc = {'fonlar': [], 'ozet': {}, 'tarih': ''}
+    hisse_agirliklari = []
+    for kod in aday_kodlar:
+        try:
+            f = bp.Fund(kod)
+            a = f.allocation
+            if a is None or (isinstance(a, pd.DataFrame) and a.empty):
+                continue
+            df = a.dropna(subset=['code'])
+            satirlar = []
+            hs_agirlik = 0.0
+            for _, r in df.iterrows():
+                w = float(r.get('weight', 0))
+                satirlar.append({'sinif': str(r.get('asset_name', r.get('code', ''))),
+                                 'agirlik': round(w, 2)})
+                if str(r.get('code', '')).lower() in ('hs', 'yhs'):
+                    hs_agirlik += w
+            if not satirlar:
+                continue
+            tarih = str(df.iloc[0].get('Date', ''))[:10]
+            sonuc['fonlar'].append({'kod': kod, 'tarih': tarih, 'hisse_agirlik': round(hs_agirlik, 1),
+                                    'varliklar': satirlar[:8]})
+            sonuc['tarih'] = tarih
+            hisse_agirliklari.append(hs_agirlik)
+        except Exception:
+            continue
+    if hisse_agirliklari:
+        sonuc['ozet'] = {
+            'fon_sayisi': len(hisse_agirliklari),
+            'ort_hisse_agirlik': round(sum(hisse_agirliklari) / len(hisse_agirliklari), 1),
+            'max_hisse_agirlik': round(max(hisse_agirliklari), 1),
+        }
+    sonuc['not'] = ('TEFAS varlık sınıfı bazlı dağılım verir (hisse senedi, ters-repo, eurobond…). '
+                    'Hisse BAZLI dağılım (hangi hisse ne kadar) TEFAS API anahtarı gerektirir.')
+    return sonuc
+
+
 def main():
     log("=== BIST PANEL veri çekme başladı ===")
     liste = bist100_listesi()
@@ -434,6 +531,12 @@ def main():
     # 5. Test senaryoları
     senaryolar = test_senaryolari(hisse_veri) if hisse_veri else {}
 
+    # 5b. Haberler
+    haberler = haberler_cek()
+
+    # 5c. Fonlar
+    fonlar = fonlar_cek()
+
     # 6. JSON yaz
     paket = {
         'uretildi': dt.datetime.now().strftime('%Y-%m-%dT%H:%M:%S'),
@@ -443,6 +546,8 @@ def main():
         'takvim': takvim,
         'sinyaller': sinyaller,
         'test_senaryolari': senaryolar,
+        'haberler': haberler,
+        'fonlar': fonlar,
     }
     (DATA_DIR / 'piyasa.json').write_text(json.dumps(paket, ensure_ascii=False, indent=1), encoding='utf-8')
     log(f"piyasa.json yazıldı: {os.path.getsize(DATA_DIR / 'piyasa.json')} byte")
