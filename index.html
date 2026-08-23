@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BIST Panel</title>
+<link rel="manifest" href="manifest.json">
+<style>
+:root { color-scheme: dark; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background:#0d1117; color:#c9d1d9; font-family:'Segoe UI',system-ui,sans-serif; padding:16px; }
+h1 { color:#f0f6fc; font-size:20px; margin-bottom:8px; }
+.meta { color:#8b949e; font-size:12px; margin-bottom:16px; }
+.card { background:#161b22; border:1px solid #30363d; border-radius:8px; padding:16px; margin-bottom:12px; }
+.card .label { color:#8b949e; font-size:11px; text-transform:uppercase; }
+.card .val { font-size:24px; font-weight:bold; margin-top:4px; }
+.up { color:#3fb950; } .down { color:#f85149; }
+</style>
+</head>
+<body>
+<h1>📊 BIST Panel</h1>
+<div class="meta" id="meta">Yükleniyor...</div>
+<div id="icerik"><p>Veri bekleniyor — ilk Actions çalışması tamamlanınca buraya gelecek.</p></div>
+<script>
+fetch('data/piyasa.json').then(r => r.json()).then(d => {
+  document.getElementById('meta').textContent = 'Son güncelleme: ' + d.uretildi + ' · Kaynak: ' + d.kaynak;
+  const e = d.endeks;
+  let html = '<div class="card"><div class="label">BIST 100 (XU100)</div>' +
+    '<div class="val ' + (e && e.degisim_yuzde >= 0 ? 'up' : 'down') + '">' +
+    (e ? e.deger.toLocaleString('tr-TR') + ' <small>%' + e.degisim_yuzde.toFixed(2) + '</small>' : '—') + '</div></div>';
+  const s = d.sinyaller;
+  html += '<div class="card"><div class="label">🟢 AL</div><div class="val up">' + (s.al ? s.al.length : 0) + '</div></div>';
+  html += '<div class="card"><div class="label">🔴 SAT</div><div class="val down">' + (s.sat ? s.sat.length : 0) + '</div></div>';
+  document.getElementById('icerik').innerHTML = html;
+}).catch(err => {
+  document.getElementById('icerik').innerHTML = '<p>Veri yok: ' + err.message + '</p>';
+});
+</script>
+</body>
+</html>
