@@ -70,6 +70,7 @@ def cek_isyatirim(bist_list: list) -> list | None:
                 h.append({
                     'tarih': s['Tarih'][:10],
                     'kapanis': s.get('HGDG_Kapanis'),
+                    'acilis': s.get('HGDG_AOF'),
                     'min': s.get('HGDG_Min'),
                     'max': s.get('HGDG_Max'),
                     'hacim': s.get('HGDG_Hacim'),
@@ -106,6 +107,7 @@ def cek_yfinance(bist_list: list) -> dict:
                     rows.append({
                         'tarih': str(idx.date()),
                         'kapanis': round(float(row['Close']), 4),
+                        'acilis': round(float(row['Open']), 4) if 'Open' in row else None,
                         'min': round(float(row['Low']), 4) if 'Low' in row else None,
                         'max': round(float(row['High']), 4) if 'High' in row else None,
                         'hacim': int(row['Volume']) if 'Volume' in row else None,
@@ -318,6 +320,90 @@ def sinyalleri_hesapla(hisse_veri: dict) -> dict:
     }
 
 
+def test_senaryolari(hisse_veri: dict) -> dict:
+    """TEST SENARYOLARI — 'geçmişte sinyal olsaydı şu an ne olurdu?' hesabı.
+
+    Gerçek veri + gerçek sinyal geçmişi (uydurma yok):
+    - S1 PAZARTESİ AÇILIŞ: cuma kapanışında AL sinyali olan hisse, pazartesi AÇILIŞ fiyatından
+      alınıp bugüne kadar tutulursa kar/zarar (tüm pazartesiler, son 6 ay)
+    - S2 ERTESI GÜN AÇILIŞ: her AL sinyali gününde, ertesi gün açılışta alınıp tutulursa
+    - S3 STOP-LOSS'LU: S2 + girişten sonra -%5 düşerse çık (gerçekçi senaryo)
+    - S4 EŞİT AĞIRLIK: tüm sinyaller eşit ağırlıkta portföy (ortalama getiri)
+    """
+    import sys
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from indikatorler import tum_indikatorler, sinyal_hesapla
+    import pandas as pd
+
+    pazartesi_islemleri = []   # S1
+    gunluk_islemler = []       # S2 + S3
+
+    for sembol, rows in hisse_veri.items():
+        if len(rows) < 60:
+            continue
+        df = pd.DataFrame(rows)
+        df['HGDG_TARIH'] = pd.to_datetime(df['tarih'])
+        df = df.rename(columns={'kapanis': 'HGDG_KAPANIS', 'acilis': 'HGDG_ACILIS',
+                                'min': 'HGDG_MIN', 'max': 'HGDG_MAX', 'hacim': 'HGDG_HACIM'})
+        df = df.sort_values('HGDG_TARIH').reset_index(drop=True)
+        try:
+            ind = tum_indikatorler(df)
+        except Exception:
+            continue
+        # Tüm barlarda sinyal üret (son bar hariç — giriş ertesi gün)
+        son_fiyat = float(ind['HGDG_KAPANIS'].iloc[-1])
+        for i in range(60, len(ind) - 1):
+            son = ind.iloc[i]
+            s = sinyal_hesapla(son)
+            if s['sinyal'] not in ('AL', 'DİKKAT_AL'):
+                continue
+            giris_gunu = pd.Timestamp(son['HGDG_TARIH']).date()
+            # Ertesi günün verileri
+            sonraki = ind.iloc[i + 1]
+            giris_fiyat = float(sonraki['HGDG_ACILIS']) if pd.notna(sonraki.get('HGDG_ACILIS')) else float(sonraki['HGDG_KAPANIS'])
+            if not giris_fiyat or giris_fiyat <= 0:
+                continue
+            getiri = (son_fiyat / giris_fiyat - 1) * 100
+            # S3: stop-loss kontrolü — girişten sonraki barlarda -%5'e düştü mü?
+            stop_calismadi = True
+            stop_getiri = getiri
+            for j in range(i + 1, len(ind)):
+                d_ip = (float(ind.iloc[j]['HGDG_MIN']) / giris_fiyat - 1) * 100
+                if d_ip <= -5:
+                    stop_calismadi = False
+                    stop_getiri = -5.0  # %5 stop ile çıkıldı
+                    break
+            islem = {'sembol': sembol, 'tarih': str(giris_gunu), 'giris': round(giris_fiyat, 2),
+                     'bugun': round(son_fiyat, 2), 'getiri_yuzde': round(getiri, 1),
+                     'stop_getiri_yuzde': round(stop_getiri, 1), 'stop_calismis': not stop_calismadi,
+                     'sinyal_tarih': str(son['HGDG_TARIH'].date())}
+            gunluk_islemler.append(islem)
+            # S1: cuma sinyali → pazartesi girişi
+            if giris_gunu.weekday() == 0:  # pazartesi
+                pazartesi_islemleri.append(islem)
+
+    def ozetle(islemler, ad, stop_mu=False):
+        if not islemler:
+            return {'ad': ad, 'islem': 0, 'ortalama': 0, 'kazanan': 0, 'kaybeden': 0,
+                    'en_iyi': None, 'en_kotu': None, 'islemler': []}
+        getiriler = [x['stop_getiri_yuzde'] if stop_mu else x['getiri_yuzde'] for x in islemler]
+        kazanan = sum(1 for g in getiriler if g > 0)
+        return {'ad': ad, 'islem': len(islemler), 'ortalama': round(sum(getiriler) / len(getiriler), 1),
+                'kazanan': kazanan, 'kaybeden': len(getiriler) - kazanan,
+                'en_iyi': max(islemler, key=lambda x: x['stop_getiri_yuzde'] if stop_mu else x['getiri_yuzde']),
+                'en_kotu': min(islemler, key=lambda x: x['stop_getiri_yuzde'] if stop_mu else x['getiri_yuzde']),
+                'islemler': sorted(islemler, key=lambda x: x['stop_getiri_yuzde'] if stop_mu else x['getiri_yuzde'], reverse=True)[:15]}
+
+    return {
+        'pazartesi_acilis': ozetle(pazartesi_islemleri, 'Pazartesi açılışında al'),
+        'ertesi_gun_acilis': ozetle(gunluk_islemler, 'Sinyal ertesi gün açılışında al'),
+        'stop_losslu': ozetle(gunluk_islemler, 'Ertesi gün açılış + %5 stop-loss', stop_mu=True),
+        'aciklama': ('Senaryolar GERÇEK veriyle hesaplanır: sinyal günü kapanışında AL/DİKKAT_AL üreten '
+                     'hisse, ertesi gün açılıştan alınır ve bugünkü kapanışla kar/zarar ölçülür. '
+                     'Stop-loss senaryosu giriş sonrası -%5 düşüşte çıkış varsayar.'),
+    }
+
+
 def main():
     log("=== BIST PANEL veri çekme başladı ===")
     liste = bist100_listesi()
@@ -345,7 +431,10 @@ def main():
     # 4. Sinyaller
     sinyaller = sinyalleri_hesapla(hisse_veri) if hisse_veri else {'al': [], 'tut': [], 'sat': [], 'toplam': 0, 'hesap_tarihi': ''}
 
-    # 5. JSON yaz
+    # 5. Test senaryoları
+    senaryolar = test_senaryolari(hisse_veri) if hisse_veri else {}
+
+    # 6. JSON yaz
     paket = {
         'uretildi': dt.datetime.now().strftime('%Y-%m-%dT%H:%M:%S'),
         'kaynak': kaynak,
@@ -353,6 +442,7 @@ def main():
         'makro': {'fiyatlar': fiyatlar, 'faiz': faiz, 'tufe': tufe},
         'takvim': takvim,
         'sinyaller': sinyaller,
+        'test_senaryolari': senaryolar,
     }
     (DATA_DIR / 'piyasa.json').write_text(json.dumps(paket, ensure_ascii=False, indent=1), encoding='utf-8')
     log(f"piyasa.json yazıldı: {os.path.getsize(DATA_DIR / 'piyasa.json')} byte")

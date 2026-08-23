@@ -235,7 +235,17 @@ def sinyal_hesapla(son: pd.Series) -> dict:
     if s['bb_konum'] == 'DESTEK': puan += 1
     elif s['bb_konum'] == 'DİRENÇ': puan -= 1
     s['skor'] = puan
-    s['sinyal'] = 'AL' if puan >= 4 else ('SAT' if puan <= -4 else 'TUT')
+    # AL/DİKKAT_AL/DİKKAT_SAT/SAT — skor≥4 tam AL, ≥2 dikkatli AL (6 ayda ≥4 neredeyse hiç tetiklenmiyor)
+    if puan >= 4:
+        s['sinyal'] = 'AL'
+    elif puan >= 2:
+        s['sinyal'] = 'DİKKAT_AL'
+    elif puan <= -4:
+        s['sinyal'] = 'SAT'
+    elif puan <= -2:
+        s['sinyal'] = 'DİKKAT_SAT'
+    else:
+        s['sinyal'] = 'TUT'
     # Stop-loss önerisi (ATR bazlı)
     s['stop_loss'] = round(fiyat - 2 * son['ATR14'], 2)
     s['hedef'] = round(fiyat + 3 * son['ATR14'], 2)
