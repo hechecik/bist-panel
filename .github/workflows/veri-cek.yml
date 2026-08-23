@@ -1,0 +1,41 @@
+name: veri-cek
+
+on:
+  schedule:
+    # Hafta içi seans saatleri: 15 dk'da bir (GitHub free dakika limiti için 9-18 arası)
+    - cron: '*/15 9-18 * * 1-5'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  veri:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Paket kurulumu
+        run: |
+          pip install --quiet pandas numpy yfinance borsapy beautifulsoup4 httpx lxml requests
+
+      - name: Veri çek + JSON üret
+        run: python scripts/veri_cek.py
+
+      - name: Commit + push (JSON güncelse)
+        run: |
+          git config user.name "bist-panel bot"
+          git config user.email "96144326+hechecik@users.noreply.github.com"
+          git add -A
+          if ! git diff --cached --quiet; then
+            git commit -m "veri guncelle $(date -u +'%d.%m %H:%M') UTC"
+            git push
+            echo "✅ push edildi"
+          else
+            echo "ℹ️ değişiklik yok"
+          fi
