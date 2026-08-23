@@ -251,13 +251,36 @@ def makro_fiyatlar() -> dict:
         import yfinance as yf
         import warnings
         warnings.filterwarnings('ignore')
-        g = yf.Ticker('GC=F').history(period='2d')
+        g = yf.Ticker('GC=F').history(period='5d')
+        g = g.dropna()
         son = float(g['Close'].iloc[-1])
         onceki = float(g['Close'].iloc[-2]) if len(g) > 1 else son
         fiyatlar['ons-altin'] = {'ad': 'ONS ALTIN', 'birim': 'USD/ons', 'fiyat': round(son, 2),
                                  'degisim': round((son / onceki - 1) * 100, 2) if onceki else None}
     except Exception as e:
         log(f"ons altın hata: {str(e)[:50]}")
+    # VIX + emtialar — yfinance (küresel risk iştahı + sektörel ipucu)
+    ekstra = [
+        ('^VIX', 'VIX KORKU', 'seviye', True),   # ters: artış = korku = kırmızı
+        ('NG=F', 'DOĞALGAZ', 'USD', False),
+        ('HG=F', 'BAKIR', 'USD/lb', False),
+        ('ZW=F', 'BUĞDAY', 'USc/buşel', False),
+    ]
+    for sym, ad, birim, ters in ekstra:
+        try:
+            import yfinance as yf
+            import warnings
+            warnings.filterwarnings('ignore')
+            h = yf.Ticker(sym).history(period='5d').dropna()
+            if h.empty:
+                continue
+            son = float(h['Close'].iloc[-1])
+            onceki = float(h['Close'].iloc[-2]) if len(h) > 1 else son
+            fiyatlar[sym] = {'ad': ad, 'birim': birim, 'fiyat': round(son, 2),
+                             'degisim': round((son / onceki - 1) * 100, 2) if onceki else None,
+                             'ters': ters}
+        except Exception as e:
+            log(f"{ad} hata: {str(e)[:40]}")
     return fiyatlar
 
 
@@ -741,6 +764,10 @@ def haberler_cek(oncelikli_hisseler=None) -> list:
         ('https://www.cnbc.com/id/10001147/device/rss/rss.html', 'CNBC Ekonomi', 'makro', 'en'),
         ('https://www.cnbc.com/id/100003114/device/rss/rss.html', 'CNBC Dünya', 'global', 'en'),
         ('https://www.investing.com/rss/news.rss', 'Investing.com', 'global', 'en'),
+        # Google News arama akışları — KAP bildirimleri + TR borsa + global makro (key'siz)
+        ('https://news.google.com/rss/search?q=KAP+bildirim+duyuru&hl=tr&gl=TR&ceid=TR:tr', 'Google News · KAP', 'bist', 'tr'),
+        ('https://news.google.com/rss/search?q=borsa+istanbul+ekonomi&hl=tr&gl=TR&ceid=TR:tr', 'Google News · TR Borsa', 'bist', 'tr'),
+        ('https://news.google.com/rss/search?q=fed+inflation+china+markets&hl=en&gl=US&ceid=US:en', 'Google News · Global', 'global', 'en'),
     ]
     for url, kaynak, kategori, dil in rss_kaynaklari:
         for item in _rss_cek(url, limit=12):
