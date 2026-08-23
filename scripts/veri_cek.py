@@ -525,7 +525,8 @@ def test_senaryolari(hisse_veri: dict) -> dict:
             islem = {'sembol': sembol, 'tarih': str(giris_gunu), 'giris': round(giris_fiyat, 2),
                      'bugun': round(son_fiyat, 2), 'getiri_yuzde': round(getiri, 1),
                      'stop_getiri_yuzde': round(stop_getiri, 1), 'stop_calismis': not stop_calismadi,
-                     'sinyal_tarih': str(son['HGDG_TARIH'].date())}
+                     'sinyal_tarih': str(son['HGDG_TARIH'].date()),
+                     'skor': int(s['skor'])}
             gunluk_islemler.append(islem)
             # S1: cuma sinyali → pazartesi girişi
             if giris_gunu.weekday() == 0:  # pazartesi
@@ -559,11 +560,36 @@ def test_senaryolari(hisse_veri: dict) -> dict:
         })
     hisse_ozet.sort(key=lambda x: x['toplam_getiri'], reverse=True)
 
+    # 2.4 — 100K TL sermaye simülasyonu (eski sürüm özelliği):
+    # SKOR≥3 strateji: güçlü AL sinyalleri, 10.000 TL/pozisyon, max 10 pozisyon
+    # (100K/10K) → toplam tahsis asla başlangıcı aşmaz (tutarlı). Pozisyonlar
+    # bugüne kadar tutulur; stop varyantı -%5'te kapatır. Gerçek getirilerden.
+    def sermaye(islemler, stop_mu=False, baslangic=100000.0, tahsis=10000.0):
+        guclu = [x for x in islemler if x.get('skor', 0) >= 3]
+        if not guclu:  # skor≥3 yoksa en güçlü sinyaller (DİKKAT_AL dahil) — boş kalmaz
+            guclu = sorted(islemler, key=lambda x: -x.get('skor', 0))[:10]
+        guclu = guclu[:int(baslangic / tahsis)]  # max 10 pozisyon
+        if not guclu:
+            return {'baslangic': baslangic, 'sonuc': baslangic, 'kar_zarar': 0.0,
+                    'islem': 0, 'tahsis': tahsis, 'strateji': 'skor≥3'}
+        toplam = baslangic
+        for x in guclu:
+            g = x['stop_getiri_yuzde'] if stop_mu else x['getiri_yuzde']
+            toplam += tahsis * g / 100.0
+        return {'baslangic': baslangic, 'sonuc': round(toplam, 0),
+                'kar_zarar': round(toplam - baslangic, 0),
+                'islem': len(guclu), 'tahsis': tahsis, 'strateji': 'skor≥3'}
+
     return {
         'pazartesi_acilis': ozetle(pazartesi_islemleri, 'Pazartesi açılışında al'),
         'ertesi_gun_acilis': ozetle(gunluk_islemler, 'Sinyal ertesi gün açılışında al'),
         'stop_losslu': ozetle(gunluk_islemler, 'Ertesi gün açılış + %5 stop-loss', stop_mu=True),
         'hisse_bazli': hisse_ozet[:20],
+        'sermaye': {
+            'pazartesi': sermaye(pazartesi_islemleri),
+            'ertesi': sermaye(gunluk_islemler),
+            'stop': sermaye(gunluk_islemler, stop_mu=True),
+        },
         'aciklama': ('Senaryolar GERÇEK veriyle hesaplanır: sinyal günü kapanışında AL/DİKKAT_AL üreten '
                      'hisse, ertesi gün açılıştan alınır ve bugünkü kapanışla kar/zarar ölçülür. '
                      'Stop-loss senaryosu giriş sonrası -%5 düşüşte çıkış varsayar.'),
