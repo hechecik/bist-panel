@@ -121,13 +121,15 @@ def cek_yfinance(bist_list: list) -> dict:
 
 
 def endeks_verisi() -> dict | None:
-    """BIST 100 endeks — yfinance ^XU100.IS."""
+    """BIST 100 endeks — yfinance XU100.IS (^XU100.IS sembolü Yahoo'da yok)."""
     try:
         import yfinance as yf
         import pandas as pd
-        df = yf.download("^XU100.IS", period="6mo", interval="1d", progress=False)
+        df = yf.download("XU100.IS", period="6mo", interval="1d", progress=False)
         if df.empty:
             return None
+        if isinstance(df.columns, pd.MultiIndex):
+            df = df.xs("XU100.IS", axis=1, level="Ticker")
         son = df.iloc[-1]
         onceki = df.iloc[-2] if len(df) > 1 else son
         return {
