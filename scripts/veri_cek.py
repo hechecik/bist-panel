@@ -596,53 +596,160 @@ def test_senaryolari(hisse_veri: dict) -> dict:
     }
 
 
-def haberler_cek(oncelikli_hisseler=None) -> list:
-    """BIST öne çıkan hisselerden gerçek haberler (Yahoo Finance news) + kural bazlı etiket.
+def _rss_cek(url: str, limit: int = 12) -> list:
+    """RSS feed çek — stdlib (xml.etree) + httpx. pubDate → ISO normalize."""
+    try:
+        import httpx
+        from xml.etree import ElementTree as ET
+        from email.utils import parsedate_to_datetime
+        r = httpx.get(url, timeout=15, follow_redirects=True, headers=HEADERS)
+        if r.status_code != 200 or '<item>' not in r.text:
+            return []
+        root = ET.fromstring(r.text)
+        sonuc = []
+        for item in root.findall('.//item')[:limit]:
+            baslik = (item.findtext('title') or '').strip()
+            if not baslik:
+                continue
+            link = (item.findtext('link') or '').strip()
+            pub = (item.findtext('pubDate') or '').strip()
+            iso = None
+            if pub:
+                try:
+                    iso = parsedate_to_datetime(pub).isoformat()
+                except Exception:
+                    try:
+                        import datetime as _dt
+                        iso = _dt.datetime.strptime(pub[:19], '%Y-%m-%d %H:%M:%S').isoformat()
+                    except Exception:
+                        iso = None
+            sonuc.append({'baslik': baslik[:200], 'link': link, 'pub': iso})
+        return sonuc
+    except Exception:
+        return []
 
-    Etiket kuralları (anahtar kelime → duyuru tipi + yön):
-    - kar/temettü/sözleşme/ihale/yatırım → pozitif
-    - zarar/dava/ceza/soruşturma/istifa → negatif
-    Kural dışı haberler nötr etiketlenir — uydurma yorum yok.
+
+def _dil_tespit(baslik: str, varsayilan: str = 'en') -> str:
+    """Türkçe karakter varsa tr, yoksa kaynak varsayılanı."""
+    tr_karakter = any(c in baslik.lower() for c in 'ğışöüç')
+    return 'tr' if tr_karakter else varsayilan
+
+
+def _yon_etiket(baslik: str) -> tuple:
+    """Anahtar kelime kurallarıyla yön + etiket (LLM'siz, uydurma yok)."""
+    pozitif_kw = ['kar', 'kâr', 'temettü', 'sözleşme', 'sozlesme', 'ihale', 'yatırım', 'yatirim',
+                  'büyüme', 'buyume', 'rekor', 'anlaşma', 'anlasma', 'artış', 'artis', 'profit',
+                  'dividend', 'contract', 'award', 'growth', 'record', 'agreement', 'increase',
+                  'yükseldi', 'yukseldi', 'rekor', 'kazanç', 'kazanc', 'yeni anlaşma']
+    negatif_kw = ['zarar', 'dava', 'ceza', 'soruşturma', 'sorusturma', 'istifa', 'iflas', 'borç', 'borc',
+                  'düşüş', 'dusus', 'kayıp', 'kayip', 'loss', 'lawsuit', 'fine', 'investigation',
+                  'resign', 'bankruptcy', 'debt', 'decline', 'probe', 'düştü', 'dustu', 'kriz',
+                  'enflasyon', 'faiz artışı', 'faiz artisi', 'yaptırım', 'yaptirim', 'savaş', 'savas']
+    alt = baslik.lower()
+    poz = sum(1 for k in pozitif_kw if k in alt)
+    neg = sum(1 for k in negatif_kw if k in alt)
+    if poz > neg:
+        return 'pozitif', '🟢 Pozitif'
+    if neg > poz:
+        return 'negatif', '🔴 Negatif'
+    return 'notr', '⚪ Nötr'
+
+
+def haberler_cek(oncelikli_hisseler=None) -> list:
+    """Cryptopanic tarzı çok kaynaklı haber akışı — BIST + global + makro + altın.
+
+    Kaynaklar (hepsi key'siz, Actions ABD IP'de çalışır):
+    - Yahoo Finance: BIST hisseleri (bist) + GC=F altın / SI=F gümüş (altin-maden)
+    - Habertürk Ekonomi RSS (makro, tr)
+    - FortuneTR RSS (makro, tr)
+    - CNBC Economy RSS (makro, en)
+    - CNBC Top News RSS (global, en)
+    - Investing.com RSS (global, en)
+
+    Her haber: baslik, kaynak, kategori, dil, yon/etiket, yayin_tarihi (ISO).
+    Sıralama: yeniden eskiye. Son 7 gün filtresi.
     """
     import yfinance as yf
     import warnings
+    import datetime as _dt
     warnings.filterwarnings('ignore')
-    oncelikli = oncelikli_hisseler or ['THYAO', 'AKBNK', 'ASELS', 'GARAN', 'ISCTR', 'KCHOL',
-                                       'SAHOL', 'TUPRS', 'EREGL', 'BIMAS']
-    pozitif_kw = ['kar', 'kâr', 'temettü', 'sözleşme', 'sozlesme', 'ihale', 'yatırım', 'yatirim',
-                  'büyüme', 'buyume', 'rekor', 'anlaşma', 'anlasma', 'artış', 'artis', 'profit',
-                  'dividend', 'contract', 'award', 'growth', 'record', 'agreement', 'increase']
-    negatif_kw = ['zarar', 'dava', 'ceza', 'soruşturma', 'sorusturma', 'istifa', 'iflas', 'borç', 'borc',
-                  'düşüş', 'dusus', 'kayıp', 'kayip', 'loss', 'lawsuit', 'fine', 'investigation',
-                  'resign', 'bankruptcy', 'debt', 'decline', 'probe']
 
     haberler = []
+    gorulen = set()  # aynı başlığı tekrar ekleme
+
+    def ekle(baslik, kaynak, kategori, dil, sembol='', link='', pub=None):
+        if not baslik or len(baslik) < 15:
+            return
+        anahtar = baslik.lower()[:80]
+        if anahtar in gorulen:
+            return
+        gorulen.add(anahtar)
+        yon, etiket = _yon_etiket(baslik)
+        haberler.append({
+            'baslik': baslik[:180], 'kaynak': kaynak, 'kategori': kategori,
+            'dil': dil, 'yon': yon, 'etiket': etiket, 'sembol': sembol,
+            'link': link, 'yayin_tarihi': pub,
+            'tarih': (pub or '')[:10] if pub else '',
+        })
+
+    # 1) BIST hisseleri (Yahoo) — mevcut mantık
+    oncelikli = oncelikli_hisseler or ['THYAO', 'AKBNK', 'ASELS', 'GARAN', 'ISCTR', 'KCHOL',
+                                       'SAHOL', 'TUPRS', 'EREGL', 'BIMAS']
     for sym in oncelikli:
         try:
             t = yf.Ticker(f"{sym}.IS")
+            for n in (t.news or [])[:3]:
+                c = n.get('content', {})
+                baslik = c.get('title', '')
+                if not baslik:
+                    continue
+                pub = (c.get('pubDate') or '')[:19].replace('T', ' ')
+                try:
+                    iso = _dt.datetime.strptime(pub, '%Y-%m-%d %H:%M:%S').isoformat() if pub else None
+                except Exception:
+                    iso = None
+                yayinci = (c.get('provider') or {}).get('displayName', 'Yahoo')
+                ekle(baslik, yayinci, 'bist', _dil_tespit(baslik, 'en'), sym, '', iso)
+        except Exception:
+            continue
+
+    # 2) Altın / Gümüş (Yahoo — GC=F, SI=F)
+    for sembol, kategori in [('GC=F', 'altin-maden'), ('SI=F', 'altin-maden')]:
+        try:
+            t = yf.Ticker(sembol)
             for n in (t.news or [])[:4]:
                 c = n.get('content', {})
                 baslik = c.get('title', '')
                 if not baslik:
                     continue
-                yayinci = (c.get('provider') or {}).get('displayName', '')
-                tarih = (c.get('pubDate') or '')[:10]
-                alt = baslik.lower()
-                poz = sum(1 for k in pozitif_kw if k in alt)
-                neg = sum(1 for k in negatif_kw if k in alt)
-                if poz > neg:
-                    yon, etiket = 'pozitif', '🟢 Pozitif'
-                elif neg > poz:
-                    yon, etiket = 'negatif', '🔴 Negatif'
-                else:
-                    yon, etiket = 'notr', '⚪ Nötr'
-                haberler.append({'sembol': sym, 'baslik': baslik[:160], 'yayinci': yayinci,
-                                 'tarih': tarih, 'etiket': etiket, 'yon': yon})
+                pub = (c.get('pubDate') or '')[:19].replace('T', ' ')
+                try:
+                    iso = _dt.datetime.strptime(pub, '%Y-%m-%d %H:%M:%S').isoformat() if pub else None
+                except Exception:
+                    iso = None
+                yayinci = (c.get('provider') or {}).get('displayName', 'Yahoo')
+                ekle(baslik, yayinci, kategori, _dil_tespit(baslik, 'en'), sembol, '', iso)
         except Exception:
             continue
-    # Tarihe göre sırala (yeniden eskiye), 30 ile sınırla
-    haberler.sort(key=lambda x: x['tarih'], reverse=True)
-    return haberler[:30]
+
+    # 3) RSS kaynakları
+    rss_kaynaklari = [
+        ('https://www.haberturk.com/rss/ekonomi.xml', 'Habertürk', 'makro', 'tr'),
+        ('https://www.fortuneturkey.com/rss', 'Fortune TR', 'makro', 'tr'),
+        ('https://www.paratic.com/feed/', 'Paratic', 'makro', 'tr'),
+        ('https://www.bloomberght.com/rss', 'Bloomberg HT', 'bist', 'tr'),
+        ('https://www.cnbc.com/id/10001147/device/rss/rss.html', 'CNBC Ekonomi', 'makro', 'en'),
+        ('https://www.cnbc.com/id/100003114/device/rss/rss.html', 'CNBC Dünya', 'global', 'en'),
+        ('https://www.investing.com/rss/news.rss', 'Investing.com', 'global', 'en'),
+    ]
+    for url, kaynak, kategori, dil in rss_kaynaklari:
+        for item in _rss_cek(url, limit=12):
+            ekle(item['baslik'], kaynak, kategori, dil, '', item.get('link', ''), item.get('pub'))
+
+    # 4) Tarihe göre yeniden eskiye sırala (filtre yok — eski haberler de görünsün,
+    #    zaman damgası "X ay önce" olarak gösterilir; max 100 haber)
+    haberler.sort(key=lambda x: x['yayin_tarihi'] or '', reverse=True)
+    return haberler[:100]
 
 
 def fonlar_cek() -> dict:
