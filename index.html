@@ -303,7 +303,7 @@ async function yukle() {
   try {
     const d = await (await fetch('data/piyasa.json?v=' + Date.now())).json();
     durum.hesapTarihi = (d.sinyaller && d.sinyaller.hesap_tarihi) || '';
-    renderPiyasa(d); renderSenaryo(d); renderHaber(d); renderFon(d);
+    renderPiyasa(d); renderGrafik(d); renderSenaryo(d); renderHaber(d); renderFon(d);
     alarmKontrol(); // 3+6 — fiyat eşik alarmları
     const gun = new Date().getDay();
     const ure = new Date(d.uretildi);
@@ -448,19 +448,28 @@ function grafikKapat() {
 
 /* ══════════ GRAFİK (2 — TradingView, saniyelik canlı) ══════════ */
 function renderGrafik(d) {
+  // 15 dk'da bir yukle() çağrılır — kullanıcının seçimini koru, widget'ı
+  // sadece sekme GÖRÜNÜRKEN yeniden embed et (display:none iken autosize:true
+  // 0 yükseklik üretir, grafik boş görünür).
+  const mevcutSym = (document.getElementById('tvSym') || {}).value || '';
+  const mevcutInt = (document.getElementById('tvInt') || {}).value || '';
+  const sec = document.getElementById('sec-grafik');
+  const aktifMi = sec.classList.contains('active');
   const hisseler = [...(d.sinyaller.al||[]), ...(d.sinyaller.tut||[]), ...(d.sinyaller.sat||[])].map(r => r.sembol);
+  const opt = (v, etiket, secili) => `<option value="${v}" ${secili ? 'selected' : ''}>${etiket}</option>`;
   let html = `<h2>📈 Canlı Grafik <span class="cnt">TradingView</span></h2>` +
     `<div class="toolbar"><select id="tvSym" onchange="tvYukle()">` +
-    `<option value="BIST:XU100">BIST 100 (XU100)</option>` +
-    hisseler.map(s => `<option value="BIST:${s}">${s}</option>`).join('') +
+    opt('BIST:XU100', 'BIST 100 (XU100)', !mevcutSym || mevcutSym === 'BIST:XU100') +
+    hisseler.map(s => opt('BIST:' + s, s, mevcutSym === 'BIST:' + s)).join('') +
     `</select><select id="tvInt" onchange="tvYukle()">` +
-    `<option value="1">1 dk</option><option value="5">5 dk</option><option value="15" selected>15 dk</option>` +
-    `<option value="60">1 saat</option><option value="D">Günlük</option><option value="W">Haftalık</option>` +
+    opt('1', '1 dk', mevcutInt === '1') + opt('5', '5 dk', mevcutInt === '5') +
+    opt('15', '15 dk', !mevcutInt || mevcutInt === '15') + opt('60', '1 saat', mevcutInt === '60') +
+    opt('D', 'Günlük', mevcutInt === 'D') + opt('W', 'Haftalık', mevcutInt === 'W') +
     `</select></div>` +
     `<div id="tvWidget" style="height:480px;border:1px solid var(--bd);border-radius:12px;overflow:hidden;background:var(--bg2)"></div>` +
     `<div class="note">TradingView embed — saniyelik canlı mum grafiği (key'siz, ücretsiz). Tablolar ~15 dk gecikmeli, grafik canlıdır. Seans dışında son kapanış görünür.</div>`;
-  document.getElementById('sec-grafik').innerHTML = html;
-  tvYukle();
+  sec.innerHTML = html;
+  if (aktifMi) tvYukle(); // sekme açıkken widget'ı görünür boyutta embed et
 }
 function tvYukle() {
   const el = document.getElementById('tvWidget');
