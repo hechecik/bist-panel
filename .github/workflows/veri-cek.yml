@@ -2,8 +2,9 @@ name: veri-cek
 
 on:
   schedule:
-    # Hafta içi seans saatleri: 15 dk'da bir (GitHub free dakika limiti için 9-18 arası)
-    - cron: '*/15 9-18 * * 1-5'
+    # Hafta içi TR seansı (09:40-18:10 TR = 06:40-15:10 UTC).
+    # GitHub schedule UTC çalışır — 06-15 UTC = TR 09:00-18:59, açılış dahil tam seans.
+    - cron: '*/15 6-15 * * 1-5'
   workflow_dispatch:
 
 permissions:
