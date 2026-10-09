@@ -135,6 +135,22 @@ tr.detail td { background:var(--bg3); padding:11px; white-space:normal; }
 .tcmb b { color:var(--tx); }
 .note { font-size:10px; color:var(--tx2); line-height:1.5; margin:12px 0 6px; }
 .empty { color:var(--tx2); font-size:12px; padding:16px 0; text-align:center; }
+/* ── KRİPTO ── */
+.kr-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(156px,1fr)); gap:10px; margin-top:10px; }
+.kr { background:var(--bg2); border:1px solid var(--bd); border-radius:14px; padding:10px 12px; }
+.kr .hd { display:flex; align-items:center; gap:6px; }
+.kr .ksym { font-weight:800; font-size:13px; }
+.kr .rank { font-size:9px; color:var(--tx2); }
+.kr .nm { margin-left:auto; font-size:9.5px; color:var(--tx2); max-width:64px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.kr .pz { font-size:17px; font-weight:800; margin-top:6px; font-variant-numeric:tabular-nums; }
+.kr .tl { font-size:10.5px; color:var(--tx2); margin-top:1px; font-variant-numeric:tabular-nums; }
+.kr .ch { display:flex; gap:12px; margin-top:7px; font-size:11px; font-weight:700; font-variant-numeric:tabular-nums; }
+.kr .ch .lb { color:var(--tx2); font-weight:500; font-size:9px; }
+.kr .sp { margin-top:6px; line-height:0; }
+.kr .ft { display:flex; align-items:center; justify-content:space-between; gap:6px; margin-top:7px; }
+.kr .kskor { font-size:11px; font-weight:800; }
+.kr .note2 { font-size:9px; color:var(--tx2); margin-top:5px; line-height:1.4; }
+.stable { font-size:9.5px; color:var(--tx2); font-weight:700; }
 /* ── MUM GRAFİK MODALI ── */
 .gbtn { background:none; border:none; cursor:pointer; font-size:15px; padding:2px 6px; border-radius:6px; }
 .gbtn:hover { background:var(--bg3); }
@@ -166,6 +182,7 @@ tr.detail td { background:var(--bg3); padding:11px; white-space:normal; }
 <main>
   <section class="sec active" id="sec-piyasa"></section>
   <section class="sec" id="sec-grafik"></section>
+  <section class="sec" id="sec-kripto"></section>
   <section class="sec" id="sec-senaryo"></section>
   <section class="sec" id="sec-haber"></section>
   <section class="sec" id="sec-fon"></section>
@@ -174,6 +191,7 @@ tr.detail td { background:var(--bg3); padding:11px; white-space:normal; }
 <nav class="tabs">
   <button class="tab active" data-sec="piyasa"><span class="ic">📊</span>Piyasa</button>
   <button class="tab" data-sec="grafik"><span class="ic">📈</span>Grafik</button>
+  <button class="tab" data-sec="kripto"><span class="ic">🪙</span>Kripto</button>
   <button class="tab" data-sec="senaryo"><span class="ic">🧪</span>Senaryo</button>
   <button class="tab" data-sec="haber"><span class="ic">📰</span>Haberler</button>
   <button class="tab" data-sec="fon"><span class="ic">🏦</span>Fonlar</button>
@@ -195,6 +213,7 @@ SEC.forEach(t => t.addEventListener('click', () => {
   document.querySelectorAll('.sec').forEach(s => s.classList.remove('active'));
   document.getElementById('sec-' + t.dataset.sec).classList.add('active');
   if (t.dataset.sec === 'grafik' && typeof tvYukle === 'function') tvYukle();
+  if (t.dataset.sec === 'kripto') kriptoYukle();
 }));
 
 const fmt = (n, d=2) => n == null ? '—' : Number(n).toLocaleString('tr-TR', {minimumFractionDigits:d, maximumFractionDigits:d});
@@ -874,8 +893,106 @@ function renderFon(d) {
   document.getElementById('sec-fon').innerHTML = html;
 }
 
+/* ══════════ KRİPTO ══════════ */
+let KRIPTO_VERI = null;
+
+// fiyat kısaltma: coin başına anlamlı hassasiyet (BTC 82.508,00 / SHIB 0,0000123)
+function krFiyat(n) {
+  if (n == null) return '—';
+  const a = Math.abs(n);
+  const h = a >= 1000 ? 2 : a >= 1 ? 2 : a >= 0.01 ? 4 : 8;
+  return Number(n).toLocaleString('tr-TR', {minimumFractionDigits: h, maximumFractionDigits: h});
+}
+// büyük sayı kısaltma: 2,91 T / 139,4 Mr
+function krBuyuk(n) {
+  if (n == null) return '—';
+  const a = Math.abs(n);
+  if (a >= 1e12) return fmt(n / 1e12, 2) + ' T';
+  if (a >= 1e9) return fmt(n / 1e9, 1) + ' Mr';
+  if (a >= 1e6) return fmt(n / 1e6, 1) + ' M';
+  return fmt(n, 0);
+}
+
+function renderKripto(d) {
+  KRIPTO_VERI = d;
+  const coinler = d.coinler || [];
+  let html = '<h2>🪙 Kripto Piyasa <span class="cnt">' + coinler.length + ' coin</span>';
+  if (d.kaynak) html += `<span class="fresh${d.kaynak === 'coingecko' ? ' ok' : ''}">${d.kaynak}</span>`;
+  html += '</h2>';
+
+  // ── Global + Korku endeksi kartları ──
+  const gl = d.global || {}, k = d.korku;
+  if (gl.toplam_piyasa_degeri != null || gl.btc_dominans != null || k) {
+    html += '<div class="scn">';
+    if (gl.toplam_piyasa_degeri != null)
+      html += `<div class="sc"><div class="t">Toplam Piyasa Değeri</div><div class="o">$${krBuyuk(gl.toplam_piyasa_degeri)}</div>` +
+        `<div class="m">24s <b class="${ok(gl.degisim_24s)}">${yuzde(gl.degisim_24s)}</b>` +
+        (gl.toplam_hacim != null ? ` · hacim $${krBuyuk(gl.toplam_hacim)}` : '') + '</div></div>';
+    if (gl.btc_dominans != null)
+      html += `<div class="sc"><div class="t">BTC Dominans</div><div class="o">%${gl.btc_dominans}</div>` +
+        `<div class="m">${gl.eth_dominans != null ? 'ETH %' + gl.eth_dominans : ''}` +
+        (gl.aktif_coin ? (gl.eth_dominans != null ? ' · ' : '') + gl.aktif_coin.toLocaleString('tr-TR') + ' aktif coin' : '') + '</div></div>';
+    if (k) {
+      const renk = k.deger < 25 ? 'var(--down)' : k.deger > 75 ? 'var(--up)' : 'var(--warn)';
+      html += `<div class="sc wide"><div class="t">😱 Korku &amp; Açgözlülük Endeksi</div>` +
+        `<div class="o" style="color:${renk}">${k.deger} <span style="font-size:13px">${k.etiket}</span></div>` +
+        `<div class="bar"><i style="width:${k.deger}%;background:${renk}"></i></div>` +
+        (k.onceki != null ? `<div class="m">Önceki: <b>${k.onceki}</b></div>` : '') + '</div>';
+    }
+    html += '</div>';
+  }
+
+  // ── Coin kartları ──
+  if (!coinler.length) {
+    html += '<div class="empty">Kripto verisi şu an yok — bir sonraki güncellemede</div>';
+  } else {
+    html += '<h2>📊 Coinler <span class="cnt">skor · sinyal</span></h2><div class="kr-grid">';
+    coinler.forEach(c => {
+      const d24 = c.degisim_24s, d7 = c.degisim_7g, st = c.sinyal === 'PARİTE';
+      const skRenk = c.skor >= 2 ? 'var(--up)' : c.skor <= -2 ? 'var(--down)' : 'var(--tx2)';
+      html += `<div class="kr" data-sym="${c.sembol}">` +
+        `<div class="hd"><span class="ksym">${c.sembol}</span>` +
+          (c.sira ? `<span class="rank">#${c.sira}</span>` : '') +
+          `<span class="nm">${c.ad || ''}</span></div>` +
+        `<div class="pz">$${krFiyat(c.fiyat)}</div>` +
+        (c.fiyat_tl != null ? `<div class="tl">₺${krFiyat(c.fiyat_tl)}</div>` : '') +
+        `<div class="ch">` +
+          `<span class="${ok(d24)}">${yuzde(d24)} <span class="lb">24s</span></span>` +
+          (d7 != null ? `<span class="${ok(d7)}">${yuzde(d7)} <span class="lb">7g</span></span>` : '') +
+        `</div>` +
+        `<div class="sp">${sparkSVG(c)}</div>` +
+        `<div class="ft">` +
+          (st ? '<span class="stable">PARİTE · stablecoin</span>'
+              : `<span class="kskor" style="color:${skRenk}">${c.skor > 0 ? '+' : ''}${c.skor}</span>${badge(c.sinyal)}`) +
+        `</div>` +
+        (!st && c.skor !== 0 && c.nedenler && c.nedenler.length
+          ? `<div class="note2">▸ ${c.nedenler[0]}</div>` : '') +
+        `</div>`;
+    });
+    html += '</div>';
+  }
+
+  if (d.not) html += `<div class="note">${d.not}` +
+    (d.ureildi ? ` · Son veri: ${new Date(d.ureildi).toLocaleString('tr-TR', {day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit'})}` : '') +
+    '</div>';
+  document.getElementById('sec-kripto').innerHTML = html;
+}
+
+async function kriptoYukle() {
+  const sec = document.getElementById('sec-kripto');
+  if (!KRIPTO_VERI) sec.innerHTML = '<div class="empty">Kripto verisi yükleniyor…</div>';
+  try {
+    const d = await (await fetch('data/kripto.json?v=' + Date.now())).json();
+    renderKripto(d);
+  } catch (e) {
+    if (!KRIPTO_VERI) sec.innerHTML = '<div class="empty">Kripto verisi yüklenemedi: ' + e.message + '</div>';
+  }
+}
+
 yukle();
+kriptoYukle(); // kripto 24/7 — açılışta bir kez, sekme tıklanınca ve 15 dk'da bir tazelenir
 setInterval(yukle, 900000); // 15 dk'da bir tazele
+setInterval(kriptoYukle, 900000);
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
 </script>
 </body>
