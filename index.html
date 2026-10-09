@@ -195,6 +195,10 @@ tr.detail td { background:var(--bg3); padding:11px; white-space:normal; }
 .modal-box { width:100%; max-width:680px; height:75vh; background:var(--bg2); border:1px solid var(--bd); border-radius:16px; padding:12px; display:flex; flex-direction:column; }
 .modal-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; font-size:15px; font-weight:700; }
 .modal-head .x { font-size:18px; padding:2px 10px; }
+/* ── ZİYARETÇİ GÖSTERGESİ ── */
+.ziyaretci { text-align:center; font-size:10.5px; color:var(--tx2); padding:16px 16px 2px; letter-spacing:.3px; }
+.ziyaretci b { color:var(--tx); font-weight:700; font-variant-numeric:tabular-nums; }
+.ziyaretci .zi-dot { color:var(--up); }
 </style>
 </head>
 <body>
@@ -227,6 +231,8 @@ tr.detail td { background:var(--bg3); padding:11px; white-space:normal; }
   <section class="sec" id="sec-fon"><div id="getiri-blok"></div><div id="fon-icerik"></div></section>
   <section class="sec" id="sec-ict"></section>
 </main>
+
+<div class="ziyaretci">👥 Bugün <b id="zyBugun">—</b> · Toplam <b id="zyToplam">—</b> ziyaretçi</div>
 
 <nav class="tabs">
   <button class="tab active" data-sec="piyasa"><span class="ic">📊</span>Piyasa</button>
@@ -1428,6 +1434,26 @@ async function altinYukle(force) {
   try { ALTIN_VERI = await (await fetch('data/altin.json?v=' + Date.now())).json(); renderAltin(ALTIN_VERI); }
   catch (e) { sec.innerHTML = '<div class="empty">Altın verisi yüklenemedi: ' + e.message + '</div>'; }
 }
+
+/* ── ZİYARETÇİ GÖSTERGESİ ──
+   Tamamen yerel/dekoratif. Ağ isteği, çerez, localStorage veya dış servis YOK.
+   Gösterilen sayı tarihe göre deterministik üretilir (herkes aynı gün aynı sayıyı görür). */
+const ZY_TABAN = 121;        // günlük gösterilen taban (patron: "121 yap")
+const ZY_YAYILIM = 6;        // güne göre 0..5 sapma → günlük 121..126
+const ZY_EPOK = Date.UTC(2026, 0, 1);
+function zyHash(s){ let h = 2166136261 >>> 0; for (let i = 0; i < s.length; i++){ h ^= s.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; } return h >>> 0; }
+function zyYukle(){
+  const d = new Date();
+  const gunK = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+  const bugun = ZY_TABAN + (zyHash(gunK) % ZY_YAYILIM);
+  const gecenGun = Math.max(0, Math.floor((Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) - ZY_EPOK) / 864e5));
+  const toplam = 480 + gecenGun * 57 + (zyHash('top' + gunK) % 23);
+  const elB = document.getElementById('zyBugun'), elT = document.getElementById('zyToplam');
+  if (elB) elB.textContent = bugun.toLocaleString('tr-TR');
+  if (elT) elT.textContent = toplam.toLocaleString('tr-TR');
+}
+
+zyYukle();
 
 yukle();
 kriptoYukle(); // kripto 24/7 — açılışta bir kez, sekme tıklanınca ve 15 dk'da bir tazelenir
