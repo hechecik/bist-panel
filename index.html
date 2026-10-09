@@ -165,6 +165,29 @@ tr.detail td { background:var(--bg3); padding:11px; white-space:normal; }
 .ict-row .skor { font-weight:800; font-variant-numeric:tabular-nums; }
 .ict-not { font-size:10px; color:var(--tx2); margin-top:9px; line-height:1.5; padding:8px 10px;
   background:var(--bg2); border:1px dashed var(--bd); border-radius:10px; }
+/* ── ALTIN (ONS) BÖLÜMÜ ── */
+.al-perf { display:flex; flex-wrap:wrap; gap:6px; margin:9px 0; }
+.al-perf .p { background:var(--bg2); border:1px solid var(--bd); border-radius:9px; padding:5px 9px;
+  font-size:10.5px; display:flex; gap:6px; align-items:center; color:var(--tx2); }
+.al-perf .p b { font-variant-numeric:tabular-nums; }
+.al-lv { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:9px; }
+.al-lv .box { background:var(--bg2); border:1px solid var(--bd); border-radius:12px; padding:9px 11px; }
+.al-lv .box h3 { font-size:10.5px; margin:0 0 6px; letter-spacing:.6px; text-transform:uppercase; color:var(--tx2); }
+.al-lv .lv { display:flex; justify-content:space-between; gap:8px; font-size:11px; padding:4px 0;
+  border-bottom:1px solid #1a2030; align-items:baseline; }
+.al-lv .lv:last-child { border-bottom:none; }
+.al-lv .lv b { font-variant-numeric:tabular-nums; font-weight:800; }
+.al-lv .lv .tp { color:var(--tx2); font-size:9px; }
+.al-lv .lv .dz { font-variant-numeric:tabular-nums; font-size:10px; }
+.al-bi { display:inline-block; padding:2px 11px; border-radius:20px; font-weight:800; font-size:11px; }
+.al-bi.boga { background:rgba(46,204,113,.15); color:var(--up); }
+.al-bi.ayi  { background:rgba(255,92,92,.15); color:var(--down); }
+.al-bi.notr { background:rgba(240,185,11,.15); color:var(--warn); }
+/* ── ICT SÖZLÜK / SENARYO ── */
+.ict-soz { display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:8px; margin-top:8px; }
+.ict-soz .k { background:var(--bg2); border:1px solid var(--bd); border-radius:10px; padding:8px 10px;
+  font-size:10.5px; line-height:1.5; color:var(--tx2); }
+.ict-soz .k b { color:var(--tx); font-size:11.5px; display:block; margin-bottom:2px; }
 /* ── MUM GRAFİK MODALI ── */
 .gbtn { background:none; border:none; cursor:pointer; font-size:15px; padding:2px 6px; border-radius:6px; }
 .gbtn:hover { background:var(--bg3); }
@@ -196,6 +219,7 @@ tr.detail td { background:var(--bg3); padding:11px; white-space:normal; }
 <main>
   <section class="sec active" id="sec-piyasa"></section>
   <section class="sec" id="sec-grafik"></section>
+  <section class="sec" id="sec-altin"></section>
   <section class="sec" id="sec-kripto"></section>
   <section class="sec" id="sec-senaryo"></section>
   <section class="sec" id="sec-haber"></section>
@@ -206,6 +230,7 @@ tr.detail td { background:var(--bg3); padding:11px; white-space:normal; }
 <nav class="tabs">
   <button class="tab active" data-sec="piyasa"><span class="ic">📊</span>Piyasa</button>
   <button class="tab" data-sec="grafik"><span class="ic">📈</span>Grafik</button>
+  <button class="tab" data-sec="altin"><span class="ic">🥇</span>Altın</button>
   <button class="tab" data-sec="kripto"><span class="ic">🪙</span>Kripto</button>
   <button class="tab" data-sec="senaryo"><span class="ic">🧪</span>Senaryo</button>
   <button class="tab" data-sec="haber"><span class="ic">📰</span>Haberler</button>
@@ -229,6 +254,7 @@ SEC.forEach(t => t.addEventListener('click', () => {
   document.querySelectorAll('.sec').forEach(s => s.classList.remove('active'));
   document.getElementById('sec-' + t.dataset.sec).classList.add('active');
   if (t.dataset.sec === 'grafik' && typeof tvYukle === 'function') tvYukle();
+  if (t.dataset.sec === 'altin') altinYukle();
   if (t.dataset.sec === 'kripto') kriptoYukle();
   if (t.dataset.sec === 'ict') ictYukle();
 }));
@@ -1062,6 +1088,33 @@ function renderIct(d) {
       (t.hesap_tarihi ? `Tarama zamanı: ${t.hesap_tarihi} · ` : '') +
       `Mantık kaynağı: ArunKBhaskar/PineScript (MPL-2.0) → <code>scripts/ict.py</code> (TradingView'siz, Python).</div>`;
   }
+
+  // ── SÖZLÜK (kısa bilgilendirme — hem panelde hem sözlü olarak) ──
+  html += '<h2>📚 ICT Sözlüğü <span class="cnt">bu listeler ne anlatıyor</span></h2><div class="ict-soz">';
+  html += [
+    ['MSS · Piyasa Yapı Kayması', 'Market Structure Shift — fiyatın son tepe/dip yapısını kırıp yön değiştirmesi. ↑ = düşüş yapısı bozuldu (alış), ↓ = yükseliş yapısı bozuldu (satış).'],
+    ['BOS · Yapı Kırılımı', 'Break of Structure — trend yönünde bir önceki tepe/dip kırılır; trendin devamı sayılır.'],
+    ['FVG · Adil Değer Boşluğu', 'Fair Value Gap — 3 mumluk hızlı hareketin bıraktığı fiyat boşluğu; fiyat çoğu zaman geri dönüp bu boşluğu doldurur.'],
+    ['OB · Order Block', 'Kurumsal emir bölgesi — büyük hareketin başladığı son ters mum; fiyat dönünce bu bölgeden tepki verir (giriş bölgesi).'],
+    ['EQH / EQL', 'Eşit Yüksekler / Eşit Düşükler — aynı seviyedeki iki tepe/dip; üstü/altı biriken stop emirleri = likidite havuzu.'],
+    ['Süpürme · stop avı', 'Likidite süpürmesi — fiyat EQH/EQL seviyesini hızla delip geri döner; stopları tetikleyip asıl yönün başlangıcı.'],
+    ['Likidite', 'Fiyatın çekildiği emir yığınları — stop-loss ve bekleyen emirlerin toplandığı seviyeler.'],
+    ['Displacement', 'Yer değiştirme — FVG/OB bırakan güçlü, tek yönlü impuls mum (kurumsal giriş işareti).']
+  ].map(([b, tt]) => `<div class="k"><b>${b}</b>${tt}</div>`).join('');
+  html += '</div>';
+
+  // ── SENARYO OKUMASI (geçmiş → şimdi → gelecek) ──
+  const yon = al.length > sat.length ? 'YUKARI (alış ağır)' : sat.length > al.length ? 'AŞAĞI (satış ağır)' : 'NÖTR (dengeli)';
+  let gelecek;
+  if (al.length > sat.length) gelecek = 'Alış sinyali veren hisselerde FVG/OB bölgesine geri çekilme alım fırsatı; üstteki EQH likiditesi hedef. SAT tarafında yapı bozulursa aşağı süpürme riski var.';
+  else if (sat.length > al.length) gelecek = 'Satış sinyali ağır — aşağı yapı kırılımları sürerse destek süpürmeleri (EQL) beklenir; alış için FVG/OB tepkisi teyit edilmeli.';
+  else gelecek = 'Sinyaller dengeli — teyit için MSS yönü ve FVG dolumu izlenmeli; net yön gelene kadar bekle-gör.';
+  html += '<div class="ict-not" style="border-style:solid">🔭 <b>Senaryo okuması</b><br>' +
+    `<b>Şimdi:</b> ${t.islenen || 0} hisse tarandı · ${al.length} alış / ${sat.length} satış → genel eğilim ${yon}. ` +
+    `${(t.mss_yukari || []).length} yukarı / ${(t.mss_asagi || []).length} aşağı yapı kırılımı, ${(t.fvg_acik || []).length} açık FVG, ` +
+    `${(t.eqh || []).length} EQH / ${(t.eql || []).length} EQL, ${(t.sweep || []).length} likidite süpürmesi.<br>` +
+    `<b>Gelecek:</b> ${gelecek}</div>`;
+
   sec.innerHTML = html;
 }
 
@@ -1075,10 +1128,110 @@ async function ictYukle() {
   renderIct(PIYASA_VERI);
 }
 
+/* ── ALTIN (ONS) BÖLÜMÜ ── */
+let ALTIN_VERI = null;
+const alEsc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pfOk = v => (v >= 0 ? '▲ +' : '▼ ') + Number(v).toFixed(2) + '%';
+const pfRenk = v => v >= 0 ? 'var(--up)' : 'var(--down)';
+
+function renderAltin(d) {
+  const sec = document.getElementById('sec-altin');
+  if (!d || !d.fiyat) { sec.innerHTML = '<div class="empty">Altın verisi bekleniyor — bir sonraki güncellemede gelecek</div>'; return; }
+  const f = d.fiyat, v = d.vital || {}, s = d.senaryo || {}, sv = d.seviyeler || {};
+  const biasK = s.bias === 'BOĞA' ? 'boga' : s.bias === 'AYI' ? 'ayi' : 'notr';
+  const d1 = (f.performans && f.performans['1g']) || 0;
+  let h = '';
+
+  h += '<h2>🥇 Ons Altın <span class="fresh ok">ons bazlı</span></h2>';
+  h += `<div class="ex-card">
+     <div class="ex-label">XAU/USD${f.spot ? ' · canlı spot ' + fmt(f.spot) + '$' : ''}</div>
+     <div class="ex-val">${fmt(f.ons)}<span style="font-size:15px;color:var(--tx2)"> $/ons</span></div>
+     <div class="ex-chg ${d1>=0?'up':'down'}">${pfOk(d1)} <span style="color:var(--tx2);font-size:11px">bugün</span></div>
+     <div class="ex-sub">
+       <span>Gram/TL: <b style="color:var(--tx)">${f.gram_tl ? fmt(f.gram_tl) : '—'}</b></span>
+       <span>USDTRY: ${f.usdtry || '—'}</span>
+       <span>Veri tarihi: ${f.son_tarih || '—'}</span>
+     </div></div>`;
+
+  h += '<div class="al-perf">';
+  [['1h','1 hafta'],['2h','2 hafta'],['1a','1 ay'],['3a','3 ay'],['6a','6 ay'],['1y','1 yıl']].forEach(([k, lb]) => {
+    const val = f.performans ? f.performans[k] : undefined;
+    if (val === undefined || val === null) return;
+    h += `<div class="p">${lb} <b style="color:${pfRenk(val)}">${pfOk(val)}</b></div>`;
+  });
+  h += '</div>';
+
+  // VİTALLER
+  h += '<h2>🩺 Vitaller</h2><div class="scn">';
+  h += `<div class="sc"><div class="t">TREND · MA20/50/200</div><div class="o" style="color:${(v.trend_skor||0)>=1?'var(--up)':(v.trend_skor||0)<=-1?'var(--down)':'var(--warn)'}">${v.trend || '—'}</div><div class="m">MA20 <b>${fmt(v.ma20)}</b> · MA50 <b>${fmt(v.ma50)}</b> · MA200 <b>${fmt(v.ma200)}</b></div></div>`;
+  h += `<div class="sc"><div class="t">RSI (14)</div><div class="o" style="color:${v.rsi>=55?'var(--up)':v.rsi<45?'var(--down)':'var(--warn)'}">${v.rsi == null ? '—' : v.rsi}</div><div class="m">${v.rsi_yorum || ''}</div></div>`;
+  h += `<div class="sc"><div class="t">52-HAFTA KONUMU</div><div class="o">${v.konum_52h == null ? '—' : v.konum_52h + '%'}</div><div class="m">${v.konum_yorum || ''} · ${fmt(v.l52)}–${fmt(v.h52)}$</div></div>`;
+  h += `<div class="sc"><div class="t">OYNAKLIK · ATR (14)</div><div class="o">${fmt(v.atr)}$</div><div class="m">günlük hareket ≈ %${v.atr_yuzde == null ? '—' : v.atr_yuzde}</div></div>`;
+  h += '</div>';
+
+  // SEVİYELER
+  const lvBox = (baslik, dizi, renk) => {
+    let b = `<div class="box"><h3>${baslik}</h3>`;
+    if (!dizi || !dizi.length) b += '<div class="lv"><span class="tp">veri yok</span></div>';
+    (dizi || []).forEach(x => {
+      b += `<div class="lv"><span class="tp">${alEsc(x.tip)}</span><b style="color:${renk}">${fmt(x.seviye)}$</b>` +
+           `<span class="dz" style="color:${renk}">${x.mesafe_pct >= 0 ? '+' : ''}${x.mesafe_pct}%</span></div>`;
+    });
+    return b + '</div>';
+  };
+  h += '<h2>📊 Destek / Direnç (ons)</h2><div class="al-lv">' +
+       lvBox('🔴 DİRENÇ · üstü', sv.direnc, 'var(--down)') +
+       lvBox('🟢 DESTEK · altı', sv.destek, 'var(--up)') + '</div>';
+
+  // SENARYO
+  h += `<h2>🔭 Senaryo <span class="al-bi ${biasK}">${s.bias || '—'} · skor ${s.bias_skor == null ? '' : (s.bias_skor > 0 ? '+' : '') + s.bias_skor}</span></h2>`;
+  h += '<div class="scn">' +
+       `<div class="sc wide"><div class="t">GEÇMİŞ · nereden geldi</div><div class="m" style="font-size:11.5px">${alEsc(s.gectmis)}</div></div>` +
+       `<div class="sc wide"><div class="t">ŞU AN · durum</div><div class="m" style="font-size:11.5px">${alEsc(s.durum)}</div></div>` +
+       `<div class="sc"><div class="t">YUKARI SENARYO · tetik ${fmt(s.yukari && s.yukari.tetik)}$</div><div class="m">${alEsc(s.yukari && s.yukari.metin)}</div></div>` +
+       `<div class="sc"><div class="t">AŞAĞI SENARYO · tetik ${fmt(s.asagi && s.asagi.tetik)}$</div><div class="m">${alEsc(s.asagi && s.asagi.metin)}</div></div>` +
+       '</div>';
+
+  // KRİTİK GÜNLER
+  if ((d.kritik_gunler || []).length) {
+    h += `<h2>🗓️ Kritik Günler <span class="cnt">${d.kritik_gunler.length} olay</span></h2>`;
+    d.kritik_gunler.slice(0, 14).forEach(k => {
+      const onem = k.onem === 'high' ? '<span class="badge hi">YÜKSEK</span>' : '<span class="badge mi">orta</span>';
+      h += `<div class="ev"><div class="dt">${alEsc(k.tarih)}<div style="font-size:9px">${alEsc(k.gun)}</div></div>` +
+           `<div class="tm">${alEsc(k.saat)}</div>` +
+           `<div class="nm"><b>${alEsc(k.ulke)}</b> ${onem} ${alEsc(k.olay)}` +
+           `<div style="font-size:10px;color:var(--tx2);margin-top:2px">↳ ${alEsc(k.neden)}</div></div></div>`;
+    });
+    h += '<div class="ict-not">🗓️ Altını hareket ettiren yüksek etkili ABD/küresel veriler (enflasyon, faiz, istihdam, perakende). Kaynak: doviz.com ekonomik takvim. Saatler Türkiye (UTC+3).</div>';
+  }
+
+  // HABERLER
+  if ((d.haberler || []).length) {
+    h += `<h2>📰 Altın Haberleri <span class="cnt">${d.haberler.length}</span></h2>`;
+    d.haberler.slice(0, 10).forEach(n => {
+      h += `<div class="ev"><div class="nm"><a href="${alEsc(n.link)}" target="_blank" rel="noopener" style="color:var(--tx);text-decoration:none">${alEsc(n.baslik)}</a>` +
+           `<div style="font-size:9.5px;color:var(--tx2);margin-top:2px">${alEsc(n.kaynak)}${n.tarih ? ' · ' + alEsc(n.tarih) : ''}</div></div></div>`;
+    });
+  }
+
+  if (d.kaynak) h += `<div class="note">📐 Kaynak: ${alEsc(d.kaynak)}<br>Seviyeler salınım uçları + MA(20/50/200) + yuvarlak seviyelerden türetilir. Bias skoru deterministiktir: fiyat-MA ilişkisi, RSI, 52h konum ve trend eğimi toplanır (≥+2 BOĞA, ≤−2 AYI). Yatırım tavsiyesi değildir.</div>`;
+  sec.innerHTML = h;
+}
+
+async function altinYukle(force) {
+  const sec = document.getElementById('sec-altin');
+  if (ALTIN_VERI && !force) { renderAltin(ALTIN_VERI); return; }
+  sec.innerHTML = '<div class="empty">Altın verisi yükleniyor…</div>';
+  try { ALTIN_VERI = await (await fetch('data/altin.json?v=' + Date.now())).json(); renderAltin(ALTIN_VERI); }
+  catch (e) { sec.innerHTML = '<div class="empty">Altın verisi yüklenemedi: ' + e.message + '</div>'; }
+}
+
 yukle();
 kriptoYukle(); // kripto 24/7 — açılışta bir kez, sekme tıklanınca ve 15 dk'da bir tazelenir
+altinYukle();  // altın — açılışta bir kez (sekme arka planda hazır olsun)
 setInterval(yukle, 900000); // 15 dk'da bir tazele
 setInterval(kriptoYukle, 900000);
+setInterval(() => altinYukle(true), 900000);
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
 </script>
 </body>
