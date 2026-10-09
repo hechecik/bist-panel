@@ -151,6 +151,20 @@ tr.detail td { background:var(--bg3); padding:11px; white-space:normal; }
 .kr .kskor { font-size:11px; font-weight:800; }
 .kr .note2 { font-size:9px; color:var(--tx2); margin-top:5px; line-height:1.4; }
 .stable { font-size:9.5px; color:var(--tx2); font-weight:700; }
+/* ── ICT TARAYICI (Katman 2 — PineScript mantığı) ── */
+.ict-list { display:flex; flex-direction:column; gap:6px; margin-top:8px; }
+.ict-row { display:flex; align-items:baseline; gap:8px; background:var(--bg2); border:1px solid var(--bd);
+  border-radius:10px; padding:7px 10px; font-size:11.5px; line-height:1.45; }
+.ict-row .sym { font-weight:800; font-size:12.5px; min-width:52px; }
+.ict-row .px { color:var(--tx2); font-variant-numeric:tabular-nums; min-width:62px; }
+.ict-row .tag { font-size:9.5px; font-weight:800; padding:1px 7px; border-radius:6px; white-space:nowrap; }
+.ict-row .tag.up { background:rgba(46,204,113,.14); color:var(--up); }
+.ict-row .tag.dn { background:rgba(255,92,92,.14); color:var(--down); }
+.ict-row .tag.nötr, .ict-row .tag.notr { background:rgba(240,185,11,.13); color:var(--warn); }
+.ict-row .dsc { color:var(--tx2); font-size:10.5px; flex:1; }
+.ict-row .skor { font-weight:800; font-variant-numeric:tabular-nums; }
+.ict-not { font-size:10px; color:var(--tx2); margin-top:9px; line-height:1.5; padding:8px 10px;
+  background:var(--bg2); border:1px dashed var(--bd); border-radius:10px; }
 /* ── MUM GRAFİK MODALI ── */
 .gbtn { background:none; border:none; cursor:pointer; font-size:15px; padding:2px 6px; border-radius:6px; }
 .gbtn:hover { background:var(--bg3); }
@@ -186,6 +200,7 @@ tr.detail td { background:var(--bg3); padding:11px; white-space:normal; }
   <section class="sec" id="sec-senaryo"></section>
   <section class="sec" id="sec-haber"></section>
   <section class="sec" id="sec-fon"></section>
+  <section class="sec" id="sec-ict"></section>
 </main>
 
 <nav class="tabs">
@@ -195,6 +210,7 @@ tr.detail td { background:var(--bg3); padding:11px; white-space:normal; }
   <button class="tab" data-sec="senaryo"><span class="ic">🧪</span>Senaryo</button>
   <button class="tab" data-sec="haber"><span class="ic">📰</span>Haberler</button>
   <button class="tab" data-sec="fon"><span class="ic">🏦</span>Fonlar</button>
+  <button class="tab" data-sec="ict"><span class="ic">🧭</span>ICT</button>
 </nav>
 
 <!-- MUM GRAFİK MODALI -->
@@ -214,6 +230,7 @@ SEC.forEach(t => t.addEventListener('click', () => {
   document.getElementById('sec-' + t.dataset.sec).classList.add('active');
   if (t.dataset.sec === 'grafik' && typeof tvYukle === 'function') tvYukle();
   if (t.dataset.sec === 'kripto') kriptoYukle();
+  if (t.dataset.sec === 'ict') ictYukle();
 }));
 
 const fmt = (n, d=2) => n == null ? '—' : Number(n).toLocaleString('tr-TR', {minimumFractionDigits:d, maximumFractionDigits:d});
@@ -987,6 +1004,75 @@ async function kriptoYukle() {
   } catch (e) {
     if (!KRIPTO_VERI) sec.innerHTML = '<div class="empty">Kripto verisi yüklenemedi: ' + e.message + '</div>';
   }
+}
+
+/* ── ICT TARAYICI (Katman 2 — PineScript→Python mantığı) ── */
+function ictListe(baslik, ikon, items, satirFn) {
+  if (!items || !items.length) return '';
+  let h = `<h2>${ikon} ${baslik} <span class="cnt">${items.length}</span></h2><div class="ict-list">`;
+  items.forEach(x => { h += `<div class="ict-row">${satirFn(x)}</div>`; });
+  return h + '</div>';
+}
+const ictYon = y => `<span class="tag ${y === 'BULLISH' ? 'up' : 'dn'}">${y === 'BULLISH' ? '▲ ALIŞ' : '▼ SATIŞ'}</span>`;
+
+function renderIct(d) {
+  const sec = document.getElementById('sec-ict');
+  const t = d && d.ict_tarama;
+  if (!t) { sec.innerHTML = '<div class="empty">ICT verisi bekleniyor — bir sonraki veri güncellemesinde gelecek</div>'; return; }
+  const al = t.al || [], sat = t.sat || [];
+  let html = '<h2>🧭 ICT Tarayıcı <span class="cnt">' + (t.islenen || 0) + ' hisse tarandı</span>' +
+             '<span class="fresh ok">PineScript→Python</span></h2>';
+
+  const kart = (etiket, deger, renk) => `<div class="sc"><div class="t">${etiket}</div><div class="o" style="color:${renk}">${deger}</div></div>`;
+  html += '<div class="scn">' +
+    kart('AL · skor ≥3', al.length, 'var(--up)') +
+    kart('SAT · skor ≤-3', sat.length, 'var(--down)') +
+    kart('MSS ↑ / ↓', (t.mss_yukari || []).length + ' / ' + (t.mss_asagi || []).length, 'var(--info)') +
+    kart('OB içinde', (t.ob_ici || []).length, 'var(--warn)') +
+    kart('FVG açık', (t.fvg_acik || []).length, 'var(--accent)') +
+    kart('EQH / EQL', (t.eqh || []).length + ' / ' + (t.eql || []).length, 'var(--tx2)') +
+    '</div>';
+
+  html += ictListe('AL Sinyali (ICT skor ≥3)', '🟢', al, x =>
+    `<span class="sym">${x.sembol}</span><span class="px">${fmt(x.fiyat)}</span>` +
+    `<span class="skor" style="color:var(--up)">+${x.skor}</span>` +
+    `<span class="dsc">${(x.nedenler || [])[0] || ''}</span>`);
+  html += ictListe('SAT Sinyali (ICT skor ≤-3)', '🔴', sat, x =>
+    `<span class="sym">${x.sembol}</span><span class="px">${fmt(x.fiyat)}</span>` +
+    `<span class="skor" style="color:var(--down)">${x.skor}</span>` +
+    `<span class="dsc">${(x.nedenler || [])[0] || ''}</span>`);
+  html += ictListe('Yapı Kırılımı ↑ (MSS / BOS)', '⬆️', t.mss_yukari, x =>
+    `<span class="sym">${x.sembol}</span><span class="px">${fmt(x.fiyat)}</span>${ictYon('BULLISH')}<span class="dsc">${x.aciklama}</span>`);
+  html += ictListe('Yapı Kırılımı ↓ (MSS / BOS)', '⬇️', t.mss_asagi, x =>
+    `<span class="sym">${x.sembol}</span><span class="px">${fmt(x.fiyat)}</span>${ictYon('BEARISH')}<span class="dsc">${x.aciklama}</span>`);
+  html += ictListe('Order Block İçinde (giriş bölgesi)', '📦', t.ob_ici, x =>
+    `<span class="sym">${x.sembol}</span><span class="px">${fmt(x.fiyat)}</span>${ictYon(x.yon)}<span class="dsc">OB bölgesi ${fmt(x.alt)} – ${fmt(x.ust)}</span>`);
+  html += ictListe('FVG Açık (dolmamış boşluk)', '🕳️', t.fvg_acik, x =>
+    `<span class="sym">${x.sembol}</span><span class="px">${fmt(x.fiyat)}</span>${ictYon(x.yon)}<span class="dsc">FVG ${fmt(x.alt)} – ${fmt(x.ust)} · fiyat: ${x.konum}</span>`);
+  html += ictListe('Likidite Süpürmesi (stop avı)', '💧', t.sweep, x =>
+    `<span class="sym">${x.sembol}</span>${ictYon(x.yon)}<span class="dsc">${x.aciklama}</span>`);
+  html += ictListe('Eşit Yüksekler (üstte likidite havuzu)', '🟰', t.eqh, x =>
+    `<span class="sym">${x.sembol}</span><span class="dsc">EQH ≈ ${fmt(x.seviye)} — süpürme hedefi</span>`);
+  html += ictListe('Eşit Düşükler (altta likidite havuzu)', '🟰', t.eql, x =>
+    `<span class="sym">${x.sembol}</span><span class="dsc">EQL ≈ ${fmt(x.seviye)} — süpürme hedefi</span>`);
+
+  if (!al.length && !sat.length) html += '<div class="empty">Bugün ICT skoru eşiği (±3) aşan hisse yok — yapı/OB/FVG listeleri yine de geçerli.</div>';
+  if (t.kural) {
+    html += `<div class="ict-not">📐 <b>Skor kuralı</b> — ${t.kural}<br>` +
+      (t.hesap_tarihi ? `Tarama zamanı: ${t.hesap_tarihi} · ` : '') +
+      `Mantık kaynağı: ArunKBhaskar/PineScript (MPL-2.0) → <code>scripts/ict.py</code> (TradingView'siz, Python).</div>`;
+  }
+  sec.innerHTML = html;
+}
+
+async function ictYukle() {
+  const sec = document.getElementById('sec-ict');
+  if (!PIYASA_VERI) {
+    sec.innerHTML = '<div class="empty">Veri yükleniyor…</div>';
+    try { PIYASA_VERI = await (await fetch('data/piyasa.json?v=' + Date.now())).json(); }
+    catch (e) { sec.innerHTML = '<div class="empty">Veri yüklenemedi: ' + e.message + '</div>'; return; }
+  }
+  renderIct(PIYASA_VERI);
 }
 
 yukle();
