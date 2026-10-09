@@ -1,0 +1,44 @@
+name: altin-cek
+
+on:
+  schedule:
+    # Altın ~24/5 işlem görür (Pazr 22:00 – Cum 21:00 UTC).
+    # Hafta içi: her 30 dakikada bir. Hafta sonu: 3 saatte bir.
+    - cron: '*/30 * * * 1-5'
+    - cron: '0 */3 * * 0,6'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  altin:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Paket kurulumu
+        run: pip install --quiet pandas numpy yfinance beautifulsoup4 httpx
+
+      - name: Altın verisi çek + JSON üret
+        run: python scripts/altin_cek.py
+
+      - name: Commit + push (data/altin.json)
+        run: |
+          git config user.name "bist-panel bot"
+          git config user.email "96144326+hechecik@users.noreply.github.com"
+          git add data/altin.json
+          if ! git diff --cached --quiet; then
+            git commit -m "altin veri guncelle $(date -u +'%d.%m %H:%M') UTC"
+            git fetch origin
+            git rebase origin/main --autostash || git rebase --abort
+            git push
+            echo "✅ altın verisi push edildi"
+          else
+            echo "ℹ️ değişiklik yok"
+          fi
