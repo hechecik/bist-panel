@@ -221,9 +221,10 @@ tr.detail td { background:var(--bg3); padding:11px; white-space:normal; }
   <section class="sec" id="sec-grafik"></section>
   <section class="sec" id="sec-altin"></section>
   <section class="sec" id="sec-kripto"></section>
-  <section class="sec" id="sec-senaryo"></section>
+  <section class="sec" id="sec-senaryo"><div id="karne-hesap"></div><div id="karne-icerik"></div></section>
   <section class="sec" id="sec-haber"></section>
-  <section class="sec" id="sec-fon"></section>
+  <section class="sec" id="sec-takvim"></section>
+  <section class="sec" id="sec-fon"><div id="getiri-blok"></div><div id="fon-icerik"></div></section>
   <section class="sec" id="sec-ict"></section>
 </main>
 
@@ -232,9 +233,10 @@ tr.detail td { background:var(--bg3); padding:11px; white-space:normal; }
   <button class="tab" data-sec="grafik"><span class="ic">📈</span>Grafik</button>
   <button class="tab" data-sec="altin"><span class="ic">🥇</span>Altın</button>
   <button class="tab" data-sec="kripto"><span class="ic">🪙</span>Kripto</button>
-  <button class="tab" data-sec="senaryo"><span class="ic">🧪</span>Senaryo</button>
+  <button class="tab" data-sec="senaryo"><span class="ic">📋</span>Karne</button>
   <button class="tab" data-sec="haber"><span class="ic">📰</span>Haberler</button>
-  <button class="tab" data-sec="fon"><span class="ic">🏦</span>Fonlar</button>
+  <button class="tab" data-sec="takvim"><span class="ic">📅</span>Takvim</button>
+  <button class="tab" data-sec="fon"><span class="ic">💵</span>Getiri</button>
   <button class="tab" data-sec="ict"><span class="ic">🧭</span>ICT</button>
 </nav>
 
@@ -257,6 +259,8 @@ SEC.forEach(t => t.addEventListener('click', () => {
   if (t.dataset.sec === 'altin') altinYukle();
   if (t.dataset.sec === 'kripto') kriptoYukle();
   if (t.dataset.sec === 'ict') ictYukle();
+  if (t.dataset.sec === 'takvim') takvimYukle();
+  if (t.dataset.sec === 'fon') getiriYukle();
 }));
 
 const fmt = (n, d=2) => n == null ? '—' : Number(n).toLocaleString('tr-TR', {minimumFractionDigits:d, maximumFractionDigits:d});
@@ -366,6 +370,7 @@ async function yukle() {
     const d = await (await fetch('data/piyasa.json?v=' + Date.now())).json();
     durum.hesapTarihi = (d.sinyaller && d.sinyaller.hesap_tarihi) || '';
     renderPiyasa(d); renderGrafik(d); renderSenaryo(d); renderHaber(d); renderFon(d);
+    getiriYukle(); takvimYukle();
     alarmKontrol(); // 3+6 — fiyat eşik alarmları
     const gun = new Date().getDay();
     const ure = new Date(d.uretildi);
@@ -696,71 +701,171 @@ function alarmKontrol() {
   }
 }
 
-/* ══════════ SENARYO ══════════ */
-function renderSenaryo(d) {
-  const t = d.test_senaryolari;
-  if (!t) { document.getElementById('sec-senaryo').innerHTML = '<div class="empty">Senaryo verisi bekleniyor</div>'; return; }
-  let html = '<h2>🧪 Test Senaryoları — 6 Aylık Gerçek Veri · 💵 100K TL Simülasyon</h2><div class="scn">';
-  const karti = (s, sermaye, acik) => {
-    if (!s) return;
-    const renk = s.ortalama >= 0 ? 'var(--up)' : 'var(--down)';
-    const poz = Math.max(0, Math.min(100, 50 + s.ortalama * 2));
-    const basari = s.islem ? Math.round(s.kazanan / s.islem * 100) : 0;
-    const kb = s.islem ? `<div class="bar"><i style="width:${basari}%;background:var(--up)"></i><i style="width:${100-basari}%;background:var(--down)"></i></div>` : '';
-    const tl = sermaye ? `<div class="m">💵 <b>100K TL ile: ${fmt(sermaye.sonuc,0)} TL</b> <span class="${ok(sermaye.kar_zarar)}">(${sermaye.kar_zarar >= 0 ? '+' : ''}${fmt(sermaye.kar_zarar,0)} TL)</span> · ${fmt(sermaye.tahsis,0)} TL/pozisyon</div>` : '';
-    html += `<div class="sc ${acik?'wide':''}"><div class="t">${s.ad}</div>` +
-      `<div class="o" style="color:${renk}">${s.ortalama >= 0 ? '+' : ''}%${s.ortalama.toFixed(1)}</div>` +
-      `<div class="bar"><i style="width:${poz}%;background:${s.ortalama>=0?'var(--up)':'var(--down)'}"></i></div>` +
-      `<div class="m">${s.islem} işlem · 🟢 ${s.kazanan} · 🔴 ${s.kaybeden} · <b>%${basari} başarı</b></div>` + kb + tl;
-    if (s.en_iyi) html += `<div class="m">🏆 ${s.en_iyi.sembol} %${s.en_iyi.getiri_yuzde >= 0 ? '+' : ''}${s.en_iyi.getiri_yuzde} (${s.en_iyi.tarih})</div>`;
-    if (s.en_kotu) html += `<div class="m">💀 ${s.en_kotu.sembol} %${s.en_kotu.getiri_yuzde >= 0 ? '+' : ''}${s.en_kotu.getiri_yuzde} (${s.en_kotu.tarih})</div>`;
-    html += '</div>';
-  };
-  const sm = t.sermaye || {};
-  karti(t.pazartesi_acilis, sm.pazartesi);
-  karti(t.ertesi_gun_acilis, sm.ertesi);
-  karti(t.stop_losslu, sm.stop, true);
-  html += '</div><div class="note">' + (t.aciklama || '') + '</div>';
+/* ══════════ KARNE — Risk/Pozisyon Hesaplayıcı + Sinyal Karnesi ══════════ */
+let KARNE_KURULDU = false;
 
-  // 4 — Sinyal doğruluk takibi
+function riskHesapKur(d) {
+  const el = document.getElementById('karne-hesap');
+  if (!el || KARNE_KURULDU) return;
+  const s = d.sinyaller || {};
+  const liste = [].concat(s.al || [], s.sat || [], s.tut || []);
+  window.__RISK = liste;
+  const opt = liste.map(x => `<option value="${x.sembol}">${x.sembol} · ${fmt(x.fiyat)} TL · ${(x.sinyal||'').replace('DİKKAT_','')}</option>`).join('');
+  el.innerHTML =
+    '<h2>🧮 Risk / Pozisyon Hesaplayıcı <span class="cnt">kaç lot · ne kadar risk</span></h2>' +
+    '<div class="portfoy" style="margin-top:0">' +
+      '<div class="top"><span style="font-size:12px;color:var(--tx2)">Sermaye (TL)</span>' +
+        '<input id="rhSermaye" type="number" value="100000" min="0" step="1000" oninput="riskHesapla()" style="width:100px">' +
+        '<span style="font-size:12px;color:var(--tx2)">Risk %</span>' +
+        '<input id="rhRisk" type="number" value="1.5" min="0.1" max="10" step="0.1" oninput="riskHesapla()" style="width:64px">' +
+        '<span style="font-size:12px;color:var(--tx2)">Stop %</span>' +
+        '<input id="rhStopYuzde" type="number" value="8" min="0.5" max="50" step="0.5" oninput="riskStopYuzde()" style="width:64px"></div>' +
+      '<div class="top"><select id="rhSembol" onchange="riskDoldur()" style="background:var(--bg3);border:1px solid var(--bd);color:var(--tx);border-radius:8px;padding:6px 9px;font-size:12px;flex:1;min-width:150px">' +
+        '<option value="">— sinyalden hisse seç —</option>' + opt + '</select></div>' +
+      '<div class="top"><span style="font-size:12px;color:var(--tx2)">Giriş</span>' +
+        '<input id="rhGiris" type="number" step="0.01" oninput="riskHesapla()" style="width:90px">' +
+        '<span style="font-size:12px;color:var(--tx2)">Stop</span>' +
+        '<input id="rhStop" type="number" step="0.01" oninput="riskHesapla()" style="width:90px"></div>' +
+      '<div id="rhSonuc" style="margin-top:10px"></div>' +
+    '</div>';
+  KARNE_KURULDU = true;
+  riskHesapla();
+}
+
+function riskDoldur() {
+  const sel = document.getElementById('rhSembol');
+  const s = (window.__RISK || []).find(x => x.sembol === sel.value);
+  if (!s) return;
+  const st = s.stop != null ? s.stop : Math.round(s.fiyat * 0.92 * 100) / 100;
+  document.getElementById('rhGiris').value = s.fiyat;
+  document.getElementById('rhStop').value = st;
+  document.getElementById('rhStopYuzde').value = Math.round(Math.abs(s.fiyat - st) / s.fiyat * 1000) / 10;
+  riskHesapla();
+}
+
+function riskStopYuzde() {
+  const g = +document.getElementById('rhGiris').value || 0;
+  const y = +document.getElementById('rhStopYuzde').value || 0;
+  if (!g) return;
+  document.getElementById('rhStop').value = Math.round(g * (1 - y / 100) * 100) / 100;
+  riskHesapla();
+}
+
+function riskHesapla() {
+  const S = +document.getElementById('rhSermaye').value || 0;
+  const r = +document.getElementById('rhRisk').value || 0;
+  const G = +document.getElementById('rhGiris').value || 0;
+  const St = +document.getElementById('rhStop').value || 0;
+  const out = document.getElementById('rhSonuc');
+  if (!out) return;
+  if (!S || !G || !St || G === St) { out.innerHTML = '<div class="note">Sermaye, giriş ve stop gir — ya da yukarıdan sinyal seç.</div>'; return; }
+  const riskTL = S * r / 100, mesafe = Math.abs(G - St), mesafeY = mesafe / G * 100;
+  const lot = Math.floor(riskTL / mesafe), pozTL = lot * G, pozY = pozTL / S * 100;
+  const long = G > St, yon = long ? 'LONG' : 'SHORT';
+  const hedef = k => long ? G + k * mesafe : G - k * mesafe;
+  const asiri = pozTL > S;
+  out.innerHTML =
+    '<div class="scn">' +
+      `<div class="sc"><div class="t">Riske Edilen</div><div class="o down">${fmt(riskTL,0)} TL</div><div class="m">sermayenin %${r}</div></div>` +
+      `<div class="sc"><div class="t">Alınacak Lot</div><div class="o">${fmt(lot,0)}</div><div class="m">${yon} · stop %${mesafeY.toFixed(1)}</div></div>` +
+      `<div class="sc"><div class="t">Pozisyon Tutarı</div><div class="o"${asiri?' style="color:var(--warn)"':''}>${fmt(pozTL,0)} TL</div><div class="m">sermayenin %${pozY.toFixed(0)}</div></div>` +
+      `<div class="sc"><div class="t">Lot Başı Risk</div><div class="o">${fmt(mesafe,2)} TL</div><div class="m">giriş − stop</div></div>` +
+    '</div>' +
+    '<div class="twrap"><table><tr><th>Hedef</th><th>Fiyat</th><th>Kâr</th><th>R:R</th></tr><tbody>' +
+      [1,2,3].map(k => `<tr><td>${k}R</td><td class="sym">${fmt(hedef(k))}</td><td class="up">+${fmt(lot*(hedef(k)-G),0)} TL</td><td>1:${k}</td></tr>`).join('') +
+    '</tbody></table></div>' +
+    `<div class="note">Lot = (Sermaye × Risk%) ÷ |Giriş − Stop|. Giriş ${fmt(G)} · Stop ${fmt(St)}. ` +
+    (asiri ? '⚠️ Pozisyon sermayeni aşıyor — stop\'u sık veya risk yüzdesini düşür.' : 'Pozisyon sermaye içinde ✓') + '</div>';
+}
+
+function karnePerformans(d) {
   const sg = d.sinyal_gecmisi;
-  if (sg && sg.kayitlar && sg.kayitlar.length) {
-    html += `<h2>🎯 Sinyal Doğruluk Takibi <span class="cnt">%${sg.basari_orani ?? '?'} başarı · ${sg.toplam} sinyal</span></h2>` +
-      '<div class="twrap"><table><tr><th>Tarih</th><th>Hisse</th><th>Sinyal</th><th>Skor</th><th>Sinyal Fiyatı</th><th>Güncel</th><th>Getiri</th></tr><tbody>';
-    sg.kayitlar.slice(0, 20).forEach(x => {
-      html += `<tr><td>${x.tarih || ''}</td><td class="sym">${x.sembol}</td><td>${badge(x.sinyal)}</td>` +
-        `<td style="color:${x.skor>=3?'var(--up)':x.skor<=-3?'var(--down)':'var(--warn)'}">${x.skor>0?'+':''}${x.skor}</td>` +
-        `<td>${fmt(x.giris)}</td><td>${x.guncel == null ? '—' : fmt(x.guncel)}</td>` +
-        `<td class="${ok(x.getiri)}">${x.getiri == null ? '—' : yuzde(x.getiri)}</td></tr>`;
-    });
-    html += '</tbody></table></div><div class="note">Gerçek veri: sinyal günü kapanış fiyatı ile bugünkü fiyat karşılaştırılır (sinyal gününden bugüne getiri). Her işlem günü 15 dakikada bir güncellenir — geçmiş büyüdükçe doğruluk anlamlılaşır.</div>';
-  } else {
-    html += '<h2>🎯 Sinyal Doğruluk Takibi <span class="cnt">veri toplanıyor</span></h2><div class="empty">Sinyal geçmişi henüz birikmedi — birkaç işlem günü sonra burada doğruluk oranı görünecek.</div>';
-  }
+  if (!sg || !sg.kayitlar || !sg.kayitlar.length)
+    return '<h2>🎯 Sinyal Performans Karnesi</h2><div class="empty">Karne veri topluyor — sinyal geçmişi biriktikçe başarı ve ortalama getiri burada görünecek.</div>';
+  const k = sg.kayitlar, get = x => x.getiri == null ? 0 : x.getiri;
+  const poz = k.filter(x => get(x) > 0).length, neg = k.filter(x => get(x) < 0).length;
+  const ort = k.reduce((a, x) => a + get(x), 0) / k.length;
+  const sirali = [...k].sort((a, b) => get(b) - get(a));
+  const enIyi = sirali[0], enKotu = sirali[sirali.length - 1];
+  const alt = k.filter(x => (x.sinyal || '').includes('AL')), satL = k.filter(x => (x.sinyal || '').includes('SAT'));
+  const oo = a => a.length ? a.reduce((s, x) => s + get(x), 0) / a.length : null;
+  const bo = a => a.length ? Math.round(a.filter(x => get(x) > 0).length / a.length * 100) : null;
+  const oran = Math.round(poz / k.length * 100);
+  const renk = ort >= 0 ? 'var(--up)' : 'var(--down)';
+  let h = '<h2>🎯 Sinyal Performans Karnesi <span class="cnt">' + k.length + ' sinyal · %' + (sg.basari_orani ?? oran) + ' başarı</span></h2>' +
+    '<div class="scn">' +
+      `<div class="sc"><div class="t">Başarı Oranı</div><div class="o" style="color:${renk}">%${sg.basari_orani ?? oran}</div><div class="m">🟢 ${poz} · 🔴 ${neg}</div></div>` +
+      `<div class="sc"><div class="t">Ort. Getiri</div><div class="o" style="color:${renk}">${ort >= 0 ? '+' : ''}%${ort.toFixed(2)}</div><div class="m">sinyal başına</div></div>` +
+      `<div class="sc"><div class="t">En İyi Sinyal</div><div class="o up">${enIyi.sembol}</div><div class="m">+%${get(enIyi).toFixed(1)} · ${enIyi.tarih}</div></div>` +
+      `<div class="sc"><div class="t">En Kötü Sinyal</div><div class="o down">${enKotu.sembol}</div><div class="m">%${get(enKotu).toFixed(1)} · ${enKotu.tarih}</div></div>` +
+    '</div>' +
+    '<div class="twrap"><table><tr><th>Sinyal</th><th>Adet</th><th>Başarı</th><th>Ort. Getiri</th></tr><tbody>' +
+      `<tr><td class="sym">AL</td><td>${alt.length}</td><td>${bo(alt) == null ? '—' : '%' + bo(alt)}</td><td class="${ok(oo(alt))}">${oo(alt) == null ? '—' : (oo(alt) >= 0 ? '+' : '') + '%' + oo(alt).toFixed(2)}</td></tr>` +
+      `<tr><td class="sym">SAT</td><td>${satL.length}</td><td>${bo(satL) == null ? '—' : '%' + bo(satL)}</td><td class="${ok(oo(satL))}">${oo(satL) == null ? '—' : (oo(satL) >= 0 ? '+' : '') + '%' + oo(satL).toFixed(2)}</td></tr>` +
+    '</tbody></table></div>' +
+    '<h2>📋 Son Sinyaller</h2><div class="twrap"><table><tr><th>Tarih</th><th>Hisse</th><th>Sinyal</th><th>Skor</th><th>Giriş</th><th>Güncel</th><th>Getiri</th></tr><tbody>';
+  [...k].reverse().slice(0, 15).forEach(x => {
+    h += `<tr><td>${x.tarih || ''}</td><td class="sym">${x.sembol}</td><td>${badge(x.sinyal)}</td>` +
+      `<td style="color:${x.skor >= 3 ? 'var(--up)' : x.skor <= -3 ? 'var(--down)' : 'var(--warn)'}">${x.skor > 0 ? '+' : ''}${x.skor}</td>` +
+      `<td>${fmt(x.giris)}</td><td>${x.guncel == null ? '—' : fmt(x.guncel)}</td>` +
+      `<td class="${ok(x.getiri)}">${x.getiri == null ? '—' : yuzde(x.getiri)}</td></tr>`;
+  });
+  h += '</tbody></table></div><div class="note">Getiri = sinyal günü kapanış → bugünkü fiyat. Gerçek veri; sinyal sayısı arttıkça karne anlam kazanır.</div>';
+  return h;
+}
 
-  // 2.3 — Hisse bazlı backtest
-  if (t.hisse_bazli && t.hisse_bazli.length) {
-    html += '<h2>📈 Hisse Bazlı Backtest <span class="cnt">sinyal başına</span></h2><div class="twrap"><table><tr>' +
-      '<th>Hisse</th><th>Toplam Getiri</th><th>İşlem</th><th>Başarı</th><th>Max Düşüş</th></tr><tbody>';
-    t.hisse_bazli.forEach(x => {
-      html += `<tr><td class="sym">${x.sembol}</td>` +
-        `<td class="${ok(x.toplam_getiri)}">${x.toplam_getiri >= 0 ? '+' : ''}%${x.toplam_getiri.toFixed(1)}</td>` +
-        `<td>${x.islem_sayisi}</td><td>%${x.basari_orani}</td>` +
-        `<td class="down">%${x.max_dusus.toFixed(1)}</td></tr>`;
-    });
-    html += '</tbody></table></div>';
-  }
+function renderSenaryo(d) {
+  riskHesapKur(d);
+  const t = d.test_senaryolari;
+  let html = karnePerformans(d);
+  if (t) {
+    html += '<h2>🧪 Simülasyon — 6 Aylık Gerçek Veri · 💵 100K TL</h2><div class="scn">';
+    const karti = (s, sermaye, acik) => {
+      if (!s) return;
+      const renk = s.ortalama >= 0 ? 'var(--up)' : 'var(--down)';
+      const poz = Math.max(0, Math.min(100, 50 + s.ortalama * 2));
+      const basari = s.islem ? Math.round(s.kazanan / s.islem * 100) : 0;
+      const kb = s.islem ? `<div class="bar"><i style="width:${basari}%;background:var(--up)"></i><i style="width:${100-basari}%;background:var(--down)"></i></div>` : '';
+      const tl = sermaye ? `<div class="m">💵 <b>100K TL ile: ${fmt(sermaye.sonuc,0)} TL</b> <span class="${ok(sermaye.kar_zarar)}">(${sermaye.kar_zarar >= 0 ? '+' : ''}${fmt(sermaye.kar_zarar,0)} TL)</span> · ${fmt(sermaye.tahsis,0)} TL/pozisyon</div>` : '';
+      html += `<div class="sc ${acik?'wide':''}"><div class="t">${s.ad}</div>` +
+        `<div class="o" style="color:${renk}">${s.ortalama >= 0 ? '+' : ''}%${s.ortalama.toFixed(1)}</div>` +
+        `<div class="bar"><i style="width:${poz}%;background:${s.ortalama>=0?'var(--up)':'var(--down)'}"></i></div>` +
+        `<div class="m">${s.islem} işlem · 🟢 ${s.kazanan} · 🔴 ${s.kaybeden} · <b>%${basari} başarı</b></div>` + kb + tl;
+      if (s.en_iyi) html += `<div class="m">🏆 ${s.en_iyi.sembol} %${s.en_iyi.getiri_yuzde >= 0 ? '+' : ''}${s.en_iyi.getiri_yuzde} (${s.en_iyi.tarih})</div>`;
+      if (s.en_kotu) html += `<div class="m">💀 ${s.en_kotu.sembol} %${s.en_kotu.getiri_yuzde >= 0 ? '+' : ''}${s.en_kotu.getiri_yuzde} (${s.en_kotu.tarih})</div>`;
+      html += '</div>';
+    };
+    const sm = t.sermaye || {};
+    karti(t.pazartesi_acilis, sm.pazartesi);
+    karti(t.ertesi_gun_acilis, sm.ertesi);
+    karti(t.stop_losslu, sm.stop, true);
+    html += '</div><div class="note">' + (t.aciklama || '') + '</div>';
 
-  const ilk = (t.ertesi_gun_acilis && t.ertesi_gun_acilis.islemler) || [];
-  if (ilk.length) {
-    html += '<h2>🏆 En Kârlı Sinyaller (son 6 ay)</h2><div class="twrap"><table><tr><th>Hisse</th><th>Sinyal Tarihi</th><th>Giriş</th><th>Bugün</th><th>Getiri</th></tr><tbody>';
-    ilk.slice(0, 10).forEach(x => {
-      html += `<tr><td class="sym">${x.sembol}</td><td>${x.sinyal_tarih}</td><td>${fmt(x.giris)}</td>` +
-        `<td>${fmt(x.bugun)}</td><td class="${ok(x.getiri_yuzde)}">${yuzde(x.getiri_yuzde)}</td></tr>`;
-    });
-    html += '</tbody></table></div>';
+    // Hisse bazlı backtest
+    if (t.hisse_bazli && t.hisse_bazli.length) {
+      html += '<h2>📈 Hisse Bazlı Backtest <span class="cnt">sinyal başına</span></h2><div class="twrap"><table><tr>' +
+        '<th>Hisse</th><th>Toplam Getiri</th><th>İşlem</th><th>Başarı</th><th>Max Düşüş</th></tr><tbody>';
+      t.hisse_bazli.forEach(x => {
+        html += `<tr><td class="sym">${x.sembol}</td>` +
+          `<td class="${ok(x.toplam_getiri)}">${x.toplam_getiri >= 0 ? '+' : ''}%${x.toplam_getiri.toFixed(1)}</td>` +
+          `<td>${x.islem_sayisi}</td><td>%${x.basari_orani}</td>` +
+          `<td class="down">%${x.max_dusus.toFixed(1)}</td></tr>`;
+      });
+      html += '</tbody></table></div>';
+    }
+
+    const ilk = (t.ertesi_gun_acilis && t.ertesi_gun_acilis.islemler) || [];
+    if (ilk.length) {
+      html += '<h2>🏆 En Kârlı Sinyaller (son 6 ay)</h2><div class="twrap"><table><tr><th>Hisse</th><th>Sinyal Tarihi</th><th>Giriş</th><th>Bugün</th><th>Getiri</th></tr><tbody>';
+      ilk.slice(0, 10).forEach(x => {
+        html += `<tr><td class="sym">${x.sembol}</td><td>${x.sinyal_tarih}</td><td>${fmt(x.giris)}</td>` +
+          `<td>${fmt(x.bugun)}</td><td class="${ok(x.getiri_yuzde)}">${yuzde(x.getiri_yuzde)}</td></tr>`;
+      });
+      html += '</tbody></table></div>';
+    }
   }
-  document.getElementById('sec-senaryo').innerHTML = html;
+  const hedefEl = document.getElementById('karne-icerik');
+  if (hedefEl) hedefEl.innerHTML = html;
 }
 
 /* ══════════ HABER (Cryptopanic tarzı: kategori + dil + yön filtreleri, zaman damgası) ══════════ */
@@ -933,7 +1038,105 @@ function renderFon(d) {
     });
     html += '</tbody></table></div><div class="note">Değer skoru: F/K&lt;5 (+2), &lt;10 (+1); PD/DD&lt;1 (+2), &lt;1.5 (+1); temettü&gt;%3 (+1).</div>';
   }
-  document.getElementById('sec-fon').innerHTML = html;
+  document.getElementById('fon-icerik').innerHTML = html;
+}
+
+/* ══════════ SABİT GETİRİ (devlet tahvili + eurobond) ══════════ */
+async function getiriYukle() {
+  const el = document.getElementById('getiri-blok');
+  if (!el) return;
+  try {
+    const g = await (await fetch('data/getiri.json?v=' + Date.now())).json();
+    const rf = g.risk_free != null ? 'Risksiz getiri (10Y): <b>%' + fmt(g.risk_free) + '</b> · ' : '';
+    let h = '<h2>💵 Sabit Getiri — Devlet Tahvili & Eurobond <span class="cnt">' +
+      (g.tahvil ? g.tahvil.length : 0) + ' tahvil · ' + (g.eurobond ? g.eurobond.length : 0) + ' eurobond</span></h2>';
+
+    if (g.tahvil && g.tahvil.length) {
+      h += '<div class="scn">';
+      g.tahvil.forEach(t => {
+        h += `<div class="sc"><div class="t">${t.ad || t.vade}</div>` +
+          `<div class="o">%${fmt(t.getiri)}</div>` +
+          `<div class="m">${t.vade} · <span class="${ok(t.degisim)}">${t.degisim >= 0 ? '+' : ''}${fmt(t.degisim, 3)}</span></div></div>`;
+      });
+      h += '</div>';
+    } else {
+      h += '<div class="empty">Tahvil verisi yok — bir sonraki güncellemede.</div>';
+    }
+
+    if (g.eurobond && g.eurobond.length) {
+      h += '<h2>🌍 Eurobond <span class="cnt">' + g.eurobond.length + ' kıymet · Ziraat kotasyonu</span></h2>' +
+        '<div class="twrap"><table><tr><th>Vade</th><th>Kalan Gün</th><th>Döviz</th><th>Alış Fiyatı</th><th>Alış Oranı</th><th>Satış Fiyatı</th><th>Satış Oranı</th></tr><tbody>';
+      g.eurobond.forEach(e => {
+        h += `<tr><td class="sym">${e.vade || ''}</td><td>${e.kalan_gun == null ? '—' : e.kalan_gun}</td><td>${e.para || ''}</td>` +
+          `<td>${e.alis_fiyat == null ? '—' : fmt(e.alis_fiyat, 3)}</td><td class="up">${e.alis_oran == null ? '—' : '%' + fmt(e.alis_oran)}</td>` +
+          `<td>${e.satis_fiyat == null ? '—' : fmt(e.satis_fiyat, 3)}</td><td class="down">${e.satis_oran == null ? '—' : '%' + fmt(e.satis_oran)}</td></tr>`;
+      });
+      h += '</tbody></table></div>' +
+        '<div class="note">' + rf + 'Alış = bankanın <b>sizden</b> alacağı (siz satarken), Satış = bankanın <b>size</b> satacağı (siz alırken). Kaynak: Ziraat Bank eurobond kotasyonu + doviz.com tahvil. Yatırım tavsiyesi değildir.</div>';
+    } else {
+      h += '<div class="note">' + rf + 'Eurobond kotasyonu şu an alınamadı.</div>';
+    }
+    el.innerHTML = h;
+  } catch (e) {
+    el.innerHTML = '<h2>💵 Sabit Getiri</h2><div class="empty">Getiri verisi yüklenemedi: ' + (e && e.message ? e.message : e) + '</div>';
+  }
+}
+
+/* ══════════ TAKVİM (Halka Arz + Temettü) ══════════ */
+function durumEtiket(d) {
+  const m = {
+    yaklasan: ['Yaklaşan', 'var(--up)'], tamamlandi: ['Tamamlandı', 'var(--tx2)'],
+    ertelendi: ['Ertelendi', 'var(--warn)'], iptal: ['İptal', 'var(--down)'],
+    basvuru: ['Başvuruda', 'var(--warn)'], bilinmiyor: ['—', 'var(--tx2)']
+  };
+  const x = m[d] || m.bilinmiyor;
+  return `<span style="color:${x[1]}">${x[0]}</span>`;
+}
+
+async function takvimYukle() {
+  const el = document.getElementById('sec-takvim');
+  if (!el) return;
+  try {
+    const t = await (await fetch('data/takvim.json?v=' + Date.now())).json();
+    let h = '<h2>📅 Halka Arz Takvimi <span class="cnt">' + (t.halka_arz ? t.halka_arz.length : 0) + ' kayıt</span></h2>';
+
+    if (t.basvuru && t.basvuru.length) {
+      h += '<div class="note">🟡 <b>Başvuru sürecinde</b> (henüz tarih/kod yok): ' + t.basvuru.slice(0, 24).map(x => x).join(' · ') + '</div>';
+    }
+
+    if (t.halka_arz && t.halka_arz.length) {
+      h += '<div class="twrap"><table><tr><th>Kod</th><th>Şirket</th><th>Tarih</th><th>Durum</th></tr><tbody>';
+      t.halka_arz.forEach(x => {
+        h += `<tr><td class="sym">${x.kod || '—'}</td><td>${x.sirket || ''}</td><td>${x.tarih || '—'}</td><td>${durumEtiket(x.durum)}</td></tr>`;
+      });
+      h += '</tbody></table></div>';
+    } else {
+      h += '<div class="empty">Halka arz listesi boş.</div>';
+    }
+
+    if (t.ertelenen && t.ertelenen.length) {
+      h += '<h2>⏸️ Ertelenen / İptal <span class="cnt">' + t.ertelenen.length + '</span></h2>' +
+        '<div class="twrap"><table><tr><th>Kod</th><th>Şirket</th><th>Tarih</th></tr><tbody>';
+      t.ertelenen.forEach(x => { h += `<tr><td class="sym">${x.kod || '—'}</td><td>${x.sirket || ''}</td><td>${x.tarih || '—'}</td></tr>`; });
+      h += '</tbody></table></div>';
+    }
+
+    if (t.temettu && t.temettu.length) {
+      h += '<h2>💰 Temettü Takvimi <span class="cnt">' + t.temettu.length + ' kayıt</span></h2>' +
+        '<div class="twrap"><table><tr><th>Kod</th><th>Şirket</th><th>Tarih</th><th>Net Temettü</th><th>Verim</th><th>Durum</th></tr><tbody>';
+      t.temettu.slice(0, 40).forEach(x => {
+        h += `<tr><td class="sym">${x.kod || '—'}</td><td>${x.sirket || ''}</td><td>${x.tarih || '—'}</td>` +
+          `<td>${x.net == null ? '—' : fmt(x.net, 4)}</td><td>${x.yuzde == null ? '—' : '%' + fmt(x.yuzde, 2)}</td>` +
+          `<td>${x.gecmis ? '<span style="color:var(--tx2)">geçti</span>' : (x.gun_fark != null && x.gun_fark >= 0 ? `<span class="up">${x.gun_fark} gün sonra</span>` : '—')}</td></tr>`;
+      });
+      h += '</tbody></table></div>';
+    }
+
+    h += `<div class="note">Kaynak: halkarz.com · üretildi ${t.uretildi || ''}. Halka arz tarihleri kesinleşmemiş olabilir — başvuru öncesi resmi KAP bildirimini doğrula.</div>`;
+    el.innerHTML = h;
+  } catch (e) {
+    el.innerHTML = '<h2>📅 Takvim</h2><div class="empty">Takvim verisi yüklenemedi: ' + (e && e.message ? e.message : e) + '</div>';
+  }
 }
 
 /* ══════════ KRİPTO ══════════ */

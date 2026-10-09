@@ -1,0 +1,48 @@
+name: ek-veri-cek
+
+on:
+  schedule:
+    # Sabit getiri (tahvil/eurobond) + halka arz/temettü takvimi.
+    # Günde 2 kez hafta içi: 06:00 UTC (TR 09:00) ve 15:00 UTC (TR 18:00, kapanış sonrası).
+    - cron: '0 6,15 * * 1-5'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  ekveri:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Paket kurulumu
+        run: pip install --quiet pandas numpy borsapy requests httpx
+
+      - name: Sabit getiri çek (tahvil + eurobond) → data/getiri.json
+        run: python scripts/getiri_cek.py
+        continue-on-error: true
+
+      - name: Takvim çek (halka arz + temettü) → data/takvim.json
+        run: python scripts/takvim_cek.py
+        continue-on-error: true
+
+      - name: Commit + push (getiri.json + takvim.json)
+        run: |
+          git config user.name "bist-panel bot"
+          git config user.email "96144326+hechecik@users.noreply.github.com"
+          git add data/getiri.json data/takvim.json
+          if ! git diff --cached --quiet; then
+            git commit -m "sabit getiri + takvim guncelle $(date -u +'%d.%m %H:%M') UTC"
+            git fetch origin
+            git rebase origin/main --autostash || git rebase --abort
+            git push
+            echo "✅ getiri + takvim verisi push edildi"
+          else
+            echo "ℹ️ değişiklik yok"
+          fi
