@@ -492,6 +492,83 @@ def sinyalleri_hesapla(hisse_veri: dict) -> dict:
     }
 
 
+def ict_tara(hisse_veri: dict) -> dict:
+    """ICT TARAYICI — tüm BIST hisselerinde tam ICT setini çalıştır (Katman 2).
+
+    Mantık kaynağı: ArunKBhaskar/PineScript (ICT MSS/FVG/OB/Mitigation/EQH-EQL/Void/
+    Market Profile/Displacement) → Python'a çevrildi (scripts/ict.py).
+    Skor kuralları ict.py başlığında açık; burada sadece tarama + toplama yapılır.
+    """
+    import sys
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from ict import ict_hesapla
+    import pandas as pd
+
+    mss_up, mss_dn, fvg_acik, ob_ici = [], [], [], []
+    sweep, eqh, eql, alim, satim = [], [], [], [], []
+    islenen = 0
+    for sembol, rows in hisse_veri.items():
+        if not rows or len(rows) < 40:
+            continue
+        try:
+            df = pd.DataFrame(rows)
+            df = df.rename(columns={'tarih': 'date', 'kapanis': 'close', 'acilis': 'open',
+                                    'min': 'low', 'max': 'high', 'hacim': 'volume'})
+            df = df.sort_values('date').reset_index(drop=True)
+            r = ict_hesapla(df)
+        except Exception:
+            continue
+        if not r:
+            continue
+        islenen += 1
+        fiyat = r.get('fiyat')
+        m = r.get('mss') or {}
+        if m.get('yon') == 'BULLISH':
+            mss_up.append({'sembol': sembol, 'fiyat': fiyat, 'seviye': m['seviye'], 'aciklama': m['aciklama']})
+        elif m.get('yon') == 'BEARISH':
+            mss_dn.append({'sembol': sembol, 'fiyat': fiyat, 'seviye': m['seviye'], 'aciklama': m['aciklama']})
+        f = r.get('fvg') or {}
+        if f and f.get('durum') == 'AÇIK':
+            fvg_acik.append({'sembol': sembol, 'yon': f['yon'], 'alt': f['alt'], 'ust': f['ust'],
+                             'konum': f['konum'], 'fiyat': fiyat})
+        o = r.get('ob') or {}
+        if o and o.get('durum') == 'İÇİNDE':
+            ob_ici.append({'sembol': sembol, 'yon': o['yon'], 'alt': o['alt'], 'ust': o['ust'], 'fiyat': fiyat})
+        s = r.get('sweep') or {}
+        if s.get('yon'):
+            sweep.append({'sembol': sembol, 'yon': s['yon'], 'seviye': s['seviye'], 'aciklama': s['aciklama']})
+        if r.get('eqh'):
+            eqh.append({'sembol': sembol, 'seviye': r['eqh']['seviye']})
+        if r.get('eql'):
+            eql.append({'sembol': sembol, 'seviye': r['eql']['seviye']})
+        kayit = {'sembol': sembol, 'fiyat': fiyat, 'skor': r['skor'],
+                 'sinyal': r['sinyal'], 'nedenler': r['nedenler']}
+        if r['sinyal'] == 'AL':
+            alim.append(kayit)
+        elif r['sinyal'] == 'SAT':
+            satim.append(kayit)
+
+    alim.sort(key=lambda x: x['skor'], reverse=True)
+    satim.sort(key=lambda x: x['skor'])
+    return {
+        'mss_yukari': mss_up[:20],
+        'mss_asagi': mss_dn[:20],
+        'fvg_acik': fvg_acik[:20],
+        'ob_ici': ob_ici[:20],
+        'sweep': sweep[:20],
+        'eqh': eqh[:20],
+        'eql': eql[:20],
+        'al': alim[:15],
+        'sat': satim[:15],
+        'islenen': islenen,
+        'al_sayisi': len(alim),
+        'sat_sayisi': len(satim),
+        'hesap_tarihi': dt.datetime.now().strftime('%d.%m.%Y %H:%M'),
+        'kural': ('MSS ±2, displacement ±1, fiyat FVG/OB bölgesi içinde ±1, likidite süpürmesi ±1, '
+                  'değer alanı dışı ±1. Skor ≥3 AL, ≤-3 SAT.'),
+    }
+
+
 def test_senaryolari(hisse_veri: dict) -> dict:
     """TEST SENARYOLARI — 'geçmişte sinyal olsaydı şu an ne olurdu?' hesabı.
 
@@ -1052,6 +1129,13 @@ def main():
     # 5g. Gece analizi (madde 5)
     gece = gece_analizi(sinyaller, takvim)
 
+    # 5h. ICT TARAYICI (Katman 2 — PineScript mantığı: MSS/FVG/OB/sweep/EQH-EQL/Profile)
+    ict_tarama = ict_tara(hisse_veri) if hisse_veri else {}
+    log(f"ICT tarayıcı: {ict_tarama.get('islenen', 0)} hisse işlendi | "
+        f"AL={ict_tarama.get('al_sayisi', 0)} SAT={ict_tarama.get('sat_sayisi', 0)} | "
+        f"MSS↑{len(ict_tarama.get('mss_yukari', []))} MSS↓{len(ict_tarama.get('mss_asagi', []))} "
+        f"OB-içi={len(ict_tarama.get('ob_ici', []))}")
+
     log(f"Haberler: {len(haberler)} | Fonlar: {len(fonlar.get('fonlar', []))} | "
         f"Sektör: {len(sektor_list)} | Temel analiz: {len(temel)} | "
         f"Doğruluk: {sinyal_gecmisi.get('toplam')} sinyal")
@@ -1072,6 +1156,7 @@ def main():
         'temel_analiz': temel,
         'sinyal_gecmisi': sinyal_gecmisi,
         'gece_analizi': gece,
+        'ict_tarama': ict_tarama,
     }
     (DATA_DIR / 'piyasa.json').write_text(json.dumps(paket, ensure_ascii=False, indent=1), encoding='utf-8')
     log(f"piyasa.json yazıldı: {os.path.getsize(DATA_DIR / 'piyasa.json')} byte")
