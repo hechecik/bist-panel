@@ -1,152 +1,102 @@
 {
- "uretildi": "2026-10-20T22:27:50",
+ "uretildi": "2026-10-21T00:44:23",
  "kaynak": "GC=F (COMEX ons) · yfinance + gold-api.com spot + doviz.com takvim",
  "fiyat": {
-  "ons": 4147.4,
-  "spot": 4132.3,
-  "spot_guncelleme": "2026-10-20T22:27:40Z",
-  "gram_tl": 6609.96,
-  "usdtry": 49.5715,
+  "ons": 4138.5,
+  "spot": 4119.9,
+  "spot_guncelleme": "2026-10-21T00:44:10Z",
+  "gram_tl": 6597.65,
+  "usdtry": 49.5856,
   "performans": {
-   "1g": -0.31,
-   "1h": -0.72,
-   "2h": -0.95,
-   "1a": -5.39,
-   "3a": -0.11,
-   "6a": -12.12,
-   "1y": -1.56
+   "1g": -0.52,
+   "1h": -0.93,
+   "2h": -1.16,
+   "1a": -5.6,
+   "3a": -0.32,
+   "6a": -12.31,
+   "1y": -1.78
   },
   "son_tarih": "2026-10-20"
  },
  "vital": {
-  "son": 4147.4,
-  "ma20": 4191.47,
-  "ma50": 4364.18,
-  "ma200": 4538.88,
+  "son": 4138.5,
+  "ma20": 4191.02,
+  "ma50": 4364.0,
+  "ma200": 4538.84,
   "trend": "ZAYIF / AŞAĞI",
   "trend_skor": -2,
-  "rsi": 40.6,
-  "rsi_yorum": "41 — negatif momentum",
-  "atr": 77.11,
-  "atr_yuzde": 1.86,
+  "rsi": 39.9,
+  "rsi_yorum": "40 — negatif momentum",
+  "atr": 78.02,
+  "atr_yuzde": 1.89,
   "h52": 5586.2,
   "l52": 3901.3,
-  "konum_52h": 14.6,
+  "konum_52h": 14.1,
   "konum_yorum": "dip bölgesi"
  },
  "seviyeler": {
   "destek": [
    {
     "seviye": 4100.0,
-    "mesafe_pct": -1.14,
+    "mesafe_pct": -0.93,
     "tip": "salınım dibi"
    },
    {
     "seviye": 4050,
-    "mesafe_pct": -2.35,
+    "mesafe_pct": -2.14,
     "tip": "yuvarlak"
    },
    {
     "seviye": 4000,
-    "mesafe_pct": -3.55,
+    "mesafe_pct": -3.35,
     "tip": "yuvarlak"
    },
    {
     "seviye": 3963.0,
-    "mesafe_pct": -4.45,
+    "mesafe_pct": -4.24,
     "tip": "salınım dibi"
    }
   ],
   "direnc": [
    {
     "seviye": 4150,
-    "mesafe_pct": 0.06,
+    "mesafe_pct": 0.28,
     "tip": "yuvarlak"
    },
    {
     "seviye": 4171.4,
-    "mesafe_pct": 0.58,
+    "mesafe_pct": 0.79,
     "tip": "salınım tepesi"
    },
    {
-    "seviye": 4191.5,
-    "mesafe_pct": 1.06,
+    "seviye": 4191.0,
+    "mesafe_pct": 1.27,
     "tip": "MA20"
    },
    {
     "seviye": 4215.5,
-    "mesafe_pct": 1.64,
+    "mesafe_pct": 1.86,
     "tip": "salınım tepesi"
    }
   ]
  },
  "senaryo": {
-  "gectmis": "Son 1 yılda ons 3,901$ (10.2025) ile 5,586$ (01.2026) arasında salındı; şu an 4,147$ — yıllık zirvenin %26 altında, yıllık aralığın %15'inde.",
-  "durum": "Trend ZAYIF / AŞAĞI, RSI 41, yıllık aralığın %15'inde (dip bölgesi). Günlük oynaklık (ATR) 77$ ≈ %1.9.",
+  "gectmis": "Son 1 yılda ons 3,901$ (10.2025) ile 5,586$ (01.2026) arasında salındı; şu an 4,138$ — yıllık zirvenin %26 altında, yıllık aralığın %14'inde.",
+  "durum": "Trend ZAYIF / AŞAĞI, RSI 40, yıllık aralığın %14'inde (dip bölgesi). Günlük oynaklık (ATR) 78$ ≈ %1.9.",
   "bias": "AYI",
   "bias_skor": -5,
   "yukari": {
    "tetik": 4150,
    "hedef": 4171.4,
-   "metin": "Fiyat 4,150$ direncini (+0.1%) hacimle kırıp üstünde kapanırsa ilk hedef 4,171$."
+   "metin": "Fiyat 4,150$ direncini (+0.3%) hacimle kırıp üstünde kapanırsa ilk hedef 4,171$."
   },
   "asagi": {
    "tetik": 4100.0,
    "hedef": 4050,
-   "metin": "4,100$ desteği (-1.1%) kaybedilirse sıradaki destek 4,050$."
+   "metin": "4,100$ desteği (-0.9%) kaybedilirse sıradaki destek 4,050$."
   }
  },
  "kritik_gunler": [
-  {
-   "tarih": "20.10",
-   "gun": "Pzt",
-   "saat": "04:00",
-   "ulke": "Çin",
-   "onem": "mid",
-   "olay": "Kredi Ana Faiz Oranı (1 Yıl) (-)",
-   "neden": "Çin enflasyon/faiz verisi — küresel likidite ve dolar endeksi üzerinden altını etkiler",
-   "iso": "2026-10-20"
-  },
-  {
-   "tarih": "20.10",
-   "gun": "Pzt",
-   "saat": "04:00",
-   "ulke": "Çin",
-   "onem": "mid",
-   "olay": "Kredi Ana Faiz Oranı (5 Yıl) (-)",
-   "neden": "Çin enflasyon/faiz verisi — küresel likidite ve dolar endeksi üzerinden altını etkiler",
-   "iso": "2026-10-20"
-  },
-  {
-   "tarih": "20.10",
-   "gun": "Pzt",
-   "saat": "04:15",
-   "ulke": "Çin",
-   "onem": "mid",
-   "olay": "Kredi Ana Faiz Oranı (1 Yıl) (-)",
-   "neden": "Çin enflasyon/faiz verisi — küresel likidite ve dolar endeksi üzerinden altını etkiler",
-   "iso": "2026-10-20"
-  },
-  {
-   "tarih": "20.10",
-   "gun": "Pzt",
-   "saat": "04:15",
-   "ulke": "Çin",
-   "onem": "mid",
-   "olay": "Kredi Ana Faiz Oranı (5 Yıl) (-)",
-   "neden": "Çin enflasyon/faiz verisi — küresel likidite ve dolar endeksi üzerinden altını etkiler",
-   "iso": "2026-10-20"
-  },
-  {
-   "tarih": "20.10",
-   "gun": "Pzt",
-   "saat": "15:15",
-   "ulke": "ABD",
-   "onem": "mid",
-   "olay": "ADP Haftalık Özel Sektör İstihdam Değişimi (-)",
-   "neden": "ABD istihdam — dolar ve Fed beklentisi üzerinden altın",
-   "iso": "2026-10-20"
-  },
   {
    "tarih": "22.10",
    "gun": "Çar",
@@ -236,6 +186,56 @@
    "olay": "GSYH Deflatör (Çeyreklik) (Öncü) (-)",
    "neden": "Büyüme verisi — risk iştahı ve dolar",
    "iso": "2026-10-29"
+  },
+  {
+   "tarih": "29.10",
+   "gun": "Çar",
+   "saat": "15:30",
+   "ulke": "ABD",
+   "onem": "mid",
+   "olay": "İlk İşsizlik Başvuruları (-)",
+   "neden": "İşgücü görünümü — Fed politikası",
+   "iso": "2026-10-29"
+  },
+  {
+   "tarih": "29.10",
+   "gun": "Çar",
+   "saat": "15:30",
+   "ulke": "ABD",
+   "onem": "mid",
+   "olay": "PCE Deflatör (Aylık) (-)",
+   "neden": "Fed'in tercih ettiği enflasyon ölçüsü — faiz beklentisi",
+   "iso": "2026-10-29"
+  },
+  {
+   "tarih": "29.10",
+   "gun": "Çar",
+   "saat": "15:30",
+   "ulke": "ABD",
+   "onem": "mid",
+   "olay": "PCE Deflatör (Yıllık) (-)",
+   "neden": "Fed'in tercih ettiği enflasyon ölçüsü — faiz beklentisi",
+   "iso": "2026-10-29"
+  },
+  {
+   "tarih": "29.10",
+   "gun": "Çar",
+   "saat": "16:15",
+   "ulke": "Euro Bölgesi",
+   "onem": "high",
+   "olay": "ECB Refinansman Operasyon Gösterge Faiz Oranı (Ekim)",
+   "neden": "Euro Bölgesi enflasyon/faiz verisi — küresel likidite ve dolar endeksi üzerinden altını etkiler",
+   "iso": "2026-10-29"
+  },
+  {
+   "tarih": "29.10",
+   "gun": "Çar",
+   "saat": "16:15",
+   "ulke": "Euro Bölgesi",
+   "onem": "high",
+   "olay": "ECB Mevduat Faiz Oranı (Ekim)",
+   "neden": "Euro Bölgesi enflasyon/faiz verisi — küresel likidite ve dolar endeksi üzerinden altını etkiler",
+   "iso": "2026-10-29"
   }
  ],
  "haberler": [
@@ -250,12 +250,6 @@
    "kaynak": "Google News · altın",
    "link": "https://news.google.com/rss/articles/CBMisgFBVV95cUxNUnlkSWkwMjliSDM3dUlEWVZFa0N5blpVNTdpNVJQbGR1VXpDR3JSWFJydUVvVy1uLWNkb0JLZ2VyWGNfTUhDNzc0S2tLNVAxaVlKZ0k0TW1leDVsbDJDTUVzcEtPMDl0VlF3c2RleGxsaFJ1TkFfVW9VRTg4T0VwMkxyUUxfb3Rndkg1VmhmQlJrb09zek1ES1JPWHZEeVRKaEUyV2VTbjN6bWFWcFdHUnNB?oc=5",
    "yayin_tarihi": "Tue, 20 Oct 2026 07:05:32 GMT"
-  },
-  {
-   "baslik": "Altın fiyatları yükselişe geçti! Ons altın 4.158 doları aştı - CNN Türk",
-   "kaynak": "Google News · altın",
-   "link": "https://news.google.com/rss/articles/CBMioAFBVV95cUxPZUVNRVcyV0hPZjd2Wk8wN1YzcTRxaG5qcWdFb25wWmxJWUpWWWxRZVlvbUFqQ1gza1diYVJuUnRGU1dxT0hhU0I0MlFGRzhHYzE4QVIzdkNPdUc3VDdTejdneHh1X2N5MWc5NHhMWDRUbXRMTjdiUHd0X1FvR1cwUG1BX255QVdTZWo5SHNsUjhET2wwbmpXY0o4VzFvcTVY?oc=5",
-   "yayin_tarihi": "Thu, 15 Oct 2026 10:00:58 GMT"
   },
   {
    "baslik": "Altın fiyatları güne düşüşle başladı: Gram, çeyrek ve Cumhuriyet altını bugün ne kadar oldu? Güncel altın fiyatları 20 Ekim 2026 Salı... - Cumhuriyet",
@@ -276,16 +270,22 @@
    "yayin_tarihi": "Tue, 20 Oct 2026 17:14:38 GMT"
   },
   {
-   "baslik": "Altın fiyatları Fed beklentileriyle yükseldi: Ons altın 4.146 doları aştı - Foreks.com",
-   "kaynak": "Google News · altın",
-   "link": "https://news.google.com/rss/articles/CBMi5wFBVV95cUxNelliSHRzb1lRazl6VVJVQTFhX3dGRHI4ajdtd2ZGZ3lfQlNpRVRqQ05ZWGljdEVSbUZzcWV3LVZmdmpibGNQUXRzRFN5SmZKaTVaYnZjYmtlZVFoWllWbjhaMnd5UEx1U2NBU2lJd2ZpOE00MFNlNVRlU2VZdWgwWTBFQ2s4RGRLNFptem1KcTdPWmRodzFaRGVOLVM3YW4xWS1nNk9mN0ZGZC1HUVJsYk9pT3FXcEpWQnpYLW1sQmU2YWk3LWNVZXgtQXdSVVQ3TE5wYkc4UUx2eWhYb1RhT1BjQXh2OUk?oc=5",
-   "yayin_tarihi": "Thu, 15 Oct 2026 05:47:51 GMT"
-  },
-  {
    "baslik": "20 EKİM 2026 ALTIN FİYATLARI: Cumhuriyet altını, gram altın, çeyrek altın ve ons altın bugün kaç lira? - 24 Saat Gazetesi",
    "kaynak": "Google News · altın",
    "link": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxOMWJPR0ZiNmVjQl9JMU5JZDhsWmk4em16Y1VZMDZteHF6bmVRQ2ktOFdCalhSVXZ2c1ZqV2VZYV9VTHBpMlpVSnU4dGl4LU10RGRrd0FDcjNhc1kzSzRycFF1U0NwbU1NR1lQeXVzZ1lYbnM1VExRemRlcVRMbERxVi1BelJGb3FBVkZRZE1uSmFFcVpLd290U2xCSkppeEpJbWZScVZZcmxral9YdEl2U1NEMFctaXhieEVmZm12WXZBQWYwUUtKQQ?oc=5",
    "yayin_tarihi": "Tue, 20 Oct 2026 06:39:00 GMT"
+  },
+  {
+   "baslik": "Bugün, 21 Ekim'de altın fiyatları: Altın külçeleri ve altın yüzüklerin fiyatları düştü. - Vietnam.vn",
+   "kaynak": "Google News · altın",
+   "link": "https://news.google.com/rss/articles/CBMihgFBVV95cUxOMVdTRTBNOVZhR3J0amdFRzVobzdQQ3djcHZuei10YlNSQ0E1U3NOZnI1NGRIZ2lxWmdQWFY1bVpENXhFaFMyX3VodXNxWUdfcEo2di04UEtIYXQybjhneVh5cUQtNTVxTnRKMG8zYkNmZ3E0cTJtcnhoZDQybVZNOW00RGdpQQ?oc=5",
+   "yayin_tarihi": "Tue, 20 Oct 2026 23:21:44 GMT"
+  },
+  {
+   "baslik": "ALTIN FİYATLARI SON DAKİKA: Fiyatlar üzerinde baskı artıyor! Altın neden düşüyor? - İstanbul Ticaret Gazetesi",
+   "kaynak": "Google News · altın",
+   "link": "https://news.google.com/rss/articles/CBMitAFBVV95cUxQMHdmMFBZWGhvdC1OZzNDWlFfdS0tc3RoaDIzUXoyWDhSZ2ZGSGI5a29zTXJaRXN0VnozVWVLX1RlTGU1d2kzRzhyMzVyV2lBRW9EVXRJVWwwcVJMUXdUcUE5V3d4d0xPdWZaaGVQTnhTMVNBejlCa3BHcVZRYWl2SDRhenJndTNXeGtvN05rVHBlNGFXQW53MWZYZVdiQ1czWENzNkZFejdUZFg5dnczdFlxSU8?oc=5",
+   "yayin_tarihi": "Tue, 20 Oct 2026 06:20:19 GMT"
   },
   {
    "baslik": "CIBC slashes gold price forecasts but sees recovery to $5,200 in 2027 as central bank demand offsets Fed headwinds - Kitco",
