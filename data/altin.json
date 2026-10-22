@@ -1,99 +1,99 @@
 {
- "uretildi": "2026-10-22T06:14:34",
+ "uretildi": "2026-10-22T12:10:35",
  "kaynak": "GC=F (COMEX ons) · yfinance + gold-api.com spot + doviz.com takvim",
  "fiyat": {
-  "ons": 4104.5,
-  "spot": 4099.6,
-  "spot_guncelleme": "2026-10-22T06:14:09Z",
-  "gram_tl": 6548.27,
-  "usdtry": 49.6221,
+  "ons": 4075.6,
+  "spot": 4069.8,
+  "spot_guncelleme": "2026-10-22T12:10:11Z",
+  "gram_tl": 6502.29,
+  "usdtry": 49.6231,
   "performans": {
-   "1g": -1.1,
-   "1h": -1.57,
-   "2h": -1.26,
-   "1a": -4.95,
-   "3a": 0.83,
-   "6a": -13.11,
-   "1y": -0.11
+   "1g": -1.79,
+   "1h": -2.27,
+   "2h": -1.96,
+   "1a": -5.62,
+   "3a": 0.12,
+   "6a": -13.73,
+   "1y": -0.82
   },
   "son_tarih": "2026-10-22"
  },
  "vital": {
-  "son": 4104.5,
-  "ma20": 4173.14,
-  "ma50": 4351.0,
-  "ma200": 4535.39,
+  "son": 4075.6,
+  "ma20": 4171.69,
+  "ma50": 4350.42,
+  "ma200": 4535.25,
   "trend": "ZAYIF / AŞAĞI",
   "trend_skor": -2,
-  "rsi": 37.2,
-  "rsi_yorum": "37 — negatif momentum",
-  "atr": 76.6,
-  "atr_yuzde": 1.87,
+  "rsi": 35.1,
+  "rsi_yorum": "35 — negatif momentum",
+  "atr": 77.29,
+  "atr_yuzde": 1.9,
   "h52": 5586.2,
   "l52": 3901.3,
-  "konum_52h": 12.1,
+  "konum_52h": 10.3,
   "konum_yorum": "dip bölgesi"
  },
  "seviyeler": {
   "destek": [
    {
-    "seviye": 4100.0,
-    "mesafe_pct": -0.11,
-    "tip": "salınım dibi"
-   },
-   {
     "seviye": 4050,
-    "mesafe_pct": -1.33,
+    "mesafe_pct": -0.63,
     "tip": "yuvarlak"
    },
    {
     "seviye": 4000,
-    "mesafe_pct": -2.55,
+    "mesafe_pct": -1.85,
     "tip": "yuvarlak"
    },
    {
     "seviye": 3963.0,
-    "mesafe_pct": -3.45,
+    "mesafe_pct": -2.76,
     "tip": "salınım dibi"
+   },
+   {
+    "seviye": 3950,
+    "mesafe_pct": -3.08,
+    "tip": "yuvarlak"
    }
   ],
   "direnc": [
    {
+    "seviye": 4100,
+    "mesafe_pct": 0.6,
+    "tip": "yuvarlak"
+   },
+   {
     "seviye": 4150,
-    "mesafe_pct": 1.11,
+    "mesafe_pct": 1.83,
     "tip": "yuvarlak"
    },
    {
     "seviye": 4171.4,
-    "mesafe_pct": 1.63,
+    "mesafe_pct": 2.35,
     "tip": "salınım tepesi"
    },
    {
     "seviye": 4200,
-    "mesafe_pct": 2.33,
+    "mesafe_pct": 3.05,
     "tip": "yuvarlak"
-   },
-   {
-    "seviye": 4215.5,
-    "mesafe_pct": 2.7,
-    "tip": "salınım tepesi"
    }
   ]
  },
  "senaryo": {
-  "gectmis": "Son 1 yılda ons 3,901$ (10.2025) ile 5,586$ (01.2026) arasında salındı; şu an 4,104$ — yıllık zirvenin %27 altında, yıllık aralığın %12'inde.",
-  "durum": "Trend ZAYIF / AŞAĞI, RSI 37, yıllık aralığın %12'inde (dip bölgesi). Günlük oynaklık (ATR) 77$ ≈ %1.9.",
+  "gectmis": "Son 1 yılda ons 3,901$ (10.2025) ile 5,586$ (01.2026) arasında salındı; şu an 4,076$ — yıllık zirvenin %27 altında, yıllık aralığın %10'inde.",
+  "durum": "Trend ZAYIF / AŞAĞI, RSI 35, yıllık aralığın %10'inde (dip bölgesi). Günlük oynaklık (ATR) 77$ ≈ %1.9.",
   "bias": "AYI",
   "bias_skor": -5,
   "yukari": {
-   "tetik": 4150,
-   "hedef": 4171.4,
-   "metin": "Fiyat 4,150$ direncini (+1.1%) hacimle kırıp üstünde kapanırsa ilk hedef 4,171$."
+   "tetik": 4100,
+   "hedef": 4150,
+   "metin": "Fiyat 4,100$ direncini (+0.6%) hacimle kırıp üstünde kapanırsa ilk hedef 4,150$."
   },
   "asagi": {
-   "tetik": 4100.0,
-   "hedef": 4050,
-   "metin": "4,100$ desteği (-0.1%) kaybedilirse sıradaki destek 4,050$."
+   "tetik": 4050,
+   "hedef": 4000,
+   "metin": "4,050$ desteği (-0.6%) kaybedilirse sıradaki destek 4,000$."
   }
  },
  "kritik_gunler": [
@@ -246,52 +246,58 @@
    "yayin_tarihi": "Thu, 22 Oct 2026 04:15:00 GMT"
   },
   {
-   "baslik": "22 Ekim 2026 gram ve ons altın fiyatlarında son durum | Türkiye Ekonomisi Haberleri - GZT",
+   "baslik": "Gram Altın Fiyatı Geriledi: 22 Ekim Güncel Rakamlar - Muğla Yenigün",
    "kaynak": "Google News · altın",
-   "link": "https://news.google.com/rss/articles/CBMikwFBVV95cUxQYzNMS3BsbmQyQjR4WDF2Vkg0UDktRk04OFZoNkx5TEx3ME9QQWVEbEJlaXI2R2hCX3RqbHhiX0ZfUXdVUV9ERGsydWFnQnVMUUZtUjFmMUNyUXN5MDk3VDlkTF9JSHZhTHRYdjJMTlMzaERDX0VXYVkwYUhEcWdDaS0tQ1lTVFRNUFJoUjhuOVc3dHM?oc=5",
-   "yayin_tarihi": "Thu, 22 Oct 2026 05:21:20 GMT"
+   "link": "https://news.google.com/rss/articles/CBMihAFBVV95cUxNNUpNOFVpR0Nuc0E1TnpoVjhaTEdJTDc1VEtmZnFBX1p6T3BIaHJCUEVlYXpVQ3VQMDc2Q1NzVlFoa19mUEQzbzdtTW9mbnRUc3FlN0h1SUJsRl9jYUhreDQyZVN2Sks4MTlzMndkS29ZOXlwaWdlWkhLMUxVTW9XdzVHUTI?oc=5",
+   "yayin_tarihi": "Thu, 22 Oct 2026 06:26:14 GMT"
   },
   {
-   "baslik": "Altın fiyatları güne düşüşle başladı: Gram ve çeyrek altında ilk rakamlar - ekotürk",
+   "baslik": "Altın fiyatları bugün ne kadar oldu? TCMB faiz kararı öncesi altın fiyatlarında düşüş - GZT",
    "kaynak": "Google News · altın",
-   "link": "https://news.google.com/rss/articles/CBMipgFBVV95cUxOZTFyUklrRmNjNDRaZjdrQ3RwczNMU2c4TlZTNkl4WXN4UEJZOHQzNEY0Rm5ja2xfMUs2bDlfQTlQc2lwQVFvMnFOdG9ON3QwN3lkVkFBeTNvQmh5TzZqdkRjRzNNb1Eycl9adzhCZERyNW1YX1RJUE9ERnlFTWp2SEkwdk1yOUFKMnV1d3kyWTlHcFBsWlp4RV9fbGx3Vmg2bTBxcHRn?oc=5",
-   "yayin_tarihi": "Thu, 22 Oct 2026 04:24:59 GMT"
+   "link": "https://news.google.com/rss/articles/CBMi8gFBVV95cUxNT0E0NjVqWXBwTUQ3QWdqOXpORks4SllLUVBtYmUxUTFXQnFad0d1akF6eFM5aXl1VnRTZmVxQV9OSkpBRWRRSkNHX0hET05aSW5aZVRUVVZqS0I5Z19pTi1VT3g4UTZUSUdKUi1teTA4VWpXMTlrOThoNFBZNVhPU09tZjVPanl3ZnRuY1VFZ2FpRGV6Mm5Mc1F5a1ZsX0N5T3RRN2lscEhYMm1VZ3RBWWl2YjF0ZFBDMktWNzV1Rmd0U3Znd2txUDBZZmpnOFN4dmVhbG8xbnRLOGRwVXNTenlHRmpDVkJNXzduR0x0VmZFQQ?oc=5",
+   "yayin_tarihi": "Thu, 22 Oct 2026 09:00:56 GMT"
   },
   {
-   "baslik": "22 Ekim, Altın Fiyatları: Altın fiyatları dip noktasına mı ulaştı? - Vietnam.vn",
+   "baslik": "ALTIN NEDEN DÜŞÜYOR? Gram altın, çeyrek altın ne kadar? 22 Ekim Kapalıçarşı ons altın, cumhuriyet altın fiyatı: Altında sert düşüş! - CNN Türk Finans",
    "kaynak": "Google News · altın",
-   "link": "https://news.google.com/rss/articles/CBMif0FVX3lxTE52UUQzWGpLNHlPMXlvXzJGU0Ywb09KanlOd1dqYzJTdGRYVlY1ZWpSZ0VsbFBnSTJDMnY3cmEydzM4SVF2QnJ4eTRXaGVxWkdHZU1lVHBBdVBzTUgzZXZHd0MxeVFxZ1VXT3VscmhYajlVTFlocTBHa0ZmcFNibzQ?oc=5",
-   "yayin_tarihi": "Thu, 22 Oct 2026 03:05:29 GMT"
+   "link": "https://news.google.com/rss/articles/CBMihwJBVV95cUxNRjA5T3FmZUlKWWpudU5DRy1vcWZUSHBSa0lCOTFFdDN1RGo2azNkVlZYa0tMRS1LZW41LWlicHFweXZhTkpWczJ3anlpM1lkamtiSTRKNlFFcU1qeWoxSE8tQlE4ZzZ5NGhBck1HczRUaGRjekJhRF96eFM3S05laU1XSE4tMTZoMnRkX29DcHZRcE1yV0tVeWk5SUhBdW5wUy1UaXlwaG5FOUdyaXRlR1otanpCaWI3c2NTSFN4QjhtTWxhaVEwa3JQZlBIRVViNmVCSFNjakhGb2Z0SGpfZ1dsTzZxSGtlclI5dml1UXVSVW41dWRQSXBhd3RwY21xTTMtZ2lBQQ?oc=5",
+   "yayin_tarihi": "Thu, 22 Oct 2026 06:25:00 GMT"
   },
   {
-   "baslik": "Altın düşüş yönünde seyrediyor! Bugün gram altın, çeyrek altın ne kadar? Altın fiyatları düşecek mi, yükselecek mi? - Habertürk",
+   "baslik": "ALTIN FİYATLARI SON DURUM: Günlük kayıp yüzde 1 aştı! Altın fiyatları neden düşüyor? - İstanbul Ticaret Gazetesi",
    "kaynak": "Google News · altın",
-   "link": "https://news.google.com/rss/articles/CBMi6wFBVV95cUxOeWR1dkNzUE5NUzBhU253MTdqZTYzM1J1N0VBZ0lPRGRYS3JWRzJCdGpSYlZKMzZleGJ1MTJBQmM4YmlCcUVHZkJwVUtDaUI0OXBFRXJKNTBOeFVaUFl3YTZZcUZNR2F6QUtfYkZSX01PSHpkNGlxWXFRRFczRjNaT1RjRXoxSDZNLVdjUC15Nnc0bzdCLWVrUm0yUHF3bHNkX2hCOGUxN2tLNERSeWFxLWE4aXplUi1sQ2RaZ1I4ZFhRVHVDdWJSY2pjRldFVnN2aDB4VjJaRDhkb1R0Z0tEMkdoOGRpQk1ZcXpN?oc=5",
-   "yayin_tarihi": "Thu, 22 Oct 2026 04:37:45 GMT"
+   "link": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxNWG9HRzM2VEdXRkVlUi1JX1RQQ1dSVVoyc1QyTEdXZWJIQnNxemZYeTNTZUJXLXp5bVd1dDdTXzVPX2JlNDREZUxNQm1lTTNnRFpSM1RhZkxHSHZhMFpXeUFYRUZrellOTXpQcDJWaHJjWVR1ZlV2Zkp3Ul96d2g0Y1BWR05NOTl4bGVpVl9NblJUb00zcHhaLVI2T3NUaDhEcTJjR2pic3VKTGt5N0FXZ3Mybm1fWlhM?oc=5",
+   "yayin_tarihi": "Thu, 22 Oct 2026 06:18:32 GMT"
   },
   {
-   "baslik": "Altın Fiyatları Yükselecek mi, Düşecek mi? İşte Ons Altında Kritik Seviyeler - Bugün Kocaeli Gazetesi",
+   "baslik": "22 Ekim 2026 Perşembe Güncel Altın Fiyatları - birgun.net",
    "kaynak": "Google News · altın",
-   "link": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxQd3o2MzdfQTRwLUdscC14UnVVVEpJd2VGdE02MGpXYl9NYjBuMDUwRll2R0pkTUNMalQyT0s0UlNBQVhDQnBKVTJjY3Zac2I5ZnpSMHMxV3ZBalJuZUdnZFRXMHlVaEt2bnFRTmpsZjhiam1sc3djOHZURlZ5bkh0UXMtTFVkMldNT256R1pRbVlmTWh6S3F4SW5TWnBEVUxld2pUVmtuLUMwZw?oc=5",
-   "yayin_tarihi": "Wed, 21 Oct 2026 20:34:00 GMT"
+   "link": "https://news.google.com/rss/articles/CBMihwFBVV95cUxQS19SeWRNaFVEYmtNeWpWZUxQUE1lSTduUnphaWhnS1lkcWg1SnZTTF9xemcwQTNvbnZ1QkpTYjZ4SlVfZ3BNb3JteFZ2bXJHMUZsbzY0cFpwTFBmbnlTZmlRcDhHdW1BYVhhSV96QzF6QXJnRE5FNk1jS1JJLWlWaHhfUXFpTlE?oc=5",
+   "yayin_tarihi": "Thu, 22 Oct 2026 06:32:00 GMT"
   },
   {
-   "baslik": "Ons, çeyrek, gram: Altın fiyatları bugüne nasıl başlıyor? 20 Ekim analizi - Platin Dergisi",
+   "baslik": "Altında sert düşüş: 22 Ekim 2026 çeyrek, gram ve yarım altın satış fiyatları - TV5 Haber",
    "kaynak": "Google News · altın",
-   "link": "https://news.google.com/rss/articles/CBMisgFBVV95cUxNUnlkSWkwMjliSDM3dUlEWVZFa0N5blpVNTdpNVJQbGR1VXpDR3JSWFJydUVvVy1uLWNkb0JLZ2VyWGNfTUhDNzc0S2tLNVAxaVlKZ0k0TW1leDVsbDJDTUVzcEtPMDl0VlF3c2RleGxsaFJ1TkFfVW9VRTg4T0VwMkxyUUxfb3Rndkg1VmhmQlJrb09zek1ES1JPWHZEeVRKaEUyV2VTbjN6bWFWcFdHUnNB?oc=5",
-   "yayin_tarihi": "Tue, 20 Oct 2026 07:05:32 GMT"
+   "link": "https://news.google.com/rss/articles/CBMingFBVV95cUxPN2JWeEYtdHluQmM5LWFQR2ZaY3E0cElZVWtldEFDNW15NE4xSV9zNWpHMy1wLWZUa054aGEzelRETXdZYlFoUm9oaFZvNVJIZ2h3WC1WbEdLek9OVUpScFBJem9BTjJSUE9hRVF0MDhuWW9KVXI1LUhVQ2JkejBvUlVYRnVRd3E5QnJoMERqNlMwXzYyMXk4UFNINFpmZw?oc=5",
+   "yayin_tarihi": "Thu, 22 Oct 2026 05:43:00 GMT"
   },
   {
-   "baslik": "Gram Ve Çeyrek Altın Bugün Ne Kadar? - Hatay Asi Gazetesi",
+   "baslik": "Altın fiyatlarının pik yapacağı tarih açıklandı! Gram altın kaç TL olacak? İşte 5 yıllık yol haritası - Sabah",
    "kaynak": "Google News · altın",
-   "link": "https://news.google.com/rss/articles/CBMic0FVX3lxTE55QmhSd3hqRV9ScXZVZ2g0ajZFLVdacEJzcGpWQzNkeUdNVFdjWUo0RG9KQlhhRzdsUmZjSFdWMGwxbS1KMk5QWFJKbTdKZTlWdmhrRW5Ed2c3U24yME5kYi1kdWdFNmE3US1wTDBKS2djMFE?oc=5",
-   "yayin_tarihi": "Thu, 22 Oct 2026 06:05:00 GMT"
+   "link": "https://news.google.com/rss/articles/CBMi3gFBVV95cUxQRXNLb3NXc3JoSDBMM1dhbWRYVWFCOEZPejBGdlgzQXRRejRWV1VHVnZmNUVFVVo0akMya2pDMzB6TjJRMmxveFFfY2FJc2pIeTBac3pBRHVUdEI2cTIxbWVkTEJqOGotMFJXZVJId1N5RVZNYi0wMWlEWGE0QUJSclhhSEZXMjlWdElhWGxaMmI2X0dOVlBpMGk0Tl93eVRnT2RhOGdtVnl6aUtKYUdiTEJKNDFvMlFra3g4cjZkc3NxQktCY2NUUVpJc1NxRVFMYW91R3VtQVZzZEhVWUHSAeABQVVfeXFMUHlMenJZb0kxQ1liQjNDcF9UalRVMkhjanRWc3pSWHh2eDNOQzFHMDBYU193blcyTUJ1NUIzcjNtOEVWY0dJT2o3ajlZcThiNEU3NjByYktWMHppcHpMQ0w3WlRPWmlTTEt2d0F5S1ltZG9LVmpBY2dDdTVMTHpiWmpSeWpMVGtqMXM0U2tGcUtIRzR1NFVXU0VHU1U0dTQ4a2IyNUVqQXdyWVdnaTQxUmRrSnBUVE5OWElKb0pUa2pobmdFRXo3eTVlWmhnYUJHeENrdEhPMUsyQlVCQ3g3d3k?oc=5",
+   "yayin_tarihi": "Thu, 22 Oct 2026 09:34:59 GMT"
   },
   {
    "baslik": "CIBC slashes gold price forecasts but sees recovery to $5,200 in 2027 as central bank demand offsets Fed headwinds - Kitco",
    "kaynak": "Google News · gold",
    "link": "https://news.google.com/rss/articles/CBMitwFBVV95cUxOajZTbWtYRkNIRkVvR0RzWHlPRjA0dmhybmVTVndycXR5Q2txZXBVZFp3QzhLWVpBV25ldUlOUk9XR3A1d28td3NEekczRzZRQzIzZDUwUVNHSUUwUXZNS08tU2RaaFAzc2VTWkRIWVdwOGJQNWNZZl9DLUhLbXgxblVpb1p2LTFOY1g1cWpHWWlLQW9rTVV0enhrMXkxN0ZPTmpBd0I1UW8wT3d4Vkx6YWtLWmlWRHM?oc=5",
    "yayin_tarihi": "Tue, 20 Oct 2026 14:25:31 GMT"
+  },
+  {
+   "baslik": "Gold (XAUUSD) & Silver Price Forecast: Gold Faces Oil-Fed Rate Fears as Russia Keeps Selling, Can Gold Hold $4,079? - FXEmpire",
+   "kaynak": "Google News · gold",
+   "link": "https://news.google.com/rss/articles/CBMi7gFBVV95cUxOWENSZEEwOVN3QTdvOTlBTDBNZWtWcjMyUXkzcmJWX1ctY3pCNnNfQ0QtRXRpVTkteEIySWktZGV6UFhwc1l2dGREYThJRXdPSFZneTRaMUlrcDk0bk1SZy1jd3dQck9EaW44ek81ZzFrMnp0Wjd2T2pPZkNqam1SOG15djMxSy1fT0tlNXVLRkpkQkFjX3B3ZVpEaVh1QlB6YTdPZ09TbXBwY24tbHlRSWVBc3F1ZzNTb1dzOUhDTTBXWkFEcVBPQmFKYjlSeXVKUFlIS2tObUI2THVpMWR4Rmp1MDkzclNqSnFxZ1Vn?oc=5",
+   "yayin_tarihi": "Thu, 22 Oct 2026 06:30:00 GMT"
   },
   {
    "baslik": "Gold Price Forecast: XAU/USD weakens to near $4,110 amid broader strength in oil prices - FXStreet",
@@ -304,12 +310,6 @@
    "kaynak": "Google News · gold",
    "link": "https://news.google.com/rss/articles/CBMimgFBVV95cUxOcm5BbXZGNHU2cUJrYkNmMlBpX21aaXFHY3dMZjFDZ0FUd0pVdmlHb2FmM3pmWHJmRzB3VkpITm0wOWNrT0hkWWxIdnEwVWlVLU9nb2psczFTYjl1OHpJd1FjQXNualZ2OGZEd0tUZjNPUkVGNXZwSVVvRUh0d1F1T2dfeFJ1MWhQaU9sZnlLemQ5aW1Rcnc3dndn?oc=5",
    "yayin_tarihi": "Mon, 19 Oct 2026 09:12:43 GMT"
-  },
-  {
-   "baslik": "XAUUSD Holds Near One-Week Low as Oil Keeps December Fed Risk Alive - FXEmpire",
-   "kaynak": "Google News · gold",
-   "link": "https://news.google.com/rss/articles/CBMiugFBVV95cUxPcWY5MUZCLTc1d1g0TkVEUkhlNmE3ckFTaEQ0LWtBWEwyXzhWZHJoVDQzSnBKU3YxeV9ndmtERXd4MDRUYUFFd1dxLUk3a0hPS3RrblY3dXNTRUN6SDBwZkhYcHdKOXhFRmVuOFJkWDNrUFBFRElQNVlQVnFfTzJtRmxpYUZLc1I5cFQxSG5ZUjYwb0lGSVpDVEFGbVhiZm5jd1NCY2MtNGg2ZGNpQjREbWV6MHFjRlEwdXc?oc=5",
-   "yayin_tarihi": "Thu, 22 Oct 2026 02:36:48 GMT"
   }
  ]
 }
