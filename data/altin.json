@@ -1,142 +1,102 @@
 {
- "uretildi": "2026-10-28T21:12:32",
+ "uretildi": "2026-10-29T01:06:02",
  "kaynak": "GC=F (COMEX ons) · yfinance + gold-api.com spot + doviz.com takvim",
  "fiyat": {
-  "ons": 4081.2,
-  "spot": 4068.6,
-  "spot_guncelleme": "2026-10-28T21:12:28Z",
-  "gram_tl": 6537.48,
-  "usdtry": 49.8232,
+  "ons": 4048.1,
+  "spot": 4042.9,
+  "spot_guncelleme": "2026-10-29T01:05:59Z",
+  "gram_tl": 6484.45,
+  "usdtry": 49.8231,
   "performans": {
-   "1g": 0.16,
-   "1h": -1.66,
-   "2h": -0.65,
-   "1a": -2.36,
-   "3a": -0.46,
-   "6a": -10.53,
-   "1y": 1.53
+   "1g": -0.65,
+   "1h": -2.46,
+   "2h": -1.46,
+   "1a": -3.15,
+   "3a": -1.27,
+   "6a": -11.26,
+   "1y": 0.71
   },
   "son_tarih": "2026-10-28"
  },
  "vital": {
-  "son": 4081.2,
-  "ma20": 4138.23,
-  "ma50": 4319.12,
-  "ma200": 4525.99,
+  "son": 4048.1,
+  "ma20": 4136.58,
+  "ma50": 4318.46,
+  "ma200": 4525.82,
   "trend": "ZAYIF / AŞAĞI",
   "trend_skor": -2,
-  "rsi": 40.0,
-  "rsi_yorum": "40 — negatif momentum",
-  "atr": 76.18,
-  "atr_yuzde": 1.87,
+  "rsi": 37.2,
+  "rsi_yorum": "37 — negatif momentum",
+  "atr": 74.28,
+  "atr_yuzde": 1.84,
   "h52": 5586.2,
   "l52": 3901.3,
-  "konum_52h": 10.7,
+  "konum_52h": 8.7,
   "konum_yorum": "dip bölgesi"
  },
  "seviyeler": {
   "destek": [
    {
-    "seviye": 4050,
-    "mesafe_pct": -0.76,
-    "tip": "yuvarlak"
+    "seviye": 4046.2,
+    "mesafe_pct": -0.05,
+    "tip": "salınım dibi"
    },
    {
     "seviye": 4000,
-    "mesafe_pct": -1.99,
+    "mesafe_pct": -1.19,
     "tip": "yuvarlak"
    },
    {
     "seviye": 3963.0,
-    "mesafe_pct": -2.9,
+    "mesafe_pct": -2.1,
     "tip": "salınım dibi"
    },
    {
     "seviye": 3950,
-    "mesafe_pct": -3.21,
+    "mesafe_pct": -2.42,
     "tip": "yuvarlak"
    }
   ],
   "direnc": [
    {
-    "seviye": 4100,
-    "mesafe_pct": 0.46,
+    "seviye": 4050,
+    "mesafe_pct": 0.05,
     "tip": "yuvarlak"
    },
    {
-    "seviye": 4138.2,
-    "mesafe_pct": 1.4,
+    "seviye": 4100,
+    "mesafe_pct": 1.28,
+    "tip": "yuvarlak"
+   },
+   {
+    "seviye": 4136.6,
+    "mesafe_pct": 2.19,
     "tip": "MA20"
    },
    {
     "seviye": 4150,
-    "mesafe_pct": 1.69,
+    "mesafe_pct": 2.52,
     "tip": "yuvarlak"
-   },
-   {
-    "seviye": 4171.4,
-    "mesafe_pct": 2.21,
-    "tip": "salınım tepesi"
    }
   ]
  },
  "senaryo": {
-  "gectmis": "Son 1 yılda ons 3,901$ (10.2025) ile 5,586$ (01.2026) arasında salındı; şu an 4,081$ — yıllık zirvenin %27 altında, yıllık aralığın %11'inde.",
-  "durum": "Trend ZAYIF / AŞAĞI, RSI 40, yıllık aralığın %11'inde (dip bölgesi). Günlük oynaklık (ATR) 76$ ≈ %1.9.",
+  "gectmis": "Son 1 yılda ons 3,901$ (10.2025) ile 5,586$ (01.2026) arasında salındı; şu an 4,048$ — yıllık zirvenin %28 altında, yıllık aralığın %9'inde.",
+  "durum": "Trend ZAYIF / AŞAĞI, RSI 37, yıllık aralığın %9'inde (dip bölgesi). Günlük oynaklık (ATR) 74$ ≈ %1.8.",
   "bias": "AYI",
   "bias_skor": -5,
   "yukari": {
-   "tetik": 4100,
-   "hedef": 4138.2,
-   "metin": "Fiyat 4,100$ direncini (+0.5%) hacimle kırıp üstünde kapanırsa ilk hedef 4,138$."
+   "tetik": 4050,
+   "hedef": 4100,
+   "metin": "Fiyat 4,050$ direncini (+0.1%) hacimle kırıp üstünde kapanırsa ilk hedef 4,100$."
   },
   "asagi": {
-   "tetik": 4050,
+   "tetik": 4046.2,
    "hedef": 4000,
-   "metin": "4,050$ desteği (-0.8%) kaybedilirse sıradaki destek 4,000$."
+   "metin": "4,046$ desteği (-0.1%) kaybedilirse sıradaki destek 4,000$."
   }
  },
  "kritik_gunler": [
-  {
-   "tarih": "28.10",
-   "gun": "Sal",
-   "saat": "21:00",
-   "ulke": "ABD",
-   "onem": "high",
-   "olay": "Fed Maksimum Gösterge Faiz Oranı (Ekim)",
-   "neden": "Merkez bankası faiz kararı — altının fırsat maliyeti",
-   "iso": "2026-10-28"
-  },
-  {
-   "tarih": "28.10",
-   "gun": "Sal",
-   "saat": "21:00",
-   "ulke": "ABD",
-   "onem": "high",
-   "olay": "Fed Minimum Gösterge Faiz Oranı (Ekim)",
-   "neden": "Merkez bankası faiz kararı — altının fırsat maliyeti",
-   "iso": "2026-10-28"
-  },
-  {
-   "tarih": "28.10",
-   "gun": "Sal",
-   "saat": "21:00",
-   "ulke": "ABD",
-   "onem": "high",
-   "olay": "Fed İskonto Faiz Oranı (Ekim)",
-   "neden": "Merkez bankası faiz kararı — altının fırsat maliyeti",
-   "iso": "2026-10-28"
-  },
-  {
-   "tarih": "28.10",
-   "gun": "Sal",
-   "saat": "21:00",
-   "ulke": "ABD",
-   "onem": "high",
-   "olay": "Fed Faiz Kararı (-)",
-   "neden": "Fed faiz kararı/kararları — altının 1. sürücüsü (düşük faiz = altına destek)",
-   "iso": "2026-10-28"
-  },
   {
    "tarih": "29.10",
    "gun": "Çar",
@@ -236,6 +196,46 @@
    "olay": "ECB Faiz Kararı (-)",
    "neden": "Euro Bölgesi enflasyon/faiz verisi — küresel likidite ve dolar endeksi üzerinden altını etkiler",
    "iso": "2026-10-29"
+  },
+  {
+   "tarih": "30.10",
+   "gun": "Per",
+   "saat": "13:00",
+   "ulke": "Euro Bölgesi",
+   "onem": "high",
+   "olay": "GSYH Büyüme Oranı (Çeyreklik) (Öncü) (-)",
+   "neden": "Euro Bölgesi verisi — küresel risk iştahı / dolar üzerinden altını etkiler",
+   "iso": "2026-10-30"
+  },
+  {
+   "tarih": "30.10",
+   "gun": "Per",
+   "saat": "13:00",
+   "ulke": "Euro Bölgesi",
+   "onem": "high",
+   "olay": "GSYH Büyüme Oranı (Yıllık) (Öncü) (-)",
+   "neden": "Euro Bölgesi verisi — küresel risk iştahı / dolar üzerinden altını etkiler",
+   "iso": "2026-10-30"
+  },
+  {
+   "tarih": "30.10",
+   "gun": "Per",
+   "saat": "13:00",
+   "ulke": "Euro Bölgesi",
+   "onem": "mid",
+   "olay": "İşsizlik Oranı (-)",
+   "neden": "Euro Bölgesi verisi — küresel risk iştahı / dolar üzerinden altını etkiler",
+   "iso": "2026-10-30"
+  },
+  {
+   "tarih": "30.10",
+   "gun": "Per",
+   "saat": "15:30",
+   "ulke": "ABD",
+   "onem": "mid",
+   "olay": "İstihdam Maliyeti - Yan Haklar (Çeyreklik) (-)",
+   "neden": "ABD istihdam — dolar ve Fed beklentisi üzerinden altın",
+   "iso": "2026-10-30"
   }
  ],
  "haberler": [
@@ -244,6 +244,12 @@
    "kaynak": "Google News · altın",
    "link": "https://news.google.com/rss/articles/CBMi9gFBVV95cUxNTlZpMTRrUmF6ajU1SkRqMFppQmF0NjNWcHRaQkpwUnVTenNMWU81QzNqeFJkM1Y0aGZYZy1GMFl5Q3dZdjQwdDJHSFJiNGQ0Q1VRaGFTR3F0YmdGak5Cc25xLXNsRUJPQ0xqb1VqZDU0VHdSMGhMNmdIR3RTMlUxTWpfQXBCNFdjNXdDd2FXcTJBd2FSSWMtZUZIQWJsZVQzVkNHVXFsbGEyWVExSDhyaG5FWWNCdmd6RWtia0lIeXBQS2NZc1E1RUlRUGtFWWtUNUh3bG92RVFZbnFBTUpSOHQ0c0VLNlR4NE55T2FXeGxsTjlZZHc?oc=5",
    "yayin_tarihi": "Wed, 28 Oct 2026 05:02:00 GMT"
+  },
+  {
+   "baslik": "Altın fiyatları düşüşe geçti: Gram altın, çeyrek altın ve ons altın ne kadar? - TRT Haber",
+   "kaynak": "Google News · altın",
+   "link": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxQVE80ZDBFVGZCSTJnbEdDY3hJYXdpRnc5MzNUbzMxVTdGTWxlN0lCVXB3LVB2VFRXTHZMU2RGNHN3TEpTM3d0UzJLakFkZnZjbVo0eVJJdWpRdFFzM2lFWVF4TE1UWlp5d2tSR0hDbnptUFl5Mmh0WFE5NmxZbDlZZHphZU93NHVyUm91T2ZfLVdPaEZrdVdka2ZYbEJxUEJldW1qdENYZ3ZIbW1WRy1nZHMyZzE5TmZnOUx2dTFFejNRaW8?oc=5",
+   "yayin_tarihi": "Wed, 28 Oct 2026 06:36:00 GMT"
   },
   {
    "baslik": "Fed faizi sabit tuttu: Altın fiyatları karara nasıl tepki verdi? - Yeni Şafak",
@@ -270,16 +276,10 @@
    "yayin_tarihi": "Wed, 28 Oct 2026 07:39:00 GMT"
   },
   {
-   "baslik": "Bugün çeyrek altın kaç TL? 28 Ekim Çarşamba 2026 Gram, tam, Cumhuriyet, Kapalıçarşı anlık fiyatlar - Finans haberlerinin doğru adresi - Mynet Finans Haber - Mynet Finans",
+   "baslik": "Bugünkü altın fiyatı (29 Ekim): Altın külçelerinin ons fiyatı 143 milyon VND'ye ulaştı. - Vietnam.vn",
    "kaynak": "Google News · altın",
-   "link": "https://news.google.com/rss/articles/CBMi3gFBVV95cUxOLTJxeXNnQi1tUlFqXzhMMmdnWXNESXU4N2RtcDRfQ0t5Y2pBYnd3SDg3a3BDYWQ4NUN6cDZFQ24xMkpSYXg2XzZEOVRLNkhwMi13QVlSMmpfd1FHY0xMSmdOU3YyLW1uUURLWVVtNDdkZzhTcFdZczVnbmVtTFZkblFNQzg2R3FuQkc4N0w3dVVvRGlWMUdLa0FBQXBUaFlSNmFsTFlEU0I0SUpPMzI2SUc1N05CQzJjc3NQQVRNV0hYYk80RkhZdjM2aWRqSXlhbFRqbmxSc3NORGpKdmfSAc8BQVVfeXFMT3BsVTlKaU54cXgtUHpkVzJKTE1EZnY0bkM1Q3otS1hmSkx1TXpOWW90MWJ2T2F6aFhhaWV4WFpJOVhqRGQ3dlM0Mk51YlhPbUlEM1JqU095dDFEVG9Rd2RJT01xaG1rVGc3X2tVZjlJbk5fbUtaazR0amdSSlV3Y3JwTHI2M3dPS0swYzhlVXJRVWpSVkkxaU1MUXotS1FFZklGeXhVZW9lU2NTMHJwWTMzZlY4VXFhMXdiSUMxN3FaQ013NUVqcVBIV3FMT0tz?oc=5",
-   "yayin_tarihi": "Wed, 28 Oct 2026 07:19:03 GMT"
-  },
-  {
-   "baslik": "Altın fiyatları bugün, 29 Ekim 2026'da, teknik ve ekonomik faktörler arasında dalgalanan piyasa nedeniyle zıt yönlerde hareket etti; uzun vadeli görünüm daha umut verici. - Vietnam",
-   "kaynak": "Google News · altın",
-   "link": "https://news.google.com/rss/articles/CBMi5wFBVV95cUxNSV85cHc4YVptN2ZkNTk3LTFHOFdmVlpCOHJDNE4zdzFrR2U2STZhSlU0V1lNQXpidGZibVlyNUEzTTBBWHRfTEtFWFFPVGR4UDdzTGxFMEpKVnVxYjNReFVvZDZRcWVRNXg3eElLS01fMFpYOU1JcEw5SEpsTV9yZWtrcmh2T2RIdHlQbmNtWGl1VG05cUJTRUpvMzMtUWlwT3huQkJHaXFoOHZBSkhvUXFtbHp2WnNJLWdyYTd0NHVkVXBYTU1mc1MxLWU3Q242allodl9Eb3EyUG9lTDUyQzFra2RvamM?oc=5",
-   "yayin_tarihi": "Wed, 28 Oct 2026 15:36:10 GMT"
+   "link": "https://news.google.com/rss/articles/CBMijgFBVV95cUxPdnMzOHEwV3VJMUduYkFBdkUydHVqNS0zX2tYSHozeE9CX0VoY0N2bzNud3EzQWQ0RG5qeGhhS0hxQm1FdmZCSkpKYlpEaVd0R2RYazBITDhqWVJKT1gwLVlJT0N0amNsQU53TU9QR0ZyVzF5Z0Jpeld2cjhJZlZSeDFzSHhmWm5ISFA1N3lB?oc=5",
+   "yayin_tarihi": "Wed, 28 Oct 2026 21:44:36 GMT"
   },
   {
    "baslik": "Altın için yeni fiyat tahmini: Analistler 2027 beklentisini yükseltti - Ekonomim",
@@ -294,6 +294,12 @@
    "yayin_tarihi": "Wed, 28 Oct 2026 16:05:04 GMT"
   },
   {
+   "baslik": "Gold slips on higher oil; markets assess Warsh comments after Fed holds rates steady - CNBC",
+   "kaynak": "Google News · gold",
+   "link": "https://news.google.com/rss/articles/CBMinwFBVV95cUxPYU1kN1huemNIcHpJQUVNR1FGaXlwVXU1Rm53bld3Nnl6TGhoTjJ5Z09tRmx1TkhBM0hEaVl0NDJMRS0xdk5BNFd1dFBfVTdoam91OWpsci1XUUxTc004MGpmTWYyVEw5NUtySFo4V1RhNW5sN1lwelpKVzQzVTZRcmVvSUhCZEs2ZDBqUF9BZXJ6U3JOak16b2RKSWg0S0XSAaQBQVVfeXFMTUsweUFjR1V3UjZTNEJpN1MtWFB6bDc5bW9rRzJ3eHd0TzAxT2gybF9Cb1kwUVpHSi1QeDFJZTVjTWp3clRjNjBBT0ZXY1ZvUXBJRWxfUjlHYnJBdS0xZnVNNnBTUXdMZEZQeElYNVFHZjdxUE1Qb0FTclNUd085NGNDX3ZsNkpUZUdYeU0wMXQ1NzNGMHFBZ2o3MTVYb28xX2xtZjQ?oc=5",
+   "yayin_tarihi": "Wed, 28 Oct 2026 04:33:42 GMT"
+  },
+  {
    "baslik": "Gold gains on softer oil prices ahead of Fed meeting - Reuters",
    "kaynak": "Google News · gold",
    "link": "https://news.google.com/rss/articles/CBMilgFBVV95cUxQQWIyeWVhRnVBaHZfV05HanpZVFJzZDZiaC1MTEFVX0JEbWc5RVhRV3htMnJFMDNCVjBPWTJISkhha3ZWc3otaXBCTGloREJidmlqOWtXMTQ4Zks2aTA5czBzNC1OdGNuVXlqLVZ4TTk3M1VUSEZvdVdCLXV3bHJsZXBHSktGcXR0dk1wS2VYdWYxTm9ueGc?oc=5",
@@ -304,12 +310,6 @@
    "kaynak": "Google News · gold",
    "link": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxPdXVmTThYOWhLRGZMbDE0N19iMnFBYXo4cVRtR2pHVWhuWG1Ub2hxX1Q3RWZ0cVhoa2JMNThwb05YVHhwYWtadWR6WWNfaE54V3FNWDZBTTBpckh5NnJiWTNha3dZcW8wbHlkVUkzRFdPVmtXVHVYcEtiaWowNTdtMkhDc0Q0dWJtMmI2SExIbmJuOEY5T2RVdUdOU1VsNmZjQUZCYUtLYzdHcVkzMDZhUnJCNnlKaHloN1JB?oc=5",
    "yayin_tarihi": "Wed, 28 Oct 2026 03:34:22 GMT"
-  },
-  {
-   "baslik": "Gold Price Forecast: $4,096–$4,125 Zone Sets the Tone After Fed Decision - FXEmpire",
-   "kaynak": "Google News · gold",
-   "link": "https://news.google.com/rss/articles/CBMiugFBVV95cUxOSUY3RWlHbmg1RVl5SFIzOGJpZnkxZWVEQkcxRlVvTkd1MVRoQ2tEVW5uRzh0eEVvUmdNTHJLZ2s4cEhiUXZITWRkeThreEZDS3ExbWdkUkMtMk8taVpZMkRuQXMxS1JzSjNxanVfanRZRFpPNzhpQURSZWZaSnYzdkhJa0d1MldYSHFQOXlsdTdnRTJObG83VTlERHBZTEtwZHk2OVdtaHIzcWFiMUxlUi1mS0g0cXRrZHc?oc=5",
-   "yayin_tarihi": "Wed, 28 Oct 2026 13:49:45 GMT"
   }
  ]
 }
