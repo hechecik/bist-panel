@@ -1,142 +1,102 @@
 {
- "uretildi": "2026-11-04T23:49:10",
+ "uretildi": "2026-11-05T04:04:27",
  "kaynak": "GC=F (COMEX ons) · yfinance + gold-api.com spot + doviz.com takvim",
  "fiyat": {
-  "ons": 4072.4,
-  "spot": 4067.1,
-  "spot_guncelleme": "2026-11-04T23:49:00Z",
-  "gram_tl": 6550.42,
-  "usdtry": 50.0297,
+  "ons": 4152.1,
+  "spot": 4137.7,
+  "spot_guncelleme": "2026-11-05T04:04:01Z",
+  "gram_tl": 6680.5,
+  "usdtry": 50.0438,
   "performans": {
-   "1g": 3.35,
-   "1h": 0.51,
-   "2h": -1.87,
-   "1a": -2.74,
-   "3a": -5.28,
-   "6a": -13.25,
-   "1y": 1.45
+   "1g": 5.37,
+   "1h": 2.48,
+   "2h": 0.05,
+   "1a": -0.84,
+   "3a": -3.43,
+   "6a": -11.55,
+   "1y": 3.44
   },
   "son_tarih": "2026-11-04"
  },
  "vital": {
-  "son": 4072.4,
-  "ma20": 4089.93,
-  "ma50": 4252.99,
-  "ma200": 4509.3,
+  "son": 4152.1,
+  "ma20": 4093.91,
+  "ma50": 4254.58,
+  "ma200": 4509.7,
   "trend": "ZAYIF / AŞAĞI",
   "trend_skor": -2,
-  "rsi": 46.8,
-  "rsi_yorum": "47 — nötr",
-  "atr": 85.6,
-  "atr_yuzde": 2.1,
+  "rsi": 52.3,
+  "rsi_yorum": "52 — nötr",
+  "atr": 91.11,
+  "atr_yuzde": 2.19,
   "h52": 5586.2,
   "l52": 3879.3,
-  "konum_52h": 11.3,
+  "konum_52h": 16.0,
   "konum_yorum": "dip bölgesi"
  },
  "seviyeler": {
   "destek": [
    {
+    "seviye": 4150,
+    "mesafe_pct": -0.05,
+    "tip": "yuvarlak"
+   },
+   {
+    "seviye": 4100.0,
+    "mesafe_pct": -1.25,
+    "tip": "salınım dibi"
+   },
+   {
     "seviye": 4050,
-    "mesafe_pct": -0.55,
+    "mesafe_pct": -2.46,
     "tip": "yuvarlak"
    },
    {
     "seviye": 4000,
-    "mesafe_pct": -1.78,
-    "tip": "yuvarlak"
-   },
-   {
-    "seviye": 3963.0,
-    "mesafe_pct": -2.69,
-    "tip": "salınım dibi"
-   },
-   {
-    "seviye": 3950,
-    "mesafe_pct": -3.01,
+    "mesafe_pct": -3.66,
     "tip": "yuvarlak"
    }
   ],
   "direnc": [
    {
-    "seviye": 4089.9,
-    "mesafe_pct": 0.43,
-    "tip": "MA20"
-   },
-   {
-    "seviye": 4150,
-    "mesafe_pct": 1.91,
-    "tip": "yuvarlak"
-   },
-   {
     "seviye": 4171.4,
-    "mesafe_pct": 2.43,
+    "mesafe_pct": 0.46,
     "tip": "salınım tepesi"
    },
    {
     "seviye": 4200,
-    "mesafe_pct": 3.13,
+    "mesafe_pct": 1.15,
     "tip": "yuvarlak"
+   },
+   {
+    "seviye": 4215.5,
+    "mesafe_pct": 1.53,
+    "tip": "salınım tepesi"
+   },
+   {
+    "seviye": 4250.0,
+    "mesafe_pct": 2.36,
+    "tip": "salınım tepesi"
    }
   ]
  },
  "senaryo": {
-  "gectmis": "Son 1 yılda ons 3,879$ (10.2026) ile 5,586$ (01.2026) arasında salındı; şu an 4,072$ — yıllık zirvenin %27 altında, yıllık aralığın %11'inde.",
-  "durum": "Trend ZAYIF / AŞAĞI, RSI 47, yıllık aralığın %11'inde (dip bölgesi). Günlük oynaklık (ATR) 86$ ≈ %2.1.",
+  "gectmis": "Son 1 yılda ons 3,879$ (10.2026) ile 5,586$ (01.2026) arasında salındı; şu an 4,152$ — yıllık zirvenin %26 altında, yıllık aralığın %16'inde.",
+  "durum": "Trend ZAYIF / AŞAĞI, RSI 52, yıllık aralığın %16'inde (dip bölgesi). Günlük oynaklık (ATR) 91$ ≈ %2.2.",
   "bias": "AYI",
-  "bias_skor": -4,
+  "bias_skor": -3,
   "yukari": {
-   "tetik": 4089.9,
-   "hedef": 4150,
-   "metin": "Fiyat 4,090$ direncini (+0.4%) hacimle kırıp üstünde kapanırsa ilk hedef 4,150$."
+   "tetik": 4171.4,
+   "hedef": 4200,
+   "metin": "Fiyat 4,171$ direncini (+0.5%) hacimle kırıp üstünde kapanırsa ilk hedef 4,200$."
   },
   "asagi": {
-   "tetik": 4050,
-   "hedef": 4000,
-   "metin": "4,050$ desteği (-0.6%) kaybedilirse sıradaki destek 4,000$."
+   "tetik": 4150,
+   "hedef": 4100.0,
+   "metin": "4,150$ desteği (-0.1%) kaybedilirse sıradaki destek 4,100$."
   }
  },
  "kritik_gunler": [
-  {
-   "tarih": "04.11",
-   "gun": "Sal",
-   "saat": "13:00",
-   "ulke": "Euro Bölgesi",
-   "onem": "mid",
-   "olay": "Çekirdek Enflasyon Oranı (Yıllık) (Öncü) (-)",
-   "neden": "Euro Bölgesi enflasyon/faiz verisi — küresel likidite ve dolar endeksi üzerinden altını etkiler",
-   "iso": "2026-11-04"
-  },
-  {
-   "tarih": "04.11",
-   "gun": "Sal",
-   "saat": "13:00",
-   "ulke": "Euro Bölgesi",
-   "onem": "mid",
-   "olay": "Enflasyon Oranı (Aylık) (Öncü) (-)",
-   "neden": "Euro Bölgesi enflasyon/faiz verisi — küresel likidite ve dolar endeksi üzerinden altını etkiler",
-   "iso": "2026-11-04"
-  },
-  {
-   "tarih": "04.11",
-   "gun": "Sal",
-   "saat": "13:00",
-   "ulke": "Euro Bölgesi",
-   "onem": "high",
-   "olay": "Enflasyon Oranı (Yıllık) (Öncü) (-)",
-   "neden": "Euro Bölgesi enflasyon/faiz verisi — küresel likidite ve dolar endeksi üzerinden altını etkiler",
-   "iso": "2026-11-04"
-  },
-  {
-   "tarih": "04.11",
-   "gun": "Sal",
-   "saat": "16:15",
-   "ulke": "ABD",
-   "onem": "mid",
-   "olay": "ADP İstihdam Değişimi (-)",
-   "neden": "ABD istihdam — dolar ve Fed beklentisi üzerinden altın",
-   "iso": "2026-11-04"
-  },
   {
    "tarih": "05.11",
    "gun": "Çar",
@@ -236,6 +196,46 @@
    "olay": "Çekirdek Enflasyon Oranı (Yıllık) (-)",
    "neden": "ABD enflasyonu — Fed faiz patikasını belirler, altını doğrudan iter",
    "iso": "2026-11-10"
+  },
+  {
+   "tarih": "10.11",
+   "gun": "Pzt",
+   "saat": "16:30",
+   "ulke": "ABD",
+   "onem": "mid",
+   "olay": "TÜFE (-)",
+   "neden": "ABD enflasyonu — Fed faiz patikasını belirler, altını doğrudan iter",
+   "iso": "2026-11-10"
+  },
+  {
+   "tarih": "10.11",
+   "gun": "Pzt",
+   "saat": "16:30",
+   "ulke": "ABD",
+   "onem": "mid",
+   "olay": "TÜFE (Mevsimsellikten Arındırılmış) (-)",
+   "neden": "ABD enflasyonu — Fed faiz patikasını belirler, altını doğrudan iter",
+   "iso": "2026-11-10"
+  },
+  {
+   "tarih": "10.11",
+   "gun": "Pzt",
+   "saat": "16:30",
+   "ulke": "ABD",
+   "onem": "high",
+   "olay": "Enflasyon Oranı (Aylık) (-)",
+   "neden": "ABD enflasyonu — Fed faiz patikasını belirler, altını doğrudan iter",
+   "iso": "2026-11-10"
+  },
+  {
+   "tarih": "10.11",
+   "gun": "Pzt",
+   "saat": "16:30",
+   "ulke": "ABD",
+   "onem": "high",
+   "olay": "Enflasyon Oranı (Yıllık) (-)",
+   "neden": "ABD enflasyonu — Fed faiz patikasını belirler, altını doğrudan iter",
+   "iso": "2026-11-10"
   }
  ],
  "haberler": [
@@ -246,16 +246,22 @@
    "yayin_tarihi": "Wed, 04 Nov 2026 09:18:00 GMT"
   },
   {
-   "baslik": "Gram altın yükselişe geçti! Canlı altın fiyatları 4 Kasım 2026 Çarşamba || Altın düşüyor mu, yükseliyor mu? 4 Kasım gram altın, çeyrek altın, cumhuriyet altını ve ONS altın alış - ",
+   "baslik": "Altın fiyatları neden yükseliyor? Günlük artış yüzde 4’e yaklaştı - Paratic Haber",
+   "kaynak": "Google News · altın",
+   "link": "https://news.google.com/rss/articles/CBMijAFBVV95cUxQOXhfdkJfRWEzeEFVRW9hX3ZRQ042SUVGVzBoM00teUgyS2dzc1JKZjZZV3p1M3N0QUpGbTAyT05hWUYtdHp3YkxPMElaVWJ4Q004d09vT09nZUlGZUZkN2FHWFJaR2xWS1hMbUVqdGV2NEcyUnJsQ3VZTXNUOE15RW1Ma1BtQVI3TGRtOA?oc=5",
+   "yayin_tarihi": "Wed, 04 Nov 2026 17:07:13 GMT"
+  },
+  {
+   "baslik": "Altın Fiyatları Güncel | Gram altın yükselişe geçti! Canlı altın fiyatları 4 Kasım 2026 Çarşamba || Altın düşüyor mu, yükseliyor mu? 4 Kasım gram altın, çeyrek altın, cumhuriyet al",
    "kaynak": "Google News · altın",
    "link": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxNNEdHUVpaUVI2aEtyREpiQ1ctZ0NZMll5TXFCSGhjZERfUWo3MHRVdDlYU3p4M3RqNHpJVVRMbnpuNUkxcnlTYUYwcl9RY25aOWZ0M2FHTTdTUkdmTmFVZ21ONWQ0LXczZmdWbFFJUWx4RTMxV2FxWW5ZRUVJMXRiMjRoNEJVVGwtdXhxR0VUdkVSZEdxTUZWQU5lUkdhMENYVnNWU3pDTTUtRjFyclhOSW9aOEc0M2hmV25iSVNCeHJZUUtaS242N2pBMlZiZDI2VVE?oc=5",
    "yayin_tarihi": "Wed, 04 Nov 2026 04:43:58 GMT"
   },
   {
-   "baslik": "Altın fiyatları neden yükseliyor? Günlük artış yüzde 4’e yaklaştı - Paratic Haber",
+   "baslik": "Bugünkü altın fiyatları, 5 Kasım: Dünya altın fiyatları keskin bir şekilde yükseldi, SJC altın fiyatı 1,8 milyon VND arttı. - Vietnam.vn",
    "kaynak": "Google News · altın",
-   "link": "https://news.google.com/rss/articles/CBMijAFBVV95cUxQOXhfdkJfRWEzeEFVRW9hX3ZRQ042SUVGVzBoM00teUgyS2dzc1JKZjZZV3p1M3N0QUpGbTAyT05hWUYtdHp3YkxPMElaVWJ4Q004d09vT09nZUlGZUZkN2FHWFJaR2xWS1hMbUVqdGV2NEcyUnJsQ3VZTXNUOE15RW1Ma1BtQVI3TGRtOA?oc=5",
-   "yayin_tarihi": "Wed, 04 Nov 2026 17:07:13 GMT"
+   "link": "https://news.google.com/rss/articles/CBMiogFBVV95cUxPRzBfdkdTelJBclVjWEgtQmR5OEhVZkdfbWgydjI3VXNmakFDOTY1Q1JfSHFBTWM5azlqazhOQ0lGWHNFM1dGQkJNTUZLMXV5YWlyZ0Z0MEw4RER2RUtrRFVveDRzZlBEaWYweUMwLVZ3bFBXTXlJTzFSb1ZiVkNiVGNSNlpsSVBtd3B4b0R2XzFNT1NJcTVEVUM5dTJTWjlWU3c?oc=5",
+   "yayin_tarihi": "Thu, 05 Nov 2026 03:45:55 GMT"
   },
   {
    "baslik": "Altın fiyatları fırladı: İşte 4 Kasım 2026 fiyatları - Manşet Haber",
@@ -264,10 +270,10 @@
    "yayin_tarihi": "Wed, 04 Nov 2026 06:57:00 GMT"
   },
   {
-   "baslik": "Altında seçim sürprizi! Bir gecede dengeler değişti, fiyatlar sert yükseldi - Ekonomim",
+   "baslik": "Enflasyon rakamları sonrası altında sert düşüş! 3 Kasım 2026 gram altın, çeyrek altın ve ons altın bugün ne kadar, kaç TL? - Habertürk",
    "kaynak": "Google News · altın",
-   "link": "https://news.google.com/rss/articles/CBMivAFBVV95cUxQakptTUdwYlJ6cVdiVC1oXzBYVXY1R3ZEWV9JdzZSU0NCQVdTZVUwLXhBMml0Q19iR1JYQTNGWXFDTkN2RGRvU3pJUU9JdXFPNEI3LTZsblRSZjhoWFJ5a2Z2MGtsM1NaX2t5N0R6a3FOdzQ0SWlzN2xPLUlab0djbnZ6dWE0QVA0Um11bEpfOFVPc3BsYVhSQWdCR0FVdHptM2laN0dEaVlCWUhDTkt5YlRNX2Z5S2daamVBeg?oc=5",
-   "yayin_tarihi": "Wed, 04 Nov 2026 18:33:00 GMT"
+   "link": "https://news.google.com/rss/articles/CBMi8wFBVV95cUxQQ2UzV3dNUkI4bGZNeVM4WFhQOFZmaGpfS0kyLXE0LVdVejVoc05CT1JISWZtV1FKWnBFdFhWdVJPUHI4Sm9ReUNzZV9tQTBibXZEMEFVVlR3b1hMVmtnQkFFLTRMWm9qQUthdEttSm9CZ2U3Z2pQeUFoNGhKTmdNQkl5MGQ4REhpNjRleERUSDlaNWh0d0FHdWRmRDcxUFJXVDhQWWkybmRrU0hZd2tSU3RXOXpqS2s1Q3h0aGJuS25NWmFRRFl2N294eXBfRkNwcGRrUC1rYWN5Q01TOUdPd1BxYU5LcmNmV29UUHRuUUl4cDA?oc=5",
+   "yayin_tarihi": "Tue, 03 Nov 2026 08:51:44 GMT"
   },
   {
    "baslik": "Bugün çeyrek altın kaç TL? 4 Kasım Çarşamba 2026 Gram, tam, Cumhuriyet, Kapalıçarşı anlık fiyatlar - Finans haberlerinin doğru adresi - Mynet Finans Haber - Mynet Finans",
@@ -276,16 +282,10 @@
    "yayin_tarihi": "Wed, 04 Nov 2026 07:01:31 GMT"
   },
   {
-   "baslik": "Enflasyon rakamları sonrası altında sert düşüş! 3 Kasım 2026 gram altın, çeyrek altın ve ons altın bugün ne kadar, kaç TL? - Habertürk",
+   "baslik": "Altında seçim sürprizi! Bir gecede dengeler değişti, fiyatlar sert yükseldi - Ekonomim",
    "kaynak": "Google News · altın",
-   "link": "https://news.google.com/rss/articles/CBMi8wFBVV95cUxQQ2UzV3dNUkI4bGZNeVM4WFhQOFZmaGpfS0kyLXE0LVdVejVoc05CT1JISWZtV1FKWnBFdFhWdVJPUHI4Sm9ReUNzZV9tQTBibXZEMEFVVlR3b1hMVmtnQkFFLTRMWm9qQUthdEttSm9CZ2U3Z2pQeUFoNGhKTmdNQkl5MGQ4REhpNjRleERUSDlaNWh0d0FHdWRmRDcxUFJXVDhQWWkybmRrU0hZd2tSU3RXOXpqS2s1Q3h0aGJuS25NWmFRRFl2N294eXBfRkNwcGRrUC1rYWN5Q01TOUdPd1BxYU5LcmNmV29UUHRuUUl4cDA?oc=5",
-   "yayin_tarihi": "Tue, 03 Nov 2026 08:51:44 GMT"
-  },
-  {
-   "baslik": "Altın fiyatlarında beklenmedik yükseliş! | 4 Kasım 2026 Çarşamba Güncel Altın Fiyatları - birgun.net",
-   "kaynak": "Google News · altın",
-   "link": "https://news.google.com/rss/articles/CBMivAFBVV95cUxQdDF2WlJfS2pDNUs1bHdXYkFxZVVVV0FBd2tXa3ZVWW5XaFlndGliQXpfVG0zcHRfVDB2YXhiNnRHUHl4QmItUlNTMVJ2eEVLdmdyaUFpSnBZNTZuVDVfTEx5d0RZSU9Zb1VpSnBPVUprYV9EakJVLWNoYmlfUXhpd2FBUlNtbE5qTV9DOU9Gd1VBQ2JlT3dldHdJRkpBcFdGLWk2aHpiRjlVWVBnOW9mVG96Z3BOb0tBNmlMaQ?oc=5",
-   "yayin_tarihi": "Wed, 04 Nov 2026 05:13:00 GMT"
+   "link": "https://news.google.com/rss/articles/CBMivAFBVV95cUxQakptTUdwYlJ6cVdiVC1oXzBYVXY1R3ZEWV9JdzZSU0NCQVdTZVUwLXhBMml0Q19iR1JYQTNGWXFDTkN2RGRvU3pJUU9JdXFPNEI3LTZsblRSZjhoWFJ5a2Z2MGtsM1NaX2t5N0R6a3FOdzQ0SWlzN2xPLUlab0djbnZ6dWE0QVA0Um11bEpfOFVPc3BsYVhSQWdCR0FVdHptM2laN0dEaVlCWUhDTkt5YlRNX2Z5S2daamVBeg?oc=5",
+   "yayin_tarihi": "Wed, 04 Nov 2026 18:33:00 GMT"
   },
   {
    "baslik": "Gold Price Forecast Faces December Fed Test as $3,900 Support Comes Into View - Brave New Coin",
@@ -294,22 +294,22 @@
    "yayin_tarihi": "Wed, 04 Nov 2026 19:41:08 GMT"
   },
   {
-   "baslik": "Citi targets $5,000 gold as a Hormuz reopening could flip the Fed from hikes to cuts - investingLive",
-   "kaynak": "Google News · gold",
-   "link": "https://news.google.com/rss/articles/CBMivwFBVV95cUxNT1J3MU5yN3NTN3ZCWlRINXlpelVIOWVDZXoxLXl2SWM3Tksza3dkUHNEWXV6ZDhLc2dkTFAxcWM4ZmlaWERQMU14YTNJSkVYamYxd0RCeFcxcEJsWjNQbk1ZT25SNEhFT0NJTEZMdjM3V1B6NExzV2RiWWdUTVEzbzFFVlV4bzcxQkh1NTNjZ0JhQ1p4a0NsRjNjVTRhMW55TEpmUVNkLVFaN3ZiRzdyek1mOUpHRFp1RHdZTE5wZw?oc=5",
-   "yayin_tarihi": "Wed, 04 Nov 2026 22:40:45 GMT"
-  },
-  {
    "baslik": "CIBC slashes gold price forecasts but sees recovery to $5,200 in 2027 as central bank demand offsets Fed headwinds - Kitco",
    "kaynak": "Google News · gold",
    "link": "https://news.google.com/rss/articles/CBMitwFBVV95cUxOajZTbWtYRkNIRkVvR0RzWHlPRjA0dmhybmVTVndycXR5Q2txZXBVZFp3QzhLWVpBV25ldUlOUk9XR3A1d28td3NEekczRzZRQzIzZDUwUVNHSUUwUXZNS08tU2RaaFAzc2VTWkRIWVdwOGJQNWNZZl9DLUhLbXgxblVpb1p2LTFOY1g1cWpHWWlLQW9rTVV0enhrMXkxN0ZPTmpBd0I1UW8wT3d4Vkx6YWtLWmlWRHM?oc=5",
    "yayin_tarihi": "Tue, 20 Oct 2026 07:00:00 GMT"
   },
   {
-   "baslik": "Gold edges up as softer inflation data dents Fed rate-hike bets - Reuters",
+   "baslik": "Citi targets $5,000 gold as a Hormuz reopening could flip the Fed from hikes to cuts - investingLive",
    "kaynak": "Google News · gold",
-   "link": "https://news.google.com/rss/articles/CBMiswFBVV95cUxNRjFDcnNwNW1uWWdUaW5iaWRNLV8wbnl4QlBGWHFjN0twMDlINnBTclUwYnRGN1pTVTJYbE94MFEyRk5yQ0FUcXlQLXNkYkdPQXQ3eFlDUko4cXF1Vkc5TUg2LXZKSTAzc3hnOGJrT1hoNl92bG1mY1lSM2MwR3lBcGVQS2NmNDVEWUdURERqcDVkYUhpVTVXZDZqUEF6c1RCMjFFeWpOZWNKVzdGS3dFNzQ3VQ?oc=5",
-   "yayin_tarihi": "Thu, 01 Oct 2026 07:00:00 GMT"
+   "link": "https://news.google.com/rss/articles/CBMivwFBVV95cUxNT1J3MU5yN3NTN3ZCWlRINXlpelVIOWVDZXoxLXl2SWM3Tksza3dkUHNEWXV6ZDhLc2dkTFAxcWM4ZmlaWERQMU14YTNJSkVYamYxd0RCeFcxcEJsWjNQbk1ZT25SNEhFT0NJTEZMdjM3V1B6NExzV2RiWWdUTVEzbzFFVlV4bzcxQkh1NTNjZ0JhQ1p4a0NsRjNjVTRhMW55TEpmUVNkLVFaN3ZiRzdyek1mOUpHRFp1RHdZTE5wZw?oc=5",
+   "yayin_tarihi": "Wed, 04 Nov 2026 22:40:45 GMT"
+  },
+  {
+   "baslik": "Gold price prediction: Gold prices extend losses on Tuesday. Check outlook for November 3 - The Economic Times",
+   "kaynak": "Google News · gold",
+   "link": "https://news.google.com/rss/articles/CBMi9gFBVV95cUxPMm5GSWxwV29YTloyLThUQ0hlRUNBbFRKRi0teFdnREFQNGxlNVkwVmdDYzhURDFSemxqeXZBc1YwTEZyZlMxelBsNUFueTZDWVZOYzEtd3gwb0doY1lXUlI2T1k1RWVlX0tYYmtpbGpJeXI3b1B3SDFWTFpmQVhMMksxa1B4T2lac2tzOVpwaDJuRkJ1WFk1cDl3OGgzRFhzX0V1YkZIekM4a0VCYzBXVm5tVU1vSjg0bUZuLWpBblpINTY5dkdoWVdkVmxPYi13aEotNlFzTVhEUGN6TVduZlY1VF90X0o1TUdKNDFuN3VfdVdLVGfSAfsBQVVfeXFMTVVVam82OEdmX0w4bE5MU0N2akhpTEFacEJKbE9QeFRQcTI0T0JwOENHcTIxbGlKT3hVbGJvUlpNTzBuM2VMYTk2NExoMzNXYjdsQ1VLRkZ5RG5sRWotb3FEZjltQzZVRS1QeDFobms0OEl6NWxwaUU0THVZZnRSSjZQdW5XVEcyU0tuWHBBQVdvSDl4ZDhvX2lFY0d5WDQxcDZjUU5iZWsxdEpiLUkxd0FwRUxiVUN6U3NkNEZCc1oydFJ3ZXdlREFEUUVSWkZ3WVVua1VaT3otX1E1ODIyWUF1alFIMzU1R1FKLWFNQVFOZ0t0M1VjUzBzcW8?oc=5",
+   "yayin_tarihi": "Tue, 03 Nov 2026 02:27:39 GMT"
   }
  ]
 }
