@@ -1,0 +1,22 @@
+name: af-kontrol
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  kontrol:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Secrets tanimli mi
+        env:
+          V: ${{ secrets.HC_URL_VERI }}
+          A: ${{ secrets.HC_URL_ALTIN }}
+          K: ${{ secrets.HC_URL_KRIPTO }}
+        run: |
+          t(){ [ -n "$2" ] && echo "$1: VAR" || echo "$1: YOK"; }
+          t HC_URL_VERI "$V"; t HC_URL_ALTIN "$A"; t HC_URL_KRIPTO "$K"
+          echo "--- scheduel son kosular (API) ---"
