@@ -1652,8 +1652,14 @@ function renderAltin(d) {
       h += `<div class="sc"><div class="t">MAKAS · piyasa − dot${dp.makas_yil ? ' (' + dp.makas_yil + ')' : ''}</div>` +
            `<div class="o" style="color:${makasRenk}">${dp.makas_bp == null ? '—' : (dp.makas_bp > 0 ? '+' : '') + dp.makas_bp + ' bp'}</div>` +
            `<div class="m">${alEsc(dp.yorum || 'veri yok')}</div></div>`;
+      h += `<div class="sc"><div class="t">SEP REVİZYONU${dp.revizyon_yil ? ' (' + dp.revizyon_yil + ')' : ''}</div>` +
+           (dp.revizyon && dp.revizyon.degisim_bp != null
+             ? `<div class="o" style="color:${dp.revizyon.degisim_bp > 0 ? 'var(--down)' : dp.revizyon.degisim_bp < 0 ? 'var(--up)' : 'var(--tx2)'}">${dp.revizyon.degisim_bp > 0 ? '+' : ''}${dp.revizyon.degisim_bp} bp</div>` +
+               `<div class="m">${alEsc(dp.revizyon.yorum)} · önceki SEP ${alEsc(dp.onceki_sep_tarihi || '—')} → ${alEsc(dp.sep_tarihi || '—')}</div>`
+             : `<div class="o">veri yok</div><div class="m">Arşivde önceki SEP yok — ilk SEP kaydı bu çalıştırmada yazıldı${dp.sep_tarihi ? ' (' + alEsc(dp.sep_tarihi) + ')' : ''}.</div>`) +
+           `</div>`;
       h += '</div>';
-      h += '<div class="ict-not">🎯 +25 bp üstü = piyasa Fed’den şahin, −25 bp altı = güvercin, arada = uyumlu. Hiçbir faiz/olasılık/hedef değeri elle girilmez; SEP revizyonu yalnız yeni SEP ile eski SEP karşılaştırılabilirse hesaplanır.</div>';
+      h += '<div class="ict-not">🎯 +25 bp üstü = piyasa Fed’den şahin, −25 bp altı = güvercin, arada = uyumlu. Hiçbir faiz/olasılık/hedef değeri elle girilmez; SEP revizyonu data/sep_arsiv.json içindeki önceki SEP medyanıyla karşılaştırılarak hesaplanır.</div>';
     }
   } catch (e) {
     h += '<h2>🌐 Makro Sürücüler</h2><div class="scn"><div class="sc wide"><div class="t">MAKRO</div><div class="o">veri yok</div><div class="m">Makro bloğu yüklenemedi — altın sayfasının diğer blokları normal çalışıyor.</div></div></div>';

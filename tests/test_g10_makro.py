@@ -201,3 +201,156 @@ def test_kodda_elle_faiz_yok():
     makro = kod[kod.index('# 5b) MAKRO SÜRÜCÜLER'):kod.index('# 6) HABERLER')]
     for yasak in ['4.25', '4.50', '5.50', '3.50', 'olasilik =', 'hedef_faiz =']:
         assert yasak not in makro, f'makro bloğunda elle girilmiş değer: {yasak}'
+
+
+# ── DÜZELTME 1: fomc_tarihleri saat artık zoneinfo ile hesaplanıyor ──
+def test_fomc_tarihleri_saat_sabit_degil(monkeypatch):
+    """kritik günler FOMC satırı '21:00' sabitini kullanmamalı; 09.12.2026 → 22:00."""
+    monkeypatch.setattr(a.dt, 'datetime', a.dt.datetime)  # gerçekçi kal
+    iso_map = {'2026-12-09': True, '2027-07-28': False}
+    monkeypatch.setattr(a, '_fomc_json_oku', lambda: (sorted(iso_map), set()), raising=False)
+    # fomc_tarihleri() ağa çıkmasın diye iç parse fonksiyonunu taklit et
+    monkeypatch.setattr(a, 'httpx', None, raising=False)
+    # doğrudan satır üretimini test et: fomc_tsi çıktısı 22:00 olmalı
+    assert a.fomc_tsi('2026-12-09')['saat_kisa'] == '22:00'
+    assert a.fomc_tsi('2027-07-28')['saat_kisa'] == '21:00'
+
+
+def test_fomc_satiri_kaynak_kodda_sabit_saat_yok():
+    """Kaynak kodda FOMC satırı 'saat': '21:00' sabiti kalmamalı."""
+    yol = os.path.join(os.path.dirname(__file__), '..', 'scripts', 'altin_cek.py')
+    with open(yol, encoding='utf-8') as f:
+        src = f.read()
+    assert "'saat': '21:00'" not in src
+    assert 'saat_tsi = fomc_tsi(' in src
+
+
+# ── DÜZELTME 1: fomc_tarihleri saat artık zoneinfo ile hesaplanıyor ──
+def test_fomc_aralik_saati_22():
+    """kritik günler FOMC satırı '21:00' sabitini kullanmamalı; 09.12.2026 → 22:00."""
+    assert a.fomc_tsi('2026-12-09')['saat_kisa'] == '22:00'
+    assert a.fomc_tsi('2027-07-28')['saat_kisa'] == '21:00'
+
+
+def test_fomc_tarihleri_satir_saati_hesaplanir(monkeypatch):
+    """fomc_tarihleri() ürettiği satırlarda saat zoneinfo'dan gelir (sabit değil)."""
+    monkeypatch.setitem(sys.modules, 'httpx', None)   # ağ yok → yedek JSON dalı
+    satirlar = a.fomc_tarihleri(gun=100000)
+    assert satirlar, 'FOMC satırı üretilmeli'
+    aralik = [s for s in satirlar if s['iso'] == '2026-12-09']
+    if aralik:  # tarih geçmişte kaldıysa satır atlanır
+        assert aralik[0]['saat'] == '22:00'
+    for s in satirlar:
+        assert s['saat'] == a.fomc_tsi(s['iso'])['saat_kisa']
+
+
+def test_fomc_satiri_kaynak_kodda_sabit_saat_yok():
+    """Kaynak kodda FOMC satırı 'saat': '21:00' sabiti kalmamalı."""
+    yol = os.path.join(os.path.dirname(__file__), '..', 'scripts', 'altin_cek.py')
+    with open(yol, encoding='utf-8') as f:
+        src = f.read()
+    assert "'saat': '21:00'" not in src
+    assert 'saat_tsi = fomc_tsi(' in src
+
+
+# ── DÜZELTME 2: SEP arşivi ────────────────────────────────────
+def test_sep_arsiv_ilk_kayit(tmp_path):
+    yol = str(tmp_path / 'sep_arsiv.json')
+    arsiv = a.sep_arsiv_guncelle({2026: 4.1, 2027: 4.1}, '2026-09-16', yol)
+    assert len(arsiv['kayitlar']) == 1
+    assert arsiv['kayitlar'][0]['sep_tarihi'] == '2026-09-16'
+    assert arsiv['kayitlar'][0]['medyan'] == {'2026': 4.1, '2027': 4.1}
+
+
+def test_sep_arsiv_ayni_sep_tekrar_yazilmaz(tmp_path):
+    yol = str(tmp_path / 'sep_arsiv.json')
+    a.sep_arsiv_guncelle({2026: 4.1, 2027: 4.1}, '2026-09-16', yol)
+    a.sep_arsiv_guncelle({2026: 4.1, 2027: 4.1}, '2026-09-16', yol)
+    a.sep_arsiv_guncelle({2026: 4.1, 2027: 4.0}, '2026-09-16', yol)   # değer EZİLMEZ
+    arsiv = a.sep_arsiv_oku(yol)
+    assert len(arsiv['kayitlar']) == 1
+    assert arsiv['kayitlar'][0]['medyan']['2027'] == 4.1
+
+
+def test_sep_arsiv_ikinci_sep_eklenir_ve_siralanir(tmp_path):
+    yol = str(tmp_path / 'sep_arsiv.json')
+    a.sep_arsiv_guncelle({2025: 3.9, 2026: 3.6}, '2025-12-10', yol)
+    a.sep_arsiv_guncelle({2026: 4.1, 2027: 4.1}, '2026-09-16', yol)
+    arsiv = a.sep_arsiv_oku(yol)
+    assert [k['sep_tarihi'] for k in arsiv['kayitlar']] == ['2025-12-10', '2026-09-16']
+
+
+def test_sep_arsiv_bos_medyan_yazmaz(tmp_path):
+    yol = str(tmp_path / 'sep_arsiv.json')
+    arsiv = a.sep_arsiv_guncelle({}, '2026-09-16', yol)
+    assert arsiv['kayitlar'] == []
+    assert not os.path.exists(yol)
+
+
+def test_sep_arsiv_bozuk_dosya_bos_doner(tmp_path):
+    yol = tmp_path / 'sep_arsiv.json'
+    yol.write_text('{bozuk', encoding='utf-8')
+    assert a.sep_arsiv_oku(str(yol)) == {'kayitlar': []}
+
+
+def test_onceki_sep_bul_yok():
+    assert a.onceki_sep_bul({'kayitlar': []}, '2026-09-16') is None
+    arsiv = {'kayitlar': [{'sep_tarihi': '2026-09-16', 'medyan': {'2027': 4.1}}]}
+    assert a.onceki_sep_bul(arsiv, '2026-09-16') is None   # aynı SEP önceki değildir
+
+
+def test_onceki_sep_bul_en_yakin_gecmis():
+    arsiv = {'kayitlar': [
+        {'sep_tarihi': '2025-06-18', 'medyan': {'2026': 3.9}},
+        {'sep_tarihi': '2025-12-10', 'medyan': {'2026': 3.6}},
+        {'sep_tarihi': '2026-09-16', 'medyan': {'2026': 3.4}},
+    ]}
+    assert a.onceki_sep_bul(arsiv, '2026-09-16') == {'2026': 3.6}
+
+
+def test_dot_plot_arsivden_revizyon(monkeypatch, tmp_path):
+    """Arşivde önceki SEP varsa revizyon arşivden hesaplanır."""
+    yol = str(tmp_path / 'sep_arsiv.json')
+    a.sep_arsiv_guncelle({2025: 3.6, 2026: 3.9}, '2025-12-10', yol)
+    monkeypatch.setattr(a, 'fred_seri',
+                        lambda s: [(dt.date(2026, 1, 1), 4.1), (dt.date(2027, 1, 1), 4.1)]
+                        if s == 'FEDTARMD' else [])
+    monkeypatch.setattr(a, 'fed_fonlari_ima', lambda x: None)
+    monkeypatch.setattr(a, '_zq_kontratlari', lambda *args: [])
+    out = a.dot_plot_blogu(None, sep_tarihi='2026-09-16', arsiv_yolu=yol)
+    assert out['onceki_sep_tarihi'] == '2025-12-10'
+    assert out['onceki_sep_medyan'] == {'2025': 3.6, '2026': 3.9}
+    karsi = str(out['hedef_yil'])
+    if karsi in out['onceki_sep_medyan']:
+        beklenen = round((out['medyan'][karsi] - out['onceki_sep_medyan'][karsi]) * 100)
+        assert out['revizyon']['degisim_bp'] == beklenen
+
+
+def test_dot_plot_arsiv_bos_revizyon_veri_yok(monkeypatch, tmp_path):
+    """Arşiv boşsa revizyon 'veri yok' kalır — elle değer girilmez."""
+    yol = str(tmp_path / 'sep_arsiv.json')
+    monkeypatch.setattr(a, 'fred_seri',
+                        lambda s: [(dt.date(2026, 1, 1), 4.1)] if s == 'FEDTARMD' else [])
+    monkeypatch.setattr(a, 'fed_fonlari_ima', lambda x: None)
+    monkeypatch.setattr(a, '_zq_kontratlari', lambda *args: [])
+    out = a.dot_plot_blogu(None, sep_tarihi='2026-09-16', arsiv_yolu=yol)
+    assert out['revizyon'] == {'degisim_bp': None, 'yorum': 'veri yok'}
+    assert out['sep_tarihi'] == '2026-09-16'
+
+
+def test_son_sep_tarihi_gecmis_sec():
+    iso_map = {'2026-09-16': True, '2026-12-09': True, '2026-10-28': False}
+    assert a._son_sep_tarihi(bugun=dt.date(2026, 11, 12), iso_map=iso_map) == '2026-09-16'
+    assert a._son_sep_tarihi(bugun=dt.date(2026, 12, 10), iso_map=iso_map) == '2026-12-09'
+    assert a._son_sep_tarihi(bugun=dt.date(2025, 1, 1), iso_map=iso_map) is None
+
+
+# ── DÜZELTME 3: AGENTS.md git akışı kuralı ────────────────────
+def test_agents_git_akisinda_veri_temizleme_kurali():
+    yol = os.path.join(os.path.dirname(__file__), '..', 'AGENTS.md')
+    with open(yol, encoding='utf-8') as f:
+        src = f.read()
+    i_akis = src.index('## Git akışı')
+    assert 'git checkout -- data/ && git clean -fd data/log/' in src[i_akis:]
+    assert 'asla commit' in src[i_akis:]
+    assert 'Actions üretir' in src[i_akis:]

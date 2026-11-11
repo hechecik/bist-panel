@@ -36,6 +36,8 @@ HEADERS = {
 }
 CIKTI = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'data', 'altin.json'))
 FOMC_JSON = os.path.abspath(os.path.join(os.path.dirname(__file__), 'fomc_tarihleri.json'))
+# SEP arşivi: her SEP'te FEDTARMD medyanları buraya birikir; revizyon buradan hesaplanır.
+SEP_ARSIV = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'data', 'sep_arsiv.json'))
 ONS_GRAM = 31.1034768  # 1 troy ons = 31.1035 gram
 gunler_ad = ['Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt', 'Paz']  # weekday(): Pazartesi=0
 
@@ -404,9 +406,15 @@ def fomc_tarihleri(gun=45):
             continue
         if d < bugun:
             continue          # geçmiş toplantılar atılır
+        # Saat sabit YAZILMAZ: 14:00 ET, zoneinfo ile TSİ'ye çevrilir (yaz saati 21:00/22:00).
+        try:
+            saat_tsi = fomc_tsi(d.strftime('%Y-%m-%d'))['saat_kisa']
+        except Exception as e:
+            log(f'fomc tsi hata: {str(e)[:50]}')
+            saat_tsi = ''
         # Pencere sınırı (son) FOMC'ye UYGULANMAZ — görev: "sınır uygulamadan her zaman ekle"
         out.append({
-            'tarih': d.strftime('%d.%m'), 'gun': gunler_ad[d.weekday()], 'saat': '21:00',
+            'tarih': d.strftime('%d.%m'), 'gun': gunler_ad[d.weekday()], 'saat': saat_tsi,
             'ulke': 'ABD', 'onem': 'high', 'olay': 'FOMC faiz kararı',
             'neden': 'Fed faiz kararı — altının 1. sürücüsü (düşük faiz = altına destek)',
             'iso': d.strftime('%Y-%m-%d'),
@@ -580,6 +588,63 @@ def rolling_korelasyon(a, b, pencere=60):
     return round(pay / (pa * pb), 3), n
 
 
+def sep_arsiv_oku(yol=None):
+    """data/sep_arsiv.json → {'kayitlar': [{'sep_tarihi','seyler':{yil:medyan},...}]}. Yoksa boş.
+
+    Saf dosya okuma; dosya yoksa/bozuksa boş yapı döner (uydurma yok).
+    """
+    yol = yol or SEP_ARSIV
+    try:
+        with open(yol, encoding='utf-8') as f:
+            j = json.load(f)
+        k = j.get('kayitlar')
+        return {'kayitlar': k if isinstance(k, list) else []}
+    except Exception:
+        return {'kayitlar': []}
+
+
+def sep_arsiv_guncelle(medyan, sep_tarihi, yol=None):
+    """SEP medyanlarını arşive ekler. Aynı SEP tarihi ikinci kez YAZILMAZ.
+
+    Dönen: güncellenmiş arşiv yapısı. medyan boş/None → arşiv değişmez.
+    Saf dosya işlemi (ağ yok).
+    """
+    yol = yol or SEP_ARSIV
+    arsiv = sep_arsiv_oku(yol)
+    if not medyan:
+        return arsiv
+    kayitlar = arsiv['kayitlar']
+    mevcut = [k for k in kayitlar if k.get('sep_tarihi') == sep_tarihi]
+    if mevcut:
+        # Aynı SEP için yalnız eksik yıllar tamamlanır; var olan değer EZİLMEZ.
+        s = mevcut[0].setdefault('medyan', {})
+        for y, v in medyan.items():
+            s.setdefault(str(y), v)
+    else:
+        kayitlar.append({'sep_tarihi': sep_tarihi,
+                         'medyan': {str(y): v for y, v in medyan.items()},
+                         'kaynak': 'FRED FEDTARMD'})
+        kayitlar.sort(key=lambda k: k.get('sep_tarihi') or '')
+    try:
+        os.makedirs(os.path.dirname(yol), exist_ok=True)
+        with open(yol, 'w', encoding='utf-8') as f:
+            json.dump({'kayitlar': kayitlar}, f, ensure_ascii=False, indent=1)
+    except Exception as e:
+        log(f'sep arsiv yazma hata: {str(e)[:60]}')
+    return {'kayitlar': kayitlar}
+
+
+def onceki_sep_bul(arsiv, bu_sep_tarihi):
+    """Arşivden, bu SEP'ten ÖNCEKİ en son SEP kaydının medyanı. Yoksa None."""
+    if not arsiv or not arsiv.get('kayitlar') or not bu_sep_tarihi:
+        return None
+    gecmis = [k for k in arsiv['kayitlar']
+              if (k.get('sep_tarihi') or '') < bu_sep_tarihi and k.get('medyan')]
+    if not gecmis:
+        return None
+    return max(gecmis, key=lambda k: k['sep_tarihi']).get('medyan')
+
+
 def makas_yorumu(makas_bp, esik=25):
     """Dot plot makası deterministik yorumu. Saf fonksiyon."""
     if makas_bp is None:
@@ -750,7 +815,15 @@ def makro_blogu(ons_seri_list=None):
 
     # Dot plot (FEDTARMD = SEP medyan fed funds, yıl bazında)
     try:
-        out['dot_plot'] = dot_plot_blogu(out.get('fed_bandi'))
+        # FEDTARMD vintage'ı bir SEP toplantısına aittir: son GERÇEKLEŞMİŞ SEP tarihi.
+        # Arşive bu tarihle yazılır; böylece aynı SEP tekrar eklenmez ve revizyon
+        # bir sonraki SEP'te önceki kayıtla kıyaslanır.
+        sep_iso = None
+        try:
+            sep_iso = _son_sep_tarihi()
+        except Exception:
+            sep_iso = None
+        out['dot_plot'] = dot_plot_blogu(out.get('fed_bandi'), sep_tarihi=sep_iso)
     except Exception as e:
         log(f'dot plot hata: {str(e)[:60]}')
         out['dot_plot'] = {'durum': 'veri yok'}
@@ -768,8 +841,12 @@ def makro_blogu(ons_seri_list=None):
     return out
 
 
-def dot_plot_blogu(fed_bandi=None):
-    """SEP medyanları + piyasa ima patikası + makas_bp. Saf hesap + ağ (ZQ)."""
+def dot_plot_blogu(fed_bandi=None, sep_tarihi=None, arsiv_yolu=None):
+    """SEP medyanları + piyasa ima patikası + makas_bp + SEP revizyonu.
+
+    Saf hesap + ağ (ZQ) + arşiv dosyası. `sep_tarihi`: bu FEDTARMD vintage'ının
+    ait olduğu SEP toplantı tarihi (YYYY-MM-DD); verilmezse bugün kullanılır.
+    """
     md = fred_seri('FEDTARMD')
     if not md:
         return {'durum': 'veri yok'}
@@ -777,9 +854,16 @@ def dot_plot_blogu(fed_bandi=None):
     medyan = {}
     for t, v in md:
         medyan[t.year] = round(v, 4)
-    # Bir önceki SEP: FEDTARMD yalnız son SEP'i tutar → bir önceki yılın değerini
-    # ARŞİVDEN alamıyoruz. Bu yüzden geçmiş tespiti (FEDTARMD-vintage) yoksa
-    # 'None' döner ve makas yorumu 'veri yok' olur; UYDURMA yapılmaz.
+    # Sep revizyonu: bu SEP medyanları arşive yazılır (aynı SEP tekrar yazılmaz),
+    # önceki SEP arşivden okunur. Arşiv boşsa revizyon 'veri yok' kalır — UYDURMA yok.
+    sep_tarihi = sep_tarihi or dt.date.today().isoformat()
+    arsiv = {'kayitlar': []}
+    try:
+        arsiv = sep_arsiv_guncelle(medyan, sep_tarihi, arsiv_yolu)
+        onceki = onceki_sep_bul(arsiv, sep_tarihi)
+    except Exception as e:
+        log(f'sep arsiv hata: {str(e)[:60]}')
+        onceki = None
     simdi_yil = dt.date.today().year
     yillar = sorted(y for y in medyan if y >= simdi_yil)
     if not yillar:
@@ -789,9 +873,19 @@ def dot_plot_blogu(fed_bandi=None):
     # 1 yıl ilerisiyle kıyaslanması gerekir.
     hedef_yil = next((y for y in yillar if y > simdi_yil), yillar[-1])
 
+    # Revizyon: hedef yıl için önceki SEP medyanı varsa bp farkı hesaplanır.
+    onceki_deger = None
+    if onceki:
+        onceki_deger = onceki.get(str(hedef_yil), onceki.get(hedef_yil))
     sonuc = {'medyan': {str(y): medyan[y] for y in yillar},
-             'onceki_sep_medyan': None,
-             'revizyon': {'degisim_bp': None, 'yorum': 'veri yok'},
+             'onceki_sep_medyan': onceki,
+             'onceki_sep_tarihi': (max((k.get('sep_tarihi') or '' for k in arsiv['kayitlar']
+                                        if (k.get('sep_tarihi') or '') < sep_tarihi
+                                        and k.get('medyan')), default=None)
+                                   if onceki else None),
+             'revizyon': sep_revizyon(onceki_deger, medyan.get(hedef_yil)),
+             'revizyon_yil': hedef_yil,
+             'sep_tarihi': sep_tarihi,
              'hedef_yil': hedef_yil,
              'kaynak': 'FRED FEDTARMD (SEP medyan fed funds projeksiyonu)'}
 
@@ -836,8 +930,8 @@ def dot_plot_blogu(fed_bandi=None):
     return sonuc
 
 
-def _fomc_blogu():
-    """fomc_tarihleri.json + canlı parse → sonraki toplantı, TSİ saat, SEP bayrağı."""
+def _fomc_iso_haritasi():
+    """FOMC tarihleri → {iso: sep(bool)}. Önce canlı parse, olmazsa yedek JSON."""
     iso_map = {}   # iso -> sep(bool)
     # 1) canlı parse (SEP yıldızı "*" ile işaretli)
     try:
@@ -888,7 +982,24 @@ def _fomc_blogu():
                         iso_map[x] = x in seps
         except Exception as e:
             log(f'fomc json hata: {str(e)[:60]}')
+    return iso_map
 
+
+def _son_sep_tarihi(bugun=None, iso_map=None):
+    """Son GERÇEKLEŞMİŞ SEP toplantı tarihi (YYYY-MM-DD). Bulunamazsa None.
+
+    FEDTARMD serisi her zaman en son yayımlanan SEP'in medyanlarını tutar;
+    arşive bu tarihle yazılır ki aynı SEP her çalıştırmada tekrar eklenmesin.
+    """
+    iso_map = iso_map if iso_map is not None else _fomc_iso_haritasi()
+    bugun = bugun or dt.date.today()
+    gecmis_sep = [x for x, sep in iso_map.items() if sep and dt.date.fromisoformat(x) <= bugun]
+    return max(gecmis_sep) if gecmis_sep else None
+
+
+def _fomc_blogu():
+    """fomc_tarihleri.json + canlı parse → sonraki toplantı, TSİ saat, SEP bayrağı."""
+    iso_map = _fomc_iso_haritasi()
     bugun = dt.date.today()
     gelecek = sorted(x for x in iso_map if dt.date.fromisoformat(x) >= bugun)
     if not gelecek:
