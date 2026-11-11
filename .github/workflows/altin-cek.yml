@@ -7,8 +7,11 @@ on:
     # G01: :00/:30 yoğun dakikalarından kaydırıldı → :11/:41 ve :13.
     - cron: '11,41 * * * 1-5'
     - cron: '13 */3 * * 0,6'
+    # BAKIM (11.11.2026): GitHub schedule fiilen tetiklenmiyor → tetik-cek.yml yedek tetikleyici.
   workflow_dispatch:
-  # G01: dış tetikleyici (cron-job.org → GitHub repository_dispatch)
+  # G01 planlanan cron-job.org → repository_dispatch kurulumu YAPILMADI (repoda
+  # secret yok, dispatch olayi sayisi 0). Yedek tetikleyici tetik-cek.yml, hedef
+  # akislari dogrudan workflow_dispatch ile cagirir. Bu blok uyumluluk icin duruyor.
   repository_dispatch:
     types: [altin]
 
@@ -63,6 +66,10 @@ jobs:
             echo "ℹ️ değişiklik yok"
           fi
 
-      - name: Kesinti alarmı (healthchecks.io ping)
+      - name: Kesinti alarmi (healthchecks.io ping)
         if: success()
-        run: curl -fsS -m 10 "${{ secrets.HC_URL_ALTIN }}" || true
+        env:
+          HC: ${{ secrets.HC_URL_ALTIN }}
+        run: |
+          if [ -n "$HC" ]; then curl -fsS -m 10 "$HC" || true; else echo "HC_URL_ALTIN tanimli degil - atlandi"; fi
+

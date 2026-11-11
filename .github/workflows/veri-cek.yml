@@ -2,19 +2,23 @@ name: veri-cek
 
 on:
   schedule:
-    # Hafta içi TR seansı (09:40-18:10 TR = 06:40-15:10 UTC).
-    # GitHub schedule UTC çalışır — 06-15 UTC = TR 09:00-18:59, açılış dahil tam seans.
-    # G01: :00/:15/:30/:45 yoğun dakikalarından kaydırıldı → :07/:22/:37/:52.
+    # Hafta ici TR seansi (09:40-18:10 TR = 06:40-15:10 UTC).
+    # GitHub schedule UTC calisir - 06-15 UTC = TR 09:00-18:59, acilis dahil tam seans.
+    # G01: :00/:15/:30/:45 yogun dakikalarindan kaydirildi -> :07/:22/:37/:52.
+    # BAKIM NOTU (11.11.2026): GitHub schedule bu repoda fiilen tetiklenmiyor
+    # (14 gun boyunca yalnizca workflow_dispatch calismalari var). Bu yuzden
+    # yedek tetikleyici: tetik-cek.yml, schedule'in en gec 25 dk gerisinde kalirsa
+    # kendi GITHUB_TOKEN'i ile repository_dispatch gonderir.
     - cron: '7,22,37,52 6-15 * * 1-5'
   workflow_dispatch:
-  # G01: dış tetikleyici (cron-job.org → GitHub repository_dispatch)
+  # G01: dis tetikleyici (tetik-cek.yml -> GitHub repository_dispatch)
   repository_dispatch:
     types: [veri]
 
 permissions:
   contents: write
 
-# Aynı görevin üst üste binen çalışmaları sıraya girer (gecikmeli cron yığılması)
+# Ayni gorevin ust uste binen calismalari siraya girer (gecikmeli cron yigilmasi)
 concurrency:
   group: ${{ github.workflow }}
   cancel-in-progress: false
@@ -34,30 +38,35 @@ jobs:
         run: |
           pip install --quiet pandas numpy yfinance borsapy beautifulsoup4 httpx lxml requests
 
-      - name: Veri çek + JSON üret
+      - name: Veri cek + JSON uret
         run: python scripts/veri_cek.py
 
-      - name: Commit + push (JSON güncelse)
+      - name: Commit + push (JSON guncelse)
         run: |
           git config user.name "bist-panel bot"
           git config user.email "hechecik@users.noreply.github.com"
-          git add -A
+          git add -A ':!data/*_kontrol.json'
           if ! git diff --cached --quiet; then
             git commit -m "veri guncelle $(date -u +'%d.%m %H:%M') UTC"
-            # G01: 3 denemeli push döngüsü (rebus/reject → fetch+rebase+push)
+            # G01: 3 denemeli push dongusu (reject -> fetch+rebase+push)
             for i in 1 2 3; do
               if git fetch origin && git rebase origin/main --autostash && git push; then
-                echo "✅ push edildi (deneme $i)"
+                echo "OK push edildi (deneme $i)"
                 break
               fi
               git rebase --abort 2>/dev/null || true
-              echo "⚠️ push denemesi $i başarısız, tekrar deneniyor"
+              echo "push denemesi $i basarisiz, tekrar deneniyor"
               sleep $((i*10))
             done
           else
-            echo "ℹ️ değişiklik yok"
+            echo "degisiklik yok"
           fi
 
-      - name: Kesinti alarmı (healthchecks.io ping)
+      # BAKIM: healthchecks.io secrets repoda tanimli degil (HC_URL_* = 0 secret).
+      # Bos degisken curl'e gecerse adim yanlislikla kirmizi olabiliyordu; koruma eklendi.
+      - name: Kesinti alarmi (healthchecks.io ping)
         if: success()
-        run: curl -fsS -m 10 "${{ secrets.HC_URL_VERI }}" || true
+        env:
+          HC: ${{ secrets.HC_URL_VERI }}
+        run: |
+          if [ -n "$HC" ]; then curl -fsS -m 10 "$HC" || true; else echo "HC_URL_VERI tanimli degil - atlandi"; fi

@@ -1,0 +1,98 @@
+name: tetik-cek
+
+# BAKIM (11.11.2026) — yedek zamanlayici.
+#
+# Sorun: GitHub'in kendi schedule mekanizmasi bu repoda fiilen tetiklenmiyor.
+# 14 gunluk Actions gecmisinde yalnizca workflow_dispatch (elle) ve Pages build
+# calismalari var; planlanmis (schedule) veri job'u 11.11 13:24'ten sonra hic
+# gelmedi (kripto 30 dk'lik dilimlerde 9 saat bos). Ayrica cron-job.org gibi dis
+# tetikleyici de kurulu degil (repository_dispatch olayi sayisi = 0) ve repoda
+# tanimli hic secret yok.
+#
+# Cozum: bu workflow kendisi calisirken (a) 4 veri is akisinin son calismasina
+# bakar, (b) gecikme kendi araligini asmissa GitHub API'sine repository_dispatch
+# gonderir. GITHUB_TOKEN'in actions:write izni 204 ile dogrulandi; repoda
+# tanimli secret gerekmiyor.
+on:
+  schedule:
+    - cron: '3,13,23,33,43,53 * * * *'   # 10 dk'da bir kontrol
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: write
+
+concurrency:
+  group: tetik-cek
+  cancel-in-progress: false
+
+jobs:
+  tetik:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      TOK: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Gecikme kontrolu + gerekirse repository_dispatch
+        run: |
+          python3 - <<'PY'
+          import json, os, datetime as dt, urllib.request, urllib.error
+
+          TOK = os.environ["TOK"]
+          REPO = "hechecik/bist-panel"
+          API = "https://api.github.com"
+
+          def api(path, method="GET", body=None):
+              data = json.dumps(body).encode() if body is not None else None
+              req = urllib.request.Request(API + path, data=data, method=method)
+              req.add_header("Authorization", "token " + TOK)
+              req.add_header("Accept", "application/vnd.github+json")
+              req.add_header("User-Agent", "bist-panel-tetik-cek")
+              if data:
+                  req.add_header("Content-Type", "application/json")
+              with urllib.request.urlopen(req, timeout=30) as r:
+                  raw = r.read().decode()
+                  return r.status, (json.loads(raw) if raw.strip() else None)
+
+          simdi = dt.datetime.now(dt.timezone.utc)
+
+          # is akisi -> (en fazla gecikme dakika, kendi cron araligi dk)
+          KURAL = {
+              "veri-cek":     (30, 15),
+              "altin-cek":    (60, 30),
+              "kripto-cek":   (60, 30),
+              "ek-veri-cek":  (180, 540),
+          }
+
+          rapor = []
+          for wf, (esik, aralik) in KURAL.items():
+              try:
+                  _, d = api(f"/repos/{REPO}/actions/workflows/{wf}.yml/runs?per_page=1&branch=main")
+                  runs = d.get("workflow_runs") or []
+              except urllib.error.HTTPError as e:
+                  rapor.append(f"{wf}: API hata {e.code}")
+                  continue
+              if not runs:
+                  rapor.append(f"{wf}: HIC CALISMA YOK")
+                  continue
+              son = runs[0]
+              ts = dt.datetime.fromisoformat(son["created_at"].replace("Z", "+00:00"))
+              gecen = (simdi - ts).total_seconds() / 60
+              durum = "OK"
+              if gecen > esik:
+                  # repository_dispatch yalnizca bu repoda dinleyicisi varsa ise yarar;
+                  # dogrudan workflow_dispatch kullan (hedef akis kesin tetiklenir).
+                  try:
+                      code, _ = api(f"/repos/{REPO}/actions/workflows/{wf}.yml/dispatches",
+                                    "POST", {"ref": "main"})
+                  except urllib.error.HTTPError as e:
+                      code = e.code
+                  durum = f"GECIKME {gecen:.0f} dk -> workflow_dispatch {code}"
+              rapor.append(f"{wf}: son {son['created_at']} ({gecen:.0f} dk once) -> {durum}")
+              print(rapor[-1])
+
+          print("\nOZET")
+          print("sunucu UTC:", simdi.strftime("%Y-%m-%d %H:%M"))
+          for r in rapor:
+              print(" -", r)
+          PY

@@ -6,10 +6,14 @@ on:
     # Günde 2 kez hafta içi: 06:00 UTC (TR 09:00) ve 15:00 UTC (TR 18:00, kapanış sonrası).
     # G01: :00 yoğun dakikasından kaydırıldı → :09 ve :19.
     - cron: '9,19 6,15 * * 1-5'
+    # BAKIM (11.11.2026): GitHub schedule fiilen tetiklenmiyor → tetik-cek.yml yedek tetikleyici.
   workflow_dispatch:
   # G01: dış tetikleyici — ek veri, hisse (veri) tetikleyicisiyle birlikte çalışır
+  # G01 planlanan cron-job.org → repository_dispatch kurulumu YAPILMADI (repoda
+  # secret yok, dispatch olayi sayisi 0). Yedek tetikleyici tetik-cek.yml, hedef
+  # akislari dogrudan workflow_dispatch ile cagirir. Bu blok uyumluluk icin duruyor.
   repository_dispatch:
-    types: [veri]
+    types: [veri, ek]
 
 permissions:
   contents: write
@@ -46,12 +50,14 @@ jobs:
           git config user.name "bist-panel bot"
           git config user.email "hechecik@users.noreply.github.com"
           git add data/getiri.json data/takvim.json
+          ok=0
           if ! git diff --cached --quiet; then
             git commit -m "sabit getiri + takvim guncelle $(date -u +'%d.%m %H:%M') UTC"
             # G01: 3 denemeli push döngüsü (reject → fetch+rebase+push)
             for i in 1 2 3; do
               if git fetch origin && git rebase origin/main --autostash && git push; then
                 echo "✅ getiri + takvim verisi push edildi (deneme $i)"
+                ok=1
                 break
               fi
               git rebase --abort 2>/dev/null || true
@@ -60,8 +66,15 @@ jobs:
             done
           else
             echo "ℹ️ değişiklik yok"
+            ok=1
           fi
+          # BAKIM: push 3 denemede de düşerse iş kırmızı olmalı (eskiden sessizce yeşil kalıyordu)
+          [ "$ok" = "1" ] || { echo "❌ push basarisiz"; exit 1; }
 
-      - name: Kesinti alarmı (healthchecks.io ping)
+      - name: Kesinti alarmi (healthchecks.io ping)
         if: success()
-        run: curl -fsS -m 10 "${{ secrets.HC_URL_EKVERI }}" || true
+        env:
+          HC: ${{ secrets.HC_URL_EKVERI }}
+        run: |
+          if [ -n "$HC" ]; then curl -fsS -m 10 "$HC" || true; else echo "HC_URL_EKVERI tanimli degil - atlandi"; fi
+
