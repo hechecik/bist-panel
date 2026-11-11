@@ -37,11 +37,16 @@ jobs:
       - name: Altın verisi çek + JSON üret
         run: python scripts/altin_cek.py
 
-      - name: Commit + push (data/altin.json)
+      - name: Commit + push (data/altin.json, sep_arsiv, altin_gecmis)
         run: |
           git config user.name "bist-panel bot"
           git config user.email "hechecik@users.noreply.github.com"
+          # G10/G11: Actions'ın ürettiği arşiv ve karne dosyaları da commit'e girer.
+          # Dosya yoksa komut hata vermez.
           git add data/altin.json
+          [ -f data/sep_arsiv.json ] && git add data/sep_arsiv.json
+          [ -f data/altin_gecmis.json ] && git add data/altin_gecmis.json
+          true
           if ! git diff --cached --quiet; then
             git commit -m "altin veri guncelle $(date -u +'%d.%m %H:%M') UTC"
             # G01: 3 denemeli push döngüsü (reject → fetch+rebase+push)
