@@ -1,4 +1,12 @@
-# G06 — Rapor (parça 1/4 tamamlandı)
+# G06 — Rapor (parça 3/4 tamamlandı)
+
+## Nerede kaldım (parça 3 — tamam, commit 87d7f00)
+- `js/main.js` 814 satır / 52.954 B → **546 satır / 37.272 B**.
+- Taşınanlar: `js/bolum/haber.js` (5.948 B — renderHaber, `haberFiltre` state, KAT_AD, `zamanGecmis`, `haberFiltrele`, `chip`; aşırı satım/alım taraması + mini takvim bu dosyada), `js/bolum/fon.js` (4.931 B — renderFon, fon risk iştahı/getiri/dağılım/sektör/temel analiz), `js/bolum/getiri.js` (2.843 B — `getiriYukle`, tahvil + eurobond), `js/bolum/takvim.js` (3.327 B — `takvimYukle`, halka arz + temettü).
+- Bölüm dosyaları kendi `window.*` bağlarını kuruyor (`renderHaber`, `haberFiltrele`, `chip`, `renderFon`, `getiriYukle`, `takvimYukle`) — inline onclick bozulmadı.
+- `sw.js`: CACHE `bist-panel-v3` → **`bist-panel-v4`**, CORE'a 4 bölüm dosyası eklendi.
+- **Doğrulama:** 284 test passed; `node --check` 10 dosyada temiz; headless Chromium'da 9 sekme tıklandı, konsol hatası/unhandled rejection yok; haber filtreleri ölçüldü (tümü 49.843 B → BIST 17.504 B → EN 22.806 B → Pozitif 11.685 B → geri 49.843 B); `zamanGecmis` ve `getiriYukle` elle çağrıldı, hatasız.
+- **Sırada (parça 4):** `main.js` içinde kalan kripto (`renderKripto`, `kriptoYukle`, `krFiyat`, `krBuyuk`, `KRIPTO_VERI`), ICT (`renderIct`, `ictYukle`, `ictListe`, `ictYon`), altın (`renderAltin`, `altinYukle`, `ALTIN_VERI`) → `js/bolum/{kripto,ict,altin}.js`. Altın bloğu en büyüğü (~245 satır). Sonrasında `AGENTS.md` dosya haritası güncellenecek ve kabul kriterleri kapanacak.
 
 ## Nerede kaldım (parça 2 — tamam)
 - `js/main.js` 1603 satır / 104.902 B → **814 satır / 52.954 B**.
