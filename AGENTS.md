@@ -23,7 +23,11 @@ Canlı adres: https://hechecik.github.io/bist-panel/
 ## Dosya haritası
 | Yol | İçerik | Not |
 |---|---|---|
-| `index.html` | Tüm ön yüz (CSS + JS tek dosyada, ~90 KB) | **Bütün olarak okuma.** Önce `grep -n "function render" index.html`, sonra ilgili satır aralığını oku |
+| `index.html` | Ön yüz iskeleti (HTML + `<script type="module" src="js/main.js">`) | **G06 devam ediyor.** Önce `grep -n` ile yeri bul; bölüm dosyaları taşındıkça burası küçülür |
+| `css/app.css` | Tüm stiller (eski `<style>` içeriği) | `grep -n "^\.\|^#" css/app.css` ile sınıf ara |
+| `js/main.js` | Giriş noktası: core import, window bağları, sekmeler, başlatma | Şu an render fonksiyonlarını da barındırıyor (parça 2/3'te `js/bolum/`e taşınacak) |
+| `js/core.js` | Ortak yardımcılar: `utcTarih`, `fmt`, `yuzde`, `ok`, `alEsc`, `pfOk/pfRenk`, `tazelik`, bayat bant, `sekmeKur` | Hepsi export edilir, main.js window'a bağlar |
+| `js/bolum/*.js` | Bölüm render fonksiyonları (her biri < 15 KB) | Henüz oluşturulmadı — G06 parça 2/3 |
 | `scripts/veri_cek.py` | Hisse verisi, sinyal, backtest, haber, fon, temel analiz | ~55 KB. `grep -n "^def "` ile fonksiyonu bul |
 | `scripts/indikatorler.py` | RSI, MACD, BB, MFI, OBV, ATR, sinyal skoru | |
 | `scripts/ict.py` | ICT tarayıcı (MSS, FVG, OB, sweep) | |
