@@ -9,7 +9,7 @@ sys.path.insert(0, str(KOK / "scripts"))
 
 from veri_cek import (  # noqa: E402
     KILIT_ESIK_PCT, LIKIDITE_ESIK_TL, IPO_GUN, RISKLI_TABAN_SAYI, RISKLI_PENCERE,
-    KESIN_SAAT_TR,
+    KESIN_SAAT_TR, KESIN_DK_TR,
     kilit_tespit, kilitli_gunler, ilk_kilitsiz, likidite_tl, ipo_bayraklari,
     taban_sayisi, riskli_tespit, sinyal_durumu,
 )
@@ -152,19 +152,48 @@ def test_riskli_bos_veri():
     assert taban_sayisi([]) == 0
 
 
-# ─────────────────── md.3 sinyal kesinliği (18:15 TR) ───────────────────
-
-def test_sinyal_durumu_kapanis_sonrasi_kesin():
-    from datetime import datetime, timezone, timedelta
-    tr = timezone(timedelta(hours=3))
-    assert sinyal_durumu(datetime(2026, 11, 11, 18, 30, tzinfo=tr)) == 'kesin'
+# ─────────────────── md.3 sinyal kesinliği (bar tarihi + 18:30 TR) ───────────────────
+from datetime import datetime, timezone, timedelta as _td
+TR = timezone(_td(hours=3))
 
 
-def test_sinyal_durumu_seans_ici_gecici():
-    from datetime import datetime, timezone, timedelta
-    tr = timezone(timedelta(hours=3))
-    assert sinyal_durumu(datetime(2026, 11, 11, 14, 0, tzinfo=tr)) == 'gecici'
+def test_bugun_1000_bar_dun_kesin():
+    """(a) Bugün 10:00 TR çalışması, bar dün → kesin (dünün barı kapanmış)."""
+    simdi = datetime(2026, 11, 11, 10, 0, tzinfo=TR)      # Çarşamba
+    assert sinyal_durumu('2026-11-10', simdi=simdi) == 'kesin'
+
+
+def test_bugun_1820_bar_bugun_gecici():
+    """(b) Bugün 18:20 TR, bar bugün → geçici (18:30 eşiği geçilmedi)."""
+    simdi = datetime(2026, 11, 11, 18, 20, tzinfo=TR)
+    assert sinyal_durumu('2026-11-11', simdi=simdi) == 'gecici'
+
+
+def test_bugun_1840_bar_bugun_kesin():
+    """(c) Bugün 18:40 TR, bar bugün → kesin."""
+    simdi = datetime(2026, 11, 11, 18, 40, tzinfo=TR)
+    assert sinyal_durumu('2026-11-11', simdi=simdi) == 'kesin'
+
+
+def test_pazartesi_0907_bar_cuma_kesin():
+    """(d) Pazartesi 09:07 TR, bar Cuma → kesin (hafta sonu bar eskidi)."""
+    simdi = datetime(2026, 11, 16, 9, 7, tzinfo=TR)       # Pazartesi
+    assert sinyal_durumu('2026-11-13', simdi=simdi) == 'kesin'
+
+
+def test_bar_tarihi_datetime_ve_string_kabul_eder():
+    simdi = datetime(2026, 11, 11, 10, 0, tzinfo=TR)
+    assert sinyal_durumu(datetime(2026, 11, 10, 18, 0, tzinfo=TR), simdi=simdi) == 'kesin'
+    assert sinyal_durumu('2026-11-10T18:00:00Z', simdi=simdi) == 'kesin'
+
+
+def test_bar_tarihi_bilinmezse_saat_kuralina_duser():
+    """bar_tarihi None → yalnızca saat kuralı (18:30)."""
+    assert sinyal_durumu(None, simdi=datetime(2026, 11, 11, 18, 20, tzinfo=TR)) == 'gecici'
+    assert sinyal_durumu(None, simdi=datetime(2026, 11, 11, 18, 30, tzinfo=TR)) == 'kesin'
 
 
 def test_kesin_saat_degeri():
-    assert KESIN_SAAT_TR == 18.25
+    """Eşik 18:30 TR — 18:15 değil (ücretsiz kaynaklar ~15 dk gecikmeli)."""
+    assert KESIN_SAAT_TR == 18.5
+    assert KESIN_DK_TR == 18 * 60 + 30

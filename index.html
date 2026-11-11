@@ -499,8 +499,8 @@ function renderPiyasa(d) {
   const s = d.sinyaller;
   const alSay = (s.al||[]).length, tutSay = (s.tut||[]).length, satSay = (s.sat||[]).length;
   const izleSay = (s.izle||[]).length, riskliSay = (s.riskli||[]).length;
-  // G05 md.3 — 18:15 TR öncesi sinyaller geçici
-  const durumEtiket = s.durum ? ` · <span class="${s.durum === 'kesin' ? 'up' : 'warn'}">${s.durum === 'kesin' ? '✅ kesin' : '⏳ geçici'}</span>` : '';
+  // G05 md.3 — geçici: seans sürüyor veya kapanış verisi henüz gelmedi (18:30'a kadar)
+  const durumEtiket = s.durum ? ` · <span class="${s.durum === 'kesin' ? 'up' : 'warn'}" title="${s.durum === 'kesin' ? 'Bar kapandı, sinyal kesinleşti' : 'Seans sürüyor veya kapanış verisi henüz gelmedi (18:30\'a kadar)'}">${s.durum === 'kesin' ? '✅ kesin' : '⏳ geçici'}</span>` : '';
   document.getElementById('ozetKartlar').innerHTML =
     `<div class="card"><div class="t">🟢 AL</div><div class="v up">${alSay}</div></div>` +
     `<div class="card"><div class="t">🟡 TUT</div><div class="v" style="color:var(--tx2)">${tutSay}</div></div>` +

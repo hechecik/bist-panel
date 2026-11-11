@@ -39,7 +39,8 @@ KILIT_ESIK_PCT = 9.5            # ±%9,5 ve kapanış == uç ise tavan/taban kil
 RISKLI_TABAN_SAYI = 3           # son RISKLI_PENCERE günde ≥3 taban kilidi → RISKLI
 RISKLI_PENCERE = 10
 IPO_GUN = 60                    # son 60 iş günü içinde işlem görmeye başlayan = yeni halka arz
-KESIN_SAAT_TR = 18.25           # 18:15 TR — bu saatten sonra üretilen sinyal "kesin"
+KESIN_SAAT_TR = 18.5            # 18:30 TR — borsa 18:10 kapanır ama ücretsiz kaynaklar ~15 dk gecikmeli
+KESIN_DK_TR = 18 * 60 + 30      # 18:30 TR (dakika)
 
 
 def log(msg):
@@ -358,12 +359,50 @@ GRAM_UYARI_ESIK = 1.0  # borsapy gram ile hesaplanan gram arası fark eşiği (%
 TZ_TR = dt.timezone(dt.timedelta(hours=3))
 
 
-def sinyal_durumu(simdi=None) -> str:
-    """TR saatiyle 18:15'ten önce üretilen sinyal 'gecici', sonrası 'kesin'."""
+def sinyal_durumu(bar_tarihi=None, simdi=None) -> str:
+    """Sinyalin kesinlik durumu — saf fonksiyon, ağa çıkmaz.
+
+    Kural (TR takvim günü bazlı):
+      - bar_tarihi bugünden önceyse → 'kesin' (bar kapanmış, gün bitmiş)
+      - bar_tarihi bugünse → TR 18:30 ve sonrası 'kesin', öncesi 'gecici'
+
+    Saate tek başına bakmak yanlıştı: sabah 09:07 çalışması dünün kapanmış
+    barını işler ve tatil günlerinde de bar eskidir; bunlar kesin sayılmalı.
+
+    bar_tarihi: date/datetime/ISO string ('2026-11-11' veya '2026-11-11T...').
+                None verilirse 'bugün' varsayılır (yalnızca saat kuralı işler).
+    """
     simdi = simdi or dt.datetime.now(dt.timezone.utc)
     tr = simdi.astimezone(TZ_TR)
+    if bar_tarihi is not None:
+        b = _tr_gun(bar_tarihi)
+        if b is not None:
+            if b < tr.date():
+                return 'kesin'
+            if b > tr.date():
+                return 'gecici'   # gelecek tarihli bar — henüz oluşmadı
     dk = tr.hour * 60 + tr.minute
-    return 'kesin' if dk >= int(KESIN_SAAT_TR * 60) else 'gecici'
+    return 'kesin' if dk >= KESIN_DK_TR else 'gecici'
+
+
+def _tr_gun(deger):
+    """Tarih benzeri değeri TR takvim gününe (date) çevirir — saf yardımcı."""
+    if deger is None:
+        return None
+    if isinstance(deger, dt.datetime):
+        d = deger
+        if d.tzinfo is not None:
+            d = d.astimezone(TZ_TR)
+        return d.date()
+    if isinstance(deger, dt.date):
+        return deger
+    s = str(deger).strip()
+    if not s:
+        return None
+    try:
+        return dt.date.fromisoformat(s[:10])
+    except ValueError:
+        return None
 
 
 def kilit_tespit(row: dict, onceki_kapanis) -> str | None:
@@ -728,7 +767,8 @@ def sinyalleri_hesapla(hisse_veri: dict, ipo: dict | None = None) -> dict:
     """OHLCV verisinden indikatör + sinyal hesapla (indikatorler.py mantığı).
 
     G05 filtreleri (saf, ağsız):
-      - durum        : 'gecici' (18:15 TR öncesi) / 'kesin'
+      - durum        : 'gecici' / 'kesin' — bar tarihi bugünden eskiyse kesin,
+                       bugünse TR 18:30 sonrası kesin
       - kilit        : 'TAVAN' / 'TABAN' — o gün tavan/taban kilidi
       - likidite_tl  : 20 günlük ortalama TL hacmi
       - ipo_yeni     : son 60 iş gününde işlem görmeye başladı (skor istatistiğinden hariç)
@@ -740,12 +780,18 @@ def sinyalleri_hesapla(hisse_veri: dict, ipo: dict | None = None) -> dict:
     from indikatorler import tum_indikatorler, sinyal_hesapla, pivot_seviyeler, seviye_durumu, ict_sinyalleri
     import pandas as pd
 
-    durum = sinyal_durumu()
     ipo = ipo or {}
+    durum = 'gecici'      # döngü hiç dönmezse (boş veri) güvenli varsayılan
     sonuclar = []
     for sembol, rows in hisse_veri.items():
+        durum = 'gecici'
         if len(rows) < 60:
             continue
+        # Kesinlik, hissenin SON BAR tarihine göre (dünün barı → kesin)
+        try:
+            durum = sinyal_durumu(rows[-1].get('tarih') if rows else None)
+        except Exception:
+            durum = 'gecici'
         df = pd.DataFrame(rows)
         df['HGDG_TARIH'] = pd.to_datetime(df['tarih'])
         df = df.rename(columns={'kapanis': 'HGDG_KAPANIS', 'min': 'HGDG_MIN', 'max': 'HGDG_MAX', 'hacim': 'HGDG_HACIM'})
@@ -835,6 +881,9 @@ def sinyalleri_hesapla(hisse_veri: dict, ipo: dict | None = None) -> dict:
             elif r.get('likidite_tl') is not None and r['likidite_tl'] < LIKIDITE_ESIK_TL:
                 r['sinyal'], r['sinyal_ham'], r['filtre'] = 'IZLE', r['sinyal'], 'likidite eşiği altı'
     sonuclar.sort(key=lambda x: x['skor'], reverse=True)
+    # G05 — üst düzey durum: hisselerin çoğunluğu kesinse 'kesin'
+    kesin_say = sum(1 for r in sonuclar if r.get('durum') == 'kesin')
+    durum = 'kesin' if sonuclar and kesin_say * 2 >= len(sonuclar) else 'gecici'
     # 2.5 — Aşırı alım/satım taraması (mevcut hesaplardan filtreleme)
     tarama = {
         'asiri_satim': [{'sembol': r['sembol'], 'fiyat': r['fiyat'], 'rsi': r['rsi'],
@@ -1429,7 +1478,7 @@ def sinyal_gecmisi_guncelle(sinyaller: dict) -> dict:
     eski kayıtlar temizlenir. Dosya repo'ya commit edilir (Actions).
     """
     GECMIS = DATA_DIR / 'sinyal_gecmisi.json'
-    # G05 — karneye SADECE kesin sinyaller yazılır (18:15 TR sonrası).
+    # G05 — karneye SADECE kesin sinyaller yazılır (bar bugünden eski ya da TR 18:30 sonrası).
     # Geçici sinyaller karnede yer almaz: gün içi anlık görüntü kesin sonuç değil.
     if sinyaller.get('durum') != 'kesin':
         log(f"Sinyal geçmişi: durum={sinyaller.get('durum')} → karneye yazılmadı")
