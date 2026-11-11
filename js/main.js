@@ -5,13 +5,18 @@
 
    Taşınanlar (parça 2): piyasa + filtre/portföy/alarm → js/bolum/piyasa.js,
    grafik/mum modalı → js/bolum/grafik.js, karne/senaryo → js/bolum/karne.js.
-   Kalan bölümler (haber, fon, takvim, getiri, kripto, ICT, altın) parça 3/4'te
-   taşınacak. */
+   Taşınanlar (parça 3): haber → js/bolum/haber.js, fon → js/bolum/fon.js,
+   getiri/takvim → js/bolum/getiri.js + takvim.js.
+   Kalan bölümler (kripto, ICT, altın) parça 4'te taşınacak. */
 import { utcTarih, fmt, yuzde, ok, tazelik, BAYAT, haftaIciIsGunu, bayatBantMetni,
          bayatBantGuncelle, alEsc, pfOk, pfRenk, sekmeKur } from './core.js';
 import { renderPiyasa, alarmKontrol, durum } from './bolum/piyasa.js';
 import { renderGrafik } from './bolum/grafik.js';
 import { renderSenaryo } from './bolum/karne.js';
+import { renderHaber } from './bolum/haber.js';
+import { renderFon } from './bolum/fon.js';
+import { getiriYukle } from './bolum/getiri.js';
+import { takvimYukle } from './bolum/takvim.js';
 
 async function yukle() {
   try {
@@ -40,277 +45,6 @@ async function yukle() {
   }
 }
 
-/* ══════════ HABER (Cryptopanic tarzı: kategori + dil + yön filtreleri, zaman damgası) ══════════ */
-const KAT_AD = {'bist':'📊 BIST','altin-maden':'🥇 Altın/Maden','makro':'🏛️ Makro','global':'🌍 Global'};
-let haberFiltre = { kategori: '', dil: '', yon: '' };
-
-function zamanGecmis(iso) {
-  if (!iso) return '';
-  const t = utcTarih(iso).getTime();
-  if (isNaN(t)) return '';
-  const dk = Math.floor((Date.now() - t) / 60000);
-  if (dk < 1) return 'az önce';
-  if (dk < 60) return dk + ' dk önce';
-  const sa = Math.floor(dk / 60);
-  if (sa < 24) return sa + ' saat önce';
-  const gn = Math.floor(sa / 24);
-  if (gn < 30) return gn + ' gün önce';
-  return Math.floor(gn / 30) + ' ay önce';
-}
-
-function haberFiltrele(k, v) {
-  if (haberFiltre[k] === v) haberFiltre[k] = '';
-  else haberFiltre[k] = v;
-  renderHaber(PIYASA_VERI);
-}
-
-function chip(k, v, etiket, aktifRenk) {
-  const aktif = haberFiltre[k] === v;
-  return `<button class="chip ${aktif ? 'active' : ''}" style="${aktif ? 'border-color:' + aktifRenk + ';color:' + aktifRenk + ';font-weight:700' : ''}" onclick="haberFiltrele('${k}','${v}')">${etiket}</button>`;
-}
-
-function renderHaber(d) {
-  const hb = d.haberler || [];
-  let html = '<h2>📰 Haber Akışı <span class="cnt">' + hb.length + ' haber · 7 gün</span></h2>';
-  html += '<div class="chips">' +
-    chip('dil', 'tr', '🇹🇷 Türkçe', 'var(--info)') +
-    chip('dil', 'en', '🇬🇧 İngilizce', 'var(--info)') +
-    chip('kategori', 'bist', '📊 BIST', 'var(--up)') +
-    chip('kategori', 'altin-maden', '🥇 Altın/Maden', 'var(--warn)') +
-    chip('kategori', 'makro', '🏛️ Makro', 'var(--info)') +
-    chip('kategori', 'global', '🌍 Global', 'var(--accent)') +
-    chip('yon', 'pozitif', '🟢 Pozitif', 'var(--up)') +
-    chip('yon', 'negatif', '🔴 Negatif', 'var(--down)') +
-    (Object.values(haberFiltre).some(Boolean) ? `<button class="chip" onclick="haberFiltre={kategori:'',dil:'',yon:''};renderHaber(PIYASA_VERI)">✕ Temizle</button>` : '') +
-    '</div>';
-
-  const filtreli = hb.filter(h =>
-    (!haberFiltre.kategori || h.kategori === haberFiltre.kategori) &&
-    (!haberFiltre.dil || h.dil === haberFiltre.dil) &&
-    (!haberFiltre.yon || h.yon === haberFiltre.yon)
-  );
-
-  if (filtreli.length) {
-    filtreli.forEach(h => {
-      const cls = h.yon === 'pozitif' ? 'b-AL' : (h.yon === 'negatif' ? 'b-SAT' : 'b-TUT');
-      const kat = KAT_AD[h.kategori] || h.kategori || '';
-      const dil = h.dil === 'tr' ? '🇹🇷' : '🇬🇧';
-      const zaman = zamanGecmis(h.yayin_tarihi);
-      const ic = `<div class="nm"><span class="badge ${cls}">${h.etiket}</span> ` +
-        (h.sembol ? `<b>${h.sembol}</b> ` : '') + h.baslik +
-        `<br><small style="color:var(--tx2)">${kat} ${dil} · ${h.kaynak || ''} · <b style="color:var(--tx)">${zaman}</b></small></div>`;
-      html += h.link
-        ? `<a class="ev" style="text-decoration:none;color:inherit" href="${h.link}" target="_blank" rel="noopener">${ic}</a>`
-        : `<div class="ev">${ic}</div>`;
-    });
-    html += '<div class="note">Kaynaklar: Yahoo Finance (BIST + altın/gümüş) · Habertürk · Fortune TR · Paratic · Bloomberg HT · CNBC Ekonomi/Dünya · Investing.com · Google News (KAP bildirim + TR borsa + global makro). Etiketler anahtar kelime kurallarıyla otomatik — uydurma yorum yok. Başlığa tıkla → kaynağa git.</div>';
-  } else {
-    html += '<div class="empty">Bu filtreye uyan haber yok</div>';
-  }
-
-  // Tarama (mevcut)
-  const tr = d.sinyaller && d.sinyaller.tarama;
-  if (tr) {
-    html += '<h2>🔍 Aşırı Satım (RSI &lt; 30) <span class="cnt">' + (tr.asiri_satim||[]).length + '</span></h2>';
-    html += (tr.asiri_satim && tr.asiri_satim.length)
-      ? '<div class="chips">' + tr.asiri_satim.map(r => `<span class="chip"><b style="color:var(--info)">${r.sembol}</b> ${fmt(r.fiyat)} <span class="r">RSI ${fmt(r.rsi,0)} · ${r.sinyal}</span></span>`).join('') + '</div>'
-      : '<div class="empty" style="padding:6px 0">Yok</div>';
-    html += '<h2>🔴 Aşırı Alım (RSI &gt; 75) <span class="cnt">' + (tr.asiri_alim||[]).length + '</span></h2>';
-    html += (tr.asiri_alim && tr.asiri_alim.length)
-      ? '<div class="chips">' + tr.asiri_alim.map(r => `<span class="chip"><b style="color:var(--down)">${r.sembol}</b> ${fmt(r.fiyat)} <span class="r">RSI ${fmt(r.rsi,0)} · ${r.sinyal}</span></span>`).join('') + '</div>'
-      : '<div class="empty" style="padding:6px 0">Yok</div>';
-    html += '<h2>🟢 MACD Güçlü (skor ≥ 2) <span class="cnt">' + (tr.macd_guclu||[]).length + '</span></h2>';
-    html += (tr.macd_guclu && tr.macd_guclu.length)
-      ? '<div class="chips">' + tr.macd_guclu.map(r => `<span class="chip"><b style="color:var(--up)">${r.sembol}</b> ${fmt(r.fiyat)} <span class="r">${r.sinyal} · skor ${r.skor > 0 ? '+' : ''}${r.skor}</span></span>`).join('') + '</div>'
-      : '<div class="empty" style="padding:6px 0">Yok</div>';
-  }
-
-  // Takvim (mevcut, alta taşındı)
-  html += '<h2>📅 Ekonomik Takvim</h2>';
-  if (d.takvim && d.takvim.length) {
-    d.takvim.slice(0, 10).forEach(ev => {
-      const cls = ev.onem === 'high' ? 'hi' : (ev.onem === 'mid' ? 'mi' : '');
-      html += `<div class="ev"><div class="dt">${ev.tarih}</div><div class="tm">${ev.saat}</div>` +
-              `<div class="nm"><span class="${cls}">${ev.ulke}</span> · ${ev.olay}</div></div>`;
-    });
-  } else html += '<div class="empty">Takvim verisi yok</div>';
-
-  document.getElementById('sec-haber').innerHTML = html;
-}
-
-/* ══════════ FON ══════════ */
-const SEKTOR_TR = {'Industrials':'Sanayi','Financial Services':'Finans','Basic Materials':'Hammadde',
-  'Consumer Cyclical':'Tüketici','Consumer Defensive':'Temel Tüketim','Technology':'Teknoloji',
-  'Communication Services':'İletişim','Energy':'Enerji','Utilities':'Kamu Hizmetleri',
-  'Real Estate':'Gayrimenkul','Healthcare':'Sağlık'};
-const sekTr = s => SEKTOR_TR[s] || s || '—';
-
-function renderFon(d) {
-  const f = d.fonlar;
-  let html = '<h2>🏦 Fonlar & Kurumsal</h2>';
-
-  if (f && f.fonlar && f.fonlar.length) {
-    if (f.ozet && f.ozet.fon_sayisi) {
-      html += `<h2>📊 Fonların Risk İştahı <span class="cnt">${f.tarih}</span></h2>`;
-      html += '<div class="scn">' +
-        `<div class="sc"><div class="t">İncelenen Fon</div><div class="o">${f.ozet.fon_sayisi}</div></div>` +
-        `<div class="sc"><div class="t">Ort. Hisse Ağırlığı</div><div class="o ${f.ozet.ort_hisse_agirlik >= 50 ? 'up' : 'down'}">%${f.ozet.ort_hisse_agirlik}</div></div>` +
-        (f.ozet.max_hisse_agirlik != null ? `<div class="sc"><div class="t">En Riskli Fon</div><div class="o up">%${f.ozet.max_hisse_agirlik}</div></div>` : '') +
-        '</div>';
-    }
-    html += '<h2>📈 Fon Getirileri (TEFAS)</h2><div class="twrap"><table><tr>' +
-      '<th>Fon</th><th>Hisse %</th><th>1 Ay</th><th>3 Ay</th><th>6 Ay</th><th>1 Yıl</th></tr><tbody>';
-    f.fonlar.forEach(fn => {
-      const g = fn.getiri || {};
-      const h = x => x == null ? '—' : `<span class="${ok(x)}">${x >= 0 ? '+' : ''}%${x.toFixed(1)}</span>`;
-      html += `<tr><td class="sym">${fn.kod}</td><td>%${fn.hisse_agirlik}</td>` +
-        `<td>${h(g['1A'])}</td><td>${h(g['3A'])}</td><td>${h(g['6A'])}</td><td>${h(g['1Y'])}</td></tr>`;
-    });
-    html += '</tbody></table></div>';
-    html += '<h2>📋 Fon Dağılımları</h2>';
-    f.fonlar.forEach(fn => {
-      const renk = fn.hisse_agirlik >= 50 ? 'var(--up)' : 'var(--warn)';
-      html += `<div class="ev"><div class="nm"><b>${fn.kod}</b> · ${fn.tarih} · <span style="color:${renk}">Hisse %${fn.hisse_agirlik}</span><br>` +
-        `<small style="color:var(--tx2)">${fn.varliklar.map(v=>`${v.sinif} %${v.agirlik}`).join(' · ')}</small></div></div>`;
-    });
-    html += '<div class="note">' + (f.not || '') + '</div>';
-  } else {
-    html += '<div class="empty">🏦 TEFAS fon verisi şu an yok — bir sonraki güncellemede</div>';
-  }
-
-  if (d.sektorler && d.sektorler.length) {
-    html += '<h2>🏭 Sektör Dağılımı <span class="cnt">' + d.sektorler.length + '</span></h2><div class="twrap"><table><tr>' +
-      '<th>Sektör</th><th>Hisse</th><th>Ort. Skor</th><th>🟢 AL</th><th>🔴 SAT</th><th>Dağılım</th></tr><tbody>';
-    const maxH = Math.max(...d.sektorler.map(x => x.hisse_sayisi));
-    d.sektorler.forEach(x => {
-      const genislik = Math.round(x.hisse_sayisi / maxH * 100);
-      html += `<tr><td class="sym">${sekTr(x.sektor)}</td><td>${x.hisse_sayisi}</td>` +
-        `<td class="${ok(x.ort_skor)}">${x.ort_skor > 0 ? '+' : ''}${x.ort_skor}</td>` +
-        `<td class="up">${x.al}</td><td class="down">${x.sat}</td>` +
-        `<td style="min-width:110px"><div class="bar"><i style="width:${genislik}%;background:var(--accent)"></i></div></td></tr>`;
-    });
-    html += '</tbody></table></div><div class="note">Sektörler Yahoo Finance resmi sınıflandırmasıdır.</div>';
-  }
-
-  if (d.temel_analiz && d.temel_analiz.length) {
-    html += '<h2>💎 Temel Analiz — BIST 30 <span class="cnt">değer skoru</span></h2><div class="twrap"><table><tr>' +
-      '<th>Hisse</th><th>F/K</th><th>PD/DD</th><th>Temettü</th><th>Skor</th><th>Not</th></tr><tbody>';
-    d.temel_analiz.forEach(x => {
-      let notlar = [];
-      if (x.fk != null && x.fk < 5) notlar.push('F/K çok ucuz');
-      else if (x.fk != null && x.fk < 10) notlar.push('F/K ucuz');
-      if (x.pddd != null && x.pddd < 1) notlar.push('PD/DD defter altı');
-      if (x.temettu != null && x.temettu > 3) notlar.push('Yüksek temettü');
-      html += `<tr><td class="sym">${x.sembol}</td>` +
-        `<td>${x.fk == null ? '—' : fmt(x.fk)}</td>` +
-        `<td>${x.pddd == null ? '—' : fmt(x.pddd)}</td>` +
-        `<td>${x.temettu == null ? '—' : '%' + fmt(x.temettu,1)}</td>` +
-        `<td style="color:${x.skor >= 3 ? 'var(--up)' : 'var(--warn)'};font-weight:700">+${x.skor}</td>` +
-        `<td class="ned">${notlar.join(' · ') || '—'}</td></tr>`;
-    });
-    html += '</tbody></table></div><div class="note">Değer skoru: F/K&lt;5 (+2), &lt;10 (+1); PD/DD&lt;1 (+2), &lt;1.5 (+1); temettü&gt;%3 (+1).</div>';
-  }
-  document.getElementById('fon-icerik').innerHTML = html;
-}
-
-/* ══════════ SABİT GETİRİ (devlet tahvili + eurobond) ══════════ */
-async function getiriYukle() {
-  const el = document.getElementById('getiri-blok');
-  if (!el) return;
-  try {
-    const g = await (await fetch('data/getiri.json?v=' + Date.now())).json();
-    const rf = g.risk_free != null ? 'Risksiz getiri (10Y): <b>%' + fmt(g.risk_free) + '</b> · ' : '';
-    let h = '<h2>💵 Sabit Getiri — Devlet Tahvili & Eurobond <span class="cnt">' +
-      (g.tahvil ? g.tahvil.length : 0) + ' tahvil · ' + (g.eurobond ? g.eurobond.length : 0) + ' eurobond</span></h2>';
-
-    if (g.tahvil && g.tahvil.length) {
-      h += '<div class="scn">';
-      g.tahvil.forEach(t => {
-        h += `<div class="sc"><div class="t">${t.ad || t.vade}</div>` +
-          `<div class="o">%${fmt(t.getiri)}</div>` +
-          `<div class="m">${t.vade} · <span class="${ok(t.degisim)}">${t.degisim >= 0 ? '+' : ''}${fmt(t.degisim, 3)}</span></div></div>`;
-      });
-      h += '</div>';
-    } else {
-      const sebep = g.tahvil_durum || 'sebep yazılmadı';
-      h += '<div class="empty">⚠️ Tahvil verisi alınamadı — <b>' + sebep + '</b></div>';
-    }
-
-    if (g.eurobond && g.eurobond.length) {
-      h += '<h2>🌍 Eurobond <span class="cnt">' + g.eurobond.length + ' kıymet · Ziraat kotasyonu</span></h2>' +
-        '<div class="twrap"><table><tr><th>Vade</th><th>Kalan Gün</th><th>Döviz</th><th>Alış Fiyatı</th><th>Alış Oranı</th><th>Satış Fiyatı</th><th>Satış Oranı</th></tr><tbody>';
-      g.eurobond.forEach(e => {
-        h += `<tr><td class="sym">${e.vade || ''}</td><td>${e.kalan_gun == null ? '—' : e.kalan_gun}</td><td>${e.para || ''}</td>` +
-          `<td>${e.alis_fiyat == null ? '—' : fmt(e.alis_fiyat, 3)}</td><td class="up">${e.alis_oran == null ? '—' : '%' + fmt(e.alis_oran)}</td>` +
-          `<td>${e.satis_fiyat == null ? '—' : fmt(e.satis_fiyat, 3)}</td><td class="down">${e.satis_oran == null ? '—' : '%' + fmt(e.satis_oran)}</td></tr>`;
-      });
-      h += '</tbody></table></div>' +
-        '<div class="note">' + rf + 'Alış = bankanın <b>sizden</b> alacağı (siz satarken), Satış = bankanın <b>size</b> satacağı (siz alırken). Kaynak: Ziraat Bank eurobond kotasyonu + doviz.com tahvil. Yatırım tavsiyesi değildir.</div>';
-    } else {
-      h += '<div class="note">' + rf + 'Eurobond kotasyonu şu an alınamadı.</div>';
-    }
-    el.innerHTML = h;
-  } catch (e) {
-    el.innerHTML = '<h2>💵 Sabit Getiri</h2><div class="empty">Getiri verisi yüklenemedi: ' + (e && e.message ? e.message : e) + '</div>';
-  }
-}
-
-/* ══════════ TAKVİM (Halka Arz + Temettü) ══════════ */
-function durumEtiket(d) {
-  const m = {
-    yaklasan: ['Yaklaşan', 'var(--up)'], tamamlandi: ['Tamamlandı', 'var(--tx2)'],
-    ertelendi: ['Ertelendi', 'var(--warn)'], iptal: ['İptal', 'var(--down)'],
-    basvuru: ['Başvuruda', 'var(--warn)'], bilinmiyor: ['—', 'var(--tx2)']
-  };
-  const x = m[d] || m.bilinmiyor;
-  return `<span style="color:${x[1]}">${x[0]}</span>`;
-}
-
-async function takvimYukle() {
-  const el = document.getElementById('sec-takvim');
-  if (!el) return;
-  try {
-    const t = await (await fetch('data/takvim.json?v=' + Date.now())).json();
-    let h = '<h2>📅 Halka Arz Takvimi <span class="cnt">' + (t.halka_arz ? t.halka_arz.length : 0) + ' kayıt</span></h2>';
-
-    if (t.basvuru && t.basvuru.length) {
-      h += '<div class="note">🟡 <b>Başvuru sürecinde</b> (henüz tarih/kod yok): ' + t.basvuru.slice(0, 24).map(x => x).join(' · ') + '</div>';
-    }
-
-    if (t.halka_arz && t.halka_arz.length) {
-      h += '<div class="twrap"><table><tr><th>Kod</th><th>Şirket</th><th>Tarih</th><th>Durum</th></tr><tbody>';
-      t.halka_arz.forEach(x => {
-        h += `<tr><td class="sym">${x.kod || '—'}</td><td>${x.sirket || ''}</td><td>${x.tarih || '—'}</td><td>${durumEtiket(x.durum)}</td></tr>`;
-      });
-      h += '</tbody></table></div>';
-    } else {
-      h += '<div class="empty">Halka arz listesi boş.</div>';
-    }
-
-    if (t.ertelenen && t.ertelenen.length) {
-      h += '<h2>⏸️ Ertelenen / İptal <span class="cnt">' + t.ertelenen.length + '</span></h2>' +
-        '<div class="twrap"><table><tr><th>Kod</th><th>Şirket</th><th>Tarih</th></tr><tbody>';
-      t.ertelenen.forEach(x => { h += `<tr><td class="sym">${x.kod || '—'}</td><td>${x.sirket || ''}</td><td>${x.tarih || '—'}</td></tr>`; });
-      h += '</tbody></table></div>';
-    }
-
-    if (t.temettu && t.temettu.length) {
-      h += '<h2>💰 Temettü Takvimi <span class="cnt">' + t.temettu.length + ' kayıt</span></h2>' +
-        '<div class="twrap"><table><tr><th>Kod</th><th>Şirket</th><th>Tarih</th><th>Net Temettü</th><th>Verim</th><th>Durum</th></tr><tbody>';
-      t.temettu.slice(0, 40).forEach(x => {
-        h += `<tr><td class="sym">${x.kod || '—'}</td><td>${x.sirket || ''}</td><td>${x.tarih || '—'}</td>` +
-          `<td>${x.net == null ? '—' : fmt(x.net, 4)}</td><td>${x.yuzde == null ? '—' : '%' + fmt(x.yuzde, 2)}</td>` +
-          `<td>${x.gecmis ? '<span style="color:var(--tx2)">geçti</span>' : (x.gun_fark != null && x.gun_fark >= 0 ? `<span class="up">${x.gun_fark} gün sonra</span>` : '—')}</td></tr>`;
-      });
-      h += '</tbody></table></div>';
-    }
-
-    h += `<div class="note">Kaynak: halkarz.com · üretildi ${t.uretildi || ''}. Halka arz tarihleri kesinleşmemiş olabilir — başvuru öncesi resmi KAP bildirimini doğrula.</div>`;
-    el.innerHTML = h;
-  } catch (e) {
-    el.innerHTML = '<h2>📅 Takvim</h2><div class="empty">Takvim verisi yüklenemedi: ' + (e && e.message ? e.message : e) + '</div>';
-  }
-}
 
 /* ══════════ KRİPTO ══════════ */
 let KRIPTO_VERI = null;
@@ -782,7 +516,7 @@ function zyYukle(){
 /* ── GERİYE DÖNÜK UYUMLULUK ──
    inline onclick/onchange nitelikleri ve core sekme yönetimi fonksiyonlara
    isimle erişir. Modül kapsamı global olmadığı için burada window'a bağlanır.
-   Bölünen bölümler (piyasa/grafik/karne) kendi window bağlarını kurar; burada
+   Bölünen bölümler (piyasa/grafik/karne/haber/fon/getiri/takvim) kendi window bağlarını kurar; burada
    yalnızca bu dosyada kalan fonksiyonlar ve core yardımcıları bağlanır.
    NOT: `import * as core` ile bağlamak YANLIŞ — modül namespace nesnesinin
    değerleri salt-okunur erişimci olur, window.fmt çağrılamaz hale gelir
@@ -790,8 +524,7 @@ function zyYukle(){
 Object.assign(window, {
   utcTarih, fmt, yuzde, ok, tazelik, BAYAT, haftaIciIsGunu, bayatBantMetni,
   bayatBantGuncelle, alEsc, pfOk, pfRenk,
-  yukle, zamanGecmis,
-  haberFiltrele, chip, renderHaber, renderFon, getiriYukle, durumEtiket, takvimYukle,
+  yukle, renderHaber, renderFon, getiriYukle, takvimYukle,
   krFiyat, krBuyuk, renderKripto, kriptoYukle, ictListe, renderIct, ictYukle,
   renderAltin, altinYukle, zyYukle,
 });
