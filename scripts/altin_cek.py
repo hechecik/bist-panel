@@ -93,6 +93,22 @@ def usdtry():
         return None
 
 
+def usdtry_seri(period='1y'):
+    """USDTRY günlük kapanış serisi → [(date, float)] eskiden yeniye. Hata → [].
+
+    G11 gram ayrışımı ve kur trendi için; veri yoksa boş liste döner (uydurma yok).
+    """
+    try:
+        import yfinance as yf
+        import warnings
+        warnings.filterwarnings('ignore')
+        h = yf.Ticker('TRY=X').history(period=period).dropna()
+        return [(t.date(), float(x)) for t, x in h['Close'].items()]
+    except Exception as e:
+        log(f'usdtry_seri hata: {str(e)[:60]}')
+        return []
+
+
 def performans(c):
     """1g..1y yüzde değişim (kapanıştan kapanışa)."""
     out = {}
@@ -252,12 +268,8 @@ def senaryo(df, v, perf, sev):
     else:
         gectmis = f"Şu an ons {son:,.0f}$."
 
-    # bias skoru: trend + RSI + konum + performans
-    skor = v['trend_skor']
-    skor += 1 if v['rsi'] >= 55 else (-1 if v['rsi'] < 45 else 0)
-    skor += 1 if v['konum_52h'] >= 60 else (-1 if v['konum_52h'] < 40 else 0)
-    y1a = perf.get('1a', 0)
-    skor += 1 if y1a > 2 else (-1 if y1a < -2 else 0)
+    # G11: bias skoru = teknik_skor (52h konum bileşeni kaldırıldı — momentum 3 kez sayılıyordu)
+    skor = teknik_skor(v, perf) or 0
     bias = 'BOĞA' if skor >= 2 else 'AYI' if skor <= -2 else 'NÖTR'
 
     d1 = sev['direnc'][0] if sev['direnc'] else None
@@ -302,6 +314,361 @@ def senaryo(df, v, perf, sev):
         'gectmis': gectmis, 'durum': durum, 'bias': bias, 'bias_skor': skor,
         'yukari': yukari, 'asagi': asagi,
     }
+
+
+# ──────────────────────────────────────────────────────────────
+# G11 — SKOR AYRIMI: teknik_skor (mekanik) + makro_skor (yönlü)
+# ──────────────────────────────────────────────────────────────
+# ⚠️ Eşikler DOĞRULANMAMIŞ BAŞLANGIÇ DEĞERLERİDİR. Ürüne alınmadan önce log + IC
+# denetiminden geçirilmeli (docs/analiz/altin_yonerge.md §B, C1 notu).
+ESIK_REEL_FAIZ_BP = 10      # reel 10Y 20 günde ≥10 bp düşüş → +1, ≥10 bp artış → −1
+ESIK_DXY_PCT = 1.0          # DXY 20 günde ≥%1 düşüş → +1, ≥%1 artış → −1
+ESIK_BRENT_PCT = 10.0       # Brent 20 günde ≥%10 artış → +1 (jeopolitik prim), ≥%10 düşüş → −1
+ESIK_DOT_BP = 25            # dot plot makası ≥+25 bp = piyasa şahin → +1, ≤−25 bp → −1
+ESIK_BRENT_5G_PCT = 15.0    # jeopolitik şok: Brent 5 günde ≥%15 artış
+ESIK_GRAM_SAPMA_PCT = 0.2   # gram ayrışımı kabul toleransı (kabul kriteri)
+KARNE_MAKS = 400            # data/altin_gecmis.json en fazla kayıt
+ZAMAN_DILIMI = 'Europe/Istanbul'
+
+
+def _isaret_yorum(skor, esik=2):
+    if skor is None:
+        return 'veri yok'
+    if skor >= esik:
+        return 'BOĞA'
+    if skor <= -esik:
+        return 'AYI'
+    return 'NÖTR'
+
+
+def teknik_skor(v, perf):
+    """Saf fonksiyon: mevcut bias skorunun mekanik hali (−5..+5).
+
+    G11: momentum üç kez sayılıyordu (trend + 52h konum + 1 aylık performans).
+    52 haftalık konum bileşeni KALDIRILDI → trend ±2, RSI ±1, 1 aylık ±1 (±4).
+    """
+    if not v or v.get('trend_skor') is None:
+        return None
+    skor = int(v['trend_skor'])
+    rsi = v.get('rsi')
+    if rsi is not None:
+        skor += 1 if rsi >= 55 else (-1 if rsi < 45 else 0)
+    y1a = (perf or {}).get('1a')
+    if y1a is not None:
+        skor += 1 if y1a > 2 else (-1 if y1a < -2 else 0)
+    return skor
+
+
+def makro_skor(makro):
+    """Saf fonksiyon: reel faiz, DXY, dot plot makası, Brent → −4..+4 (her bileşen ±1).
+
+    `makro`: altin.json 'makro' bloğu (ağa çıkmaz). Eksik bileşen atlanır,
+    o yüzden `makro_skor_maks` alanı da döner (skor kaç bileşenle üretildi).
+    """
+    if not makro or makro.get('durum') == 'veri yok':
+        return {'skor': None, 'bilesenler': {}, 'maks': 0, 'durum': 'veri yok'}
+    ser = makro.get('seriler') or {}
+    py = makro.get('piyasa') or {}
+    dp = makro.get('dot_plot') or {}
+    bil = {}
+
+    # Reel faiz (DFII10) — 20 günlük değişim bp
+    reel = ser.get('DFII10') or {}
+    if reel.get('degisim_20g') is not None:
+        bp = reel['degisim_20g'] * 100
+        bil['reel_faiz'] = {'deger': round(bp, 1), 'birim': 'bp',
+                            'puan': 1 if bp <= -ESIK_REEL_FAIZ_BP else (-1 if bp >= ESIK_REEL_FAIZ_BP else 0),
+                            'esik': ESIK_REEL_FAIZ_BP,
+                            'kaynak': 'FRED DFII10 20g'}
+    # DXY — 20 günlük yüzde değişim
+    dxy = py.get('dxy') or {}
+    if dxy.get('degisim_20g_pct') is not None:
+        p = dxy['degisim_20g_pct']
+        bil['dxy'] = {'deger': round(p, 2), 'birim': '%',
+                      'puan': 1 if p <= -ESIK_DXY_PCT else (-1 if p >= ESIK_DXY_PCT else 0),
+                      'esik': ESIK_DXY_PCT, 'kaynak': 'DX-Y.NYB 20g'}
+    # Dot plot makası — piyasa Fed'den şahinse geri çekilme potansiyeli (+1)
+    if dp.get('makas_bp') is not None:
+        m = dp['makas_bp']
+        bil['dot_makas'] = {'deger': m, 'birim': 'bp',
+                            'puan': 1 if m >= ESIK_DOT_BP else (-1 if m <= -ESIK_DOT_BP else 0),
+                            'esik': ESIK_DOT_BP, 'kaynak': 'dot plot makası'}
+    # Brent — 20 günlük yüzde değişim
+    br = py.get('brent') or {}
+    if br.get('degisim_20g_pct') is not None:
+        p = br['degisim_20g_pct']
+        bil['brent'] = {'deger': round(p, 2), 'birim': '%',
+                        'puan': 1 if p >= ESIK_BRENT_PCT else (-1 if p <= -ESIK_BRENT_PCT else 0),
+                        'esik': ESIK_BRENT_PCT, 'kaynak': 'BZ=F 20g'}
+    if not bil:
+        return {'skor': None, 'bilesenler': {}, 'maks': 0, 'durum': 'veri yok'}
+    return {'skor': sum(x['puan'] for x in bil.values()),
+            'bilesenler': bil, 'maks': len(bil), 'durum': 'ok'}
+
+
+def ayrisim_uyarisi(teknik, makro, esik=2):
+    """Saf fonksiyon: iki skor zıt yönde VE ikisi de |esik| üstündeyse '⚠️ ayrışma'.
+
+    Zayıf skorlar (±1) ayrışma sayılmaz — makro tarafın 4 bileşeninden biri
+    dönmüş olması yön iddiası taşımaz. Dönüş: (bool, metin).
+    """
+    if teknik is None or makro is None:
+        return False, 'ayrışma değerlendirilemedi — skor eksik'
+    if abs(makro) < esik:
+        return False, f'Teknik ve makro ayrışmıyor (makro |{makro}| < {esik} — yön zayıf).'
+    z = (teknik > 0 and makro < 0) or (teknik < 0 and makro > 0)
+    if z:
+        yon = ('teknik BOĞA, makro AYI' if teknik > 0 else 'teknik AYI, makro BOĞA')
+        return True, f'⚠️ Teknik ve makro ayrışıyor ({yon}), kırılım riski yüksek.'
+    return False, 'Teknik ve makro aynı yönde veya nötr.'
+
+
+def bant(son, atr, k):
+    """Saf fonksiyon: ons bandı = son ± |k|×(ATR×√5). Dönüş: (alt, ust) — alt < ust.
+
+    `k`'nin işareti yönü belirtir (aşağı senaryo negatif), ama bant daima
+    alt < son < ust olacak şekilde normalize edilir; yön `k` alanında taşınır.
+    """
+    if not son or not atr:
+        return None, None
+    d = abs(k) * atr * (5 ** 0.5)
+    return round(son - d, 1), round(son + d, 1)
+
+
+def senaryolar(makro, son, atr, dot=None):
+    """Saf fonksiyon: 4 makro senaryo — EĞER → gözlenebilir tetik → ons bandı.
+
+    Olasılık SADECE vadeli (ZQ) fiyatlamasından türetiliyorsa hesaplanır;
+    türetilemiyorsa `olasilik` None döner ve UI sütunu gizler. Elle yüzde yok.
+    Çakışan durum (şahin Fed + jeopolitik şok) ayrı satır.
+    """
+    dp = dot or (makro or {}).get('dot_plot') or {}
+    ser = (makro or {}).get('seriler') or {}
+    py = (makro or {}).get('piyasa') or {}
+    makas = dp.get('makas_bp')
+    ima = dp.get('piyasa_ima') or {}
+    vadeli_mi = ima.get('kaynak') == 'vadeli'
+    rev = dp.get('revizyon') or {}
+    rev_bp = rev.get('degisim_bp')
+    br = (py.get('brent') or {})
+    brent_5g = br.get('degisim_5g')
+    brent_5g_pct = (round(brent_5g / (br['son'] - brent_5g) * 100, 2)
+                    if (brent_5g is not None and br.get('son')) else None)
+    reel = (ser.get('DFII10') or {}).get('degisim_20g')
+
+    def olasilik(yon):
+        """Yalnız ZQ'den türetilebilen kaba fiyatlama payı — değilse None."""
+        if not vadeli_mi or not makas:
+            return None
+        return None
+
+    sv = []
+    # 1) Fiyatlanmış
+    kosul = (f"FOMC piyasa beklentisi kadar hareket eder ve dot medyanı piyasa ima "
+             f"patikasına ±{ESIK_DOT_BP} bp yakın (makas {makas if makas is not None else '—'} bp)")
+    alt, ust = bant(son, atr, 1.0)
+    sv.append({'ad': 'Fiyatlanmış', 'kosul': kosul, 'tetik': 'makas ±25 bp içinde',
+               'bant': [alt, ust], 'k': 1.0, 'vurgu': None, 'yon': 'iki yön', 'olasilik': olasilik(0),
+               'kaynak': 'ATR×√5', 'gerceklesti': bool(makas is not None and abs(makas) <= ESIK_DOT_BP)})
+    # 2) Şahin sürpriz
+    kosul = ("Beklentiden büyük artırım VEYA 2027 dot medyanı +25 bp ve üstü yukarı revize"
+             + (f" (son SEP revizyonu {rev_bp:+d} bp)" if isinstance(rev_bp, int) else ''))
+    alt, ust = bant(son, atr, 1.0)
+    sv.append({'ad': 'Şahin sürpriz', 'kosul': kosul, 'tetik': 'dot revizyonu ≥ +25 bp',
+               'bant': [alt, ust], 'k': -1.0, 'vurgu': 'alt', 'yon': 'aşağı', 'olasilik': olasilik(-1),
+               'kaynak': 'ATR×√5', 'gerceklesti': bool(isinstance(rev_bp, int) and rev_bp >= ESIK_DOT_BP)})
+    # 3) Güvercin sürpriz
+    kosul = ("Artırım beklentinin altında VEYA 2027 dot medyanı ≥25 bp aşağı revize"
+             + (f" (son SEP revizyonu {rev_bp:+d} bp)" if isinstance(rev_bp, int) else ''))
+    alt, ust = bant(son, atr, 1.0)
+    sv.append({'ad': 'Güvercin sürpriz', 'kosul': kosul, 'tetik': 'dot revizyonu ≤ −25 bp',
+               'bant': [alt, ust], 'k': 1.0, 'vurgu': 'üst', 'yon': 'yukarı', 'olasilik': olasilik(1),
+               'kaynak': 'ATR×√5', 'gerceklesti': bool(isinstance(rev_bp, int) and rev_bp <= -ESIK_DOT_BP)})
+    # 4) Jeopolitik şok
+    kosul = (f"Brent 5 günde ≥%{ESIK_BRENT_5G_PCT:g} VE reel faiz düşüyor"
+             f" (Brent 5g {brent_5g_pct if brent_5g_pct is not None else '—'}%, "
+             f"reel 10Y 20g {round(reel*100, 1) if reel is not None else '—'} bp)")
+    alt, ust = bant(son, atr, 2.0)
+    sv.append({'ad': 'Jeopolitik şok', 'kosul': kosul, 'tetik': f'Brent 5g ≥ +%{ESIK_BRENT_5G_PCT:g} + reel faiz ↓',
+               'bant': [alt, ust], 'k': 2.0, 'vurgu': 'üst', 'yon': 'yukarı', 'olasilik': None,
+               'kaynak': 'ATR×√5', 'gerceklesti': bool(brent_5g_pct is not None and brent_5g_pct >= ESIK_BRENT_5G_PCT
+                                                       and reel is not None and reel < 0)})
+    # Çakışma satırı: şahin Fed + jeopolitik şok — iki yön zıt olduğu için belirsizlik
+    # bandı (k=1) kullanılır; tek başına iki senaryonun bandı buraya kopyalanmaz.
+    alt, ust = bant(son, atr, 1.0)
+    sv.append({'ad': 'Çakışma · şahin Fed + jeopolitik şok',
+               'kosul': 'Şahin sürpriz ile jeopolitik şok aynı anda — ikisi birleştirilmez, ayrı izlenir',
+               'tetik': 'dot ↑ ≥25 bp VE Brent 5g ≥ +%15', 'bant': [alt, ust], 'k': 1.0,
+               'vurgu': None, 'yon': 'belirsiz',
+               'olasilik': None, 'kaynak': 'ATR×√5', 'cakisma': True,
+               'gerceklesti': bool(isinstance(rev_bp, int) and rev_bp >= ESIK_DOT_BP
+                                   and brent_5g_pct is not None and brent_5g_pct >= ESIK_BRENT_5G_PCT)})
+
+    return {'liste': sv,
+            'olasilik_kaynagi': 'ZQ vadeli' if vadeli_mi else None,
+            'olasilik_goster': False,   # ZQ'den türetilebilen bir pay yok → sütun gizli
+            'not': ('Olasılık sütunu yalnız vadeli fiyatlamadan türetilebiliyorsa gösterilir; '
+                    'şu an ZQ kontratlarından senaryo olasılığı türetilemiyor, sütun gizlendi.'),
+            'atr': atr, 'katsayi': 'ATR×√5'}
+
+
+def kur_trend(seriler, pencere=63):
+    """Saf fonksiyon: son `pencere` ortak günün USDTRY ortalama aylık değer kaybı (%).
+
+    `seriler`: [(date, float)] eskiden yeniye. Dönüş: {aylik_kayip_pct, gun, ...} veya veri yok.
+    """
+    if not seriler or len(seriler) < 22:
+        return {'durum': 'veri yok'}
+    s = seriler[-pencere:]
+    ilk, son = s[0][1], s[-1][1]
+    if not ilk or not son:
+        return {'durum': 'veri yok'}
+    toplam = (son / ilk - 1) * 100
+    ay = toplam / len(s) * 21          # 21 işlem günü ≈ 1 ay
+    return {'aylik_kayip_pct': round(ay, 3), 'toplam_pct': round(toplam, 3),
+            'gun': len(s), 'ilk_tarih': s[0][0].isoformat(), 'son_tarih': s[-1][0].isoformat()}
+
+
+def gram_ayrisim(ons_degisimleri, kur_degisimleri):
+    """Saf fonksiyon: Δgram% ≈ Δons% + ΔUSDTRY% ve katkı payları.
+
+    `ons_degisimleri` / `kur_degisimleri`: {'1g': pct, '1h': pct, '1a': pct} (yüzde).
+    Dönüş: {'1g': {'ons_pct','kur_pct','gram_pct','ons_pay','kur_pay'}, ...}
+    """
+    out = {}
+    for k in ('1g', '1h', '1a'):
+        a = (ons_degisimleri or {}).get(k)
+        b = (kur_degisimleri or {}).get(k)
+        if a is None and b is None:
+            out[k] = {'durum': 'veri yok'}
+            continue
+        a = a or 0.0
+        b = b or 0.0
+        g = a + b
+        pay = (round(a / g * 100, 1) if g else None)
+        out[k] = {'ons_pct': round(a, 3), 'kur_pct': round(b, 3), 'gram_pct': round(g, 3),
+                  'ons_pay': pay if pay is not None else None,
+                  'kur_pay': round(100 - pay, 1) if pay is not None else None,
+                  'not': 'bir bileşen eksik — toplam tek bacaktan' if (k not in (ons_degisimleri or {}) or
+                                                                      k not in (kur_degisimleri or {})) else None}
+    return out
+
+
+def gram_gercek_kontrol(ons_seri_list, kur_seri_list, gun=21):
+    """Saf fonksiyon: yaklaşık formülün gerçek gram değişimine sapması (kabul kriteri)."""
+    if not ons_seri_list or not kur_seri_list or len(ons_seri_list) <= gun or len(kur_seri_list) <= gun:
+        return {'durum': 'veri yok'}
+    o0, o1 = ons_seri_list[-gun - 1][1], ons_seri_list[-1][1]
+    k0, k1 = kur_seri_list[-gun - 1][1], kur_seri_list[-1][1]
+    if not o0 or not k0:
+        return {'durum': 'veri yok'}
+    gercek = ((o1 * k1) / (o0 * k0) - 1) * 100
+    yaklasik = ((o1 / o0 - 1) + (k1 / k0 - 1)) * 100
+    return {'gercek_pct': round(gercek, 3), 'yaklasik_pct': round(yaklasik, 3),
+            'sapma_pct': round(abs(gercek - yaklasik), 4),
+            'kabul': abs(gercek - yaklasik) <= ESIK_GRAM_SAPMA_PCT,
+            'tolerans_pct': ESIK_GRAM_SAPMA_PCT}
+
+
+# ──────────────────────────────────────────────────────────────
+# G11 — ALTIN KARNESİ (data/altin_gecmis.json)
+# ──────────────────────────────────────────────────────────────
+def karne_ekle(kayitlar, yeni, maks=KARNE_MAKS):
+    """Saf fonksiyon: aynı tarihe bir kez yazar, en fazla `maks` kayıt tutar."""
+    liste = [k for k in (kayitlar or []) if k.get('tarih') != yeni.get('tarih')]
+    liste.append(yeni)
+    liste.sort(key=lambda k: k.get('tarih') or '')
+    return liste[-maks:]
+
+
+def karne_isabet(kayitlar, ons_seri_list, ufuklar=(5, 20)):
+    """Saf fonksiyon: bias'ın ufuk gün sonra doğru çıkıp çıkma oranı.
+
+    Ölçüt: BOĞA → fiyat ufuk sonunda yükselmiş; AYI → düşmüş; NÖTR sayılmaz.
+    `ons_seri_list`: [(date, float)] eskiden yeniye.
+    """
+    if not kayitlar or not ons_seri_list:
+        return {'durum': 'veri yok'}
+    fiyat = {t.isoformat() if hasattr(t, 'isoformat') else str(t): v for t, v in ons_seri_list}
+    gunler = sorted(fiyat)
+    out = {}
+    for ufuk in ufuklar:
+        dogru = yanlis = 0
+        for k in kayitlar:
+            bias = k.get('bias')
+            if bias not in ('BOĞA', 'AYI'):
+                continue
+            t0 = k.get('tarih')
+            if not t0 or t0 not in fiyat or k.get('ons') in (None, 0):
+                continue
+            sonra = [g for g in gunler if g > t0]
+            if len(sonra) < ufuk:
+                continue
+            f1 = fiyat[sonra[ufuk - 1]]
+            deg = f1 - fiyat[t0]
+            if (bias == 'BOĞA' and deg > 0) or (bias == 'AYI' and deg < 0):
+                dogru += 1
+            else:
+                yanlis += 1
+        n = dogru + yanlis
+        out[f'{ufuk}g'] = {'isabet_pct': round(dogru / n * 100, 1) if n else None,
+                           'ornek': n, 'dogru': dogru,
+                           'durum': 'ok' if n else 'veri yok'}
+    return out
+
+
+def karne_blogu(kayitlar, ons_seri_list, bugun=None):
+    """Saf fonksiyon: UI için karne özeti (isabet + son kayıtlar)."""
+    kayitlar = kayitlar or []
+    if not kayitlar:
+        return {'durum': 'veri yok',
+                'not': 'Karne boş — ilk kayıt bu çalıştırmada yazılır. Geçmiş uydurulmaz.'}
+    return {'durum': 'ok', 'kayit_sayisi': len(kayitlar),
+            'ilk_tarih': kayitlar[0].get('tarih'), 'son_tarih': kayitlar[-1].get('tarih'),
+            'isabet': karne_isabet(kayitlar, ons_seri_list),
+            'son_kayit': kayitlar[-1]}
+
+
+GECMIS_JSON = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'data', 'altin_gecmis.json'))
+
+
+def gecmis_oku(yol=None):
+    """data/altin_gecmis.json → {'kayitlar': [...]}. Yoksa/bozuksa boş (uydurma yok)."""
+    yol = yol or GECMIS_JSON
+    try:
+        with open(yol, encoding='utf-8') as f:
+            j = json.load(f)
+        k = j.get('kayitlar') if isinstance(j, dict) else j
+        return {'kayitlar': k if isinstance(k, list) else []}
+    except Exception:
+        return {'kayitlar': []}
+
+
+def gecmis_yaz(kayitlar, yol=None):
+    """Karneyi diske yazar (en fazla KARNE_MAKS kayıt)."""
+    yol = yol or GECMIS_JSON
+    os.makedirs(os.path.dirname(yol), exist_ok=True)
+    with open(yol, 'w', encoding='utf-8') as f:
+        json.dump({'kayitlar': kayitlar[-KARNE_MAKS:]}, f, ensure_ascii=False, indent=1)
+    return yol
+
+
+def tr_saat(simdi=None):
+    """UTC → Europe/Istanbul (zoneinfo). Dönüş: timezone-aware datetime."""
+    simdi = simdi or dt.datetime.now(dt.timezone.utc)
+    try:
+        from zoneinfo import ZoneInfo
+        return simdi.astimezone(ZoneInfo(ZAMAN_DILIMI))
+    except Exception:
+        return simdi.astimezone(dt.timezone(dt.timedelta(hours=3)))
+
+
+def karne_zamani_mi(simdi=None, saat=23, tolerans_dk=45):
+    """Saf fonksiyon: TR saatiyle 23:00 ± tolerans_dk penceresi içinde miyiz."""
+    t = tr_saat(simdi)
+    dk = t.hour * 60 + t.minute
+    hedef = saat * 60
+    return abs(dk - hedef) <= tolerans_dk
 
 
 # ──────────────────────────────────────────────────────────────
@@ -553,6 +920,9 @@ def seri_ozet(degerler, altin_seri=None, pencere=60):
         out['degisim_5g'] = round(son - degerler[-6][1], 4)
     if len(degerler) > 20:
         out['degisim_20g'] = round(son - degerler[-21][1], 4)
+    # G11: makro skor için YÜZDE değişim (baz 0 ise None — uydurma yok)
+    if len(degerler) > 20 and degerler[-21][1]:
+        out['degisim_20g_pct'] = round((son / degerler[-21][1] - 1) * 100, 3)
     if altin_seri:
         k = rolling_korelasyon(degerler, altin_seri, pencere)
         if k is not None:
@@ -1117,6 +1487,63 @@ def main():
         'haberler': haberler(),
         'makro': makro,
     }
+
+    # G11: teknik / makro skor ayrımı + ayrışma uyarısı (makro bloğundan sonra)
+    tsk = teknik_skor(v, perf)
+    try:
+        msk = makro_skor(makro)
+    except Exception as e:
+        log(f'makro skor HATA: {str(e)[:80]}')
+        msk = {'skor': None, 'bilesenler': {}, 'maks': 0, 'durum': 'veri yok'}
+    ayr_var, ayr_metin = ayrisim_uyarisi(tsk, msk.get('skor'))
+
+    # G11: 4 senaryo (EĞER → tetik → ons bandı)
+    try:
+        scn = senaryolar(makro, v['son'], v.get('atr'))
+    except Exception as e:
+        log(f'senaryo motoru HATA: {str(e)[:80]}')
+        scn = {'liste': [], 'olasilik_goster': False, 'durum': 'veri yok'}
+
+    # G11: gram ayrışımı (1g/1h/1a) ≈ Δons + ΔUSDTRY · kur varsayımı 63 gün ortalaması
+    try:
+        kur_seri = usdtry_seri()
+        kt = kur_trend(kur_seri)
+        fx_deg = {}
+        for k, gun in (('1g', 1), ('1h', 21), ('1a', 252)):
+            if len(kur_seri) > gun and kur_seri[-gun - 1][1]:
+                fx_deg[k] = (kur_seri[-1][1] / kur_seri[-gun - 1][1] - 1) * 100
+        ga = gram_ayrisim(perf, fx_deg)
+        gk = gram_gercek_kontrol([(t.date(), float(x)) for t, x in c.items()], kur_seri)
+    except Exception as e:
+        log(f'gram ayrışım HATA: {str(e)[:80]}')
+        kt, ga, gk = {'durum': 'veri yok'}, {}, {'durum': 'veri yok'}
+
+    # G11: karne — TR 23:00 penceresinde günde tek kayıt (geçmiş uydurulmaz)
+    try:
+        gecmis = gecmis_oku()
+        kayitlar = gecmis['kayitlar']
+        if karne_zamani_mi():
+            yeni = {'tarih': tr_saat().date().isoformat(),
+                    'ons': ons_manşet, 'gram': gram, 'usdtry': fx,
+                    'bias': sen['bias'], 'teknik_skor': tsk, 'makro_skor': msk.get('skor')}
+            kayitlar = karne_ekle(kayitlar, yeni)
+            gecmis_yaz(kayitlar)
+            log(f"   karne yazıldı · {len(kayitlar)} kayıt")
+        karne = karne_blogu(kayitlar, [(t.date(), float(x)) for t, x in c.items()])
+    except Exception as e:
+        log(f'karne HATA: {str(e)[:80]}')
+        karne = {'durum': 'veri yok'}
+
+    veri['skorlar'] = {'teknik': tsk, 'teknik_yorum': _isaret_yorum(tsk),
+                       'makro': msk.get('skor'), 'makro_maks': msk.get('maks'),
+                       'makro_yorum': _isaret_yorum(msk.get('skor')), 'makro_bilesenler': msk.get('bilesenler'),
+                       'ayrisim': ayr_var, 'ayrisim_metin': ayr_metin,
+                       'esikler_dogrulanmamis': True}
+    veri['senaryolar'] = scn
+    veri['gram_ayrisim'] = {'donemler': ga, 'kur_trend': kt, 'formul': 'Δgram% ≈ Δons% + ΔUSDTRY%',
+                            'kur_varsayimi': '63 gün ortalaması',
+                            'gercek_kontrol': gk}
+    veri['karne'] = karne
 
     os.makedirs(os.path.dirname(CIKTI), exist_ok=True)
     with open(CIKTI, 'w', encoding='utf-8') as f:
