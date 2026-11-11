@@ -132,6 +132,107 @@ def cek_borsapy(bist_list: list) -> dict:
     return veri
 
 
+BOLUNME_ESIK = -0.30   # bundan düşük günlük kapanış değişimi fiziksel olarak imkânsız (BIST marjı ±%10)
+
+
+def _guvenli(v):
+    """None/NaN güvenli float dönüşümü — geçersizse None."""
+    try:
+        f = float(v)
+    except (TypeError, ValueError):
+        return None
+    return f if f == f else None
+
+
+def bolunme_tespit(rows: list, esik: float = BOLUNME_ESIK) -> list:
+    """Düzeltilmemiş bedelsiz bölünme (split) sıçramalarını tespit eder — SAF fonksiyon.
+
+    Mantık: BIST'te günlük fiyat marjı ±%10. Bir günün kapanışı önceki günün
+    kapanışına göre %30'dan fazla düşmüşse bu gerçek bir fiyat hareketi olamaz;
+    seri bölünmeye göre düzeltilmemiştir.
+
+    Kural (G02):
+    - Kapanış değişimi `esik`in (-0.30) altında olmalı → −%10..−%30 arası gerçek düşüş sayılır, dokunulmaz.
+    - Oran = bugünün AÇILIŞI / önceki kapanış (bölünme katsayısı, ör. 1:20 → 0.05).
+      Açılış yoksa kapanış oranı kullanılır (yfinance'te Open geç boş kalabiliyor).
+    - Oran (0, 0.9) aralığında olmalı; 1'e çok yakınsa bölünme değil, serbest
+      düşüş/kötü veridir → atlanır. (−%30..−%90 aralığındaki gerçek düşüşler
+      zaten eşik kuralıyla elenir; bu kontrol yalnızca güvenlik ağı.)
+
+    Returns: [{'tarih': ..., 'oran': ..., 'onceki_kapanis': ..., 'acilis': ...}]
+    """
+    tespitler = []
+    for i in range(1, len(rows)):
+        onceki_k = _guvenli(rows[i - 1].get('kapanis'))
+        bugun_k = _guvenli(rows[i].get('kapanis'))
+        bugun_a = _guvenli(rows[i].get('acilis'))
+        if not onceki_k or onceki_k <= 0 or not bugun_k or bugun_k <= 0:
+            continue
+        degisim = bugun_k / onceki_k - 1.0
+        if degisim >= esik:          # −%30'dan küçük düşüş (yani daha az) → gerçek hareket, dokunma
+            continue
+        taban = bugun_a if (bugun_a and bugun_a > 0) else bugun_k
+        oran = taban / onceki_k
+        if not (0 < oran < 0.9):       # oran ~1 ise bölünme değil, normal düşüş/kötü veri
+            continue
+        tespitler.append({
+            'tarih': rows[i].get('tarih'),
+            'oran': round(oran, 6),
+            'onceki_kapanis': round(onceki_k, 4),
+            'acilis': round(taban, 4),
+            'kapanis': round(bugun_k, 4),
+        })
+    return tespitler
+
+
+def bolunme_duzelt(rows: list, tespitler: list) -> list:
+    """Tespit edilen bölünmeler için ÖNCEKİ tüm barları bölünme SONRASI ölçeğe çeker — SAF fonksiyon.
+
+    Bölünme günü ve sonrası zaten yeni (bölünmüş) birimdedir → dokunulmaz.
+    Önceki barlar eski birimdedir → `× oran` (1:20 için ÷20) ile küçültülür,
+    hacim ise `÷ oran` ile büyütülür. Böylece seri tek ölçekli ve sürekli olur.
+    Girdi listesi değiştirilmez; yeni liste döner.
+    """
+    if not tespitler:
+        return rows
+    yeni = [dict(r) for r in rows]
+    for t in tespitler:
+        oran = t['oran']
+        if not oran or not (0 < oran < 1):
+            continue
+        for r in yeni:
+            if r.get('tarih', '') >= t['tarih']:   # ISO tarih → string karşılaştırma geçerli
+                break
+            for alan in ('acilis', 'kapanis', 'min', 'max'):
+                v = _guvenli(r.get(alan))
+                if v is not None:
+                    r[alan] = round(v * oran, 4)
+            h = _guvenli(r.get('hacim'))
+            if h is not None:
+                r['hacim'] = int(round(h / oran))
+    return yeni
+
+
+def bolunme_uygula(hisse_veri: dict) -> dict:
+    """Tüm hisselere bölünme tespiti + düzeltmesi uygular.
+
+    Returns: {sembol: [{'tarih', 'oran'}, ...]}  (saglik.bolunme_duzeltme olarak yazılır)
+    """
+    duzeltmeler = {}
+    for sym, rows in (hisse_veri or {}).items():
+        try:
+            tespitler = bolunme_tespit(rows)
+            if not tespitler:
+                continue
+            hisse_veri[sym] = bolunme_duzelt(rows, tespitler)
+            duzeltmeler[sym] = [{'tarih': t['tarih'], 'oran': t['oran']} for t in tespitler]
+            log(f"bölünme düzeltmesi: {sym} " +
+                ", ".join(f"{t['tarih']} oran={t['oran']:.4f}" for t in tespitler))
+        except Exception as e:
+            log(f"bölünme düzeltme hata {sym}: {str(e)[:60]}")
+    return duzeltmeler
+
+
 def veri_saglik_kontrolu(hisse_veri: dict, endeks: dict | None, kaynak: str) -> dict:
     """Veri sağlık kontrolü — çapraz doğrulama (anti-hallüsinasyon).
 
@@ -180,7 +281,7 @@ def cek_yfinance(bist_list: list) -> dict:
     veri = {}
     try:
         df = yf.download(tickers, period="1y", interval="1d",
-                         group_by="ticker", auto_adjust=False, progress=False,
+                         group_by="ticker", auto_adjust=True, progress=False,
                          threads=True)
         for s, t in zip(bist_list, tickers):
             try:
@@ -1128,11 +1229,25 @@ def main():
         log("KRİTİK: TÜM KAYNAKLAR BAŞARISIZ")
         hisse_veri = {}
 
+    # 1b. Bölünme (split) düzeltmesi — veri çekildikten HEMEN sonra, hiçbir analizden önce.
+    #     Düzeltilmemiş bölünme MA/RSI/ATR, backtest ve ICT sonuçlarını bozar (ör. RALYH −%98).
+    bolunme_duzeltmeleri = {}
+    if hisse_veri:
+        try:
+            bolunme_duzeltmeleri = bolunme_uygula(hisse_veri)
+            log(f"Bölünme düzeltmesi: {len(bolunme_duzeltmeleri)} hisse"
+                + (f" — {', '.join(sorted(bolunme_duzeltmeleri))}" if bolunme_duzeltmeleri else ""))
+        except Exception as e:
+            log(f"bölünme düzeltmesi hata: {str(e)[:60]}")
+
     # 2. Endeks
     endeks = endeks_verisi()
 
     # 2b. Veri sağlık kontrolü (çapraz doğrulama)
     saglik = veri_saglik_kontrolu(hisse_veri or {}, endeks, kaynak)
+    saglik['bolunme_duzeltme'] = [{'sembol': s, **t}
+                                  for s in sorted(bolunme_duzeltmeleri)
+                                  for t in bolunme_duzeltmeleri[s]]
     log(f"SAĞLIK: {saglik['durum']} | kaynak={kaynak} | hisse={saglik['hisse']} | "
         f"yeterli_bar={saglik['yeterli_bar']} | sorunlar={saglik['sorunlar']}")
 

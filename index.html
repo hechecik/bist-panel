@@ -96,6 +96,7 @@ tbody tr { cursor:pointer; }
 tbody tr:hover { background:rgba(124,92,255,.06); }
 .sym { font-weight:700; position:sticky; left:0; background:var(--bg2); z-index:1; }
 th.sym { left:0; z-index:2; }
+td.sym .bol { display:flex; flex-direction:column; gap:1px; margin-top:2px; font-size:9.5px; font-weight:400; color:var(--warn); line-height:1.25; white-space:nowrap; }
 .badge { display:inline-block; padding:1px 7px; border-radius:20px; font-size:9.5px; font-weight:700; }
 .b-AL { background:rgba(46,204,113,.15); color:var(--up); }
 .b-DİKKAT_AL { background:rgba(240,185,11,.15); color:var(--warn); }
@@ -373,8 +374,13 @@ const KOLONLAR = ['Hisse','Grafik','Fiyat','1A','Skor','Sinyal','Trend','Para','
 
 function hisseSatir(r, durum) {
   const onceki = durum.detay.get(r.sembol);
+  const bol = (durum.bolunme || []).filter(b => b.sembol === r.sembol);
+  const bolNot = bol.length
+    ? `<div class="bol"><span>⚙️ bölünme düzeltildi</span>` +
+      bol.map(b => `<span>${b.tarih} · oran ${b.oran}</span>`).join('') + `</div>`
+    : '';
   let html = `<tr data-sym="${r.sembol}">` +
-    `<td class="sym">${r.sembol}</td>` +
+    `<td class="sym">${r.sembol}${bolNot}</td>` +
     `<td>${sparkSVG(r)}</td>` +
     `<td>${fmt(r.fiyat)}</td>` +
     `<td class="${ok(r.ay_oncesi)}">${r.ay_oncesi == null ? '—' : yuzde(r.ay_oncesi)}</td>` +
@@ -407,7 +413,7 @@ function hisseSatir(r, durum) {
   return html;
 }
 
-let durum = { detay: new Map(), hesapTarihi: '' };
+let durum = { detay: new Map(), hesapTarihi: '', bolunme: [] };
 
 function tabloBolum(baslik, ikon, liste) {
   let html = `<h2>${ikon} ${baslik} <span class="cnt">${liste.length}</span></h2>`;
@@ -421,6 +427,7 @@ async function yukle() {
   try {
     const d = await (await fetch('data/piyasa.json?v=' + Date.now())).json();
     durum.hesapTarihi = (d.sinyaller && d.sinyaller.hesap_tarihi) || '';
+    durum.bolunme = (d.saglik && d.saglik.bolunme_duzeltme) || [];
     renderPiyasa(d); renderGrafik(d); renderSenaryo(d); renderHaber(d); renderFon(d);
     getiriYukle(); takvimYukle();
     alarmKontrol(); // 3+6 — fiyat eşik alarmları
