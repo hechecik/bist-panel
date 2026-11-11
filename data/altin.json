@@ -1,102 +1,166 @@
 {
- "uretildi": "2026-11-11T12:44:07+00:00",
- "kaynak": "GC=F (COMEX ons) · yfinance + gold-api.com spot + doviz.com takvim",
+ "uretildi": "2026-11-11T14:18:55+00:00",
+ "kaynak": "gold-api.com spot (manşet) · GC=F COMEX vadeli (tarihsel seri) · doviz.com takvim",
  "fiyat": {
-  "ons": 4051.6,
-  "spot": 4043.7,
-  "spot_guncelleme": "2026-11-11T12:44:00Z",
-  "gram_tl": 6532.9,
-  "usdtry": 50.152,
+  "ons": 4031.7,
+  "kaynak_tipi": "spot",
+  "vadeli_ons": 4037.9,
+  "spot": 4031.7,
+  "spot_guncelleme": "2026-11-11T14:18:30Z",
+  "gram_tl": 6510.55,
+  "usdtry": 50.2271,
   "performans": {
-   "1g": 0.53,
-   "1h": -0.53,
-   "2h": 0.0,
-   "1a": -3.01,
-   "3a": -8.34,
-   "6a": -13.92,
-   "1y": -1.71
+   "1g": 0.19,
+   "1h": -0.86,
+   "2h": -0.34,
+   "1a": -3.34,
+   "3a": -8.65,
+   "6a": -14.21,
+   "1y": -2.04
   },
   "son_tarih": "2026-11-11"
  },
  "vital": {
-  "son": 4051.6,
-  "ma20": 4066.74,
-  "ma50": 4206.19,
-  "ma200": 4486.75,
+  "son": 4037.9,
+  "ma20": 4066.05,
+  "ma50": 4205.92,
+  "ma200": 4486.68,
   "trend": "ZAYIF / AŞAĞI",
   "trend_skor": -2,
-  "rsi": 46.0,
-  "rsi_yorum": "46 — nötr",
+  "rsi": 44.9,
+  "rsi_yorum": "45 — negatif momentum",
   "atr": 87.36,
   "atr_yuzde": 2.16,
   "h52": 5586.2,
   "l52": 3879.3,
-  "konum_52h": 10.1,
+  "konum_52h": 9.3,
   "konum_yorum": "dip bölgesi"
  },
  "seviyeler": {
   "destek": [
    {
-    "seviye": 4050,
-    "mesafe_pct": -0.04,
-    "tip": "yuvarlak"
-   },
-   {
     "seviye": 4000,
-    "mesafe_pct": -1.27,
+    "mesafe_pct": -0.94,
     "tip": "yuvarlak"
    },
    {
     "seviye": 3963.0,
-    "mesafe_pct": -2.19,
+    "mesafe_pct": -1.85,
     "tip": "salınım dibi"
    },
    {
-    "seviye": 3950,
-    "mesafe_pct": -2.51,
-    "tip": "yuvarlak"
+    "seviye": 3901.3,
+    "mesafe_pct": -3.38,
+    "tip": "salınım dibi"
+   },
+   {
+    "seviye": 3879.3,
+    "mesafe_pct": -3.93,
+    "tip": "52h dip"
    }
   ],
   "direnc": [
    {
-    "seviye": 4066.7,
-    "mesafe_pct": 0.37,
+    "seviye": 4066.1,
+    "mesafe_pct": 0.7,
     "tip": "MA20"
    },
    {
     "seviye": 4100,
-    "mesafe_pct": 1.19,
-    "tip": "yuvarlak"
-   },
-   {
-    "seviye": 4150,
-    "mesafe_pct": 2.43,
+    "mesafe_pct": 1.54,
     "tip": "yuvarlak"
    },
    {
     "seviye": 4171.4,
-    "mesafe_pct": 2.96,
+    "mesafe_pct": 3.31,
     "tip": "salınım tepesi"
+   },
+   {
+    "seviye": 4200,
+    "mesafe_pct": 4.01,
+    "tip": "yuvarlak"
    }
   ]
  },
  "senaryo": {
-  "gectmis": "Son 1 yılda ons 3,879$ (10.2026) ile 5,586$ (01.2026) arasında salındı; şu an 4,052$ — yıllık zirvenin %27 altında, yıllık aralığın %10'inde.",
-  "durum": "Trend ZAYIF / AŞAĞI, RSI 46, yıllık aralığın %10'inde (dip bölgesi). Günlük oynaklık (ATR) 87$ ≈ %2.2.",
+  "gectmis": "Son 1 yılda ons 3,879$ (10.2026) ile 5,586$ (01.2026) arasında salındı; şu an 4,038$ — yıllık zirvenin %28 altında, yıllık aralığın %9'inde.",
+  "durum": "Trend ZAYIF / AŞAĞI, RSI 45, yıllık aralığın %9'inde (dip bölgesi). Günlük oynaklık (ATR) 87$ ≈ %2.2.",
   "bias": "AYI",
-  "bias_skor": -4,
+  "bias_skor": -5,
   "yukari": {
-   "tetik": 4066.7,
-   "hedef": 4100,
-   "metin": "Fiyat 4,067$ direncini (+0.4%) hacimle kırıp üstünde kapanırsa ilk hedef 4,100$."
+   "tetik": 4100,
+   "hedef": 4200,
+   "gecersiz": 4056.3,
+   "metin": "Fiyat 4,100$ direncini (+1.5%) kırıp üstünde kapanırsa ilk hedef 4,200$."
   },
   "asagi": {
-   "tetik": 4050,
-   "hedef": 4000,
-   "metin": "4,050$ desteği (-0.0%) kaybedilirse sıradaki destek 4,000$."
+   "tetik": 3963.0,
+   "hedef": null,
+   "gecersiz": 4006.7,
+   "metin": "Destek kırılımı henüz yok."
   }
  },
  "kritik_gunler": [
+  {
+   "tarih": "13.11",
+   "gun": "Cum",
+   "saat": "16:30",
+   "ulke": "ABD",
+   "onem": "high",
+   "olay": "ÜFE (Aylık) (-)",
+   "neden": "ABD üretici enflasyonu — TÜFE öncü göstergesi, Fed beklentisi",
+   "iso": "2026-11-13"
+  },
+  {
+   "tarih": "16.11",
+   "gun": "Pzt",
+   "saat": "05:00",
+   "ulke": "Çin",
+   "onem": "high",
+   "olay": "Perakende Satışlar (Yıllık) (-)",
+   "neden": "Çin verisi — küresel risk iştahı / dolar üzerinden altını etkiler",
+   "iso": "2026-11-16"
+  },
+  {
+   "tarih": "18.11",
+   "gun": "Çar",
+   "saat": "22:00",
+   "ulke": "ABD",
+   "onem": "high",
+   "olay": "FOMC Toplantı Tutanakları (-)",
+   "neden": "Fed faiz kararı/kararları — altının 1. sürücüsü (düşük faiz = altına destek)",
+   "iso": "2026-11-18"
+  },
+  {
+   "tarih": "25.11",
+   "gun": "Çar",
+   "saat": "16:30",
+   "ulke": "ABD",
+   "onem": "high",
+   "olay": "Çekirdek PCE Deflatör (Aylık) (-)",
+   "neden": "Fed'in tercih ettiği enflasyon ölçüsü — faiz beklentisi",
+   "iso": "2026-11-25"
+  },
+  {
+   "tarih": "25.11",
+   "gun": "Çar",
+   "saat": "16:30",
+   "ulke": "ABD",
+   "onem": "high",
+   "olay": "GSYH Büyüme Oranı (Çeyreklik) (2. Tahmin) (-)",
+   "neden": "Büyüme verisi — risk iştahı ve dolar",
+   "iso": "2026-11-25"
+  },
+  {
+   "tarih": "09.12",
+   "gun": "Çar",
+   "saat": "21:00",
+   "ulke": "ABD",
+   "onem": "high",
+   "olay": "FOMC faiz kararı",
+   "neden": "Fed faiz kararı — altının 1. sürücüsü (düşük faiz = altına destek)",
+   "iso": "2026-12-09"
+  },
   {
    "tarih": "12.11",
    "gun": "Per",
@@ -126,26 +190,6 @@
    "olay": "Çekirdek ÜFE (Aylık) (-)",
    "neden": "ABD üretici enflasyonu — TÜFE öncü göstergesi, Fed beklentisi",
    "iso": "2026-11-13"
-  },
-  {
-   "tarih": "13.11",
-   "gun": "Cum",
-   "saat": "16:30",
-   "ulke": "ABD",
-   "onem": "high",
-   "olay": "ÜFE (Aylık) (-)",
-   "neden": "ABD üretici enflasyonu — TÜFE öncü göstergesi, Fed beklentisi",
-   "iso": "2026-11-13"
-  },
-  {
-   "tarih": "16.11",
-   "gun": "Pzt",
-   "saat": "05:00",
-   "ulke": "Çin",
-   "onem": "high",
-   "olay": "Perakende Satışlar (Yıllık) (-)",
-   "neden": "Çin verisi — küresel risk iştahı / dolar üzerinden altını etkiler",
-   "iso": "2026-11-16"
   },
   {
    "tarih": "17.11",
@@ -178,16 +222,6 @@
    "iso": "2026-11-17"
   },
   {
-   "tarih": "18.11",
-   "gun": "Çar",
-   "saat": "22:00",
-   "ulke": "ABD",
-   "onem": "high",
-   "olay": "FOMC Toplantı Tutanakları (-)",
-   "neden": "Fed faiz kararı/kararları — altının 1. sürücüsü (düşük faiz = altına destek)",
-   "iso": "2026-11-18"
-  },
-  {
    "tarih": "19.11",
    "gun": "Per",
    "saat": "16:30",
@@ -206,36 +240,6 @@
    "olay": "Kredi Ana Faiz Oranı (5 Yıl) (-)",
    "neden": "Çin enflasyon/faiz verisi — küresel likidite ve dolar endeksi üzerinden altını etkiler",
    "iso": "2026-11-20"
-  },
-  {
-   "tarih": "24.11",
-   "gun": "Sal",
-   "saat": "15:15",
-   "ulke": "ABD",
-   "onem": "mid",
-   "olay": "ADP Haftalık Özel Sektör İstihdam Değişimi (-)",
-   "neden": "ABD istihdam — dolar ve Fed beklentisi üzerinden altın",
-   "iso": "2026-11-24"
-  },
-  {
-   "tarih": "25.11",
-   "gun": "Çar",
-   "saat": "16:30",
-   "ulke": "ABD",
-   "onem": "high",
-   "olay": "Çekirdek PCE Deflatör (Aylık) (-)",
-   "neden": "Fed'in tercih ettiği enflasyon ölçüsü — faiz beklentisi",
-   "iso": "2026-11-25"
-  },
-  {
-   "tarih": "25.11",
-   "gun": "Çar",
-   "saat": "16:30",
-   "ulke": "ABD",
-   "onem": "high",
-   "olay": "GSYH Büyüme Oranı (Çeyreklik) (2. Tahmin) (-)",
-   "neden": "Büyüme verisi — risk iştahı ve dolar",
-   "iso": "2026-11-25"
   }
  ],
  "haberler": [
@@ -288,10 +292,10 @@
    "yayin_tarihi": "Wed, 11 Nov 2026 00:29:46 GMT"
   },
   {
-   "baslik": "Gold gains after steep drop, but hawkish central bank signals weigh - Reuters",
+   "baslik": "Gold falls nearly 3% as CPI tops forecasts, lifting dollar and yields - Reuters",
    "kaynak": "Google News · gold",
-   "link": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxPUkZNV2RySHI5TXJ4YTBhNlNpTllnVXUyRk9CNzBrLXBLWFc3OTlOM0Y1MUVDcGRhS1pQU1oxR3hveVE5VWRfVGF1aTR4Z0lhcWJjbGV4Ym93cDdqb09JQlpFdC10cW9FUkVBX0NPVFFyOTdxSV81Z0RWUEx4UkdITjNwUnRHUmdDbmg5a0F5QmZXRzdjWGZzeXJsdUNUbDRKM3NvU0VGVGQ?oc=5",
-   "yayin_tarihi": "Wed, 11 Nov 2026 03:39:00 GMT"
+   "link": "https://news.google.com/rss/articles/CBMimwFBVV95cUxNUUt5d0NsOEFXZzVGWU5qOFFwbGtuT0pyM3RMcTR3ZDRXYzFqV1NkM1VadUV0VzdNUFpZREVYLU1mdWFpSDE5V0w3Qlo5X1luTXVXRkZKNHQ1bXY1X0VCNHRienZVbnhQdE93UWFYRk41T0Fhd2tiQ2dpZzF2WEZmM0hVTFpjMVFzR2JhNlpWN0R5ZkFCY0JkRUVuYw?oc=5",
+   "yayin_tarihi": "Tue, 10 Nov 2026 03:31:00 GMT"
   },
   {
    "baslik": "Goldman Sachs Cuts Gold Price Forecasts as Hawkish Federal Reserve Weighs on Demand - Yahoo Finance",
@@ -306,10 +310,10 @@
    "yayin_tarihi": "Fri, 06 Nov 2026 13:18:40 GMT"
   },
   {
-   "baslik": "Gold Price Forecast: XAU/USD defends $4,000, but for how long? - FXStreet",
+   "baslik": "Gold Price Forecast: XAU/USD rallies remain limited with bulls capped below $4,050 - FXStreet",
    "kaynak": "Google News · gold",
-   "link": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxOR21CU0pxSlpuRktsdXV0a3daSndwV2lDel9GaFdQVGFWaGo3MjVtbndBVjc4SEtvVVBWWG1rdkdsVzhTYWhmTUhzekpIVC1jMHN5VjFKZkVaMnFaZENGa2hTckQ0UkhjbU41Wi0wZlRFZExIS1l4QzZETUZ6cTVmS0pLZDdac21KREh5M2E0Nk1qNm1RZDlRU0EzSktQNTNfaDZHZTVGQkE?oc=5",
-   "yayin_tarihi": "Wed, 11 Nov 2026 04:26:19 GMT"
+   "link": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxPUE94U3h1aGo0MlQ5bEpwRnNsM2EyNXUya1dPbjAwQzcyUnpZNlgyR2kweGZQcXdqMWZEOUFMOTAtWFIyX2xUeVQ4dUZXeEpvWVhIUktJN1k5bGxrdkpWczhrOUFNQkd3N1dsR0dlNnpOZ0t3V28zVncwNFV1ejBpY3pCcmktMWpBTmlUUTJIVGdES2x3Q2tiZnVUV2xpaEc1eGJCM3BKWE5OeThTQW9HMUlwd0E4dFBUcVZXcElINUQ?oc=5",
+   "yayin_tarihi": "Wed, 11 Nov 2026 11:12:08 GMT"
   }
  ]
 }

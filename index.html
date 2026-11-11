@@ -113,6 +113,7 @@ tr.detail td { background:var(--bg3); padding:11px; white-space:normal; }
 .det-ic li::before { content:'▸'; position:absolute; left:0; color:var(--accent); }
 .fresh { display:inline-block; padding:1px 8px; border-radius:20px; font-size:9.5px; font-weight:700; background:rgba(240,185,11,.12); color:var(--warn); margin-left:8px; }
 .fresh.ok { background:rgba(46,204,113,.12); color:var(--up); }
+.fresh.bayat { background:rgba(231,76,60,.14); color:var(--down); }
 /* ── SENARYO ── */
 .scn { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
 .sc { background:var(--bg2); border:1px solid var(--bd); border-radius:14px; padding:12px 14px; }
@@ -1406,8 +1407,16 @@ function renderAltin(d) {
   let h = '';
 
   h += '<h2>🥇 Ons Altın <span class="fresh ok">ons bazlı</span></h2>';
+  // Tazelik: hafta içi üretildi 90 dakikadan eskiyse bayat
+  {
+    const gun = utcTarih(d.uretildi);
+    const haftaIci = gun.getDay() >= 1 && gun.getDay() <= 5;
+    const bayat = haftaIci && (Date.now() - gun.getTime()) > 90 * 60 * 1000;
+    h += `<div class="fresh ${bayat ? 'bayat' : 'ok'}" style="margin-bottom:6px">${bayat ? 'veri bayat — son güncelleme 90+ dk önce' : 'veri güncel'}</div>`;
+  }
+  const vadeli = f.kaynak_tipi === 'vadeli';
   h += `<div class="ex-card">
-     <div class="ex-label">XAU/USD${f.spot ? ' · canlı spot ' + fmt(f.spot) + '$' : ''}</div>
+     <div class="ex-label">XAU/USD${vadeli ? ' <span class="badge">VADELİ</span>' : (f.spot ? ' · canlı spot ' + fmt(f.spot) + '$' : '')}</div>
      <div class="ex-val">${fmt(f.ons)}<span style="font-size:15px;color:var(--tx2)"> $/ons</span></div>
      <div class="ex-chg ${d1>=0?'up':'down'}">${pfOk(d1)} <span style="color:var(--tx2);font-size:11px">bugün</span></div>
      <div class="ex-sub">
@@ -1451,8 +1460,8 @@ function renderAltin(d) {
   h += '<div class="scn">' +
        `<div class="sc wide"><div class="t">GEÇMİŞ · nereden geldi</div><div class="m" style="font-size:11.5px">${alEsc(s.gectmis)}</div></div>` +
        `<div class="sc wide"><div class="t">ŞU AN · durum</div><div class="m" style="font-size:11.5px">${alEsc(s.durum)}</div></div>` +
-       `<div class="sc"><div class="t">YUKARI SENARYO · tetik ${fmt(s.yukari && s.yukari.tetik)}$</div><div class="m">${alEsc(s.yukari && s.yukari.metin)}</div></div>` +
-       `<div class="sc"><div class="t">AŞAĞI SENARYO · tetik ${fmt(s.asagi && s.asagi.tetik)}$</div><div class="m">${alEsc(s.asagi && s.asagi.metin)}</div></div>` +
+       `<div class="sc"><div class="t">YUKARI SENARYO · tetik ${fmt(s.yukari && s.yukari.tetik)}$</div><div class="m">${alEsc(s.yukari && s.yukari.metin)}${s.yukari && s.yukari.gecersiz != null ? `<br><span style="color:var(--tx2);font-size:10.5px">geçersizlik: ${fmt(s.yukari.gecersiz)}$ altı</span>` : ''}</div></div>` +
+       `<div class="sc"><div class="t">AŞAĞI SENARYO · tetik ${fmt(s.asagi && s.asagi.tetik)}$</div><div class="m">${alEsc(s.asagi && s.asagi.metin)}${s.asagi && s.asagi.gecersiz != null ? `<br><span style="color:var(--tx2);font-size:10.5px">geçersizlik: ${fmt(s.asagi.gecersiz)}$ üstü</span>` : ''}</div></div>` +
        '</div>';
 
   // KRİTİK GÜNLER
@@ -1477,7 +1486,7 @@ function renderAltin(d) {
     });
   }
 
-  if (d.kaynak) h += `<div class="note">📐 Kaynak: ${alEsc(d.kaynak)}<br>Seviyeler salınım uçları + MA(20/50/200) + yuvarlak seviyelerden türetilir. Bias skoru deterministiktir: fiyat-MA ilişkisi, RSI, 52h konum ve trend eğimi toplanır (≥+2 BOĞA, ≤−2 AYI). Yatırım tavsiyesi değildir.</div>`;
+  if (d.kaynak) h += `<div class="note">📐 Kaynak: ${alEsc(d.kaynak)}<br>Seviyeler salınım uçları + MA(20/50/200) + 100'lük yuvarlak seviyelerden türetilir. Senaryo tetikleri fiyattan en az 0,5×ATR, hedefler tetikten en az 1×ATR uzakta seçilir. Bias skoru deterministiktir: fiyat-MA ilişkisi, RSI, 52h konum ve 1 aylık performans toplanır (≥+2 BOĞA, ≤−2 AYI). Yatırım tavsiyesi değildir.</div>`;
   sec.innerHTML = h;
 }
 

@@ -35,7 +35,9 @@ HEADERS = {
     'Accept-Language': 'tr,en;q=0.8',
 }
 CIKTI = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'data', 'altin.json'))
+FOMC_JSON = os.path.abspath(os.path.join(os.path.dirname(__file__), 'fomc_tarihleri.json'))
 ONS_GRAM = 31.1034768  # 1 troy ons = 31.1035 gram
+gunler_ad = ['Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt', 'Paz']  # weekday(): Pazartesi=0
 
 
 def log(m):
@@ -185,8 +187,8 @@ def _pivotlar(df, k=6):
 
 
 def yuvarlak(son, yon, adet=6):
-    """Sonraki yuvarlak seviyeler (50/100 katları)."""
-    adim = 50 if son > 500 else 10
+    """Sonraki 100'lük yuvarlak seviyeler (50'lik ara basamaklar kullanılmaz)."""
+    adim = 100 if son > 500 else 20
     taban = (int(son // adim) + 1) * adim if yon == 'up' else (int(son // adim)) * adim
     return [taban + i * adim if yon == 'up' else taban - i * adim for i in range(adet)]
 
@@ -261,16 +263,31 @@ def senaryo(df, v, perf, sev):
     s1 = sev['destek'][0] if sev['destek'] else None
     s2 = sev['destek'][1] if len(sev['destek']) > 1 else None
 
+    atr = v['atr'] or 0.0
+    min_tetik = 0.5 * atr   # tetik fiyattan en az 0.5 ATR uzakta
+    min_hedef = 1.0 * atr   # hedef tetikten en az 1 ATR ötede
+
+    # direnç adayları: fiyattan >= 0.5 ATR yukarıda olanlar (yakın olan ilk sırada)
+    dy = [d for d in sev['direnc'] if (d['seviye'] - son) >= min_tetik]
+    sy = [d for d in sev['destek'] if (son - d['seviye']) >= min_tetik]
+    d1 = dy[0] if dy else None
+    s1 = sy[0] if sy else None
+    # hedef: tetikten >= 1 ATR ötede olan ilk aday
+    d2 = next((d for d in dy[1:] if (d['seviye'] - d1['seviye']) >= min_hedef), None) if d1 else None
+    s2 = next((d for d in sy[1:] if (s1['seviye'] - d['seviye']) >= min_hedef), None) if s1 else None
+
     yukari = {
         'tetik': d1['seviye'] if d1 else None,
         'hedef': d2['seviye'] if d2 else None,
-        'metin': (f"Fiyat {d1['seviye']:,.0f}$ direncini ({(d1['mesafe_pct']):+.1f}%) hacimle kırıp "
+        'gecersiz': round(d1['seviye'] - min_tetik, 1) if d1 else None,
+        'metin': (f"Fiyat {d1['seviye']:,.0f}$ direncini ({(d1['mesafe_pct']):+.1f}%) kırıp "
                   f"üstünde kapanırsa ilk hedef {d2['seviye']:,.0f}$." if d1 and d2 else
                   'Direnç kırılımı henüz yok.'),
     }
     asagi = {
         'tetik': s1['seviye'] if s1 else None,
         'hedef': s2['seviye'] if s2 else None,
+        'gecersiz': round(s1['seviye'] + min_tetik, 1) if s1 else None,
         'metin': (f"{s1['seviye']:,.0f}$ desteği ({(s1['mesafe_pct']):+.1f}%) kaybedilirse "
                   f"sıradaki destek {s2['seviye']:,.0f}$." if s1 and s2 else
                   'Destek kırılımı henüz yok.'),
@@ -316,7 +333,87 @@ def _neden(olay, ulke=''):
     return ''
 
 
-def kritik_gunler(gun=21):
+def fomc_tarihleri(gun=45):
+    """FOMC karar günleri — federalreserve.gov'dan parse, olmazsa scripts/fomc_tarihleri.json.
+
+    Takvim penceresi sınırı UYGULANMAZ: FOMC her zaman listeye girer.
+    """
+    bugun = dt.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+    son = bugun + dt.timedelta(days=gun)
+    iso = []
+
+    # 1) canlı parse
+    try:
+        import httpx
+        from bs4 import BeautifulSoup
+        r = httpx.get('https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm',
+                      timeout=25, follow_redirects=True, headers=HEADERS)
+        soup = BeautifulSoup(r.text, 'html.parser')
+        aylar = {'january': 1, 'february': 2, 'march': 3, 'april': 4, 'may': 5, 'june': 6,
+                 'july': 7, 'august': 8, 'september': 9, 'october': 10, 'november': 11, 'december': 12}
+        # Panel yapısı: div.panel > div.panel-heading(h4 "YYYY FOMC Meetings")
+        #               + div.fomc-meeting satırları (month + date hücreleri)
+        # NOT: panel metninin tamamını taramak YANLIŞ — basın toplantısı/tutanak
+        #      açıklamalarındaki tarihler de eşleşir. Sadece month/date hücreleri okunur.
+        for panel in soup.find_all('div', class_='panel'):
+            bas = panel.find('h4')
+            if not bas:
+                continue
+            m = re.match(r'\s*(20\d\d)\s+FOMC', bas.get_text(' ', strip=True))
+            if not m:
+                continue
+            yil = int(m.group(1))
+            for satir in panel.find_all('div', class_='fomc-meeting'):
+                ay_el = satir.find('div', class_='fomc-meeting__month')
+                gun_el = satir.find('div', class_='fomc-meeting__date')
+                if not ay_el or not gun_el:
+                    continue
+                ay = ay_el.get_text(' ', strip=True).strip().lower().rstrip('.')
+                gtxt = gun_el.get_text(' ', strip=True)
+                gm = re.search(r'(\d{1,2})\s*(?:-\s*(\d{1,2}))?', gtxt)   # "*" = projeksiyon
+                if ay not in aylar or not gm:
+                    continue
+                gun_no = int(gm.group(2) or gm.group(1))   # aralıkta SON gün = karar günü
+                try:
+                    iso.append(dt.date(yil, aylar[ay], gun_no).isoformat())
+                except ValueError:
+                    pass
+        iso = sorted(set(iso))
+    except Exception as e:
+        log(f'fomc parse hata: {str(e)[:60]}')
+        iso = []
+
+    # 2) JSON yedeği
+    if not iso:
+        try:
+            with open(FOMC_JSON, encoding='utf-8') as f:
+                j = json.load(f)
+            for k, v in j.items():
+                if k.startswith('_') or not isinstance(v, list):
+                    continue
+                iso.extend(x for x in v if isinstance(x, str))
+            iso = sorted(set(iso))
+        except Exception as e:
+            log(f'fomc json hata: {str(e)[:60]}')
+
+    out = []
+    for s in iso:
+        try:
+            d = dt.datetime.strptime(s, '%Y-%m-%d')
+        except ValueError:
+            continue
+        if d < bugun or d > son:
+            continue
+        out.append({
+            'tarih': d.strftime('%d.%m'), 'gun': gunler_ad[d.weekday()], 'saat': '21:00',
+            'ulke': 'ABD', 'onem': 'high', 'olay': 'FOMC faiz kararı',
+            'neden': 'Fed faiz kararı — altının 1. sürücüsü (düşük faiz = altına destek)',
+            'iso': d.strftime('%Y-%m-%d'),
+        })
+    return out
+
+
+def kritik_gunler(gun=45):
     try:
         import httpx
         from bs4 import BeautifulSoup
@@ -379,8 +476,20 @@ def kritik_gunler(gun=21):
             continue
         gor.add(key)
         temiz.append(k)
-    temiz.sort(key=lambda x: (x['iso'], x['saat']))
-    return temiz[:14]
+    return temiz
+
+
+def birlesik_kritik_gunler(gun=45, ust_sinir=14):
+    """Takvim olayları + FOMC (sınırsız) → önem (high>mid) sonra tarih sırası, ilk `ust_sinir` kayıt."""
+    olaylar = kritik_gunler(gun)
+    # FOMC zaten takvimde varsa tekrar ekleme
+    mevcut = {(k['iso'], re.sub(r'\s*\(.*?\)', '', k['olay']).strip().lower()) for k in olaylar}
+    for f in fomc_tarihleri(gun):
+        if (f['iso'], re.sub(r'\s*\(.*?\)', '', f['olay']).strip().lower()) not in mevcut:
+            olaylar.append(f)
+    onem_sira = {'high': 0, 'mid': 1, 'low': 2}
+    olaylar.sort(key=lambda x: (onem_sira.get(x.get('onem', 'low'), 2), x.get('iso', ''), x.get('saat', '')))
+    return olaylar[:ust_sinir]
 
 
 # ──────────────────────────────────────────────────────────────
@@ -439,13 +548,22 @@ def main():
     sen = senaryo(df, v, perf, sev)
     spot, spot_t = spot_fiyat()
     fx = usdtry()
-    gram = round(v['son'] / ONS_GRAM * fx, 2) if fx else None
+
+    # Manşet fiyat SPOT'tan; GC=F (vadeli) yalnızca tarihsel seri için
+    if spot and fx:
+        ons_manşet, kaynak_tipi = round(spot, 2), 'spot'
+        gram = round(ons_manşet / ONS_GRAM * fx, 2)
+    else:
+        ons_manşet, kaynak_tipi = v['son'], 'vadeli'
+        gram = round(ons_manşet / ONS_GRAM * fx, 2) if fx else None
 
     veri = {
         'uretildi': dt.datetime.now(dt.timezone.utc).isoformat(timespec='seconds'),
-        'kaynak': 'GC=F (COMEX ons) · yfinance + gold-api.com spot + doviz.com takvim',
+        'kaynak': 'gold-api.com spot (manşet) · GC=F COMEX vadeli (tarihsel seri) · doviz.com takvim',
         'fiyat': {
-            'ons': v['son'],
+            'ons': ons_manşet,
+            'kaynak_tipi': kaynak_tipi,
+            'vadeli_ons': v['son'],
             'spot': round(spot, 2) if spot else None,
             'spot_guncelleme': spot_t,
             'gram_tl': gram,
@@ -456,7 +574,7 @@ def main():
         'vital': v,
         'seviyeler': sev,
         'senaryo': sen,
-        'kritik_gunler': kritik_gunler(21),
+        'kritik_gunler': birlesik_kritik_gunler(45),
         'haberler': haberler(),
     }
 

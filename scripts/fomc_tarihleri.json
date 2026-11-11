@@ -1,15 +1,25 @@
 {
-  "guncelleme_notu": "FOMC takvimi. Ana kaynak federalreserve.gov (otomatik parse). Parse başarısız olursa bu dosya kullanılır. Tarihler resmi kaynaktan alınmıştır; 2027 ve sonrası tahmin edilmez.",
-  "son_kontrol": "2026-11-11",
-  "toplantilar": [
-    {"tarih": "2026-12-09", "sep": true, "tutanak_tarihi": "2026-12-30"},
-    {"tarih": "2027-01-27", "sep": false, "tutanak_tarihi": "2027-02-17"},
-    {"tarih": "2027-03-17", "sep": true, "tutanak_tarihi": "2027-04-07"},
-    {"tarih": "2027-04-28", "sep": false, "tutanak_tarihi": "2027-05-19"},
-    {"tarih": "2027-06-09", "sep": true, "tutanak_tarihi": "2027-06-30"},
-    {"tarih": "2027-07-28", "sep": false, "tutanak_tarihi": "2027-08-18"},
-    {"tarih": "2027-09-15", "sep": true, "tutanak_tarihi": "2027-10-06"},
-    {"tarih": "2027-10-27", "sep": false, "tutanak_tarihi": "2027-11-17"},
-    {"tarih": "2027-12-08", "sep": true, "tutanak_tarihi": "2027-12-29"}
-  ]
+ "_kaynak": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
+ "_guncelleme": "2026-11-11",
+ "_not": "FOMC karar günleri (toplantının son günü = karar açıklaması). federalreserve.gov sayfasından parse edilmiştir. Sayfa parse edilemezse bu değerler kullanılır.",
+ "2025": [
+  "2025-01-29",
+  "2025-03-19",
+  "2025-05-07",
+  "2025-06-18",
+  "2025-07-30",
+  "2025-09-17",
+  "2025-10-29",
+  "2025-12-10"
+ ],
+ "2026": [
+  "2026-01-28",
+  "2026-03-18",
+  "2026-04-29",
+  "2026-06-17",
+  "2026-07-29",
+  "2026-09-16",
+  "2026-10-28",
+  "2026-12-09"
+ ]
 }
