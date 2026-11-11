@@ -36,6 +36,8 @@ HEADERS = {
 }
 CIKTI = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'data', 'altin.json'))
 FOMC_JSON = os.path.abspath(os.path.join(os.path.dirname(__file__), 'fomc_tarihleri.json'))
+# SEP arşivi: her SEP'te FEDTARMD medyanları buraya birikir; revizyon buradan hesaplanır.
+SEP_ARSIV = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'data', 'sep_arsiv.json'))
 ONS_GRAM = 31.1034768  # 1 troy ons = 31.1035 gram
 gunler_ad = ['Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt', 'Paz']  # weekday(): Pazartesi=0
 
@@ -404,9 +406,15 @@ def fomc_tarihleri(gun=45):
             continue
         if d < bugun:
             continue          # geçmiş toplantılar atılır
+        # Saat sabit YAZILMAZ: 14:00 ET, zoneinfo ile TSİ'ye çevrilir (yaz saati 21:00/22:00).
+        try:
+            saat_tsi = fomc_tsi(d.strftime('%Y-%m-%d'))['saat_kisa']
+        except Exception as e:
+            log(f'fomc tsi hata: {str(e)[:50]}')
+            saat_tsi = ''
         # Pencere sınırı (son) FOMC'ye UYGULANMAZ — görev: "sınır uygulamadan her zaman ekle"
         out.append({
-            'tarih': d.strftime('%d.%m'), 'gun': gunler_ad[d.weekday()], 'saat': '21:00',
+            'tarih': d.strftime('%d.%m'), 'gun': gunler_ad[d.weekday()], 'saat': saat_tsi,
             'ulke': 'ABD', 'onem': 'high', 'olay': 'FOMC faiz kararı',
             'neden': 'Fed faiz kararı — altının 1. sürücüsü (düşük faiz = altına destek)',
             'iso': d.strftime('%Y-%m-%d'),
@@ -494,6 +502,517 @@ def birlesik_kritik_gunler(gun=45, ust_sinir=14):
 
 
 # ──────────────────────────────────────────────────────────────
+# 5b) MAKRO SÜRÜCÜLER — FRED + yfinance, anahtarsız (G10)
+# ──────────────────────────────────────────────────────────────
+FRED_CSV = 'https://fred.stlouisfed.org/graph/fredgraph.csv?id='
+# FRED, tarayıcı User-Agent'ı ile bot korumasına takıp bağlantıyı düşürüyor.
+# Kendi tanıtıcımız + Accept: text/csv ile anında yanıt veriyor.
+FRED_HEADERS = {'User-Agent': 'bist-panel/1.0 (github.com/hechecik/bist-panel)',
+                'Accept': 'text/csv,*/*'}
+FRED_SERILER = ['DGS2', 'DGS10', 'DFII10', 'T10YIE', 'DFEDTARU', 'DFEDTARL']
+SERI_ADLARI = {
+    'DGS2': 'ABD 2Y', 'DGS10': 'ABD 10Y nominal', 'DFII10': 'ABD 10Y reel (TIPS)',
+    'T10YIE': '10Y başabaş enflasyon', 'DFEDTARU': 'Fed üst bant', 'DFEDTARL': 'Fed alt bant',
+}
+DOT_YIL_ANAHTAR = {2026: '2026_sonu', 2027: '2027_sonu', 2028: '2028_sonu'}
+
+
+def fred_seri(seri):
+    """FRED CSV → [(date, float)] listesi. Anahtar gerekmez. Hata → []."""
+    try:
+        raw = _get(FRED_CSV + urllib.parse.quote(seri), timeout=25, headers=FRED_HEADERS).decode('utf-8', 'replace')
+    except Exception as e:
+        log(f'fred {seri} hata: {str(e)[:50]}')
+        return []
+    out = []
+    for satir in raw.splitlines()[1:]:
+        p = satir.split(',')
+        if len(p) < 2:
+            continue
+        try:
+            out.append((dt.date.fromisoformat(p[0].strip()), float(p[1])))
+        except ValueError:
+            continue          # boş / "." / geçersiz gözlem
+    return out
+
+
+def seri_ozet(degerler, altin_seri=None, pencere=60):
+    """Son değer + 5/20 günlük değişim + ons ile 60 günlük rolling korelasyon.
+
+    Saf fonksiyon. `degerler`: [(date, float)] eskiden yeniye.
+    `altin_seri`: [(date, float)] ons kapanışları; verilirse korelasyon hesaplanır.
+    Dönüş: {son, tarih, degisim_5g, degisim_20g, korelasyon_60g, korelasyon_gun}
+    """
+    if not degerler:
+        return {'durum': 'veri yok'}
+    son_t, son = degerler[-1]
+    out = {'son': round(son, 4), 'tarih': son_t.isoformat(),
+           'degisim_5g': None, 'degisim_20g': None,
+           'korelasyon_60g': None, 'korelasyon_gun': 0}
+    if len(degerler) > 5:
+        out['degisim_5g'] = round(son - degerler[-6][1], 4)
+    if len(degerler) > 20:
+        out['degisim_20g'] = round(son - degerler[-21][1], 4)
+    if altin_seri:
+        k = rolling_korelasyon(degerler, altin_seri, pencere)
+        if k is not None:
+            out['korelasyon_60g'] = k[0]
+            out['korelasyon_gun'] = k[1]
+    return out
+
+
+def rolling_korelasyon(a, b, pencere=60):
+    """İki [(date, float)] serisinin son `pencere` ortak günündeki Pearson korelasyonu.
+
+    Saf fonksiyon (yalnız stdlib). Dönüş: (korelasyon, n) veya None.
+    Günler tarih üzerinden hizalanır — FRED tatil günleri ile ölçüm günleri farklı.
+    """
+    da, db = {}, {}
+    for t, v in a:
+        da[t] = v
+    for t, v in b:
+        db[t] = v
+    ortak = sorted(set(da) & set(db))
+    if len(ortak) < 10:
+        return None
+    ortak = ortak[-pencere:]
+    xa = [da[t] for t in ortak]
+    xb = [db[t] for t in ortak]
+    n = len(ortak)
+    ma, mb = sum(xa) / n, sum(xb) / n
+    pay = sum((x - ma) * (y - mb) for x, y in zip(xa, xb))
+    pa = sum((x - ma) ** 2 for x in xa) ** 0.5
+    pb = sum((y - mb) ** 2 for y in xb) ** 0.5
+    if pa == 0 or pb == 0:
+        return None
+    return round(pay / (pa * pb), 3), n
+
+
+def sep_arsiv_oku(yol=None):
+    """data/sep_arsiv.json → {'kayitlar': [{'sep_tarihi','seyler':{yil:medyan},...}]}. Yoksa boş.
+
+    Saf dosya okuma; dosya yoksa/bozuksa boş yapı döner (uydurma yok).
+    """
+    yol = yol or SEP_ARSIV
+    try:
+        with open(yol, encoding='utf-8') as f:
+            j = json.load(f)
+        k = j.get('kayitlar')
+        return {'kayitlar': k if isinstance(k, list) else []}
+    except Exception:
+        return {'kayitlar': []}
+
+
+def sep_arsiv_guncelle(medyan, sep_tarihi, yol=None):
+    """SEP medyanlarını arşive ekler. Aynı SEP tarihi ikinci kez YAZILMAZ.
+
+    Dönen: güncellenmiş arşiv yapısı. medyan boş/None → arşiv değişmez.
+    Saf dosya işlemi (ağ yok).
+    """
+    yol = yol or SEP_ARSIV
+    arsiv = sep_arsiv_oku(yol)
+    if not medyan:
+        return arsiv
+    kayitlar = arsiv['kayitlar']
+    mevcut = [k for k in kayitlar if k.get('sep_tarihi') == sep_tarihi]
+    if mevcut:
+        # Aynı SEP için yalnız eksik yıllar tamamlanır; var olan değer EZİLMEZ.
+        s = mevcut[0].setdefault('medyan', {})
+        for y, v in medyan.items():
+            s.setdefault(str(y), v)
+    else:
+        kayitlar.append({'sep_tarihi': sep_tarihi,
+                         'medyan': {str(y): v for y, v in medyan.items()},
+                         'kaynak': 'FRED FEDTARMD'})
+        kayitlar.sort(key=lambda k: k.get('sep_tarihi') or '')
+    try:
+        os.makedirs(os.path.dirname(yol), exist_ok=True)
+        with open(yol, 'w', encoding='utf-8') as f:
+            json.dump({'kayitlar': kayitlar}, f, ensure_ascii=False, indent=1)
+    except Exception as e:
+        log(f'sep arsiv yazma hata: {str(e)[:60]}')
+    return {'kayitlar': kayitlar}
+
+
+def onceki_sep_bul(arsiv, bu_sep_tarihi):
+    """Arşivden, bu SEP'ten ÖNCEKİ en son SEP kaydının medyanı. Yoksa None."""
+    if not arsiv or not arsiv.get('kayitlar') or not bu_sep_tarihi:
+        return None
+    gecmis = [k for k in arsiv['kayitlar']
+              if (k.get('sep_tarihi') or '') < bu_sep_tarihi and k.get('medyan')]
+    if not gecmis:
+        return None
+    return max(gecmis, key=lambda k: k['sep_tarihi']).get('medyan')
+
+
+def makas_yorumu(makas_bp, esik=25):
+    """Dot plot makası deterministik yorumu. Saf fonksiyon."""
+    if makas_bp is None:
+        return 'veri yok'
+    if makas_bp > esik:
+        return ('Piyasa Fed’in kendi projeksiyonundan şahin. Güvercin bir SEP '
+                'altına pozitif sürpriz olur.')
+    if makas_bp < -esik:
+        return ('Piyasa Fed’in kendi projeksiyonundan güvercin. Şahin bir SEP '
+                'altına negatif sürpriz olur.')
+    return 'Uyumlu, sürpriz potansiyeli düşük.'
+
+
+def sep_revizyon(onceki, yeni, esik=25):
+    """SEP medyanı değişimi (bp) → 'şahin revizyon' / 'güvercin revizyon' / 'değişim yok'.
+
+    Saf fonksiyon. Girdiler yüzde (4.1 gibi); değişim baz puana çevrilir.
+    """
+    if onceki is None or yeni is None:
+        return {'degisim_bp': None, 'yorum': 'veri yok'}
+    bp = round((yeni - onceki) * 100)
+    if bp >= esik:
+        yorum = 'şahin revizyon'
+    elif bp <= -esik:
+        yorum = 'güvercin revizyon'
+    else:
+        yorum = 'değişim yok'
+    return {'degisim_bp': bp, 'yorum': yorum}
+
+
+def fomc_tsi(iso_tarih, saat_et=14):
+    """FOMC karar anı TSİ karşılığı. Saf fonksiyon.
+
+    14:00 ET → New York yaz saati uygulamasına göre 21:00/22:00 TSİ olur;
+    sabit yazılmaz, zoneinfo ile hesaplanır. Dönüş: {'tsi':'...','epok':...,'iso_utc':'...'}
+    """
+    from zoneinfo import ZoneInfo
+    d = dt.date.fromisoformat(iso_tarih)
+    et = dt.datetime(d.year, d.month, d.day, saat_et, 0, tzinfo=ZoneInfo('America/New_York'))
+    tsi = et.astimezone(ZoneInfo('Europe/Istanbul'))
+    return {'tsi': tsi.strftime('%d.%m.%Y %H:%M'), 'saat_kisa': tsi.strftime('%H:%M'),
+            'iso_utc': et.astimezone(dt.timezone.utc).isoformat(), 'epok': int(et.timestamp())}
+
+
+def fomc_sayac(iso_tarih, sep=False, simdi=None):
+    """Sonraki FOMC sayacı: tarih · TSİ saat · N gün · SEP var/yok. Saf fonksiyon."""
+    if not iso_tarih:
+        return {'durum': 'veri yok'}
+    t = fomc_tsi(iso_tarih)
+    simdi = simdi or dt.datetime.now(dt.timezone.utc)
+    hedef = dt.datetime.fromisoformat(t['iso_utc'])
+    gun = (hedef - simdi).total_seconds() / 86400
+    return {'tarih': dt.date.fromisoformat(iso_tarih).strftime('%d.%m.%Y'),
+            'saat_tsi': t['saat_kisa'], 'kalan_gun': max(0, int(gun // 1)),
+            'kalan_saat': round(max(0.0, gun * 24), 1), 'sep': bool(sep),
+            'epok': t['epok'], 'metin': (
+                f"Sonraki FOMC: {dt.date.fromisoformat(iso_tarih).strftime('%d.%m.%Y')} "
+                f"{t['saat_kisa']} TSİ · {max(0, int(gun // 1))} gün · "
+                f"SEP/dot plot {'VAR' if sep else 'YOK'}")}
+
+
+def _yf_kapanis(ticker, periyot='1y'):
+    """yfinance tek sembol günlük kapanış → [(date, float)]. Hata → []."""
+    try:
+        import yfinance as yf
+        h = yf.Ticker(ticker).history(period=periyot)
+        if h is None or not len(h):
+            return []
+        out = []
+        for ts, v in h['Close'].items():
+            if v != v:            # NaN
+                continue
+            out.append((ts.date(), float(v)))
+        return out
+    except Exception as e:
+        log(f'yfinance {ticker} hata: {str(e)[:60]}')
+        return []
+
+
+def fed_fonlari_ima(aylar=None):
+    """Fed funds vadelilerinden piyasa ima patikası. Saf hesap, ağ yok.
+
+    `aylar`: [{'ay':'YYYY-MM','fiyat':96.0}] → ima faiz = 100 − fiyat.
+    Dönüş: {'yillar': {2026: x, 2027: y}, 'kontratlar': [...], 'kaynak': 'vadeli'}
+    Her yıl için o yılın SON kontratının ima faizi alınır (yıl sonu patikası).
+    """
+    if not aylar:
+        return None
+    yillar = {}
+    kontratlar = []
+    for k in sorted(aylar, key=lambda x: x['ay']):
+        if k.get('fiyat') is None:
+            continue
+        ima = round(100 - k['fiyat'], 4)
+        kontratlar.append({'ay': k['ay'], 'fiyat': round(k['fiyat'], 4), 'ima': ima})
+        y, m = k['ay'].split('-')
+        yillar[int(y)] = ima          # sıralı → son kontrat kalır
+    if not kontratlar:
+        return None
+    return {'yillar': yillar, 'kontratlar': kontratlar, 'kaynak': 'vadeli'}
+
+
+def _zq_kontratlari(simdi=None):
+    """ZQ (30-gün fed funds) kontrat aylarını çek. yfinance sembolü .CBT uzantılı."""
+    simdi = simdi or dt.date.today()
+    harfler = ['F', 'G', 'H', 'J', 'K', 'M', 'N', 'Q', 'U', 'V', 'X', 'Z']
+    # içinde bulunulan aydan itibaren 24 ay
+    aylar, y, m = [], simdi.year, simdi.month
+    for _ in range(24):
+        aylar.append(f'{y}-{m:02d}')
+        m += 1
+        if m > 12:
+            m, y = 1, y + 1
+    out = []
+    for ay in aylar:
+        y, m = ay.split('-')
+        sym = f'ZQ{harfler[int(m) - 1]}{y[-2:]}.CBT'
+        k = _yf_kapanis(sym, periyot='1mo')
+        if not k:
+            continue
+        out.append({'ay': ay, 'fiyat': round(k[-1][1], 4)})
+    return out
+
+
+def makro_blogu(ons_seri_list=None):
+    """altin.json → makro bloğu. FRED+yfinance düşerse 'durum':'veri yok'."""
+    out = {'uretildi': dt.datetime.now(dt.timezone.utc).isoformat(timespec='seconds')}
+    ons = ons_seri_list or []
+    seriler = {}
+    for s in FRED_SERILER:
+        try:
+            oz = seri_ozet(fred_seri(s), ons)
+            oz['ad'] = SERI_ADLARI.get(s, s)
+            seriler[s] = oz
+        except Exception as e:
+            log(f'makro seri {s} hata: {str(e)[:50]}')
+            seriler[s] = {'durum': 'veri yok', 'ad': SERI_ADLARI.get(s, s)}
+    out['seriler'] = seriler
+
+    # yfinance: DXY + Brent (ayrı alanlar; WTI ile KARIŞTIRILMAZ)
+    piyasa = {}
+    for kod, tk, ad in [('dxy', 'DX-Y.NYB', 'DXY · dolar endeksi'),
+                        ('brent', 'BZ=F', 'Brent (ICE, BZ=F)')]:
+        try:
+            oz = seri_ozet(_yf_kapanis(tk), ons)
+            oz['ad'] = ad
+            oz['sembol'] = tk
+            piyasa[kod] = oz
+        except Exception as e:
+            log(f'makro {kod} hata: {str(e)[:50]}')
+            piyasa[kod] = {'durum': 'veri yok', 'ad': ad, 'sembol': tk}
+    if piyasa.get('brent', {}).get('son') is not None:
+        piyasa['brent']['not'] = 'BZ=F Brent vadeli; WTI ayrı seridir, karıştırılmaz.'
+    out['piyasa'] = piyasa
+
+    # Fed faiz bandı (mevcut politika faizi — FRED'den, elle girilmez)
+    try:
+        ust = fred_seri('DFEDTARU')
+        alt = fred_seri('DFEDTARL')
+        if ust and alt:
+            out['fed_bandi'] = {'ust': round(ust[-1][1], 2), 'alt': round(alt[-1][1], 2),
+                                'orta': round((ust[-1][1] + alt[-1][1]) / 2, 4),
+                                'tarih': ust[-1][0].isoformat()}
+        else:
+            out['fed_bandi'] = {'durum': 'veri yok'}
+    except Exception:
+        out['fed_bandi'] = {'durum': 'veri yok'}
+
+    # Dot plot (FEDTARMD = SEP medyan fed funds, yıl bazında)
+    try:
+        # FEDTARMD vintage'ı bir SEP toplantısına aittir: son GERÇEKLEŞMİŞ SEP tarihi.
+        # Arşive bu tarihle yazılır; böylece aynı SEP tekrar eklenmez ve revizyon
+        # bir sonraki SEP'te önceki kayıtla kıyaslanır.
+        sep_iso = None
+        try:
+            sep_iso = _son_sep_tarihi()
+        except Exception:
+            sep_iso = None
+        out['dot_plot'] = dot_plot_blogu(out.get('fed_bandi'), sep_tarihi=sep_iso)
+    except Exception as e:
+        log(f'dot plot hata: {str(e)[:60]}')
+        out['dot_plot'] = {'durum': 'veri yok'}
+
+    # FOMC sayacı
+    try:
+        out['fomc'] = _fomc_blogu()
+    except Exception as e:
+        log(f'fomc blogu hata: {str(e)[:60]}')
+        out['fomc'] = {'durum': 'veri yok'}
+
+    if all((v.get('durum') == 'veri yok') for v in seriler.values()) and \
+            all((v.get('durum') == 'veri yok') for v in piyasa.values()):
+        out['durum'] = 'veri yok'
+    return out
+
+
+def dot_plot_blogu(fed_bandi=None, sep_tarihi=None, arsiv_yolu=None):
+    """SEP medyanları + piyasa ima patikası + makas_bp + SEP revizyonu.
+
+    Saf hesap + ağ (ZQ) + arşiv dosyası. `sep_tarihi`: bu FEDTARMD vintage'ının
+    ait olduğu SEP toplantı tarihi (YYYY-MM-DD); verilmezse bugün kullanılır.
+    """
+    md = fred_seri('FEDTARMD')
+    if not md:
+        return {'durum': 'veri yok'}
+    # FEDTARMD yıl başı (YYYY-01-01) gözlemleri; aynı yıl için son kayıt geçerli
+    medyan = {}
+    for t, v in md:
+        medyan[t.year] = round(v, 4)
+    # Sep revizyonu: bu SEP medyanları arşive yazılır (aynı SEP tekrar yazılmaz),
+    # önceki SEP arşivden okunur. Arşiv boşsa revizyon 'veri yok' kalır — UYDURMA yok.
+    sep_tarihi = sep_tarihi or dt.date.today().isoformat()
+    arsiv = {'kayitlar': []}
+    try:
+        arsiv = sep_arsiv_guncelle(medyan, sep_tarihi, arsiv_yolu)
+        onceki = onceki_sep_bul(arsiv, sep_tarihi)
+    except Exception as e:
+        log(f'sep arsiv hata: {str(e)[:60]}')
+        onceki = None
+    simdi_yil = dt.date.today().year
+    yillar = sorted(y for y in medyan if y >= simdi_yil)
+    if not yillar:
+        return {'durum': 'veri yok'}
+    # Karşılaştırma yılı: bir sonraki yılın SEP medyanı (cari yılı geçen ilk yıl).
+    # Cari yıl medyanı zaten bugünün politikasını yansıtır; piyasa patikasının
+    # 1 yıl ilerisiyle kıyaslanması gerekir.
+    hedef_yil = next((y for y in yillar if y > simdi_yil), yillar[-1])
+
+    # Revizyon: hedef yıl için önceki SEP medyanı varsa bp farkı hesaplanır.
+    onceki_deger = None
+    if onceki:
+        onceki_deger = onceki.get(str(hedef_yil), onceki.get(hedef_yil))
+    sonuc = {'medyan': {str(y): medyan[y] for y in yillar},
+             'onceki_sep_medyan': onceki,
+             'onceki_sep_tarihi': (max((k.get('sep_tarihi') or '' for k in arsiv['kayitlar']
+                                        if (k.get('sep_tarihi') or '') < sep_tarihi
+                                        and k.get('medyan')), default=None)
+                                   if onceki else None),
+             'revizyon': sep_revizyon(onceki_deger, medyan.get(hedef_yil)),
+             'revizyon_yil': hedef_yil,
+             'sep_tarihi': sep_tarihi,
+             'hedef_yil': hedef_yil,
+             'kaynak': 'FRED FEDTARMD (SEP medyan fed funds projeksiyonu)'}
+
+    # Piyasa ima patikası
+    ima = None
+    try:
+        ima = fed_fonlari_ima(_zq_kontratlari())
+    except Exception as e:
+        log(f'zq hata: {str(e)[:50]}')
+    if not ima:
+        # Proxy: 2Y getirisi − mevcut faiz (etiketlenir, uydurma değil)
+        try:
+            dgs2 = fred_seri('DGS2')
+            if dgs2 and fed_bandi and fed_bandi.get('orta') is not None:
+                ima = {'kaynak': 'proxy', 'not': 'ZQ kontratı alınamadı → 2Y − mevcut faiz (proxy)',
+                       'yillar': {sonuc['hedef_yil']: round(dgs2[-1][1], 4)},
+                       'proxy_fark': round(dgs2[-1][1] - fed_bandi['orta'], 4)}
+        except Exception:
+            ima = None
+    sonuc['piyasa_ima'] = ima
+
+    # makas_bp = (piyasa − dot) × 100 — dot ile piyasa AYNI yıl için kıyaslanır
+    makas, makas_yil = None, None
+    if ima and ima.get('yillar'):
+        if ima.get('kaynak') == 'proxy':
+            # proxy patika SEVİYESİ değil FARK verir (2Y − mevcut faiz), o yüzden
+            # cari yıl SEP medyanı değil, proxy farkı bp olarak raporlanır.
+            if medyan.get(simdi_yil) is not None:
+                makas = round(ima.get('proxy_fark', 0) * 100)
+                makas_yil = simdi_yil
+        else:
+            # Piyasanın hedef yıl sonu ima faizi varsa onu kullan; yoksa en yakın
+            # (hedeften küçük) yılın son kontratına düş ve etiketle.
+            uygun = [y for y in ima['yillar'] if y in medyan]
+            if uygun:
+                y = hedef_yil if hedef_yil in uygun else min(uygun, key=lambda x: abs(x - hedef_yil))
+                makas = round((ima['yillar'][y] - medyan[y]) * 100)
+                makas_yil = y
+    sonuc['makas_bp'] = makas
+    sonuc['makas_yil'] = makas_yil
+    sonuc['yorum'] = makas_yorumu(makas)
+    return sonuc
+
+
+def _fomc_iso_haritasi():
+    """FOMC tarihleri → {iso: sep(bool)}. Önce canlı parse, olmazsa yedek JSON."""
+    iso_map = {}   # iso -> sep(bool)
+    # 1) canlı parse (SEP yıldızı "*" ile işaretli)
+    try:
+        import httpx
+        from bs4 import BeautifulSoup
+        r = httpx.get('https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm',
+                      timeout=25, follow_redirects=True, headers=HEADERS)
+        soup = BeautifulSoup(r.text, 'html.parser')
+        aylar = {'january': 1, 'february': 2, 'march': 3, 'april': 4, 'may': 5, 'june': 6,
+                 'july': 7, 'august': 8, 'september': 9, 'october': 10, 'november': 11, 'december': 12}
+        for panel in soup.find_all('div', class_='panel'):
+            bas = panel.find('h4')
+            if not bas:
+                continue
+            m = re.match(r'\s*(20\d\d)\s+FOMC', bas.get_text(' ', strip=True))
+            if not m:
+                continue
+            yil = int(m.group(1))
+            for satir in panel.find_all('div', class_='fomc-meeting'):
+                ay_el = satir.find('div', class_='fomc-meeting__month')
+                gun_el = satir.find('div', class_='fomc-meeting__date')
+                if not ay_el or not gun_el:
+                    continue
+                ay = ay_el.get_text(' ', strip=True).strip().lower().rstrip('.')
+                gtxt = gun_el.get_text(' ', strip=True)
+                gm = re.search(r'(\d{1,2})\s*(?:-\s*(\d{1,2}))?', gtxt)
+                if ay not in aylar or not gm:
+                    continue
+                gun_no = int(gm.group(2) or gm.group(1))
+                try:
+                    iso_map[dt.date(yil, aylar[ay], gun_no).isoformat()] = '*' in gtxt
+                except ValueError:
+                    pass
+    except Exception as e:
+        log(f'fomc sep parse hata: {str(e)[:50]}')
+
+    # 2) yedek JSON (SEP bayrağı JSON'da yoksa sep_tarihleri listesinden)
+    if not iso_map:
+        try:
+            with open(FOMC_JSON, encoding='utf-8') as f:
+                j = json.load(f)
+            seps = set(j.get('_sep', []))
+            for k, v in j.items():
+                if k.startswith('_') or not isinstance(v, list):
+                    continue
+                for x in v:
+                    if isinstance(x, str):
+                        iso_map[x] = x in seps
+        except Exception as e:
+            log(f'fomc json hata: {str(e)[:60]}')
+    return iso_map
+
+
+def _son_sep_tarihi(bugun=None, iso_map=None):
+    """Son GERÇEKLEŞMİŞ SEP toplantı tarihi (YYYY-MM-DD). Bulunamazsa None.
+
+    FEDTARMD serisi her zaman en son yayımlanan SEP'in medyanlarını tutar;
+    arşive bu tarihle yazılır ki aynı SEP her çalıştırmada tekrar eklenmesin.
+    """
+    iso_map = iso_map if iso_map is not None else _fomc_iso_haritasi()
+    bugun = bugun or dt.date.today()
+    gecmis_sep = [x for x, sep in iso_map.items() if sep and dt.date.fromisoformat(x) <= bugun]
+    return max(gecmis_sep) if gecmis_sep else None
+
+
+def _fomc_blogu():
+    """fomc_tarihleri.json + canlı parse → sonraki toplantı, TSİ saat, SEP bayrağı."""
+    iso_map = _fomc_iso_haritasi()
+    bugun = dt.date.today()
+    gelecek = sorted(x for x in iso_map if dt.date.fromisoformat(x) >= bugun)
+    if not gelecek:
+        return {'durum': 'veri yok'}
+    nxt = gelecek[0]
+    s = fomc_sayac(nxt, iso_map.get(nxt, False))
+    s['sonraki_liste'] = [{'tarih': x, 'sep': iso_map[x],
+                           'tsi': fomc_tsi(x)['saat_kisa']} for x in gelecek[:6]]
+    s['kaynak'] = 'federalreserve.gov FOMC takvimi'
+    return s
+
+
+# ──────────────────────────────────────────────────────────────
 # 6) HABERLER — ons altın RSS
 # ──────────────────────────────────────────────────────────────
 def _rss(url, kaynak, limit=8):
@@ -570,6 +1089,13 @@ def main():
     mh = manset(spot, fx, v['son'])
     ons_manşet, kaynak_tipi, gram = mh['ons'], mh['kaynak_tipi'], mh['gram_tl']
 
+    # G10: makro sürücüler — kendi try/except'i içinde, düşerse altın blokları etkilenmez
+    try:
+        makro = makro_blogu([(t.date(), float(v)) for t, v in c.items()])
+    except Exception as e:
+        log(f'makro blok HATA: {str(e)[:80]}')
+        makro = {'durum': 'veri yok'}
+
     veri = {
         'uretildi': dt.datetime.now(dt.timezone.utc).isoformat(timespec='seconds'),
         'kaynak': 'gold-api.com spot (manşet) · GC=F COMEX vadeli (tarihsel seri) · doviz.com takvim',
@@ -589,6 +1115,7 @@ def main():
         'senaryo': sen,
         'kritik_gunler': birlesik_kritik_gunler(45),
         'haberler': haberler(),
+        'makro': makro,
     }
 
     os.makedirs(os.path.dirname(CIKTI), exist_ok=True)
