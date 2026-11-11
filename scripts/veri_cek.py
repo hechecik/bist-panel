@@ -340,6 +340,139 @@ ONS_GRAM = 31.1034768  # 1 troy ons = 31,1034768 gram
 GRAM_UYARI_ESIK = 1.0  # borsapy gram ile hesaplanan gram arası fark eşiği (%)
 
 
+# ──────────────────────────────────────────────────────────────
+# G05 — BIST'e özgü filtreler (saf fonksiyonlar, ağa çıkmaz)
+# ──────────────────────────────────────────────────────────────
+KESIN_SAAT_TR = 18.25          # 18:15 TR — bu saatten sonra üretilen sinyal "kesin"
+TZ_TR = dt.timezone(dt.timedelta(hours=3))
+KILIT_ESIK_PCT = 9.5           # ±%9,5 ve kapanış == uç ise tavan/taban kilidi
+LIKIDITE_ESIK_TL = 50_000_000  # 20 günlük ortalama TL hacmi (kapanış × hacim) alt sınırı
+LIKIDITE_PENCERE = 20
+IPO_GUN = 60                   # son 60 iş günü içinde işlem görmeye başlayan = yeni halka arz
+RISKLI_TABAN_SAYI = 3          # son 10 günde ≥3 taban kilidi → RISKLI
+RISKLI_PENCERE = 10
+
+
+def sinyal_durumu(simdi=None) -> str:
+    """TR saatiyle 18:15'ten önce üretilen sinyal 'gecici', sonrası 'kesin'."""
+    simdi = simdi or dt.datetime.now(dt.timezone.utc)
+    tr = simdi.astimezone(TZ_TR)
+    dk = tr.hour * 60 + tr.minute
+    return 'kesin' if dk >= int(KESIN_SAAT_TR * 60) else 'gecici'
+
+
+def kilit_tespit(row: dict, onceki_kapanis) -> str | None:
+    """Tavan/taban kilidi — saf fonksiyon.
+
+    Değişim ≥ +%9,5 ve kapanış == gün yükseği  → 'TAVAN'
+    Değişim ≤ −%9,5 ve kapanış == gün düşüğü  → 'TABAN'
+    Aksi halde None. row: {'kapanis','max','min'} (float veya str).
+    """
+    try:
+        kapanis = float(str(row.get('kapanis')))
+        yuksek = float(str(row.get('max')))
+        dusuk = float(str(row.get('min')))
+        onceki = float(str(onceki_kapanis))
+    except (TypeError, ValueError):
+        return None
+    if not onceki or onceki <= 0:
+        return None
+    degisim = (kapanis / onceki - 1) * 100
+    if degisim >= KILIT_ESIK_PCT and abs(kapanis - yuksek) < 1e-9:
+        return 'TAVAN'
+    if degisim <= -KILIT_ESIK_PCT and abs(kapanis - dusuk) < 1e-9:
+        return 'TABAN'
+    return None
+
+
+def likidite_tl(rows: list) -> float | None:
+    """20 günlük ortalama TL hacmi = ortalama(kapanış × hacim).
+
+    Yetersiz bar varsa mevcut barlarla hesaplanır; hiç geçerli bar yoksa None.
+    """
+    if not rows:
+        return None
+    toplam, n = 0.0, 0
+    for r in rows[-LIKIDITE_PENCERE:]:
+        try:
+            k, h = float(r.get('kapanis')), float(r.get('hacim'))
+        except (TypeError, ValueError):
+            continue
+        if k > 0 and h >= 0:
+            toplam += k * h
+            n += 1
+    return round(toplam / n, 0) if n else None
+
+
+def ipo_bayraklari(halka_arz: list, islem_gunleri: dict, bugun=None) -> dict:
+    """Son 60 iş günü içinde işlem görmeye başlayan hisseler → {SEMBOL: ilk_bar}.
+
+    islem_gunleri: {SEMBOL: [tarih_str, ...]} (artan sıralı). İlk bar tarihi
+    bugünden 60 iş günü önceki tarihten yeni ise yeni halka arz sayılır.
+    """
+    bugun = bugun or dt.date.today()
+    esik = bugun
+    sayac = 0
+    while sayac < IPO_GUN:                     # 60 iş günü geriye git
+        esik -= dt.timedelta(days=1)
+        if esik.weekday() < 5:
+            sayac += 1
+    kodlar = {str(x.get('kod', '')).upper() for x in (halka_arz or []) if x.get('kod')}
+    out = {}
+    for sembol, tarihler in (islem_gunleri or {}).items():
+        s = sembol.upper().replace('.IS', '')
+        if s not in kodlar or not tarihler:
+            continue
+        try:
+            ilk = dt.date.fromisoformat(str(tarihler[0])[:10])
+        except ValueError:
+            continue
+        if ilk >= esik:
+            out[s] = str(tarihler[0])[:10]
+    return out
+
+
+def taban_sayisi(rows: list, pencere: int = RISKLI_PENCERE) -> int:
+    """Son `pencere` barda kaç TABAN kilidi var (kilit_tespit ile)."""
+    if not rows or len(rows) < 2:
+        return 0
+    sayi = 0
+    for i in range(max(1, len(rows) - pencere), len(rows)):
+        if kilit_tespit(rows[i], rows[i - 1].get('kapanis')) == 'TABAN':
+            sayi += 1
+    return sayi
+
+
+def riskli_tespit(rows: list) -> str | None:
+    """Son 10 günde ≥3 taban kilidi → 'RISKLI' (gerekçeli), aksi halde None.
+
+    Yakın İzleme Pazarı / konkordato bilgisi ağsız bir kaynakta güvenilir
+    biçimde bulunmadığı için uydurulmaz; yalnızca ölçülebilir taban serisi
+    kullanılır (G05 md.6).
+    """
+    n = taban_sayisi(rows)
+    return f"son {RISKLI_PENCERE} günde {n} taban kilidi" if n >= RISKLI_TABAN_SAYI else None
+
+
+def kilitli_gunler(rows: list) -> dict:
+    """{tarih_str: 'TAVAN'|'TABAN'} — backtest giriş/çıkış kaydırması için."""
+    out = {}
+    for i in range(1, len(rows or [])):
+        k = kilit_tespit(rows[i], rows[i - 1].get('kapanis'))
+        if k:
+            out[str(rows[i].get('tarih'))[:10]] = k
+    return out
+
+
+def ilk_kilitsiz(indeksler, kilitler: dict) -> int | None:
+    """Verilen bar indekslerinde ilk kilitsiz günü döndür (yoksa None)."""
+    for j in indeksler:
+        if j not in kilitler:
+            return j
+    return None
+
+
+
 def gram_altin_hesapla(ons_usd, usdtry, capraz, ons_kaynak=None) -> dict:
     """Gram altın = ons / 31,1034768 × USD/TL. borsapy değeri sadece 'capraz'.
 
@@ -586,13 +719,24 @@ def tufe_verisi() -> dict:
         return {}
 
 
-def sinyalleri_hesapla(hisse_veri: dict) -> dict:
-    """OHLCV verisinden indikatör + sinyal hesapla (indikatorler.py mantığı)."""
+def sinyalleri_hesapla(hisse_veri: dict, ipo: dict | None = None) -> dict:
+    """OHLCV verisinden indikatör + sinyal hesapla (indikatorler.py mantığı).
+
+    G05 filtreleri (saf, ağsız):
+      - durum        : 'gecici' (18:15 TR öncesi) / 'kesin'
+      - kilit        : 'TAVAN' / 'TABAN' — o gün tavan/taban kilidi
+      - likidite_tl  : 20 günlük ortalama TL hacmi
+      - ipo_yeni     : son 60 iş gününde işlem görmeye başladı (skor istatistiğinden hariç)
+      - tedbir       : VBTS tedbiri (kaynak yoksa None — uydurulmaz)
+      - riskli       : AL yerine 'RISKLI' (son 10 günde ≥3 taban)
+    """
     import sys
     sys.path.insert(0, str(Path(__file__).resolve().parent))
     from indikatorler import tum_indikatorler, sinyal_hesapla, pivot_seviyeler, seviye_durumu, ict_sinyalleri
     import pandas as pd
 
+    durum = sinyal_durumu()
+    ipo = ipo or {}
     sonuclar = []
     for sembol, rows in hisse_veri.items():
         if len(rows) < 60:
@@ -662,9 +806,29 @@ def sinyalleri_hesapla(hisse_veri: dict) -> dict:
                 'spark': spark,
                 'nedenler': nedenler[:5],
                 'tarih': str(son['HGDG_TARIH'].date()),
+                # ── G05 filtre alanları ──
+                'durum': durum,
+                'likidite_tl': likidite_tl(rows),
+                'ipo_yeni': sembol in ipo,
+                'tedbir': None,
+                **({'ipo_tarih': ipo[sembol]} if sembol in ipo else {}),
             })
         except Exception:
             continue
+    # G05 — kilit / likidite / riskli / IPO filtresi (sinyal üretiminden sonra uygulanır)
+    for r in sonuclar:
+        rows = hisse_veri.get(r['sembol']) or []
+        r['kilit'] = kilit_tespit(rows[-1], rows[-2].get('kapanis')) if len(rows) > 1 else None
+        risk = riskli_tespit(rows)
+        r['riskli'] = risk
+        r['taban_10g'] = taban_sayisi(rows)
+        if r['sinyal'] in ('AL', 'DİKKAT_AL'):
+            if risk:                                    # md.6 — sorunlu hisse
+                r['sinyal'], r['sinyal_ham'], r['filtre'] = 'RISKLI', r['sinyal'], risk
+            elif r.get('tedbir'):                       # md.5 — VBTS
+                r['sinyal'], r['sinyal_ham'], r['filtre'] = 'IZLE', r['sinyal'], 'VBTS tedbiri'
+            elif r.get('likidite_tl') is not None and r['likidite_tl'] < LIKIDITE_ESIK_TL:
+                r['sinyal'], r['sinyal_ham'], r['filtre'] = 'IZLE', r['sinyal'], 'likidite eşiği altı'
     sonuclar.sort(key=lambda x: x['skor'], reverse=True)
     # 2.5 — Aşırı alım/satım taraması (mevcut hesaplardan filtreleme)
     tarama = {
@@ -676,14 +840,25 @@ def sinyalleri_hesapla(hisse_veri: dict) -> dict:
                         'sinyal': r['sinyal'], 'skor': r['skor']} for r in sonuclar
                        if r.get('macd_hist', 0) > 0 and r['skor'] >= 2][:15],
     }
+    # G05 md.4 — yeni halka arzlar skor istatistiklerinden hariç
+    istatistik_kaynak = [r for r in sonuclar if not r.get('ipo_yeni') and not r.get('riskli')]
+    skorlar = [r['skor'] for r in istatistik_kaynak]
     return {
         '_tum': sonuclar,   # kırpılmamış tam kesit — sektör/gece/karne/log bunu kullanır, JSON'a yazılmaz
         'al': [r for r in sonuclar if r['sinyal'] in ('AL', 'DİKKAT_AL')][:15],
         'tut': [r for r in sonuclar if r['sinyal'] == 'TUT'][:10],
         'sat': [r for r in sonuclar if r['sinyal'] in ('SAT', 'DİKKAT_SAT')][:10],
+        'izle': [r for r in sonuclar if r['sinyal'] == 'IZLE'][:15],
+        'riskli': [r for r in sonuclar if r['sinyal'] == 'RISKLI'][:15],
         'tarama': tarama,
         'toplam': len(sonuclar),
+        'durum': durum,
         'hesap_tarihi': dt.datetime.now().strftime('%d.%m.%Y %H:%M'),
+        'filtre_esikleri': {'kilit_pct': KILIT_ESIK_PCT, 'likidite_tl': LIKIDITE_ESIK_TL,
+                            'ipo_gun': IPO_GUN, 'taban_10g': RISKLI_TABAN_SAYI},
+        'skor_istatistik': {'kapsam': len(istatistik_kaynak),
+                            'haric': len(sonuclar) - len(istatistik_kaynak),
+                            'ort_skor': round(sum(skorlar) / len(skorlar), 2) if skorlar else None},
     }
 
 
@@ -796,31 +971,48 @@ def test_senaryolari(hisse_veri: dict) -> dict:
             continue
         # Tüm barlarda sinyal üret (son bar hariç — giriş ertesi gün)
         son_fiyat = float(ind['HGDG_KAPANIS'].iloc[-1])
+        # G05 — kilitli günler (tavan/taban): o gün ne giriş ne çıkış yapılabilir
+        kilitler = {}
+        for k in range(1, len(ind)):
+            kk = kilit_tespit({'kapanis': ind.iloc[k]['HGDG_KAPANIS'], 'max': ind.iloc[k]['HGDG_MAX'],
+                               'min': ind.iloc[k]['HGDG_MIN']}, ind.iloc[k - 1]['HGDG_KAPANIS'])
+            if kk:
+                kilitler[k] = kk
         for i in range(60, len(ind) - 1):
             son = ind.iloc[i]
             s = sinyal_hesapla(son)
             if s['sinyal'] not in ('AL', 'DİKKAT_AL'):
                 continue
             giris_gunu = pd.Timestamp(son['HGDG_TARIH']).date()
-            # Ertesi günün verileri
-            sonraki = ind.iloc[i + 1]
+            # G05 — kilitli günde giriş yapılmaz, ilk kilitsiz güne kaydırılır
+            gi = ilk_kilitsiz(range(i + 1, len(ind)), kilitler)
+            if gi is None:
+                continue
+            sonraki = ind.iloc[gi]
             giris_fiyat = float(sonraki['HGDG_ACILIS']) if pd.notna(sonraki.get('HGDG_ACILIS')) else float(sonraki['HGDG_KAPANIS'])
             if not giris_fiyat or giris_fiyat <= 0:
                 continue
             getiri = (son_fiyat / giris_fiyat - 1) * 100
             # S3: stop-loss kontrolü — girişten sonraki barlarda -%5'e düştü mü?
+            # G05 md.6 — taban kilitli günde çıkış yapılamaz (stop-loss dahil), ilk kilitsiz güne kaydırılır
             stop_calismadi = True
             stop_getiri = getiri
-            for j in range(i + 1, len(ind)):
+            for j in range(gi, len(ind) + 1):
+                if j >= len(ind):
+                    break
+                if kilitler.get(j) == 'TABAN':
+                    continue
                 d_ip = (float(ind.iloc[j]['HGDG_MIN']) / giris_fiyat - 1) * 100
                 if d_ip <= -5:
                     stop_calismadi = False
                     stop_getiri = -5.0  # %5 stop ile çıkıldı
                     break
-            islem = {'sembol': sembol, 'tarih': str(giris_gunu), 'giris': round(giris_fiyat, 2),
+            islem = {'sembol': sembol, 'tarih': str(giris_gunu), 'giris_tarih': str(pd.Timestamp(sonraki['HGDG_TARIH']).date()),
+                     'giris': round(giris_fiyat, 2),
                      'bugun': round(son_fiyat, 2), 'getiri_yuzde': round(getiri, 1),
                      'stop_getiri_yuzde': round(stop_getiri, 1), 'stop_calismis': not stop_calismadi,
                      'sinyal_tarih': str(son['HGDG_TARIH'].date()),
+                     'kaydirildi': gi != i + 1, 'kilit': kilitler.get(gi),
                      'skor': int(s['skor'])}
             gunluk_islemler.append(islem)
             # S1: cuma sinyali → pazartesi girişi
@@ -1382,8 +1574,19 @@ def main():
     faiz = tcmb_faizi()
     tufe = tufe_verisi()
 
-    # 4. Sinyaller
-    sinyaller = sinyalleri_hesapla(hisse_veri) if hisse_veri else {'al': [], 'tut': [], 'sat': [], 'toplam': 0, 'hesap_tarihi': ''}
+    # 4. Sinyaller (G05 — yeni halka arz bayrakları: takvim.json'daki halka_arz + ilk bar tarihleri)
+    halka_arz = []
+    try:
+        with open(DATA_DIR / 'takvim.json', encoding='utf-8') as f:
+            halka_arz = json.load(f).get('halka_arz') or []
+    except Exception:
+        halka_arz = []
+    islem_gunleri = {s: [str(r.get('tarih'))[:10] for r in (rows or []) if r.get('tarih')]
+                     for s, rows in (hisse_veri or {}).items()}
+    ipo = ipo_bayraklari(halka_arz, islem_gunleri)
+    if ipo:
+        log(f"G05: yeni halka arz = {len(ipo)} ({', '.join(sorted(ipo))})")
+    sinyaller = sinyalleri_hesapla(hisse_veri, ipo) if hisse_veri else {'al': [], 'tut': [], 'sat': [], 'izle': [], 'riskli': [], 'toplam': 0, 'hesap_tarihi': ''}
 
     # 5. Test senaryoları
     senaryolar = test_senaryolari(hisse_veri) if hisse_veri else {}
