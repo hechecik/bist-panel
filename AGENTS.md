@@ -6,7 +6,7 @@ Canlı adres: https://hechecik.github.io/bist-panel/
 ## Görev sistemi
 - Görevler `docs/gorevler/` klasöründe, her biri ayrı dosyada (`G01-...md`, `G02-...md`).
 - Kullanıcı "G05" yazarsa sadece `docs/gorevler/G05-*.md` dosyasını oku ve uygula. Başka görev dosyası açma.
-- Görev dosyasında "Önkoşul" varsa önce `git log --oneline | grep "G0X"` ile önkoşulun tamamlandığını kontrol et. Tamamlanmamışsa dur ve kullanıcıya bildir.
+- Görev dosyasında "Önkoşul" varsa önce `git log --oneline | grep "G0X"` ile önkoşulun tamamlandığını kontrol et. Tamamlanmamışsa dur ve kullanıcıya bildir. **G00 manueldir; repoda AGENTS.md varsa G00 tamamlanmış sayılır.**
 - Ayrıntılı gerekçe gerekirse `docs/analiz/` altındaki dosyalardan **sadece görevde adı geçen bölümü** oku.
 
 ## Değişmez ilkeler

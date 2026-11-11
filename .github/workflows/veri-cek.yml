@@ -4,8 +4,12 @@ on:
   schedule:
     # Hafta içi TR seansı (09:40-18:10 TR = 06:40-15:10 UTC).
     # GitHub schedule UTC çalışır — 06-15 UTC = TR 09:00-18:59, açılış dahil tam seans.
-    - cron: '*/15 6-15 * * 1-5'
+    # G01: :00/:15/:30/:45 yoğun dakikalarından kaydırıldı → :07/:22/:37/:52.
+    - cron: '7,22,37,52 6-15 * * 1-5'
   workflow_dispatch:
+  # G01: dış tetikleyici (cron-job.org → GitHub repository_dispatch)
+  repository_dispatch:
+    types: [veri]
 
 permissions:
   contents: write
@@ -40,15 +44,20 @@ jobs:
           git add -A
           if ! git diff --cached --quiet; then
             git commit -m "veri guncelle $(date -u +'%d.%m %H:%M') UTC"
-            git fetch origin
-            git rebase origin/main --autostash || {
-              echo "rebase çakışması — veriyi koruyorum"
-              git checkout --theirs data/piyasa.json 2>/dev/null || true
-              git add -A
-              git -c core.editor=true rebase --continue
-            }
-            git push
-            echo "✅ push edildi"
+            # G01: 3 denemeli push döngüsü (rebus/reject → fetch+rebase+push)
+            for i in 1 2 3; do
+              if git fetch origin && git rebase origin/main --autostash && git push; then
+                echo "✅ push edildi (deneme $i)"
+                break
+              fi
+              git rebase --abort 2>/dev/null || true
+              echo "⚠️ push denemesi $i başarısız, tekrar deneniyor"
+              sleep $((i*10))
+            done
           else
             echo "ℹ️ değişiklik yok"
           fi
+
+      - name: Kesinti alarmı (healthchecks.io ping)
+        if: success()
+        run: curl -fsS -m 10 "${{ secrets.HC_URL_VERI }}" || true
