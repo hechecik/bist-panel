@@ -14,9 +14,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 3
     steps:
-      - name: Yerel saat ve ortam
+      - name: Tetikleyici karsilastirma
+        env:
+          GHT: ${{ secrets.CRONJOB_TOKEN }}
         run: |
-          echo "RUNNER_UTC $(date -u +'%Y-%m-%d %H:%M:%S')"
-          echo "TZ=$TZ CI=$CI"
-          uptime
-          free -m | head -2
+          chk(){ curl -s -o /dev/null -w "$1:%{http_code} " -X POST -H "Authorization: token $GHT" -H "Accept: application/vnd.github+json" -H "Content-Type: application/json" "https://api.github.com/repos/hechecik/bist-panel/actions/workflows/af-kontrol.yml/dispatches" -d '{"ref":"main"}'; }
+          echo "scheduler_token: $([ -n "$GHT" ] && echo VAR || echo YOK)"
+          chk dummy
+          echo
