@@ -14,6 +14,7 @@ Hiçbir API key, kişisel bilgi, IP adresi bu script'te yok. OPSEC temiz.
 """
 import json, os, sys, re
 import datetime as dt
+import urllib.request
 from pathlib import Path
 
 
@@ -336,15 +337,16 @@ def endeks_verisi() -> dict | None:
 
 
 ONS_GRAM = 31.1034768  # 1 troy ons = 31,1034768 gram
-GRAM_UYARI_ESIK = 11.0  # borsapy gram ile hesaplanan gram arası fark eşiği (%)
+GRAM_UYARI_ESIK = 1.0  # borsapy gram ile hesaplanan gram arası fark eşiği (%)
 
 
-def gram_altin_hesapla(ons_usd, usdtry, capraz) -> dict:
+def gram_altin_hesapla(ons_usd, usdtry, capraz, ons_kaynak=None) -> dict:
     """Gram altın = ons / 31,1034768 × USD/TL. borsapy değeri sadece 'capraz'.
 
     Ağa çıkmayan saf fonksiyon. ons_usd veya usdtry yoksa 'fiyat' None döner.
     capraz (borsapy) ile hesaplanan değer arasındaki fark GRAM_UYARI_ESIK'i
     aşarsa 'uyari': True olur — borsapy değeri bayat demektir.
+    ons_kaynak: ons değerinin geldiği yer — 'spot' (gold-api) veya 'vadeli' (GC=F).
     """
     capraz_f = None
     try:
@@ -354,7 +356,8 @@ def gram_altin_hesapla(ons_usd, usdtry, capraz) -> dict:
 
     if not ons_usd or not usdtry:
         return {'ad': 'GRAM ALTIN', 'birim': 'TL/gram', 'fiyat': None, 'degisim': None,
-                'capraz': capraz_f, 'uyari': False, 'kaynak': 'ons/fx yok'}
+                'capraz': capraz_f, 'uyari': False, 'kaynak': 'ons/fx yok',
+                'ons_kaynak': ons_kaynak}
 
     fiyat = round(float(ons_usd) / ONS_GRAM * float(usdtry), 2)
     fark = None
@@ -364,16 +367,31 @@ def gram_altin_hesapla(ons_usd, usdtry, capraz) -> dict:
         uyari = abs(fark) > GRAM_UYARI_ESIK
     return {'ad': 'GRAM ALTIN', 'birim': 'TL/gram', 'fiyat': fiyat,
             'capraz': capraz_f, 'fark_yuzde': fark, 'uyari': uyari,
-            'kaynak': 'ons/31,1034768 × USD/TL'}
+            'kaynak': 'ons/31,1034768 × USD/TL', 'ons_kaynak': ons_kaynak}
+
+
+def spot_ons() -> float | None:
+    """Canlı spot ons — gold-api.com (anahtar yok). altin_cek.spot_fiyat ile aynı yöntem."""
+    try:
+        req = urllib.request.Request(
+            'https://api.gold-api.com/price/XAU',
+            headers={'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) Chrome/122'})
+        j = json.loads(urllib.request.urlopen(req, timeout=15).read())
+        return float(j['price'])
+    except Exception as e:
+        log(f"spot ons hata: {str(e)[:50]}")
+        return None
 
 
 def makro_fiyatlar() -> dict:
-    """Altın/döviz/emtia — borsapy FX (doviz.com) + ons için yfinance.
+    """Altın/döviz/emtia — borsapy FX (doviz.com) + ons için spot (gold-api) / GC=F.
 
     GRAM ALTIN: borsapy'nin gram değeri bayat olabiliyor (kanıt: 10 Kasım'da
     6.675 TL görünürken ons×USD hesabı 6.512 TL veriyordu). Bu yüzden gram
     her zaman ons / 31,1034768 × USD/TL ile hesaplanır; borsapy değeri
-    'capraz' alanına yazılır ve fark %11'i aşarsa uyarı verilir.
+    'capraz' alanına yazılır ve fark %1'i aşarsa uyarı verilir.
+    Ons değeri önce canlı spot'tan (gold-api.com), alınamazsa GC=F vadeli'den
+    alınır ve gram kaydına 'ons_kaynak': 'spot' / 'vadeli' yazılır.
     """
     fiyatlar = {}
     borsapy_gram = None
@@ -395,7 +413,13 @@ def makro_fiyatlar() -> dict:
                 continue
     except Exception as e:
         log(f"borsapy FX hata: {str(e)[:50]}")
-    # ONS altın — yfinance GC=F (borsapy yarım değer veriyor)
+    # ONS altın — önce canlı spot (gold-api.com), alınamazsa yfinance GC=F
+    ons_spot = spot_ons()
+    ons_f, ons_deg, ons_kaynak = None, None, None
+    if ons_spot:
+        ons_f, ons_kaynak = round(ons_spot, 2), 'spot'
+        fiyatlar['ons-altin'] = {'ad': 'ONS ALTIN', 'birim': 'USD/ons', 'fiyat': ons_f,
+                                 'degisim': None, 'kaynak': 'spot'}
     try:
         import yfinance as yf
         import warnings
@@ -404,17 +428,22 @@ def makro_fiyatlar() -> dict:
         g = g.dropna()
         son = float(g['Close'].iloc[-1])
         onceki = float(g['Close'].iloc[-2]) if len(g) > 1 else son
-        fiyatlar['ons-altin'] = {'ad': 'ONS ALTIN', 'birim': 'USD/ons', 'fiyat': round(son, 2),
-                                 'degisim': round((son / onceki - 1) * 100, 2) if onceki else None}
+        ons_deg = round((son / onceki - 1) * 100, 2) if onceki else None
+        if ons_f is None:
+            ons_f, ons_kaynak = round(son, 2), 'vadeli'
+            fiyatlar['ons-altin'] = {'ad': 'ONS ALTIN', 'birim': 'USD/ons', 'fiyat': ons_f,
+                                     'degisim': ons_deg, 'kaynak': 'vadeli'}
+        else:
+            # spot manşet; değişim yalnızca vadeli seriden (spot geçmişi yok)
+            fiyatlar['ons-altin']['degisim'] = ons_deg
+            fiyatlar['ons-altin']['vadeli_fiyat'] = round(son, 2)
     except Exception as e:
         log(f"ons altın hata: {str(e)[:50]}")
     # GRAM ALTIN — her zaman ons/USD'den hesaplanır (borsapy gram bayat olabiliyor)
     try:
-        ons_f = (fiyatlar.get('ons-altin') or {}).get('fiyat')
         usd_f = (fiyatlar.get('USD') or {}).get('fiyat')
-        ons_deg = (fiyatlar.get('ons-altin') or {}).get('degisim')
         usd_deg = (fiyatlar.get('USD') or {}).get('degisim')
-        gram = gram_altin_hesapla(ons_f, usd_f, borsapy_gram)
+        gram = gram_altin_hesapla(ons_f, usd_f, borsapy_gram, ons_kaynak)
         if ons_deg is not None and usd_deg is not None and gram.get('fiyat'):
             # bileşik değişim: (1+ons)(1+usd) - 1
             gram['degisim'] = round(((1 + ons_deg / 100) * (1 + usd_deg / 100) - 1) * 100, 2)
