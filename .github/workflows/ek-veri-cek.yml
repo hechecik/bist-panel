@@ -5,15 +5,10 @@ on:
     # Sabit getiri (tahvil/eurobond) + halka arz/temettü takvimi.
     # Günde 2 kez hafta içi: 06:00 UTC (TR 09:00) ve 15:00 UTC (TR 18:00, kapanış sonrası).
     # G01: :00 yoğun dakikasından kaydırıldı → :09 ve :19.
+    # BAKIM (12.11.2026): GitHub schedule fiilen tetiklenmiyor -> harici tetikleyici
+    # cron-job.org, fine-grained PAT (Actions: write) ile workflow_dispatch cagirir.
     - cron: '9,19 6,15 * * 1-5'
-    # BAKIM (11.11.2026): GitHub schedule fiilen tetiklenmiyor → tetik-cek.yml yedek tetikleyici.
   workflow_dispatch:
-  # G01: dış tetikleyici — ek veri, hisse (veri) tetikleyicisiyle birlikte çalışır
-  # G01 planlanan cron-job.org → repository_dispatch kurulumu YAPILMADI (repoda
-  # secret yok, dispatch olayi sayisi 0). Yedek tetikleyici tetik-cek.yml, hedef
-  # akislari dogrudan workflow_dispatch ile cagirir. Bu blok uyumluluk icin duruyor.
-  repository_dispatch:
-    types: [veri, ek]
 
 permissions:
   contents: write

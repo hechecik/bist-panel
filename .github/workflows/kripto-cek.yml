@@ -4,14 +4,10 @@ on:
   schedule:
     # Kripto 24/7 işlem görür — hafta sonu dahil her 30 dakikada bir tazele.
     # G01: :00/:30 yoğun dakikalarından kaydırıldı → :17/:47.
-    # BAKIM (11.11.2026): GitHub schedule fiilen tetiklenmiyor → tetik-cek.yml yedek tetikleyici.
+    # BAKIM (12.11.2026): GitHub schedule fiilen tetiklenmiyor -> harici tetikleyici
+    # cron-job.org, fine-grained PAT (Actions: write) ile workflow_dispatch cagirir.
     - cron: '17,47 * * * *'
   workflow_dispatch:
-  # G01 planlanan cron-job.org → repository_dispatch kurulumu YAPILMADI (repoda
-  # secret yok, dispatch olayi sayisi 0). Yedek tetikleyici tetik-cek.yml, hedef
-  # akislari dogrudan workflow_dispatch ile cagirir. Bu blok uyumluluk icin duruyor.
-  repository_dispatch:
-    types: [kripto]
 
 permissions:
   contents: write

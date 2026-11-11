@@ -5,15 +5,12 @@ on:
     # Hafta ici TR seansi (09:40-18:10 TR = 06:40-15:10 UTC).
     # GitHub schedule UTC calisir - 06-15 UTC = TR 09:00-18:59, acilis dahil tam seans.
     # G01: :00/:15/:30/:45 yogun dakikalarindan kaydirildi -> :07/:22/:37/:52.
-    # BAKIM NOTU (11.11.2026): GitHub schedule bu repoda fiilen tetiklenmiyor
-    # (14 gun boyunca yalnizca workflow_dispatch calismalari var). Bu yuzden
-    # yedek tetikleyici: tetik-cek.yml, schedule'in en gec 25 dk gerisinde kalirsa
-    # kendi GITHUB_TOKEN'i ile repository_dispatch gonderir.
+    # BAKIM (12.11.2026): GitHub'in kendi schedule mekanizmasi bu repoda fiilen
+    # tetiklenmiyor. Harici tetikleyici cron-job.org -> workflow_dispatch
+    # (fine-grained PAT, yalnizca Actions: write). HMAC katmani kaldirildi:
+    # cron-job.org sabit govde gonderdigi icin imza uretilemiyor.
     - cron: '7,22,37,52 6-15 * * 1-5'
   workflow_dispatch:
-  # G01: dis tetikleyici (tetik-cek.yml -> GitHub repository_dispatch)
-  repository_dispatch:
-    types: [veri]
 
 permissions:
   contents: write

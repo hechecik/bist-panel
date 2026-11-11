@@ -12,6 +12,7 @@ Canlı adres: https://hechecik.github.io/bist-panel/
 - Ayrıntılı gerekçe gerekirse `docs/analiz/` altındaki dosyalardan **sadece görevde adı geçen bölümü** oku.
 
 ## Değişmez ilkeler
+0. **Kullanıcı onayı olmadan yeni workflow dosyası oluşturma veya silme.** `.github/workflows/` altındaki dosya kümesi sabittir: `veri-cek.yml`, `altin-cek.yml`, `kripto-cek.yml`, `ek-veri-cek.yml`. Geçici teşhis/test workflow'u açmak da bu kurala tabidir.
 1. **LLM veya ücretli API çağrısı ekleme.** Site çalışırken sıfır token harcar. Bütün yorum metinleri sayılardan deterministik şablonlarla üretilir.
 2. **Uydurma sayı yok.** Her sayı gerçek bir kaynaktan gelir. Veri alınamazsa `"durum": "veri yok"` yazılır, tahmini veya elle girilmiş değer kullanılmaz. Elle olasılık yüzdesi yazmak yasak.
 3. **Zaman damgaları** timezone-aware UTC ISO formatında yazılır (`dt.datetime.now(dt.timezone.utc)`). UI'da gösterim `timeZone:'Europe/Istanbul'` ile yapılır. JS'de tarih ayrıştırmak için `utcTarih()` yardımcısı kullanılır.
@@ -32,7 +33,7 @@ Canlı adres: https://hechecik.github.io/bist-panel/
 | `scripts/sinyal_denetim.py` | Sinyallerin ileri getiri denetimi (IC, AL−SAT farkı) | Ağ bağlantısı gerekmez |
 | `data/*.json` | Üretilen veri | **Bütün olarak okuma.** `python3 -c "import json;d=json.load(open('data/X.json'));print(list(d))"` veya `jq` ile alan seç |
 | `data/log/*.jsonl` | Günlük tam kesit sinyal kaydı (100 hisse) | Denetimin ham verisi |
-| `.github/workflows/*.yml` | veri-cek (15 dk), altin-cek (30 dk), kripto-cek (30 dk), ek-veri-cek (2×/gün) | |
+| `.github/workflows/*.yml` | veri-cek (15 dk), altin-cek (30 dk), kripto-cek (30 dk), ek-veri-cek (2×/gün) | Hepsi `workflow_dispatch` içerir; harici tetikleme cron-job.org → fine-grained PAT (Actions: write) |
 | `tests/` | Ağ bağlantısı gerektirmeyen pytest testleri | |
 
 ## Çalışma kuralları (token tasarrufu)
