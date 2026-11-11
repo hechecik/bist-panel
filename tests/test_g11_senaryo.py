@@ -4,10 +4,11 @@ import datetime as dt
 import pytest
 
 from scripts.altin_cek import (
-    ESIK_BRENT_5G_PCT, ESIK_BRENT_PCT, ESIK_DOT_BP, ESIK_DXY_PCT, ESIK_GRAM_SAPMA_PCT,
-    ESIK_REEL_FAIZ_BP, KARNE_MAKS, ayrisim_uyarisi, bant, gram_ayrisim,
-    gram_gercek_kontrol, karne_blogu, karne_ekle, karne_isabet, karne_zamani_mi, kur_trend,
-    makro_skor, senaryolar, teknik_skor, tr_saat,
+    DONEM_BAR, ESIK_BRENT_5G_PCT, ESIK_BRENT_PCT, ESIK_DOT_BP, ESIK_DXY_PCT, ESIK_GRAM_SAPMA_PCT,
+    ESIK_REEL_FAIZ_BP, HIZALAMA_TOLERANS_GUN, KARNE_MAKS, KUR_UYARI_KAT, ayrisim_uyarisi, bant,
+    donem_degisimleri, gram_ayrisim, gram_gercek_kontrol, gram_serisi, karne_blogu, karne_ekle,
+    karne_isabet, karne_zamani_mi, kur_trend, kur_tutarlilik_uyarisi, makro_skor, senaryolar,
+    seri_degisim, tarihe_gore_deger, teknik_skor, tr_saat,
 )
 
 
@@ -232,7 +233,7 @@ def test_gram_ayrisim_toplam_ve_pay():
 
 
 def test_gram_ayrisim_bilesen_eksik():
-    r = gram_ayrisim({'1a': 3.0}, {})
+    r = gram_ayrisim({'1a': {'pct': 3.0}}, {})
     assert r['1a']['gram_pct'] == pytest.approx(3.0)
     assert r['1a']['kur_pct'] == 0.0
     assert r['1a']['not']
@@ -253,14 +254,16 @@ def test_gram_ayrisim_sifir_toplamda_pay_none():
 def test_gram_gercek_kontrol_kabul():
     ons = _seri([2000 + i for i in range(30)])
     kur = _seri([40 + 0.2 * i for i in range(30)])
-    r = gram_gercek_kontrol(ons, kur, gun=21)
+    r = gram_gercek_kontrol(ons, kur, bar=21)
     assert r['kabul'] is True
-    assert r['sapma_pct'] < ESIK_GRAM_SAPMA_PCT
+    # tolerans çapraz terime göre genişler, sabit eşik değil
+    assert r['sapma_pct'] <= r['tolerans_pct']
+    assert r['tolerans_pct'] >= ESIK_GRAM_SAPMA_PCT
 
 
 def test_gram_gercek_kontrol_veri_yok():
     assert gram_gercek_kontrol([], [])['durum'] == 'veri yok'
-    assert gram_gercek_kontrol(_seri([1] * 5), _seri([1] * 5), gun=21)['durum'] == 'veri yok'
+    assert gram_gercek_kontrol(_seri([1] * 5), _seri([1] * 5), bar=21)['durum'] == 'veri yok'
 
 
 # ── karne ───────────────────────────────────────────────────
@@ -334,3 +337,136 @@ def test_karne_zamani_23te_dogru():
     assert karne_zamani_mi(dt.datetime(2026, 1, 15, 20, 40, tzinfo=dt.timezone.utc)) is True
     assert karne_zamani_mi(dt.datetime(2026, 1, 15, 18, 0, tzinfo=dt.timezone.utc)) is False
     assert karne_zamani_mi(dt.datetime(2026, 1, 15, 22, 0, tzinfo=dt.timezone.utc)) is False
+
+
+# ── DÜZELTME: pencere (1g/1h/1a iş günü) + tarihe göre hizalama ──────────────
+def _isg_seri(degerler, bas=dt.date(2026, 1, 5)):
+    """İş günü (Pzt–Cum) serisi üret: [(date, float)] eskiden yeniye."""
+    out, t, i = [], bas, 0
+    while len(out) < len(degerler):
+        if t.weekday() < 5:
+            out.append((t, float(degerler[i])))
+            i += 1
+        t += dt.timedelta(days=1)
+    return out
+
+
+def test_pencereler_is_gunu_1g_1h_1a():
+    # 1a = 21 iş günü (1 ay), 252 DEĞİL — pencere hatası regresyon testi
+    assert DONEM_BAR == {'1g': 1, '1h': 5, '1a': 21}
+
+
+def test_donem_degisimleri_is_gunu_bazli():
+    # her iş günü +%1 → 1g %1, 1h ~%5, 1a ~%21 (yıllık %1000 DEĞİL)
+    seri = _isg_seri([100 * (1.01 ** i) for i in range(60)])
+    d = donem_degisimleri(seri)
+    assert d['1g']['pct'] == pytest.approx(1.0, abs=0.05)
+    assert d['1h']['pct'] == pytest.approx(5.1, abs=0.4)
+    assert d['1a']['pct'] == pytest.approx(23.2, abs=1.5)
+    assert d['1a']['bar'] == 21
+
+
+def test_seri_degisim_aylik_pencerede_baslangic_tarihi():
+    seri = _isg_seri([100 + i for i in range(40)])
+    r = seri_degisim(seri, DONEM_BAR['1a'])
+    assert r['bas_tarih'] and r['son_tarih']
+    fark = (dt.date.fromisoformat(r['son_tarih']) - dt.date.fromisoformat(r['bas_tarih'])).days
+    # 21 iş günü ≈ 29 takvim günü — YIL değil
+    assert 27 <= fark <= 33, f'1a penceresi ~1 ay olmalı, {fark} gün çıktı'
+
+
+def test_tarihe_gore_deger_eksik_gun_oncekini_kullanir():
+    seri = [(dt.date(2026, 1, 5), 10.0), (dt.date(2026, 1, 9), 20.0)]
+    # 2026-01-07 seride yok → en yakın ÖNCEKİ (01-05)
+    assert tarihe_gore_deger(seri, dt.date(2026, 1, 7)) == (dt.date(2026, 1, 5), 10.0)
+    # hafta sonu → cuma
+    assert tarihe_gore_deger(seri, dt.date(2026, 1, 10)) == (dt.date(2026, 1, 9), 20.0)
+
+
+def test_tarihe_gore_deger_tolerans_asilirsa_none():
+    seri = [(dt.date(2026, 1, 5), 10.0)]
+    assert tarihe_gore_deger(seri, dt.date(2026, 1, 5 + HIZALAMA_TOLERANS_GUN + 1)) is None
+    assert tarihe_gore_deger(seri, dt.date(2026, 1, 4)) is None   # hedef öncesi veri yok
+
+
+def test_seri_degisim_index_kaymasi_yapmaz():
+    # ons her iş günü var; kurda 10 günlük BOŞLUK var. Index ile hizalama yanlış tarihe bakardı.
+    ons = _isg_seri([2000.0] * 40)                 # sabit ons → ons değişimi %0
+    kur = _isg_seri([40.0 + 0.1 * i for i in range(40)])
+    kur_kopuk = [x for i, x in enumerate(kur) if not (18 <= i <= 27)]
+    d_ons = donem_degisimleri(ons)['1a']
+    d_kur = donem_degisimleri(kur_kopuk)['1a']
+    assert d_ons['pct'] == pytest.approx(0.0, abs=1e-9)
+    # kopuk seride de baz, hedef tarihe en yakın önceki gün → kur artışı makul, uçuk değil
+    assert d_kur['pct'] is None or 0 < d_kur['pct'] < 12
+
+
+def test_seri_degisim_veri_yok_kisa_seri():
+    assert seri_degisim([], 21)['durum'] == 'veri yok'
+    assert seri_degisim(_isg_seri([1.0] * 10), 21)['durum'] == 'veri yok'
+
+
+def test_seri_degisim_sifir_baz_pct_yok():
+    # baz (1 gün önce) 0 → yüzde ÜRETİLMEZ (sıfıra bölme/uydurma yok)
+    seri = _isg_seri([5.0] * 30 + [0.0])
+    r = seri_degisim(seri, 1)
+    assert r['durum'] == 'veri yok' and 'pct' not in r
+    # baz 0 ama SON değer var: 2 gün önce 0 → hedef 0 → veri yok
+    seri2 = _isg_seri([5.0] * 29 + [0.0, 7.0])
+    r2 = seri_degisim(seri2, 1)
+    assert r2['durum'] == 'veri yok' and 'pct' not in r2
+
+
+def test_gram_serisi_bagimsiz_ve_hizali():
+    ons = _isg_seri([2000.0 + i for i in range(30)])
+    kur = _isg_seri([40.0 + 0.1 * i for i in range(30)])
+    gs = gram_serisi(ons, kur)
+    assert len(gs) == 30
+    assert gs[0][1] == pytest.approx(2000.0 / 31.1034768 * 40.0, rel=1e-9)
+
+
+def test_gram_gercek_kontrol_pencere_hatasini_tekrarlamaz():
+    # 1a kontrolü ~1 ay olmalı: gram serisi 1 yıllık değişimi göstermemeli
+    ons = _isg_seri([2000.0] * 300)
+    kur = _isg_seri([40.0 * (1.0065 ** i) for i in range(300)])
+    r = gram_gercek_kontrol(ons, kur, bar=21)
+    assert r['kabul'] is True
+    assert r['yaklasik_pct'] < 20, f'1a ~1 ay olmalı, %{r["yaklasik_pct"]} çıktı'
+    fark = (dt.date.fromisoformat(r['son_tarih']) - dt.date.fromisoformat(r['bas_tarih'])).days
+    assert 28 <= fark <= 35
+
+
+def test_kur_tutarlilik_uyarisi_esik_asilinca_uyarir():
+    # aylık varsayım %1,65 → eşik %4,95; 1a %18,62 pencere hatası UYARI vermeli
+    donem = {'1g': {'pct': 0.1}, '1h': {'pct': 0.4}, '1a': {'pct': 18.62}}
+    r = kur_tutarlilik_uyarisi(donem, {'aylik_kayip_pct': 1.65})
+    assert r['var'] is True
+    assert r['esik_pct'] == pytest.approx(4.95, abs=0.01)
+    assert any(u['donem'] == '1a' for u in r['uyarilar'])
+
+
+def test_kur_tutarlilik_uyarisi_makul_degisimde_susar():
+    donem = {'1g': {'pct': 0.1}, '1h': {'pct': 0.4}, '1a': {'pct': 1.2}}
+    assert kur_tutarlilik_uyarisi(donem, {'aylik_kayip_pct': 1.65})['var'] is False
+
+
+def test_kur_tutarlilik_uyarisi_aylik_yoksa_denetlemez():
+    r = kur_tutarlilik_uyarisi({'1a': {'pct': 50.0}}, {'durum': 'veri yok'})
+    assert r['var'] is False and r['aylik_pct'] is None
+
+
+def test_kur_uyari_kat_sabiti():
+    assert KUR_UYARI_KAT == 3.0
+
+
+# ── jeopolitik şok tek yön gösterimi ────────────────────────
+def test_jeopolitik_sok_tek_yon_ust_bant():
+    makro = {'dot_plot': {'makas_bp': None, 'piyasa_ima': {}},
+             'seriler': {'reel_faiz_20g_bp': -20.0, 'brent_5g_pct': 20.0},
+             'piyasa': {}}
+    s = senaryolar(makro, son=4000.0, atr=90.0)
+    j = [x for x in s['liste'] if x['ad'] == 'Jeopolitik şok'][0]
+    assert j['yon'] == 'yukarı'
+    # yön yukarı → gösterim yalnız üst bant (iki yönlü aralık DEĞİL)
+    assert j['bant_gosterim'] == [j['bant'][1], j['bant'][1]]
+    assert j['bant_gosterim'][0] != j['bant'][0]

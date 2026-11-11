@@ -330,6 +330,19 @@ ESIK_GRAM_SAPMA_PCT = 0.2   # gram ayrışımı kabul toleransı (kabul kriteri)
 KARNE_MAKS = 400            # data/altin_gecmis.json en fazla kayıt
 ZAMAN_DILIMI = 'Europe/Istanbul'
 
+# G11 düzeltme: dönem pencereleri İŞ GÜNÜ (bar) cinsinden — 1g=1, 1h=5, 1a=21 bar.
+# Önceki sürüm main() içinde 1h=21, 1a=252 bar kullanıyordu (1a ≈ 356 takvim günü = ~1 yıl),
+# bu yüzden 1a kur değişimi yıllık birikimi gösteriyordu. Tek doğru kaynak burasıdır.
+DONEM_BAR = {'1g': 1, '1h': 5, '1a': 21}
+
+# Tarihe göre hizalama: seride o tarih yoksa en yakın ÖNCEKİ tarih kullanılır.
+# Tolerans iş günü cinsinden; aşılırsa o dönem "veri yok" döner (eski veri taşınmaz).
+HIZALAMA_TOLERANS_GUN = 5
+
+# Uyarı eşiği: dönem kur değişimi, aylık ortalama kur değişiminin bu katını aşarsa
+# "pencere/veri sorunu" uyarısı üretilir (aylık varsayımla tutarsızlık denetimi).
+KUR_UYARI_KAT = 3.0
+
 
 def _isaret_yorum(skor, esik=2):
     if skor is None:
@@ -490,9 +503,10 @@ def senaryolar(makro, son, atr, dot=None):
              f"reel 10Y 20g {round(reel*100, 1) if reel is not None else '—'} bp)")
     alt, ust = bant(son, atr, 2.0)
     sv.append({'ad': 'Jeopolitik şok', 'kosul': kosul, 'tetik': f'Brent 5g ≥ +%{ESIK_BRENT_5G_PCT:g} + reel faiz ↓',
-               'bant': [alt, ust], 'k': 2.0, 'vurgu': 'üst', 'yon': 'yukarı', 'olasilik': None,
+               'bant': [alt, ust], 'bant_gosterim': [ust, ust], 'k': 2.0, 'vurgu': 'üst', 'yon': 'yukarı',
+               'olasilik': None,
                'kaynak': 'ATR×√5', 'gerceklesti': bool(brent_5g_pct is not None and brent_5g_pct >= ESIK_BRENT_5G_PCT
-                                                       and reel is not None and reel < 0)})
+                                                      and reel is not None and reel < 0)})
     # Çakışma satırı: şahin Fed + jeopolitik şok — iki yön zıt olduğu için belirsizlik
     # bandı (k=1) kullanılır; tek başına iki senaryonun bandı buraya kopyalanmaz.
     alt, ust = bant(son, atr, 1.0)
@@ -529,6 +543,108 @@ def kur_trend(seriler, pencere=63):
             'gun': len(s), 'ilk_tarih': s[0][0].isoformat(), 'son_tarih': s[-1][0].isoformat()}
 
 
+def _tarih_key(t):
+    """date/datetime/Timestamp → date. Hizalama karşılaştırmaları için."""
+    if hasattr(t, 'date') and not isinstance(t, __import__('datetime').date):
+        try:
+            return t.date()
+        except Exception:
+            pass
+    if isinstance(t, __import__('datetime').date) and not isinstance(t, __import__('datetime').datetime):
+        return t
+    if hasattr(t, 'date'):
+        return t.date()
+    return t
+
+
+def tarihe_gore_deger(seri, hedef_tarih, tolerans=HIZALAMA_TOLERANS_GUN):
+    """Saf fonksiyon: `seri` [(date, float)] içinde `hedef_tarih`e en yakın ÖNCEKİ değeri bul.
+
+    Seride o tarih yoksa (hafta sonu/tatil/boşluk) en yakın önceki tarih kullanılır.
+    Toleransı (gün) aşan eşleşme kabul edilmez → None döner (eski veri taşınmaz).
+    `seri` eskiden yeniye sıralı olmalıdır.
+    """
+    if not seri:
+        return None
+    hedef = _tarih_key(hedef_tarih)
+    aday = None
+    for t, v in seri:
+        tk = _tarih_key(t)
+        if tk <= hedef:
+            aday = (tk, v)
+        else:
+            break
+    if aday is None:
+        return None
+    fark = (hedef - aday[0]).days
+    if fark > tolerans:
+        return None
+    return aday
+
+
+def seri_degisim(seri, bar, tolerans=HIZALAMA_TOLERANS_GUN, donem_bas=None):
+    """Saf fonksiyon: son değere göre `bar` iş günü önceki değere göre yüzde değişim.
+
+    TARİHE göre hizalama: `bar` iş günü geriye sayılıp hedef tarih bulunur, sonra HER İKİ
+    değer `tarihe_gore_deger` ile kendi serisinden okunur. Böylece ons ve USDTRY serilerinde
+    eksik gün/boşluk olsa da aynı takvim tarihine bakılır (index kayması olmaz).
+
+    Dönüş: {'pct', 'bas_tarih', 'son_tarih', 'bar', 'kaydirma_gun'} veya {'durum': 'veri yok'}.
+    Baz 0/None ise yüzde üretilmez (uydurma yok).
+    """
+    if not seri or len(seri) <= bar:
+        return {'durum': 'veri yok', 'bar': bar}
+    son_t, son_v = _tarih_key(seri[-1][0]), seri[-1][1]
+    if not son_v:
+        return {'durum': 'veri yok', 'bar': bar}
+    # hedef tarih: son tarihten `bar` iş günü geri (iş günü ≈ takvim günü ×7/5, yuvarlanır)
+    hedef_t = donem_bas if donem_bas is not None else son_t - dt.timedelta(days=int(round(bar * 7 / 5)))
+    bas = tarihe_gore_deger(seri, hedef_t, tolerans)
+    if bas is None or not bas[1]:
+        return {'durum': 'veri yok', 'bar': bar, 'hedef_tarih': _tarih_key(hedef_t).isoformat()}
+    pct = (son_v / bas[1] - 1) * 100
+    return {'pct': round(pct, 3), 'bas_tarih': bas[0].isoformat(), 'son_tarih': son_t.isoformat(),
+            'bar': bar, 'kaydirma_gun': (hedef_t - bas[0]).days,
+            'bas_deger': round(float(bas[1]), 4), 'son_deger': round(float(son_v), 4)}
+
+
+def donem_degisimleri(seri, donem_bar=None):
+    """Saf fonksiyon: {'1g': {...}, '1h': {...}, '1a': {...}} — iş günü bazlı, tarihe göre hizalı."""
+    tablo = donem_bar or DONEM_BAR
+    return {k: seri_degisim(seri, bar) for k, bar in tablo.items()}
+
+
+def kur_tutarlilik_uyarisi(donemler, kur_trend_sonuc, kat=KUR_UYARI_KAT):
+    """Saf fonksiyon: dönem kur değişimi aylık varsayımla tutarsız mı? (pencere/veri hatası denetimi)
+
+    `donemler`: donem_degisimleri() çıktısı · `kur_trend_sonuc`: kur_trend() çıktısı.
+    Aylık değişim `aylik_kayip_pct`. 1a penceresi ≈ 1 ay olduğundan |1a pct| aylık değerin
+    `kat` katından büyükse uyarı üretilir (1g/1h için kısa pencere olduğundan yalnız bilgi).
+    Dönüş: {'var': bool, 'uyarilar': [{'donem','pct','esik_pct','metin'}], 'aylik_pct'}
+    """
+    if not donemler or not kur_trend_sonuc or kur_trend_sonuc.get('durum') == 'veri yok':
+        return {'var': False, 'uyarilar': [], 'aylik_pct': None,
+                'not': 'aylık kur varsayımı yok — tutarlılık denetlenemedi'}
+    aylik = kur_trend_sonuc.get('aylik_kayip_pct')
+    if aylik is None:
+        return {'var': False, 'uyarilar': [], 'aylik_pct': None,
+                'not': 'aylık kur varsayımı yok — tutarlılık denetlenemedi'}
+    esik = abs(aylik) * kat
+    uyarilar = []
+    for k in ('1g', '1h', '1a'):
+        d = (donemler or {}).get(k) or {}
+        pct = d.get('pct')
+        if pct is None:
+            continue
+        if abs(pct) > esik and esik > 0:
+            uyarilar.append({'donem': k, 'pct': round(pct, 3), 'esik_pct': round(esik, 3),
+                             'metin': (f'{k} kur değişimi %{pct:.2f}, aylık varsayımın '
+                                       f'(%{aylik:.2f}/ay) {kat:g} katı eşiğini (%{esik:.2f}) aşıyor — '
+                                       f'pencere veya seri boşluğu şüphesi')})
+    return {'var': bool(uyarilar), 'uyarilar': uyarilar, 'aylik_pct': aylik,
+            'kat': kat, 'esik_pct': round(esik, 3)}
+
+
 def gram_ayrisim(ons_degisimleri, kur_degisimleri):
     """Saf fonksiyon: Δgram% ≈ Δons% + ΔUSDTRY% ve katkı payları.
 
@@ -539,35 +655,90 @@ def gram_ayrisim(ons_degisimleri, kur_degisimleri):
     for k in ('1g', '1h', '1a'):
         a = (ons_degisimleri or {}).get(k)
         b = (kur_degisimleri or {}).get(k)
-        if a is None and b is None:
+        a_pct = a.get('pct') if isinstance(a, dict) else a
+        b_pct = b.get('pct') if isinstance(b, dict) else b
+        if a_pct is None and b_pct is None:
             out[k] = {'durum': 'veri yok'}
             continue
-        a = a or 0.0
-        b = b or 0.0
-        g = a + b
-        pay = (round(a / g * 100, 1) if g else None)
-        out[k] = {'ons_pct': round(a, 3), 'kur_pct': round(b, 3), 'gram_pct': round(g, 3),
+        eksik = a_pct is None or b_pct is None
+        a_pct = a_pct or 0.0
+        b_pct = b_pct or 0.0
+        g = a_pct + b_pct
+        pay = (round(a_pct / g * 100, 1) if g else None)
+        out[k] = {'ons_pct': round(a_pct, 3), 'kur_pct': round(b_pct, 3), 'gram_pct': round(g, 3),
                   'ons_pay': pay if pay is not None else None,
                   'kur_pay': round(100 - pay, 1) if pay is not None else None,
-                  'not': 'bir bileşen eksik — toplam tek bacaktan' if (k not in (ons_degisimleri or {}) or
-                                                                      k not in (kur_degisimleri or {})) else None}
+                  'bas_tarih': (a or {}).get('bas_tarih') if isinstance(a, dict) else None,
+                  'son_tarih': (a or {}).get('son_tarih') if isinstance(a, dict) else None,
+                  'bar': (a or {}).get('bar') if isinstance(a, dict) else None,
+                  'eksik_bilesen': [n for n, v in (('ons', a_pct), ('kur', b_pct)) if v is None or
+                                    (n == 'ons' and not isinstance(a, dict) and a is None) or
+                                    (n == 'kur' and not isinstance(b, dict) and b is None)],
+                  'not': 'bir bileşen eksik — toplam tek bacaktan' if eksik else None}
     return out
 
 
-def gram_gercek_kontrol(ons_seri_list, kur_seri_list, gun=21):
-    """Saf fonksiyon: yaklaşık formülün gerçek gram değişimine sapması (kabul kriteri)."""
-    if not ons_seri_list or not kur_seri_list or len(ons_seri_list) <= gun or len(kur_seri_list) <= gun:
-        return {'durum': 'veri yok'}
-    o0, o1 = ons_seri_list[-gun - 1][1], ons_seri_list[-1][1]
-    k0, k1 = kur_seri_list[-gun - 1][1], kur_seri_list[-1][1]
-    if not o0 or not k0:
-        return {'durum': 'veri yok'}
-    gercek = ((o1 * k1) / (o0 * k0) - 1) * 100
-    yaklasik = ((o1 / o0 - 1) + (k1 / k0 - 1)) * 100
+def gram_serisi(ons_seri_list, kur_seri_list, tolerans=HIZALAMA_TOLERANS_GUN):
+    """Saf fonksiyon: ons ve kur serilerinden BAĞIMSIZ gram/TL serisi üret.
+
+    Her ons tarihi için kur, TARİHE göre hizalanır (en yakın önceki, tolerans içinde).
+    Eşleşmeyen günler seriye alınmaz. Bu seri kontrol hesabının tek kaynağıdır —
+    yaklaşık formülün pencere hatasını tekrarlamaz.
+    Dönüş: [(date, gram_float)] eskiden yeniye.
+    """
+    if not ons_seri_list or not kur_seri_list:
+        return []
+    out = []
+    for t, o in ons_seri_list:
+        if not o:
+            continue
+        k = tarihe_gore_deger(kur_seri_list, t, tolerans)
+        if k is None or not k[1]:
+            continue
+        out.append((_tarih_key(t), float(o) / ONS_GRAM * float(k[1])))
+    out.sort(key=lambda x: x[0])
+    return out
+
+
+def gram_gercek_kontrol(ons_seri_list, kur_seri_list, bar=21, tolerans=HIZALAMA_TOLERANS_GUN):
+    """Saf fonksiyon: yaklaşık formülün gerçek gram değişimine sapması (kabul kriteri).
+
+    Gerçek değişim, `gram_serisi()` ile ons+kurdan BAĞIMSIZ kurulan gram serisinden alınır
+    ve TARİHE göre hizalanır — böylece pencere hatası tekrarlanmaz. Yaklaşık değer
+    Δons% + Δkur% olarak aynı başlangıç/bitiş tarihlerinde hesaplanır.
+    """
+    gs = gram_serisi(ons_seri_list, kur_seri_list, tolerans)
+    if len(gs) <= bar:
+        return {'durum': 'veri yok', 'bar': bar}
+    son_t, g1 = gs[-1]
+    hedef_t = son_t - dt.timedelta(days=int(round(bar * 7 / 5)))
+    bas = tarihe_gore_deger(gs, hedef_t, tolerans)
+    if bas is None or not bas[1]:
+        return {'durum': 'veri yok', 'bar': bar, 'hedef_tarih': hedef_t.isoformat()}
+    gercek = (g1 / bas[1] - 1) * 100
+    # yaklaşık: aynı tarihlerde ons ve kur değişimi
+    o0 = tarihe_gore_deger(ons_seri_list, bas[0], tolerans)
+    o1 = tarihe_gore_deger(ons_seri_list, son_t, tolerans)
+    k0 = tarihe_gore_deger(kur_seri_list, bas[0], tolerans)
+    k1 = tarihe_gore_deger(kur_seri_list, son_t, tolerans)
+    if not (o0 and o1 and k0 and k1 and o0[1] and k0[1]):
+        return {'durum': 'veri yok', 'bar': bar}
+    yaklasik = ((o1[1] / o0[1] - 1) + (k1[1] / k0[1] - 1)) * 100
+    # Yaklaşık formülün hatası karesel çapraz terimdir: |Δons%·Δkur%|/100.
+    # Tolerans = sabit taban + bu çapraz terim → büyük değişimde yapay RET olmaz.
+    sapma = abs(gercek - yaklasik)
+    d_ons = abs((o1[1] / o0[1] - 1) * 100)
+    d_kur = abs((k1[1] / k0[1] - 1) * 100)
+    capraz = d_ons * d_kur / 100
+    tolerans = max(ESIK_GRAM_SAPMA_PCT, capraz * 1.5)
     return {'gercek_pct': round(gercek, 3), 'yaklasik_pct': round(yaklasik, 3),
-            'sapma_pct': round(abs(gercek - yaklasik), 4),
-            'kabul': abs(gercek - yaklasik) <= ESIK_GRAM_SAPMA_PCT,
-            'tolerans_pct': ESIK_GRAM_SAPMA_PCT}
+            'sapma_pct': round(sapma, 4), 'tolerans_pct': round(tolerans, 4),
+            'capraz_pct': round(capraz, 4), 'kabul': sapma <= tolerans,
+            'bar': bar,
+            'bas_tarih': bas[0].isoformat(), 'son_tarih': son_t.isoformat(),
+            'gram_bas': round(bas[1], 2), 'gram_son': round(g1, 2),
+            'ons_bas': round(o0[1], 2), 'ons_son': round(o1[1], 2),
+            'kur_bas': round(k0[1], 4), 'kur_son': round(k1[1], 4)}
 
 
 # ──────────────────────────────────────────────────────────────
@@ -1505,18 +1676,21 @@ def main():
         scn = {'liste': [], 'olasilik_goster': False, 'durum': 'veri yok'}
 
     # G11: gram ayrışımı (1g/1h/1a) ≈ Δons + ΔUSDTRY · kur varsayımı 63 gün ortalaması
+    # DÜZELTME: pencereler iş günü (1g=1, 1h=5, 1a=21 bar) ve TARİHE göre hizalı.
+    # Önceki sürüm 1h=21, 1a=252 bar kullanıyordu → 1a ≈ 356 takvim günü (yıllık birikim).
+    ons_list = [(t.date(), float(x)) for t, x in c.items()]
     try:
         kur_seri = usdtry_seri()
         kt = kur_trend(kur_seri)
-        fx_deg = {}
-        for k, gun in (('1g', 1), ('1h', 21), ('1a', 252)):
-            if len(kur_seri) > gun and kur_seri[-gun - 1][1]:
-                fx_deg[k] = (kur_seri[-1][1] / kur_seri[-gun - 1][1] - 1) * 100
-        ga = gram_ayrisim(perf, fx_deg)
-        gk = gram_gercek_kontrol([(t.date(), float(x)) for t, x in c.items()], kur_seri)
+        ons_deg = donem_degisimleri(ons_list)
+        fx_deg = donem_degisimleri(kur_seri)
+        ga = gram_ayrisim(ons_deg, fx_deg)
+        gk = gram_gercek_kontrol(ons_list, kur_seri, bar=DONEM_BAR['1a'])
+        ku = kur_tutarlilik_uyarisi(fx_deg, kt)
     except Exception as e:
         log(f'gram ayrışım HATA: {str(e)[:80]}')
         kt, ga, gk = {'durum': 'veri yok'}, {}, {'durum': 'veri yok'}
+        ku = {'var': False, 'uyarilar': []}
 
     # G11: karne — TR 23:00 penceresinde günde tek kayıt (geçmiş uydurulmaz)
     try:
@@ -1542,6 +1716,9 @@ def main():
     veri['senaryolar'] = scn
     veri['gram_ayrisim'] = {'donemler': ga, 'kur_trend': kt, 'formul': 'Δgram% ≈ Δons% + ΔUSDTRY%',
                             'kur_varsayimi': '63 gün ortalaması',
+                            'pencereler': {'1g': '1 iş günü', '1h': '5 iş günü', '1a': '21 iş günü'},
+                            'hizalama': 'tarihe göre — eksik tarihte en yakın önceki, tolerans 5 gün',
+                            'kur_tutarlilik': ku,
                             'gercek_kontrol': gk}
     veri['karne'] = karne
 

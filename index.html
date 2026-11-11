@@ -1714,10 +1714,12 @@ function renderAltin(d) {
     h += `<h2>🎯 Senaryolar <span class="cnt">ATR×√5 · ATR ${sn.atr != null ? sn.atr : '—'}$</span></h2>`;
     sn.liste.forEach(s => {
       const b = s.bant || [];
+      // bant_gosterim: yön tek ise (yukarı/aşağı) bant yerine o yönün seviyesi gösterilir
+      const bg = s.bant_gosterim || b;
       const gerc = s.gerceklesti ? ' <span class="badge hi">TETİKLENDİ</span>' : '';
       h += `<div class="sc" style="${s.cakisma ? 'border-left:3px solid var(--down)' : ''}">` +
            `<div class="t">${alEsc(s.ad)}${gerc}${s.olasilik != null ? ' · olasılık %' + s.olasilik : ''}</div>` +
-           `<div class="v">${b[0] != null ? b[0] + ' – ' + b[1] + '$' : 'bant yok'}</div>` +
+           `<div class="v">${bg[0] != null ? (s.vurgu && bg[0] === bg[1] ? '≈ ' + bg[0] + '$ (tek yön)' : bg[0] + ' – ' + bg[1] + '$') : 'bant yok'}</div>` +
            `<div class="m">EĞER ${alEsc(s.kosul)}<br>Tetik: ${alEsc(s.tetik)} · k=${s.k}` +
            (s.vurgu ? ` · <b style="color:${s.vurgu === 'üst' ? 'var(--up)' : 'var(--down)'}">${alEsc(s.yon)} yön: ${s.vurgu} bant ${s.vurgu === 'üst' ? b[1] : b[0]}$</b>` : '') + `</div></div>`;
     });
