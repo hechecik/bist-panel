@@ -646,7 +646,10 @@ def _islem_hesapla(sembol: str, i: int, s: dict, ind, kilitler: dict) -> dict | 
         cikis_neden = 'vade'
 
     brut = (cikis_fiyat / giris_fiyat - 1) * 100
-    net = (cikis_fiyat * (1 - MALIYET / 2) / giris_fiyat - 1) * 100   # gidiş-dönüş maliyet
+    # Gidiş-dönüş maliyet: alışta (1+MALIYET/2), satışta (1−MALIYET/2) uygulanır
+    net = (cikis_fiyat * (1 - MALIYET / 2)) / (giris_fiyat * (1 + MALIYET / 2)) * 100 - 100
+    # Stop durumunda da aynı mantık: stop fiyatından satış, maliyetli giriş fiyatına göre
+    stop_net = (stop_fiyat * (1 - MALIYET / 2)) / (giris_fiyat * (1 + MALIYET / 2)) * 100 - 100
     return {
         'sembol': sembol,
         'tarih': str(pd.Timestamp(ind.iloc[si]['HGDG_TARIH']).date()),      # geriye uyum
@@ -659,7 +662,7 @@ def _islem_hesapla(sembol: str, i: int, s: dict, ind, kilitler: dict) -> dict | 
         'getiri_yuzde': round(net, 1),                                       # net (maliyet düşülmüş)
         'brut_getiri_yuzde': round(brut, 1),
         'maliyet_yuzde': round(MALIYET * 100, 2),
-        'stop_getiri_yuzde': round(-BT_ATR_STOP * atr14 / giris_fiyat * 100 - MALIYET * 100, 1),
+        'stop_getiri_yuzde': round(stop_net, 1),
         'stop_calismis': cikis_neden == 'stop',
         'kaydirildi': gi != si + 1,
         'kilit': kilitler.get(gi),
@@ -682,11 +685,15 @@ def sermaye_simule(islemler: list, baslangic=None, max_pozisyon=None) -> dict:
     max_pozisyon = int(BT_MAX_POZISYON if max_pozisyon is None else max_pozisyon)
     tahsis = baslangic / max_pozisyon if max_pozisyon else baslangic
 
-    sira = sorted(islemler, key=lambda x: (x.get('giris_tarih') or '', x.get('sembol') or ''))
+    # Aynı giriş tarihli sinyallerde SKOR azalan, eşitlikte sembol (deterministik)
+    sira = sorted(islemler, key=lambda x: (x.get('giris_tarih') or '',
+                                           -(x.get('skor') or 0),
+                                           x.get('sembol') or ''))
     sermaye = baslangic
     acik = []                                # [(cikis_tarih, getiri_yuzde, tahsis_tl)]
     atlanan = 0
     islenen = 0
+    beklenen_kar = 0.0                       # Σ(tahsis × getiri/100) — mutabakat için
     zirve, max_dd = baslangic, 0.0
 
     for x in sira:
@@ -704,6 +711,7 @@ def sermaye_simule(islemler: list, baslangic=None, max_pozisyon=None) -> dict:
             continue
         sermaye -= tahsis
         acik.append((x.get('cikis_tarih') or giris_t, x.get('getiri_yuzde', 0.0), tahsis))
+        beklenen_kar += tahsis * x.get('getiri_yuzde', 0.0) / 100.0
         islenen += 1
         # Eşit ağırlıklı anlık portföy değeri (açık pozisyonlar maliyetten sayılır)
         deger = sermaye + len(acik) * tahsis
@@ -713,10 +721,16 @@ def sermaye_simule(islemler: list, baslangic=None, max_pozisyon=None) -> dict:
 
     for _cikis_t, g, tutar in acik:
         sermaye += tutar * (1 + g / 100.0)
+    kar_zarar = sermaye - baslangic
+    fark = kar_zarar - beklenen_kar
     return {'baslangic': baslangic, 'sonuc': round(sermaye, 0),
-            'kar_zarar': round(sermaye - baslangic, 0), 'islem': islenen,
+            'kar_zarar': round(kar_zarar, 0), 'islem': islenen,
             'atlanan': atlanan, 'tahsis': round(tahsis, 0),
-            'max_drawdown_yuzde': round(max_dd, 1)}
+            'gerceklesen_max_dd_yuzde': round(max_dd, 1),
+            'max_drawdown_yuzde': round(max_dd, 1),   # geriye uyum (bir sürüm)
+            'beklenen_kar': round(beklenen_kar, 0),
+            'mutabakat_fark': round(fark, 0),
+            'mutabakat_fark_yuzde': round(fark / baslangic * 100, 3)}
 
 
 
@@ -1369,7 +1383,12 @@ def test_senaryolari(hisse_veri: dict, endeks_serisi=None) -> dict:
         sim = sermaye_simule(islemler, baslangic=baslangic, max_pozisyon=BT_MAX_POZISYON)
         return {'baslangic': baslangic, 'sonuc': sim['sonuc'], 'kar_zarar': sim['kar_zarar'],
                 'islem': sim['islem'], 'atlanan': sim['atlanan'], 'tahsis': round(tahsis, 0),
-                'max_drawdown_yuzde': sim['max_drawdown_yuzde'], 'strateji': 'kronolojik'}
+                'gerceklesen_max_dd_yuzde': sim['gerceklesen_max_dd_yuzde'],
+                'max_drawdown_yuzde': sim['max_drawdown_yuzde'],   # geriye uyum
+                'beklenen_kar': sim['beklenen_kar'],
+                'mutabakat_fark': sim['mutabakat_fark'],
+                'mutabakat_fark_yuzde': sim['mutabakat_fark_yuzde'],
+                'strateji': 'kronolojik'}
 
     # 2.5 — G08: Benchmark (XU100) alfa + metrikler + skor seviyesi tabloları.
     #      `endeks_serisi`: [(tarih_str, kapanis)] artan sıralı (G09 tam serisi).
@@ -1420,7 +1439,7 @@ def test_senaryolari(hisse_veri: dict, endeks_serisi=None) -> dict:
             'ortalama_alfa': alfa_grup(islemler),
             # kâr/zarar 0 ise oran tanımsız → None (sonsuz yazılmaz)
             'profit_factor': round(kaz / kay, 2) if kay > 0 else None,
-            'max_drawdown': sim['max_drawdown_yuzde'],
+            'max_drawdown': sim['gerceklesen_max_dd_yuzde'],
             # devir: yıllık ortalama işlem sayısı (252 / ortalama vade)
             'devir': round(252 / ort_gun, 1) if ort_gun > 0 else None,
         }

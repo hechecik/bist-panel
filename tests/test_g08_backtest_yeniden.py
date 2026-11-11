@@ -59,10 +59,10 @@ def test_stop_tetiklenir():
     assert isl['stop_calismis'] is True
     assert isl['cikis_tarih'] == _gun(3)
     assert isl['stop_fiyat'] == 98.0                          # 100 − 2×1
-    # brüt −%2, maliyet %0,2 → net ≈ −%2,1 (−2,098 → tek ondalık)
+    # brüt −%2, gidiş-dönüş maliyet %0,2 → net ≈ −%2,2
     assert isl['brut_getiri_yuzde'] == pytest.approx(-2.0, abs=0.05)
-    assert isl['getiri_yuzde'] == pytest.approx(-2.1, abs=0.05)
-    assert isl['brut_getiri_yuzde'] - isl['getiri_yuzde'] == pytest.approx(0.1, abs=0.06)
+    assert isl['getiri_yuzde'] == pytest.approx(-2.2, abs=0.05)
+    assert isl['brut_getiri_yuzde'] - isl['getiri_yuzde'] == pytest.approx(0.2, abs=0.06)
 
 
 # (b) Vade çıkışı: hiçbir seviye tetiklenmezse 5. iş günü kapanışından çıkış
@@ -101,7 +101,7 @@ def test_cakisma_engeli():
     assert hv  # kullanıldı
 
 
-# (d) Maliyet düşümü: net = brüt − MALIYET×100 (yaklaşık, kalan gün sayısı etkisiyle)
+# (d) Maliyet düşümü: GİDİŞ-DÖNÜŞ %0,2 — alışta ve satışta yarım maliyet
 def test_maliyet_dusumu():
     barlar = [_bar(_gun(0), 100.0, 100.0, 99.9, 100.1, atr=1.0)]
     for n in range(1, 7):
@@ -109,7 +109,42 @@ def test_maliyet_dusumu():
     isl = _islem(barlar)
     assert isl['maliyet_yuzde'] == pytest.approx(v.MALIYET * 100)
     fark = isl['brut_getiri_yuzde'] - isl['getiri_yuzde']
-    assert fark == pytest.approx(v.MALIYET * 100, abs=0.15), f'Maliyet düşülmemiş: {isl}'
+    assert fark == pytest.approx(v.MALIYET * 100, abs=0.05), f'Maliyet düşülmemiş: {isl}'
+
+
+def test_maliyet_fiyat_degismezse_yuzde_02():
+    """Fiyat hiç değişmezse net getiri ≈ −%0,2 olmalı (gidiş-dönüş maliyet)."""
+    barlar = [_bar(_gun(0), 100.0, 100.0, 99.9, 100.1, atr=1.0)]
+    for n in range(1, 7):
+        barlar.append(_bar(_gun(n), 100.0, 100.0, 100.0, 100.0))
+    isl = _islem(barlar)
+    assert isl['brut_getiri_yuzde'] == pytest.approx(0.0, abs=0.05)
+    assert isl['getiri_yuzde'] == pytest.approx(-0.2, abs=0.05), f'Beklenen −%0,2: {isl}'
+
+
+# (g) Aynı giriş tarihli sinyaller skora göre sıralanır (yüksek skor önce)
+def test_sermaye_simule_skor_onceligi():
+    islemler = [
+        {'sembol': 'AAA', 'giris_tarih': '2026-01-05', 'cikis_tarih': '2026-01-20',
+         'getiri_yuzde': -10.0, 'skor': 2},
+        {'sembol': 'ZZZ', 'giris_tarih': '2026-01-05', 'cikis_tarih': '2026-01-20',
+         'getiri_yuzde': 10.0, 'skor': 5},
+    ]
+    # 1 pozisyonluk slot: skor 5 olan seçilmeli
+    sim = v.sermaye_simule(islemler, baslangic=100000.0, max_pozisyon=1)
+    assert sim['islem'] == 1 and sim['atlanan'] == 1
+    assert sim['kar_zarar'] > 0, f'Yüksek skor seçilmedi: {sim}'
+
+
+# (h) Mutabakat: kar_zarar ≈ Σ(tahsis × getiri) — fark %1'den küçük
+def test_sermaye_mutabakat():
+    islemler = [{'sembol': f'S{i:02d}', 'giris_tarih': f'2026-01-{i+1:02d}',
+                 'cikis_tarih': f'2026-02-{i+1:02d}', 'getiri_yuzde': (i - 4) * 3.0,
+                 'skor': 3} for i in range(10)]
+    sim = v.sermaye_simule(islemler, baslangic=100000.0, max_pozisyon=10)
+    assert abs(sim['mutabakat_fark_yuzde']) < 1.0, f'Mutabakat sapması: {sim}'
+    assert sim['beklenen_kar'] == pytest.approx(sim['kar_zarar'], abs=sim['baslangic'] * 0.01)
+    assert 'gerceklesen_max_dd_yuzde' in sim and 'max_drawdown_yuzde' in sim
 
 
 # (e) Aynı gün stop + hedef → muhafazakâr kural: STOP sayılır

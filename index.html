@@ -988,13 +988,13 @@ function renderSenaryo(d) {
         `<div class="sc"><div class="t">İşlem Getirisi</div><div class="o ${m.ortalama >= 0 ? 'up' : 'down'}">${af(m.ortalama)}</div><div class="m">maliyet düşülmüş, işlem başına</div></div>` +
         `<div class="sc"><div class="t">İsabet</div><div class="o">%${m.isabet == null ? '—' : (m.isabet * 100).toFixed(1)}</div><div class="m">${m.islem} işlem</div></div>` +
         `<div class="sc"><div class="t">Profit Factor</div><div class="o ${(m.profit_factor ?? 0) >= 1 ? 'up' : 'down'}">${m.profit_factor == null ? '—' : m.profit_factor.toFixed(2)}</div><div class="m">kâr / zarar</div></div>` +
-        `<div class="sc"><div class="t">Max Drawdown (100K)</div><div class="o down">${m.max_drawdown == null ? '—' : '%' + m.max_drawdown.toFixed(1)}</div><div class="m">kronolojik simülasyon</div></div>` +
+        `<div class="sc"><div class="t">Gerçekleşen Max Düşüş (100K)</div><div class="o down">${m.max_drawdown == null ? '—' : '%' + m.max_drawdown.toFixed(1)}</div><div class="m">kronolojik simülasyon, açık pozisyonlar maliyetten</div></div>` +
         `<div class="sc"><div class="t">Devir</div><div class="o">${m.devir == null ? '—' : m.devir.toFixed(0)}</div><div class="m">yıllık işlem / pozisyon</div></div>` +
         '</div>';
 
       if (t.skor_tablosu && t.skor_tablosu.length) {
         html += '<h2>🎚️ Skor Seviyesine Göre <span class="cnt">XU100\'e göre alfa</span></h2><div class="twrap"><table><tr>' +
-          '<th>Skor</th><th>İşlem</th><th>İsabet</th><th>Ort. Getiri</th><th>Ort. Alfa (XU100\'e göre)</th><th>Profit Factor</th><th>Max DD</th></tr><tbody>';
+          '<th>Skor</th><th>İşlem</th><th>İsabet</th><th>Ort. Getiri</th><th>Ort. Alfa (XU100\'e göre)</th><th>Profit Factor</th><th>Gerçekleşen Max DD</th></tr><tbody>';
         t.skor_tablosu.forEach(r => {
           html += `<tr><td class="sym">${r.skor}</td><td>${r.islem}</td>` +
             `<td>${r.isabet == null ? '—' : '%' + (r.isabet * 100).toFixed(1)}</td>` +
