@@ -2,21 +2,42 @@ name: af-kontrol
 
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/af-kontrol.yml'
 
 permissions:
   contents: read
+  actions: read
 
 jobs:
   kontrol:
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    env:
+      TOK: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - name: Secrets tanimli mi
-        env:
-          V: ${{ secrets.HC_URL_VERI }}
-          A: ${{ secrets.HC_URL_ALTIN }}
-          K: ${{ secrets.HC_URL_KRIPTO }}
+      - name: Zamanlama teshisi
         run: |
-          t(){ [ -n "$2" ] && echo "$1: VAR" || echo "$1: YOK"; }
-          t HC_URL_VERI "$V"; t HC_URL_ALTIN "$A"; t HC_URL_KRIPTO "$K"
-          echo "--- scheduel son kosular (API) ---"
+          python3 - <<'PY'
+          import json,os,urllib.request,datetime as dt
+          tok=os.environ["TOK"]
+          def api(u):
+              r=urllib.request.Request("https://api.github.com"+u,headers={"Authorization":"token "+tok,"Accept":"application/vnd.github+json","User-Agent":"af"})
+              return json.load(urllib.request.urlopen(r,timeout=30))
+          base="/repos/hechecik/bist-panel"
+          print("sunucu UTC:",dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%d %H:%M"))
+          for wid in (340681937,380092667,380053231,380109152):
+              d=api(f"/actions/workflows/{wid}/runs?per_page=6")
+              print("==",d["workflow_runs"][0]["name"] if d["workflow_runs"] else wid)
+              for x in d["workflow_runs"]:
+                  print("  ",x["created_at"],x["event"],x["conclusion"])
+          s=api(base+"/actions/permissions")
+          print("actions izinleri:",s)
+          try:
+              print("schedule sağlığı (60 gün kural): tüm workflow'lar:")
+              for w in api(base+"/actions/workflows")["workflows"]:
+                  print("  ",w["name"],w["state"])
+          except Exception as e:
+              print("workflow listesi hata:",e)
+          PY
