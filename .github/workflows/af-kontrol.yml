@@ -8,19 +8,16 @@ on:
 
 permissions:
   contents: write
-  actions: read
+  actions: write
 
 jobs:
   kontrol:
     runs-on: ubuntu-latest
     timeout-minutes: 3
     steps:
-      - name: GITHUB_TOKEN yetkileri
+      - name: GITHUB_TOKEN actions:write testi
         env:
           TOK: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          for u in "/repos/hechecik/bist-panel" "/repos/hechecik/bist-panel/actions/permissions"; do
-            echo "GET $u -> $(curl -s -o /dev/null -w '%{http_code}' -H "Authorization: token $TOK" -H "Accept: application/vnd.github+json" "https://api.github.com$u")"
-          done
-          echo "POST dispatch -> $(curl -s -o /dev/null -w '%{http_code}' -X POST -H "Authorization: token $TOK" -H "Accept: application/vnd.github+json" "https://api.github.com/repos/hechecik/bist-panel/actions/workflows/af-kontrol.yml/dispatches" -d '{"ref":"main"}')"
-          echo "SCHEMA $(date -u +%H:%M)"
+          echo "POST daire dispatch -> $(curl -s -o /dev/null -w '%{http_code}' -X POST -H "Authorization: token $TOK" -H "Accept: application/vnd.github+json" "https://api.github.com/repos/hechecik/bist-panel/actions/workflows/af-kontrol.yml/dispatches" -d '{"ref":"main"}')"
+          echo "POST repo dispatch -> $(curl -s -o /dev/null -w '%{http_code}' -X POST -H "Authorization: token $TOK" -H "Accept: application/vnd.github+json" "https://api.github.com/repos/hechecik/bist-panel/dispatches" -d '{"event_type":"af-test"}')"
