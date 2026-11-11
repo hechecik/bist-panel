@@ -1,7 +1,32 @@
 {
- "uretildi": "2026-11-11T16:27:09",
+ "uretildi": "2026-11-11T17:45:16",
  "kaynak": "borsapy · doviz.com/tahvil + Ziraat Yatırım eurobond",
- "tahvil": [],
+ "tahvil": [
+  {
+   "vade": "2Y",
+   "ad": "Türkiye 2 Yıllık Tahvil Faizi",
+   "getiri": 39.42,
+   "degisim": null,
+   "degisim_yuzde": 0.13,
+   "kaynak": "doviz.com/tahvil"
+  },
+  {
+   "vade": "5Y",
+   "ad": "Türkiye 5 Yıllık Tahvil Faizi",
+   "getiri": 39.03,
+   "degisim": null,
+   "degisim_yuzde": 0.31,
+   "kaynak": "doviz.com/tahvil"
+  },
+  {
+   "vade": "10Y",
+   "ad": "Türkiye 10 Yıllık Tahvil Faizi",
+   "getiri": 35.99,
+   "degisim": null,
+   "degisim_yuzde": 0.56,
+   "kaynak": "doviz.com/tahvil"
+  }
+ ],
  "eurobond": [
   {
    "isin": "US900123CL22",
@@ -375,9 +400,8 @@
   }
  ],
  "risk_free": null,
- "hatalar": [
-  "tahvil: Bond table not found on page"
- ],
+ "hatalar": [],
+ "tahvil_durum": "ok — doviz.com/tahvil",
  "eurobond_ozet": {
   "adet": 37,
   "para": [

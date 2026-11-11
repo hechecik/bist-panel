@@ -478,7 +478,10 @@ function renderPiyasa(d) {
     // ters: VIX gibi endekslerde artış negatiftir (korku) → renk ters
     const ts = f.ters ? -1 : 1;
     const renk = f.degisim == null ? '' : ((f.degisim * ts) >= 0 ? 'up' : 'down');
-    mk += `<div class="mk"><div class="t">${f.ad}</div><div class="v">${fmt(f.fiyat)}</div>` +
+    // gram altın uyarısı: borsapy çapraz değeri ile hesap arasında >%11 fark
+    const gramUyari = f.uyari ? ' <span class="up" title="borsapy çapraz: ' + fmt(f.capraz) +
+      ' · fark %' + fmt(f.fark_yuzde) + '">[1]</span>' : '';
+    mk += `<div class="mk"><div class="t">${f.ad}${gramUyari}</div><div class="v">${fmt(f.fiyat)}</div>` +
           `<div class="d ${renk}">${f.degisim == null ? f.birim : yuzde(f.degisim)}</div></div>`;
   });
   document.getElementById('makroRow').innerHTML = mk;
@@ -905,12 +908,14 @@ function renderSenaryo(d) {
     // Hisse bazlı backtest
     if (t.hisse_bazli && t.hisse_bazli.length) {
       html += '<h2>📈 Hisse Bazlı Backtest <span class="cnt">sinyal başına</span></h2><div class="twrap"><table><tr>' +
-        '<th>Hisse</th><th>Toplam Getiri</th><th>İşlem</th><th>Başarı</th><th>Max Düşüş</th></tr><tbody>';
+        '<th>Hisse</th><th>Toplam Getiri</th><th>İşlem</th><th>Başarı</th><th>En Kötü İşlem</th></tr><tbody>';
       t.hisse_bazli.forEach(x => {
+        // en_kotu_islem yeni ad; eski 'max_dusus' bir sürüm boyunca yedek
+        const ek = x.en_kotu_islem != null ? x.en_kotu_islem : x.max_dusus;
         html += `<tr><td class="sym">${x.sembol}</td>` +
           `<td class="${ok(x.toplam_getiri)}">${x.toplam_getiri >= 0 ? '+' : ''}%${x.toplam_getiri.toFixed(1)}</td>` +
           `<td>${x.islem_sayisi}</td><td>%${x.basari_orani}</td>` +
-          `<td class="down">%${x.max_dusus.toFixed(1)}</td></tr>`;
+          `<td class="${ek >= 0 ? 'up' : 'down'}">${ek == null ? '—' : (ek >= 0 ? '+' : '') + '%' + ek.toFixed(1)}</td></tr>`;
       });
       html += '</tbody></table></div>';
     }
@@ -1121,7 +1126,8 @@ async function getiriYukle() {
       });
       h += '</div>';
     } else {
-      h += '<div class="empty">Tahvil verisi yok — bir sonraki güncellemede.</div>';
+      const sebep = g.tahvil_durum || 'sebep yazılmadı';
+      h += '<div class="empty">⚠️ Tahvil verisi alınamadı — <b>' + sebep + '</b></div>';
     }
 
     if (g.eurobond && g.eurobond.length) {

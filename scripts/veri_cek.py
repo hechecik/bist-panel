@@ -37,12 +37,14 @@ def log(msg):
 def bist100_listesi() -> list:
     """BIST 100 hisse listesi — repo içindeki sabit dosyadan."""
     if BIST100_FILE.exists():
-        return [l.strip().upper() for l in BIST100_FILE.read_text().splitlines() if l.strip()]
+        # '#' ile başlayan satırlar yorumdur (ör. "# güncelleme: 2026-11-11")
+        return [l.strip().upper() for l in BIST100_FILE.read_text().splitlines()
+                if l.strip() and not l.strip().startswith('#')]
     # Fallback: bilinen ana hisseler
     return ['THYAO','AKBNK','ASELS','GARAN','ISCTR','KCHOL','SAHOL','TUPRS','EREGL','BIMAS',
             'FROTO','PETKM','SISE','TCELL','TAVHL','YKBNK','HEKTS','SASA','EKGYO','TOASO',
             'KRDMD','OTKAR','AEFES','BRSAN','CCOLA','ENKAI','KOZAL','PGSUS','SOKM','TKFEN',
-            'AGHOL','AKSA','ALARK','ARCLK','BAGFS','BRISA','DOAS','GUBRF','ISDMR','KCHOL',
+            'AGHOL','AKSA','ALARK','ARCLK','BAGFS','BRISA','DOAS','GUBRF','ISDMR',
             'MAVI','MGROS','ODINE','OYAKC','SMRTG','SODA','TMSN','TTKOM','VESTL','ZOREN']
 
 
@@ -333,9 +335,48 @@ def endeks_verisi() -> dict | None:
         return None
 
 
+ONS_GRAM = 31.1034768  # 1 troy ons = 31,1034768 gram
+GRAM_UYARI_ESIK = 11.0  # borsapy gram ile hesaplanan gram arası fark eşiği (%)
+
+
+def gram_altin_hesapla(ons_usd, usdtry, capraz) -> dict:
+    """Gram altın = ons / 31,1034768 × USD/TL. borsapy değeri sadece 'capraz'.
+
+    Ağa çıkmayan saf fonksiyon. ons_usd veya usdtry yoksa 'fiyat' None döner.
+    capraz (borsapy) ile hesaplanan değer arasındaki fark GRAM_UYARI_ESIK'i
+    aşarsa 'uyari': True olur — borsapy değeri bayat demektir.
+    """
+    capraz_f = None
+    try:
+        capraz_f = float(capraz) if capraz is not None else None
+    except (TypeError, ValueError):
+        capraz_f = None
+
+    if not ons_usd or not usdtry:
+        return {'ad': 'GRAM ALTIN', 'birim': 'TL/gram', 'fiyat': None, 'degisim': None,
+                'capraz': capraz_f, 'uyari': False, 'kaynak': 'ons/fx yok'}
+
+    fiyat = round(float(ons_usd) / ONS_GRAM * float(usdtry), 2)
+    fark = None
+    uyari = False
+    if capraz_f:
+        fark = round((capraz_f / fiyat - 1) * 100, 2)
+        uyari = abs(fark) > GRAM_UYARI_ESIK
+    return {'ad': 'GRAM ALTIN', 'birim': 'TL/gram', 'fiyat': fiyat,
+            'capraz': capraz_f, 'fark_yuzde': fark, 'uyari': uyari,
+            'kaynak': 'ons/31,1034768 × USD/TL'}
+
+
 def makro_fiyatlar() -> dict:
-    """Altın/döviz/emtia — borsapy FX (doviz.com) + ons için yfinance."""
+    """Altın/döviz/emtia — borsapy FX (doviz.com) + ons için yfinance.
+
+    GRAM ALTIN: borsapy'nin gram değeri bayat olabiliyor (kanıt: 10 Kasım'da
+    6.675 TL görünürken ons×USD hesabı 6.512 TL veriyordu). Bu yüzden gram
+    her zaman ons / 31,1034768 × USD/TL ile hesaplanır; borsapy değeri
+    'capraz' alanına yazılır ve fark %11'i aşarsa uyarı verilir.
+    """
     fiyatlar = {}
+    borsapy_gram = None
     try:
         import borsapy as bp
         semboller = {'gram-altin': ('GRAM ALTIN', 'TL/gram'), 'USD': ('DOLAR/TL', 'TL'),
@@ -346,6 +387,8 @@ def makro_fiyatlar() -> dict:
                 c = bp.FX(sym).current
                 son = c.get('last')
                 acilis = c.get('open')
+                if sym == 'gram-altin':
+                    borsapy_gram = float(son) if son else None
                 fiyatlar[sym] = {'ad': ad, 'birim': birim, 'fiyat': round(float(son), 2) if son else None,
                                  'degisim': round((float(son) / float(acilis) - 1) * 100, 2) if son and acilis else None}
             except Exception:
@@ -365,6 +408,22 @@ def makro_fiyatlar() -> dict:
                                  'degisim': round((son / onceki - 1) * 100, 2) if onceki else None}
     except Exception as e:
         log(f"ons altın hata: {str(e)[:50]}")
+    # GRAM ALTIN — her zaman ons/USD'den hesaplanır (borsapy gram bayat olabiliyor)
+    try:
+        ons_f = (fiyatlar.get('ons-altin') or {}).get('fiyat')
+        usd_f = (fiyatlar.get('USD') or {}).get('fiyat')
+        ons_deg = (fiyatlar.get('ons-altin') or {}).get('degisim')
+        usd_deg = (fiyatlar.get('USD') or {}).get('degisim')
+        gram = gram_altin_hesapla(ons_f, usd_f, borsapy_gram)
+        if ons_deg is not None and usd_deg is not None and gram.get('fiyat'):
+            # bileşik değişim: (1+ons)(1+usd) - 1
+            gram['degisim'] = round(((1 + ons_deg / 100) * (1 + usd_deg / 100) - 1) * 100, 2)
+        fiyatlar['gram-altin'] = gram
+        if gram.get('uyari'):
+            log(f"gram altın UYARI: borsapy {gram.get('capraz')} vs hesap {gram.get('fiyat')} "
+                f"(fark %{gram.get('fark_yuzde')})")
+    except Exception as e:
+        log(f"gram altın hesap hata: {str(e)[:50]}")
     # VIX + emtialar — yfinance (küresel risk iştahı + sektörel ipucu)
     ekstra = [
         ('^VIX', 'VIX KORKU', 'seviye', True),   # ters: artış = korku = kırmızı
@@ -763,6 +822,9 @@ def test_senaryolari(hisse_veri: dict) -> dict:
             'toplam_getiri': round(sum(getiriler), 1),
             'islem_sayisi': len(islemler),
             'basari_orani': round(sum(1 for g in getiriler if g > 0) / len(getiriler) * 100),
+            # Alan adı: aslında "en kötü işlem getirisi" (pozitif olabilir).
+            # Eski ad 'max_dusus' bir sürüm boyunca geriye uyumluluk için yazılır.
+            'en_kotu_islem': round(min(getiriler), 1),
             'max_dusus': round(min(getiriler), 1),
         })
     hisse_ozet.sort(key=lambda x: x['toplam_getiri'], reverse=True)
@@ -803,6 +865,56 @@ def test_senaryolari(hisse_veri: dict) -> dict:
     }
 
 
+def haber_tarihi_iso(deger) -> str | None:
+    """Herhangi bir yayın tarihi biçimini UTC ISO'ya çevir. Ağa çıkmaz.
+
+    Desteklenen biçimler:
+      - RFC-2822 / "+0000 GMT" (email.utils.parsedate_to_datetime)
+      - ISO 8601 ("2026-11-11T14:03:00Z", "+03:00" ofsetli, ofsetsiz)
+      - "YYYY-MM-DD HH:MM:SS" (ofsetsiz → UTC kabul edilir)
+      - "YYYY-MM-DD"
+    Ayrıştırılamazsa None döner (uydurma tarih yazılmaz).
+    """
+    import datetime as _dt
+    from email.utils import parsedate_to_datetime
+
+    if deger is None:
+        return None
+    s = str(deger).strip()
+    if not s:
+        return None
+
+    # 1) RFC-2822 ("Wed, 11 Nov 2026 14:03:00 +0000" / "... GMT")
+    try:
+        dt = parsedate_to_datetime(s)
+    except (TypeError, ValueError, IndexError):
+        dt = None
+    if dt is not None:
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=_dt.timezone.utc)
+        return dt.astimezone(_dt.timezone.utc).isoformat()
+
+    # 2) ISO 8601
+    t = s.replace('Z', '+00:00').replace('z', '+00:00')
+    try:
+        dt = _dt.datetime.fromisoformat(t)
+    except ValueError:
+        dt = None
+    if dt is not None:
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=_dt.timezone.utc)  # ofsetsiz → UTC kabul
+        return dt.astimezone(_dt.timezone.utc).isoformat()
+
+    # 3) Açık biçimler
+    for fmt in ('%Y-%m-%d %H:%M:%S', '%Y-%m-%dT%H:%M:%S', '%Y-%m-%d %H:%M', '%Y-%m-%d'):
+        try:
+            dt = _dt.datetime.strptime(s[:len(fmt) + 4], fmt).replace(tzinfo=_dt.timezone.utc)
+            return dt.astimezone(_dt.timezone.utc).isoformat()
+        except ValueError:
+            continue
+    return None
+
+
 def _rss_cek(url: str, limit: int = 12) -> list:
     """RSS feed çek — stdlib (xml.etree) + httpx. pubDate → ISO normalize."""
     try:
@@ -820,16 +932,7 @@ def _rss_cek(url: str, limit: int = 12) -> list:
                 continue
             link = (item.findtext('link') or '').strip()
             pub = (item.findtext('pubDate') or '').strip()
-            iso = None
-            if pub:
-                try:
-                    iso = parsedate_to_datetime(pub).isoformat()
-                except Exception:
-                    try:
-                        import datetime as _dt
-                        iso = _dt.datetime.strptime(pub[:19], '%Y-%m-%d %H:%M:%S').isoformat()
-                    except Exception:
-                        iso = None
+            iso = haber_tarihi_iso(pub) if pub else None
             sonuc.append({'baslik': baslik[:200], 'link': link, 'pub': iso})
         return sonuc
     except Exception:
@@ -916,11 +1019,12 @@ def haberler_cek(oncelikli_hisseler=None) -> list:
             return
         gorulen.add(anahtar)
         yon, etiket = _yon_etiket(baslik)
+        iso = haber_tarihi_iso(pub) if pub else None
         haberler.append({
             'baslik': baslik[:180], 'kaynak': kaynak, 'kategori': kategori,
             'dil': dil, 'yon': yon, 'etiket': etiket, 'sembol': sembol,
-            'link': link, 'yayin_tarihi': pub,
-            'tarih': (pub or '')[:10] if pub else '',
+            'link': link, 'yayin_tarihi': iso,
+            'tarih': (iso or '')[:10] if iso else '',
         })
 
     # 1) BIST hisseleri (Yahoo) — mevcut mantık
@@ -934,11 +1038,7 @@ def haberler_cek(oncelikli_hisseler=None) -> list:
                 baslik = c.get('title', '')
                 if not baslik:
                     continue
-                pub = (c.get('pubDate') or '')[:19].replace('T', ' ')
-                try:
-                    iso = _dt.datetime.strptime(pub, '%Y-%m-%d %H:%M:%S').isoformat() if pub else None
-                except Exception:
-                    iso = None
+                iso = haber_tarihi_iso(c.get('pubDate'))
                 yayinci = (c.get('provider') or {}).get('displayName', 'Yahoo')
                 ekle(baslik, yayinci, 'bist', _dil_tespit(baslik, 'en'), sym, '', iso)
         except Exception:
@@ -953,11 +1053,7 @@ def haberler_cek(oncelikli_hisseler=None) -> list:
                 baslik = c.get('title', '')
                 if not baslik:
                     continue
-                pub = (c.get('pubDate') or '')[:19].replace('T', ' ')
-                try:
-                    iso = _dt.datetime.strptime(pub, '%Y-%m-%d %H:%M:%S').isoformat() if pub else None
-                except Exception:
-                    iso = None
+                iso = haber_tarihi_iso(c.get('pubDate'))
                 yayinci = (c.get('provider') or {}).get('displayName', 'Yahoo')
                 ekle(baslik, yayinci, kategori, _dil_tespit(baslik, 'en'), sembol, '', iso)
         except Exception:
