@@ -354,3 +354,7 @@ def test_agents_git_akisinda_veri_temizleme_kurali():
     assert 'git checkout -- data/ && git clean -fd data/log/' in src[i_akis:]
     assert 'asla commit' in src[i_akis:]
     assert 'Actions üretir' in src[i_akis:]
+    # data/ ve data/log/ Actions tarafından commit edilir; log arşivi silinemez/ignore edilemez
+    assert 'Actions commit eder' in src[i_akis:]
+    assert 'data/log/ ölçüm arşividir' in src[i_akis:]
+    assert 'asla silinmez veya ignore edilmez' in src[i_akis:]

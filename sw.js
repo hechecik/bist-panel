@@ -1,5 +1,5 @@
 // Service Worker — çevrimdışı önbellek (PWA)
-const CACHE = 'bist-panel-v5';
+const CACHE = 'bist-panel-v6';
 const CORE = ['/', '/index.html', '/manifest.json',
   // G06: ön yüz bölündü — CSS ve JS ayrı dosyalar
   '/css/app.css', '/js/core.js', '/js/main.js',

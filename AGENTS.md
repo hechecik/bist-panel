@@ -72,7 +72,7 @@ python3 scripts/sinyal_denetim.py --git . --ufuk 5 10 | tail -25   # isteğe ba�
 Yeni bir saf fonksiyon (ağa çıkmayan) eklediysen `tests/` altına testini de ekle.
 
 ## Git akışı
-0. **Görev başında:** `git checkout -- data/ && git clean -fd data/log/` ile yerel veri değişikliklerini at, sonra `git pull`. `data/` dosyaları asla commit'e katılmaz; veriyi Actions üretir.
+0. **Görev başında:** `git checkout -- data/ && git clean -fd data/log/` ile yerel veri değişikliklerini at, sonra `git pull`. `data/` dosyaları ajan tarafından asla commit'e katılmaz; veriyi Actions üretir ve commit eder. (data/ dosyalarını Actions commit eder; data/log/ ölçüm arşividir, asla silinmez veya ignore edilmez)
 1. `git checkout -b gorev/GXX`
 2. Değişiklikleri yap ve testleri çalıştır.
 3. `git commit -m "GXX: kısa açıklama"`. Mesajda görev kodu mutlaka geçsin.
