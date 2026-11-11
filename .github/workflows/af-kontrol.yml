@@ -17,27 +17,12 @@ jobs:
     env:
       TOK: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - name: Zamanlama teshisi
+      - name: GH cron teshisi
         run: |
-          python3 - <<'PY'
-          import json,os,urllib.request,datetime as dt
-          tok=os.environ["TOK"]
-          def api(u):
-              r=urllib.request.Request("https://api.github.com"+u,headers={"Authorization":"token "+tok,"Accept":"application/vnd.github+json","User-Agent":"af"})
-              return json.load(urllib.request.urlopen(r,timeout=30))
-          base="/repos/hechecik/bist-panel"
-          print("sunucu UTC:",dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%d %H:%M"))
-          for wid in (340681937,380092667,380053231,380109152):
-              d=api(f"/actions/workflows/{wid}/runs?per_page=6")
-              print("==",d["workflow_runs"][0]["name"] if d["workflow_runs"] else wid)
-              for x in d["workflow_runs"]:
-                  print("  ",x["created_at"],x["event"],x["conclusion"])
-          s=api(base+"/actions/permissions")
-          print("actions izinleri:",s)
-          try:
-              print("schedule sağlığı (60 gün kural): tüm workflow'lar:")
-              for w in api(base+"/actions/workflows")["workflows"]:
-                  print("  ",w["name"],w["state"])
-          except Exception as e:
-              print("workflow listesi hata:",e)
-          PY
+          set -x
+          date -u
+          curl -s -o /dev/null -w "repo:%{http_code}\n" -H "Authorization: token $TOK" -H "Accept: application/vnd.github+json" "https://api.github.com/repos/hechecik/bist-panel"
+          curl -s -o /dev/null -w "perms:%{http_code}\n" -H "Authorization: token $TOK" -H "Accept: application/vnd.github+json" "https://api.github.com/repos/hechecik/bist-panel/actions/permissions"
+          curl -s -o /dev/null -w "runs:%{http_code}\n" -H "Authorization: token $TOK" -H "Accept: application/vnd.github+json" "https://api.github.com/repos/hechecik/bist-panel/actions/runs?per_page=1"
+          curl -s -H "Authorization: token $TOK" -H "Accept: application/vnd.github+json" "https://api.github.com/repos/hechecik/bist-panel/actions/workflows" | head -c 400
+          echo
