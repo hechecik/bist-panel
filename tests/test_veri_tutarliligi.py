@@ -33,14 +33,40 @@ def test_gram_borsapy_degeri_sadece_capraz():
 
 
 def test_gram_fark_esigi_asilirsa_uyari():
-    """6.675 vs hesap ~6.525 → fark %2,3; uyarı YOK."""
+    """%1 eşiği: 6.675 vs hesap ~6.525 → fark %2,3 > %1 → UYARI var."""
     r = gram_altin_hesapla(4040.0, 50.24, 6675.0)
+    assert r["fark_yuzde"] > GRAM_UYARI_ESIK
+    assert r["uyari"] is True
+
+
+def test_gram_esik_yuzde_bir():
+    """GRAM_UYARI_ESIK %1 olmalı — %11'de bayat değer hiç yakalanmıyordu."""
+    assert GRAM_UYARI_ESIK == 1.0
+
+
+def test_gram_esik_altinda_uyari_yok():
+    """Hesabın %0,5 üstündeki borsapy değeri eşiğin altında → uyarı YOK."""
+    hesap = 4040.0 / ONS_GRAM * 50.24  # ~6525
+    r = gram_altin_hesapla(4040.0, 50.24, hesap * 1.005)
     assert r["uyari"] is False
-    assert abs(r["fark_yuzde"]) < GRAM_UYARI_ESIK
+    assert abs(r["fark_yuzde"]) < 1.0
+
+
+def test_gram_esik_hemen_ustunde_uyari_var():
+    """Hesabın %1,2 üstü → eşik aşıldı, uyarı VAR (sınır davranışı)."""
+    hesap = 4040.0 / ONS_GRAM * 50.24
+    r = gram_altin_hesapla(4040.0, 50.24, hesap * 1.012)
+    assert r["uyari"] is True
+
+
+def test_gram_ons_kaynak_spot_vadeli():
+    """Ons kaynağı gram kaydına yazılmalı: spot / vadeli."""
+    assert gram_altin_hesapla(4040.0, 50.24, None, "spot")["ons_kaynak"] == "spot"
+    assert gram_altin_hesapla(4040.0, 50.24, None, "vadeli")["ons_kaynak"] == "vadeli"
 
 
 def test_gram_buyuk_fark_uyari_verir():
-    """borsapy %11'den fazla saparsa uyari=True."""
+    """borsapy eşiği fazla saparsa uyari=True."""
     hesap = 4040.0 / ONS_GRAM * 50.24  # ~6525
     capraz = hesap * 1.20              # %20 yüksek
     r = gram_altin_hesapla(4040.0, 50.24, capraz)
