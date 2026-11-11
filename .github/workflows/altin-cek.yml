@@ -4,9 +4,13 @@ on:
   schedule:
     # Altın ~24/5 işlem görür (Pazr 22:00 – Cum 21:00 UTC).
     # Hafta içi: her 30 dakikada bir. Hafta sonu: 3 saatte bir.
-    - cron: '*/30 * * * 1-5'
-    - cron: '0 */3 * * 0,6'
+    # G01: :00/:30 yoğun dakikalarından kaydırıldı → :11/:41 ve :13.
+    - cron: '11,41 * * * 1-5'
+    - cron: '13 */3 * * 0,6'
   workflow_dispatch:
+  # G01: dış tetikleyici (cron-job.org → GitHub repository_dispatch)
+  repository_dispatch:
+    types: [altin]
 
 permissions:
   contents: write
@@ -40,10 +44,20 @@ jobs:
           git add data/altin.json
           if ! git diff --cached --quiet; then
             git commit -m "altin veri guncelle $(date -u +'%d.%m %H:%M') UTC"
-            git fetch origin
-            git rebase origin/main --autostash || git rebase --abort
-            git push
-            echo "✅ altın verisi push edildi"
+            # G01: 3 denemeli push döngüsü (reject → fetch+rebase+push)
+            for i in 1 2 3; do
+              if git fetch origin && git rebase origin/main --autostash && git push; then
+                echo "✅ altın verisi push edildi (deneme $i)"
+                break
+              fi
+              git rebase --abort 2>/dev/null || true
+              echo "⚠️ push denemesi $i başarısız, tekrar deneniyor"
+              sleep $((i*10))
+            done
           else
             echo "ℹ️ değişiklik yok"
           fi
+
+      - name: Kesinti alarmı (healthchecks.io ping)
+        if: success()
+        run: curl -fsS -m 10 "${{ secrets.HC_URL_ALTIN }}" || true

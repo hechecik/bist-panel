@@ -3,8 +3,12 @@ name: kripto-cek
 on:
   schedule:
     # Kripto 24/7 işlem görür — hafta sonu dahil her 30 dakikada bir tazele.
-    - cron: '*/30 * * * *'
+    # G01: :00/:30 yoğun dakikalarından kaydırıldı → :17/:47.
+    - cron: '17,47 * * * *'
   workflow_dispatch:
+  # G01: dış tetikleyici (cron-job.org → GitHub repository_dispatch)
+  repository_dispatch:
+    types: [kripto]
 
 permissions:
   contents: write
@@ -35,10 +39,20 @@ jobs:
           git add data/kripto.json
           if ! git diff --cached --quiet; then
             git commit -m "kripto veri guncelle $(date -u +'%d.%m %H:%M') UTC"
-            git fetch origin
-            git rebase origin/main --autostash || git rebase --abort
-            git push
-            echo "✅ kripto verisi push edildi"
+            # G01: 3 denemeli push döngüsü (reject → fetch+rebase+push)
+            for i in 1 2 3; do
+              if git fetch origin && git rebase origin/main --autostash && git push; then
+                echo "✅ kripto verisi push edildi (deneme $i)"
+                break
+              fi
+              git rebase --abort 2>/dev/null || true
+              echo "⚠️ push denemesi $i başarısız, tekrar deneniyor"
+              sleep $((i*10))
+            done
           else
             echo "ℹ️ değişiklik yok"
           fi
+
+      - name: Kesinti alarmı (healthchecks.io ping)
+        if: success()
+        run: curl -fsS -m 10 "${{ secrets.HC_URL_KRIPTO }}" || true

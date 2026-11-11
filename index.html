@@ -9,7 +9,7 @@
 <title>BIST Panel</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📈</text></svg>">
-<meta name="description" content="BIST piyasa paneli — sinyaller, makro, test senaryoları. 15 dk gecikmeli, seans boyunca canlı.">
+<meta name="description" content="BIST piyasa paneli — sinyaller, makro, test senaryoları. Seans içinde periyodik güncellenir.">
 <style>
 :root {
   color-scheme: dark;
@@ -27,6 +27,9 @@ header { position:sticky; top:0; z-index:50; background:rgba(11,14,20,.92); back
 .dot { width:8px; height:8px; border-radius:50%; background:var(--up); animation:pulse 2s infinite; }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.35} }
 .stale .dot { background:var(--warn); }
+/* ── BAYAT VERİ BANDI (G01) ── */
+#bayatBant { display:none; position:sticky; top:0; z-index:60; background:#b3261e; color:#fff; font-size:12px; font-weight:600; padding:8px 16px; text-align:center; border-bottom:1px solid #7f1a15; }
+#bayatBant.on { display:block; }
 /* ── ENDEKS + ÖZET ── */
 .hero { padding:12px 16px 4px; }
 .ex-card { background:linear-gradient(135deg,#141b2d 0%,#1a1233 100%); border:1px solid var(--bd); border-radius:16px; padding:14px 18px; position:relative; overflow:hidden; }
@@ -203,6 +206,8 @@ tr.detail td { background:var(--bg3); padding:11px; white-space:normal; }
 </head>
 <body>
 
+<div id="bayatBant" role="alert"></div>
+
 <header>
   <div class="logo">BIST<span>·PANEL</span></div>
   <div class="live" id="liveInfo"><span class="dot"></span><span id="liveText">bekleniyor</span></div>
@@ -330,6 +335,39 @@ function tazelik(veriTarihi) {
   return `<span class="fresh">${gun} GÜN ESKİ</span>`;
 }
 
+/* ── BAYAT VERİ BANDI (G01) ──
+   Hisse verisi hafta içi 1 iş gününden eskiyse, altın verisi 2 saatten eskiyse
+   sayfanın üstünde kırmızı bant gösterilir. */
+const BAYAT = { hisse: null, altin: null };
+function haftaIciIsGunu(ms) {           // ms: geçen süre → aşılan iş günü (tam gün)
+  if (!isFinite(ms) || ms < 0) return 0;
+  let kalan = ms, isGunu = 0, adim = 0;
+  while (kalan >= 86400000 && adim < 400) {
+    kalan -= 86400000; adim++;
+    const gun = new Date(Date.now() - kalan).getDay();
+    if (gun !== 0 && gun !== 6) isGunu++;
+  }
+  return isGunu;
+}
+function bayatBantMetni(hisseYasMs, altinYasMs) {
+  const parca = [];
+  if (isFinite(hisseYasMs) && haftaIciIsGunu(hisseYasMs) > 1)
+    parca.push('Hisse verisi ' + Math.floor(hisseYasMs / 3600000) + ' saattir güncellenmedi');
+  if (isFinite(altinYasMs) && altinYasMs > 7200000)
+    parca.push('Altın verisi ' + Math.floor(altinYasMs / 3600000) + ' saattir güncellenmedi');
+  return parca.length ? '⚠️ ' + parca.join(' · ') : '';
+}
+function bayatBantGuncelle() {
+  const el = document.getElementById('bayatBant');
+  if (!el) return;
+  const simdi = Date.now();
+  const hisseYas = BAYAT.hisse ? simdi - BAYAT.hisse.getTime() : NaN;
+  const altinYas = BAYAT.altin ? simdi - BAYAT.altin.getTime() : NaN;
+  const metin = bayatBantMetni(hisseYas, altinYas);
+  if (metin) { el.textContent = metin; el.classList.add('on'); }
+  else { el.textContent = ''; el.classList.remove('on'); }
+}
+
 /* ── TABLO ── */
 const KOLONLAR = ['Hisse','Grafik','Fiyat','1A','Skor','Sinyal','Trend','Para','RSI','MFI','Squeeze','S1/R1','SL/Hdf','Neden','📈'];
 
@@ -388,6 +426,7 @@ async function yukle() {
     alarmKontrol(); // 3+6 — fiyat eşik alarmları
     const gun = new Date().getDay();
     const ure = utcTarih(d.uretildi);
+    BAYAT.hisse = ure; bayatBantGuncelle();   // G01: bayat veri bandı
     const fark = Math.floor((Date.now() - ure.getTime()) / 60000);
     const lt = document.getElementById('liveText');
     if (gun === 0 || gun === 6) {
@@ -548,7 +587,7 @@ function renderGrafik(d) {
     opt('D', 'Günlük', mevcutInt === 'D') + opt('W', 'Haftalık', mevcutInt === 'W') +
     `</select></div>` +
     `<div id="tvWidget" style="height:480px;border:1px solid var(--bd);border-radius:12px;overflow:hidden;background:var(--bg2)"></div>` +
-    `<div class="note">TradingView embed — saniyelik canlı mum grafiği (key'siz, ücretsiz). Tablolar ~15 dk gecikmeli, grafik canlıdır. Seans dışında son kapanış görünür.</div>`;
+    `<div class="note">TradingView embed — saniyelik canlı mum grafiği (key'siz, ücretsiz). Tablolar seans içinde periyodik güncellenir, grafik canlıdır. Seans dışında son kapanış görünür.</div>`;
   sec.innerHTML = html;
   if (aktifMi) tvYukle(); // sekme açıkken widget'ı görünür boyutta embed et
 }
@@ -1439,7 +1478,7 @@ async function altinYukle(force) {
   const sec = document.getElementById('sec-altin');
   if (ALTIN_VERI && !force) { renderAltin(ALTIN_VERI); return; }
   sec.innerHTML = '<div class="empty">Altın verisi yükleniyor…</div>';
-  try { ALTIN_VERI = await (await fetch('data/altin.json?v=' + Date.now())).json(); renderAltin(ALTIN_VERI); }
+  try { ALTIN_VERI = await (await fetch('data/altin.json?v=' + Date.now())).json(); renderAltin(ALTIN_VERI); BAYAT.altin = utcTarih(ALTIN_VERI.uretildi); bayatBantGuncelle(); }
   catch (e) { sec.innerHTML = '<div class="empty">Altın verisi yüklenemedi: ' + e.message + '</div>'; }
 }
 
