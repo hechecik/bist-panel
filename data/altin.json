@@ -1,99 +1,99 @@
 {
- "uretildi": "2026-11-11T00:44:23",
+ "uretildi": "2026-11-11T07:20:24",
  "kaynak": "GC=F (COMEX ons) · yfinance + gold-api.com spot + doviz.com takvim",
  "fiyat": {
-  "ons": 4040.7,
-  "spot": 4037.0,
-  "spot_guncelleme": "2026-11-11T00:43:59Z",
-  "gram_tl": 6525.65,
-  "usdtry": 50.2315,
+  "ons": 4070.5,
+  "spot": 4063.7,
+  "spot_guncelleme": "2026-11-11T07:19:59Z",
+  "gram_tl": 6572.3,
+  "usdtry": 50.2202,
   "performans": {
-   "1g": -1.79,
-   "1h": 2.55,
-   "2h": -0.83,
-   "1a": -3.58,
-   "3a": -9.55,
-   "6a": -13.78,
-   "1y": 0.77
+   "1g": 1.0,
+   "1h": -0.06,
+   "2h": 0.47,
+   "1a": -2.56,
+   "3a": -7.92,
+   "6a": -13.52,
+   "1y": -1.25
   },
-  "son_tarih": "2026-11-10"
+  "son_tarih": "2026-11-11"
  },
  "vital": {
-  "son": 4040.7,
-  "ma20": 4070.08,
-  "ma50": 4213.3,
-  "ma200": 4491.96,
+  "son": 4070.5,
+  "ma20": 4067.68,
+  "ma50": 4206.57,
+  "ma200": 4486.85,
   "trend": "ZAYIF / AŞAĞI",
   "trend_skor": -2,
-  "rsi": 44.9,
-  "rsi_yorum": "45 — negatif momentum",
-  "atr": 86.43,
+  "rsi": 47.5,
+  "rsi_yorum": "48 — nötr",
+  "atr": 87.27,
   "atr_yuzde": 2.14,
   "h52": 5586.2,
   "l52": 3879.3,
-  "konum_52h": 9.5,
+  "konum_52h": 11.2,
   "konum_yorum": "dip bölgesi"
  },
  "seviyeler": {
   "destek": [
    {
+    "seviye": 4050,
+    "mesafe_pct": -0.5,
+    "tip": "yuvarlak"
+   },
+   {
     "seviye": 4000,
-    "mesafe_pct": -1.01,
+    "mesafe_pct": -1.73,
     "tip": "yuvarlak"
    },
    {
     "seviye": 3963.0,
-    "mesafe_pct": -1.92,
+    "mesafe_pct": -2.64,
     "tip": "salınım dibi"
    },
    {
     "seviye": 3950,
-    "mesafe_pct": -2.24,
+    "mesafe_pct": -2.96,
     "tip": "yuvarlak"
-   },
-   {
-    "seviye": 3901.3,
-    "mesafe_pct": -3.45,
-    "tip": "salınım dibi"
    }
   ],
   "direnc": [
    {
-    "seviye": 4050,
-    "mesafe_pct": 0.23,
-    "tip": "yuvarlak"
-   },
-   {
-    "seviye": 4070.1,
-    "mesafe_pct": 0.73,
-    "tip": "MA20"
-   },
-   {
     "seviye": 4100,
-    "mesafe_pct": 1.47,
+    "mesafe_pct": 0.72,
     "tip": "yuvarlak"
    },
    {
     "seviye": 4150,
-    "mesafe_pct": 2.7,
+    "mesafe_pct": 1.95,
+    "tip": "yuvarlak"
+   },
+   {
+    "seviye": 4171.4,
+    "mesafe_pct": 2.48,
+    "tip": "salınım tepesi"
+   },
+   {
+    "seviye": 4200,
+    "mesafe_pct": 3.18,
     "tip": "yuvarlak"
    }
   ]
  },
  "senaryo": {
-  "gectmis": "Son 1 yılda ons 3,879$ (10.2026) ile 5,586$ (01.2026) arasında salındı; şu an 4,041$ — yıllık zirvenin %28 altında, yıllık aralığın %10'inde.",
-  "durum": "Trend ZAYIF / AŞAĞI, RSI 45, yıllık aralığın %10'inde (dip bölgesi). Günlük oynaklık (ATR) 86$ ≈ %2.1.",
+  "gectmis": "Son 1 yılda ons 3,879$ (10.2026) ile 5,586$ (01.2026) arasında salındı; şu an 4,070$ — yıllık zirvenin %27 altında, yıllık aralığın %11'inde.",
+  "durum": "Trend ZAYIF / AŞAĞI, RSI 48, yıllık aralığın %11'inde (dip bölgesi). Günlük oynaklık (ATR) 87$ ≈ %2.1.",
   "bias": "AYI",
-  "bias_skor": -5,
+  "bias_skor": -4,
   "yukari": {
-   "tetik": 4050,
-   "hedef": 4070.1,
-   "metin": "Fiyat 4,050$ direncini (+0.2%) hacimle kırıp üstünde kapanırsa ilk hedef 4,070$."
+   "tetik": 4100,
+   "hedef": 4150,
+   "metin": "Fiyat 4,100$ direncini (+0.7%) hacimle kırıp üstünde kapanırsa ilk hedef 4,150$."
   },
   "asagi": {
-   "tetik": 4000,
-   "hedef": 3963.0,
-   "metin": "4,000$ desteği (-1.0%) kaybedilirse sıradaki destek 3,963$."
+   "tetik": 4050,
+   "hedef": 4000,
+   "metin": "4,050$ desteği (-0.5%) kaybedilirse sıradaki destek 4,000$."
   }
  },
  "kritik_gunler": [
@@ -240,52 +240,52 @@
  ],
  "haberler": [
   {
-   "baslik": "ALTIN FİYATLARI 10 KASIM 2026 SALI (CANLI) || Altın düşüyor mu, yükseliyor mu? Gram altın, çeyrek altın, cumhuriyet altını ve ONS altın alış - satış fiyatı ne kadar, kaç TL? İşte K",
+   "baslik": "11 Kasım 2026 Güncel Altın Fiyatları: Altında yön değişti! Bugün gram altın, çeyrek altın ve Cumhuriyet altını kaç TL ediyor? - Bigpara",
    "kaynak": "Google News · altın",
-   "link": "https://news.google.com/rss/articles/CBMizgFBVV95cUxQZE9veFNmZG9WeGxua3JsUjUwWXd0MzhvUUVQMVBZaFpCejRBR0ZVQVlkVTZDOGpEZ3dCWnNtWk1UZ0xGVXNqeExpdi1UU2J6TzM1bkpsUU0tVlNKYUZpWjVHSk1wc05rb3pUbzN4anppWVJvTFRuWV9wS2RtY1FrRFN3VzZnM2lKeWxQWk1WaVdGM0Z4NWMzZERtSUxzdTN6NEtoYTQxTWcwNVpVeW1JMUtXUnc3V3lrOXVWT2hVeWVGU1UzUlRZUW9yaUpsUQ?oc=5",
-   "yayin_tarihi": "Tue, 10 Nov 2026 04:49:25 GMT"
+   "link": "https://news.google.com/rss/articles/CBMi_gFBVV95cUxNYmZVeWMxbHA0VTd0dzBUU0wyd2piNm9vdV9TUzNlb2c0YWxZOUJPZjE0QUVCbnExaUV1aXFocTZGQlhXWDE1NUctNzFNWjNxUGhtSTJLQUgwNHZxazlxVnM0UVR5LWhqaHFOckxmUXVCc2RsTzVDZ0FqWlhEekNEZ1NGVlh6RURmZldJWjQxVVRmUVNlM2VOcVU2TEpmR1FhT2o3OURBUlJkOGppRkRDOXl5d0w2T2RCNkVwLUF1clR4VDNpYWNOREFOWlBjcDNSY1k5WUVqNlRMR2ZkN0RhekY0Z0FaTEhsZnhleVlEMHJWSUN3ZVB0UERRc3dzUQ?oc=5",
+   "yayin_tarihi": "Wed, 11 Nov 2026 04:27:00 GMT"
   },
   {
-   "baslik": "Altın fiyatları ABD enflasyon rakamları beklenirken sert düştü - Foreks.com",
+   "baslik": "Altın fiyatları düşüşte; gramı ne kadar oldu? - T24",
    "kaynak": "Google News · altın",
-   "link": "https://news.google.com/rss/articles/CBMi2wFBVV95cUxOeUthUEZ1OW1MLWdUTWtFZkRLLTdFYmdKS0dsNzdaUmpNejJKbllISGY2NWJlSzVSelhWRkRvZFlGTlpxaWlTZVNYdTNPUW9SRllDMXAtQTNORGJrLW45a1Q5RmpWN3FxVUI3bWFGNVZ2VlBLTmJJTzJLazF6U0lRTVB5Rk9mU24wbWlFcUlzdWZobFEzNFRibkRXT0RPOWFGamNyYUpMaV96U1NDMEVFYkZSM01Fa3M1eThRMGNNRm5RVlgweEtFZnhYazAtenJQa0JHQURGUjdHSUk?oc=5",
-   "yayin_tarihi": "Tue, 10 Nov 2026 12:29:34 GMT"
+   "link": "https://news.google.com/rss/articles/CBMihAFBVV95cUxQRElQc2JmM2xQVG9mOHZBbEdRa1RCeFZVemxBNFRZV29iNHlUOHEyRmNYYU15MWZYWkVkbkMzTEhISWJEbDdQc3hqblhpUWlMTzJkd001SVFIRFlLMlhVTUxDSHloMVpDVEpaSU96MHFYd1BMTXYwVndELUluSFYtZ0cwT0U?oc=5",
+   "yayin_tarihi": "Wed, 11 Nov 2026 06:40:00 GMT"
   },
   {
-   "baslik": "Altın fiyatları güne nasıl başladı? Gram, çeyrek ve yarım altın kaç TL? - EKOTÜRK",
+   "baslik": "ALTIN FİYATLARI 10 KASIM 2026 CANLI: Bugün Gram, Çeyrek, Cumhuriyet Ne Kadar? Kapalıçarşı Altın Fiyatları Ne Durumda? - CNN Türk",
    "kaynak": "Google News · altın",
-   "link": "https://news.google.com/rss/articles/CBMinwFBVV95cUxPVEhjb0wyeFVwNlFLRlRqNlRaNUNRLVhWb3U0d0gyZ1luRTJMNGtRUE11UDMxYWF5UlZjcThFTHlkckY0dTB0clpxNXRWWGdiMTZsODMtSThiRDUtbGgwcmZEYTQwbEVDSC13UUlLSDhWT3JWZkQ4eDdPUmphSW4zMTg5LWZ3WW01RV9DTi1Lc0l1QUw4ZnJsQUtZMnZCc1k?oc=5",
-   "yayin_tarihi": "Tue, 10 Nov 2026 08:27:47 GMT"
+   "link": "https://news.google.com/rss/articles/CBMi5wFBVV95cUxPaDd1WVNiX3c2LTRNQ0hUQUtWRWhkQ3NPUjd5UEExdTM0ZFZZNE9ncFM4d1BXZTdJQkRGODRuaExaUTdCQnFIVG5xNTh2ZjlvX2dLS0tmbVNWcjNVR0FnTU9IZHpUNGxGZ2gtQnAwSm9iX3JaR1VDUmd3X2xKUmpnTGxtb3pvXzBqcVVmWHRXN0ZLNjdWRkM5R3ozWXZqYmJrVDRnREVaUHRfeExnVl81ZjRDYWoyUE12RUxfYTJwOXJKOVhrRzU4VW1wUFpFbUU3dDVpYktPQ3BCYTdrYnBJa09WTlJSZUU?oc=5",
+   "yayin_tarihi": "Tue, 10 Nov 2026 14:32:03 GMT"
   },
   {
-   "baslik": "Altın fiyatlarında sert düşüş! ABD enflasyonu sonrası gram ve ons altın geriledi - Kamudanhaber",
+   "baslik": "Küresel altın fiyatları sert düşüşün ardından toparlandı: Fed baskısı sürüyor - EKOTÜRK",
    "kaynak": "Google News · altın",
-   "link": "https://news.google.com/rss/articles/CBMirAFBVV95cUxNMzNiMDdGOFFoa0hCdndPeEQ1T1BKZ3p5YVBQSnNDSTlaWVlLVW13TmxRQ1FpRlBHUDVWS3BhNkRic0w2ekxUdXFTVHVwSzc3cnVjcXB3aWFEWWdsRG5YY0hKdlY1YVZsalNfZXIwV2YwN3FqX3VlbmJ1R2Z1TUQ3YU5TWmxhNG5IbVdycU5aYW1lVkl6RENyN3I1dVFyc09tZ0lmQ1NwUGVsZjNG?oc=5",
-   "yayin_tarihi": "Tue, 10 Nov 2026 14:54:00 GMT"
+   "link": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxNSU1rTmpvOHp2b0NSZklDQVhoWWtYWl9STVJwV3VycC1Dc1hqUkNMU2E4cmk5SnJXMUthZWk2SjdzdE4yc1JGSEd3WEN4Yl83WjdtUl9uX0poV0FNR01fbTh1NlAtekRpclZTdUFfYnR6Z2g0ZjBIRE9wb0JDQmtUMzhndW1tNkJXSGhvcWpVQ0J1RU0ybjRwWUNLWlRIek5fdHlBUVR6bjBrQQ?oc=5",
+   "yayin_tarihi": "Wed, 11 Nov 2026 04:36:02 GMT"
   },
   {
-   "baslik": "ABD enflasyon verisi beklentinin üzerinde: Ons altın 4040 dolara indi - Paratic Haber",
+   "baslik": "Gram altın yeniden yükselişte! 11 Kasım 2026 çeyrek, yarım ve tam altın fiyatları | Türkiye Ekonomisi Haberleri - GZT",
    "kaynak": "Google News · altın",
-   "link": "https://news.google.com/rss/articles/CBMikwFBVV95cUxPak5LLU1fWDVTVEdZckJzcEJpX0E0RUxGUXUwcmdzSmoyMWl2R1o3ZnlKUUtMY1h5LXFybXdIT3FlNm9mZVIwbmQ4X2JKVmFqNlE4Qkh2dUlPNnExZlJGb09Fek1wbW5FSF81SWpLVjZ2cmZycEZhRGxydm5EMFc3ZjJXbEcxY0Fad3hGRkFvSVpWa0U?oc=5",
-   "yayin_tarihi": "Tue, 10 Nov 2026 13:32:30 GMT"
+   "link": "https://news.google.com/rss/articles/CBMitgFBVV95cUxQSUVpVmhvS3lVUERrSjlzSGJucllBamp4aUxUcXdPa3ZOb1FDRlFVdWZNTk5rNmticHB0dktfd2F5WmpwbS00dG9RdzFuQ2ppamRMWFZhWnNyM3Y1Z2N3ZnR2RmZxRXlRSDVhaGcwbmJPME8zUVBTbE1hYzBOUUZRRnNGbDlyY29OUG5KMUhrdnlrM0dhVmg4enJpd2dpWEk3NW9neHMxQ2xUekNSNVV4V01QOEJTZw?oc=5",
+   "yayin_tarihi": "Wed, 11 Nov 2026 04:54:24 GMT"
   },
   {
-   "baslik": "ABD enflasyon verileri sonrası altın fiyatları sert düştü - Yeni Alanya",
+   "baslik": "Gram altın bugün ne kadar? 11 Kasım 2026 güncel altın fiyatları: Çeyrek, yarım ve tam altın kaç TL? - Fotomaç",
    "kaynak": "Google News · altın",
-   "link": "https://news.google.com/rss/articles/CBMijAFBVV95cUxPR3RGaF80MVFEeXZsZ09KNURzSmFnbmRCaFFRZUtFbTJoTkUxd0NxdXg5YVNuVWJVbF9HVWthOXlidTBOTFhIMEw0YnY3RGNPNHVqSXVhZVFDeGlLdnZJZk5LZDc4bGJ1RHVQWVdrRlIwTDdINS1PRU9wRW1VRmVnUVI0UTlZdG52ZHVleQ?oc=5",
-   "yayin_tarihi": "Tue, 10 Nov 2026 14:32:00 GMT"
+   "link": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxPRWdvdEFMT2Y5V1BCYUh1OGFjMUY1RlhGUjR4M09mZTBZMEtNb2R2MUlWSm1velg2dy1Xa2hTU1d4UVUxT1ZQdlliZFlkdVVRSGphNTBCQTRUOHQzcmFHazR5Y1phTGdNdFNSeEV3TGNZRXh6NUF6TW00enYzTUJsU3hkZ0hfX0dZVjRIY2djRWNLbEM4TzVRcEc4RWxmVU1hTzNPTXFrUUdyZ9IBrwFBVV95cUxPRlBYclNDY0d2amwtcWhiajBjU1Y1WE9RaEN4d1JRcG11bHpkY1JrWGRia3pfQlJhZzNEejlMS0pHX0RySU1LVEktY2cyVUFDaThBanVVVWFMc0VTMXU1dDl1bEc5T3lEdmxwdFZHZFQ5UkJDS2xZMzV1Qm5LVk95YmJfU1RFM3RPN2hpdG1VVi1GamxfMUFVSEFGY3QyU2J1UWpET1VPd2pfdl96dXhn?oc=5",
+   "yayin_tarihi": "Wed, 11 Nov 2026 04:05:27 GMT"
   },
   {
-   "baslik": "ABD enflasyon verileri öncesi altın fiyatları çakıldı! Altın fiyatları neden düştü? - GZT",
+   "baslik": "Bugün çeyrek altın kaç TL? 11 Kasım Çarşamba 2026 Gram, tam, Cumhuriyet, Kapalıçarşı anlık fiyatlar - Finans haberlerinin doğru adresi - Mynet Finans Haber - Mynet Finans",
    "kaynak": "Google News · altın",
-   "link": "https://news.google.com/rss/articles/CBMi-AFBVV95cUxQNll2YV8zY0FrNjhJbHpSRlZ6WUpEM1BZVml4aEZ6d185a0pLOVVMaGN0NjFTRXBvSmVXNnV3VXJPTFN5QjJ2aTM5RE8yWmxpUHhvR1cwbDNoQURmOGo3bGNrRlUwTFFpbWNRVTZBX0dLVWR1YW9CWWtWUWRjRFhpaUNKV21ucWVRV1RLRE1vYlBVRU01MHJDQ0RwaHo2T0t2MzB6QncxRDMxV1NEMnZLMnFBdnlfRElTdGhjNEtVYTZmeE5sRWJqcy1YWm1hcVc5MG1zOUNRY0FEZTMwLVVVLVp2TFV0ZEFXbGl3NFlRSnNBa1hEc0FVXw?oc=5",
-   "yayin_tarihi": "Tue, 10 Nov 2026 13:40:00 GMT"
+   "link": "https://news.google.com/rss/articles/CBMi3wFBVV95cUxQenlTU3lOZTFyd1daMmc5RURuOWV0ekNuZFg3dU1TQkVjbEszMlBSMHBVOHdHeng3RmhRSmhNTkI3YW9HQ0dRMU92XzB4cTRvNEFBMTNUYkNNNV9zS0lRQU1adDBPVmFjX3FWbTFzNGNhQ2tpZjJ6OXI3YW95ZGZXNVcyVmpmU2RIb09VZzBLaFc3Y3RDQnNySnRXU1d3dFpJdi1LS1Q5Uk5lMUVYSFVvam5TR2JVeXl2OXhwUmwxRDc0bDFud0dmanlwNlA5cmVJaUMwSzlFSjRCUzJmRHNz0gHQAUFVX3lxTE5fb1cwZ0ZGSlppOThnTWRhRmpOYVExdjVaX0ZTaEVqaS04eEJZMjFwSHVaQVhMMnVYWW5XclV2UkpSMkxGcU1Jc0w5enhsRmJpUlpOaWUzb3dHaHl4cVMwYkM3NGZid3E3dVA0N1M0bE9VNHZEdWgzUkhsbnRTa1dvQklnYlhhdDJYWVAxMlNvQ2lwTHMxWkJZWk5vYnBtYnNJZGRSVHN4Uno1T2FjT3ZYVzYtdEg4eHY5YnVQRnlPQnZKY1ViaDF2MkZfQUI0ZFk?oc=5",
+   "yayin_tarihi": "Wed, 11 Nov 2026 07:02:43 GMT"
   },
   {
-   "baslik": "ALTIN FİYATLARI 9 KASIM 2026 CANLI: Bugün Gram, Çeyrek, Cumhuriyet Ne Kadar? Kapalıçarşı Altın Fiyatları Ne Durumda? - CNN Türk",
+   "baslik": "Altın fiyatları 11 Kasım 2026: Gram, çeyrek, yarım ve Cumhuriyet altını ne kadar? - Yayla Haber",
    "kaynak": "Google News · altın",
-   "link": "https://news.google.com/rss/articles/CBMi5gFBVV95cUxNaEpSU21qT1RTNzh0M19ZUUlGMDBBcmlLMVNjYWdtUGI1eGhVMElNZEFtVGJNdTU5VW54bVBYNF9iSXNPdThLUkZpSVZNSFcwXzRaRG92WGRFcEZMaWE5aENQMUktcEhRS2I3elFiZDQ3cXZvRk1hSkVFdWtxRUJKeFZyczBWbTJFNF94OG1tWVhNdkgxX0Y5S0c2cDB4b0h3SV9zRnFPcDJSVjYwdEJQYnJHdmRsOFdHakJjT1JjekRWR285OGJwV1dZeUVQTlJWWTEzSEpmT0pfQVV3cVJ2N09qSlRJQQ?oc=5",
-   "yayin_tarihi": "Mon, 09 Nov 2026 14:43:18 GMT"
+   "link": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxPbXF2QlJTWkcwTXZFaXR2VUEwTnhvV25mT3BVY2Q1OFJyT01EV0QtODF5ZklkR3F2eFhSVHRHeFcyb1NLTnA0dlNSemJKUnhBNjZBX3B4Tlp3R3RMSnhZZnE3RGFKWVJ1TllwNlNWY0ZKTHdtaDhPbkpjcUh6VkZJUTU3dUIycEF0dFRBRi1CWlJqTFBtYnZZOXZ5eUlEMjg0cUVNXzE2RlJ1UTQ?oc=5",
+   "yayin_tarihi": "Wed, 11 Nov 2026 07:10:00 GMT"
   },
   {
    "baslik": "Gold falls nearly 3% as CPI tops forecasts, lifting dollar and yields - Reuters",
@@ -306,10 +306,10 @@
    "yayin_tarihi": "Fri, 06 Nov 2026 13:18:40 GMT"
   },
   {
-   "baslik": "Goldman lowers year-end gold price forecast on hawkish Fed shift - Investing.com",
+   "baslik": "Gold Price Forecast: XAU/USD defends $4,000, but for how long? - FXStreet",
    "kaynak": "Google News · gold",
-   "link": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxQYzl2eThFLVlBWHhOSl9FVk51Z0h2NXhZNXNRTVNlMi0takFQNThCYmY2ekl0dzRXdkU3MkVmcTdPdDBlRWE5N2Y3bG01SFE0dG43LW1CMGlmYmJDSkphX21EZ0M2SlBBUU9PNU81LWk0MXdlR013dGdZakVrUERvWi1SekhhbE10dGhrVW50OTk5d2pCWmRBcFpxMWZaM3Z3OG5KYmhVWV80YzJpSzBkZ2tEbVhKTjEwR3Zv?oc=5",
-   "yayin_tarihi": "Fri, 06 Nov 2026 08:36:57 GMT"
+   "link": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxOR21CU0pxSlpuRktsdXV0a3daSndwV2lDel9GaFdQVGFWaGo3MjVtbndBVjc4SEtvVVBWWG1rdkdsVzhTYWhmTUhzekpIVC1jMHN5VjFKZkVaMnFaZENGa2hTckQ0UkhjbU41Wi0wZlRFZExIS1l4QzZETUZ6cTVmS0pLZDdac21KREh5M2E0Nk1qNm1RZDlRU0EzSktQNTNfaDZHZTVGQkE?oc=5",
+   "yayin_tarihi": "Wed, 11 Nov 2026 04:26:19 GMT"
   }
  ]
 }
