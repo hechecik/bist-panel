@@ -872,6 +872,474 @@ def makro_fiyatlar() -> dict:
     return fiyatlar
 
 
+# ══════════════════════════════════════════════════════════════════════════
+# G13 — Reel BIST (USD / gram altın bazlı) + Türkiye risk kartı
+# Saf fonksiyonlar (ağa çıkmaz) — ağ erişimi yalnız `tr_risk_blogu()` içinde.
+# ══════════════════════════════════════════════════════════════════════════
+
+# Pencereler İŞ GÜNÜ (bar) cinsinden — 1h=5, 1a=21, 3a=63, 1y=252 bar.
+G13_DONEM_BAR = {'1h': 5, '1a': 21, '3a': 63, '1y': 252}
+# Tarihe göre hizalama toleransı (gün). Seride hedef tarih yoksa en yakın ÖNCEKİ
+# tarih kullanılır; tolerans aşılırsa o değer "veri yok" sayılır (eski veri taşınmaz).
+G13_TOLERANS_GUN = 7
+G13_TUTARLILIK_TOL_PCT = 0.1          # TL/USD/altın tutarlılık testi eşiği (±%0,1)
+ONS_GRAM_G13 = 31.1034768
+
+TR_AYLAR = {'ocak': 1, 'şubat': 2, 'subat': 2, 'mart': 3, 'nisan': 4, 'mayıs': 5, 'mayis': 5,
+            'haziran': 6, 'temmuz': 7, 'ağustos': 8, 'agustos': 8, 'eylül': 9, 'eylul': 9,
+            'ekim': 10, 'kasım': 11, 'kasim': 11, 'aralık': 12, 'aralik': 12}
+
+
+def _g13_tarih(deger) -> dt.date:
+    """'2026-11-11' / date / datetime → date (saat dilimi farkı yaratmadan)."""
+    if isinstance(deger, dt.datetime):
+        return deger.date()
+    if isinstance(deger, dt.date):
+        return deger
+    return dt.date.fromisoformat(str(deger)[:10])
+
+
+def _g13_sayi(v):
+    """float'a çevir; geçersizse None (uydurma yok)."""
+    try:
+        f = float(v)
+    except (TypeError, ValueError):
+        return None
+    return f if f == f else None          # NaN → None
+
+
+def seri_eslestir(ana_seri, *diger_seriler, tolerans=G13_TOLERANS_GUN):
+    """Saf fonksiyon: serileri TARİHE göre hizala (index ile DEĞİL).
+
+    G11'deki `tarihe_gore_deger` yaklaşımının yeniden kullanımı: ana serinin her
+    tarihi için diğer serilerde en yakın ÖNCEKİ değer aranır (hafta sonu/tatil
+    boşlukları tolere edilir). Tolerans aşılırsa o gün eşleşmez.
+
+    Girdi: ana_seri=[(tarih, değer), ...] ve diğer seriler aynı biçimde.
+    Dönüş: [(tarih, [değer, ...]), ...] — yalnız TÜM serileri eşleşen günler,
+    eskiden yeniye. Ana serinin kendi değeri None ise gün atlanır.
+    """
+    seriler = []
+    for s in diger_seriler:
+        temiz = [(_g13_tarih(t), _g13_sayi(v)) for t, v in (s or []) if _g13_sayi(v) is not None]
+        temiz.sort(key=lambda x: x[0])
+        seriler.append(temiz)
+    out = []
+    ana = sorted(((_g13_tarih(t), _g13_sayi(v)) for t, v in (ana_seri or [])), key=lambda x: x[0])
+    for t, v in ana:
+        if v is None:
+            continue
+        degerler = [v]
+        for s in seriler:
+            aday = None
+            for ts, vs in s:
+                if ts <= t:
+                    aday = (ts, vs)
+                else:
+                    break
+            if aday is None or (t - aday[0]).days > tolerans:
+                break
+            degerler.append(aday[1])
+        if len(degerler) != len(seriler) + 1:
+            continue
+        out.append((t, degerler))
+    return out
+
+
+def _g13_hedef_tarih(son: dt.date, bar: int) -> dt.date:
+    """`bar` iş günü geriye ≈ takvim günü (×7/5, yukarı yuvarlanır)."""
+    return son - dt.timedelta(days=int(bar * 7 / 5 + 0.999))
+
+
+def _g13_baz(hizali, hedef: dt.date, tolerans=G13_TOLERANS_GUN):
+    """Hizalı seride hedef tarihe en yakın ÖNCEKİ günü bul."""
+    aday = None
+    for t, vals in hizali:
+        if t <= hedef:
+            aday = (t, vals)
+        else:
+            break
+    if aday is None or (hedef - aday[0]).days > tolerans:
+        return None
+    return aday
+
+
+def reel_bist_serileri(xu100_seri, usdtry_seri, gram_seri):
+    """Saf fonksiyon: XU100 / USDTRY ve XU100 / gram altın serileri (tarihe göre hizalı).
+
+    Girdiler [(tarih, kapanış), ...]. Dönüş {'tl','usd','altin': [(tarih, değer)],
+    'bas','son','hizalama'} — üç seri de AYNI gün kümesine sahiptir.
+    """
+    hizali = seri_eslestir(xu100_seri, usdtry_seri, gram_seri)
+    tl, usd, altin = [], [], []
+    for t, (x, u, g) in hizali:
+        if not x or not u or not g:
+            continue
+        tl.append((t.isoformat(), round(x, 2)))
+        usd.append((t.isoformat(), round(x / u, 4)))
+        altin.append((t.isoformat(), round(x / g, 4)))
+    if not tl:
+        return {'durum': 'veri yok', 'tl': [], 'usd': [], 'altin': [],
+                'hizalama': {'eslesen_gun': 0}}
+    return {'durum': 'ok', 'tl': tl, 'usd': usd, 'altin': altin,
+            'bas': tl[0][0], 'son': tl[-1][0],
+            'hizalama': {'eslesen_gun': len(tl), 'yontem': 'tarihe göre en yakın önceki gün',
+                         'tolerans_gun': G13_TOLERANS_GUN}}
+
+
+def _g13_getiri(seri, son_t: dt.date, hedef_t: dt.date, tolerans=G13_TOLERANS_GUN):
+    """Tek seri için yüzde getiri (hedef → son). Eşleşme yoksa None."""
+    son = _g13_baz(seri, son_t, 0)
+    if son is None or son[0] != son_t:
+        return None
+    bas = _g13_baz(seri, hedef_t, tolerans)
+    if son is None or bas is None or bas[0] == son[0] or not bas[1]:
+        return None
+    return {'pct': round((son[1] / bas[1] - 1) * 100, 3), 'bas_tarih': bas[0].isoformat(),
+            'son_tarih': son[0].isoformat(), 'bas_deger': round(float(bas[1]), 4),
+            'son_deger': round(float(son[1]), 4),
+            'kaydirma_gun': (hedef_t - bas[0]).days}
+
+
+def reel_bist_getirileri(seriler: dict, bugun=None) -> dict:
+    """Saf fonksiyon: 1h/1a/3a/1y/YBB getirileri — TL / USD / altın bazında.
+
+    `seriler`: reel_bist_serileri() çıktısı. Pencereler İŞ GÜNÜ: 1h=5, 1a=21, 3a=63, 1y=252 bar.
+    YBB = yılbaşından beri (son yılın ilk işlem günü).
+    Tutarlılık: (1+TL)/(1+USDTRY değ.)−1 ≈ USD getirisi (tutarlılık bloğunda).
+    """
+    if not seriler or seriler.get('durum') != 'ok':
+        return {'durum': 'veri yok', 'donemler': {}}
+    tl = [(_g13_tarih(t), v) for t, v in seriler['tl']]
+    usd = [(_g13_tarih(t), v) for t, v in seriler['usd']]
+    altin = [(_g13_tarih(t), v) for t, v in seriler['altin']]
+    son_t = tl[-1][0]
+    yilbasi = dt.date(son_t.year, 1, 1)
+    ybb_baz = None
+    for t, _v in tl:
+        if t.year == son_t.year:
+            ybb_baz = t
+            break
+
+    donemler = {}
+    for kod, bar in G13_DONEM_BAR.items():
+        hedef = _g13_hedef_tarih(son_t, bar)
+        satir = {'bar': bar, 'hedef_tarih': hedef.isoformat(), 'not': '1y için 252 bar ≈ takvim yılı'}
+        eksik = []
+        for ad, s in (('tl', tl), ('usd', usd), ('altin', altin)):
+            g = _g13_getiri(s, son_t, hedef)
+            if g is None:
+                eksik.append(ad)
+                satir[ad] = None
+            else:
+                satir[ad] = g['pct']
+                satir[f'{ad}_bas_tarih'] = g['bas_tarih']
+        satir['bas_tarih'] = satir.get('tl_bas_tarih')
+        if eksik:
+            satir['eksik'] = eksik
+            satir['not'] = 'seri geçmişi yetmiyor — ' + ', '.join(eksik) + ' için veri yok'
+        donemler[kod] = satir
+
+    ybb = {'bar': None, 'hedef_tarih': yilbasi.isoformat(), 'yilbasi': True}
+    if ybb_baz is None or ybb_baz >= son_t:
+        ybb.update({'tl': None, 'usd': None, 'altin': None, 'durum': 'veri yok'})
+    else:
+        ybb['bas_tarih'] = ybb_baz.isoformat()
+        for ad, s in (('tl', tl), ('usd', usd), ('altin', altin)):
+            g = _g13_getiri(s, son_t, ybb_baz)
+            ybb[ad] = g['pct'] if g else None
+            if g:
+                ybb[f'{ad}_bas_tarih'] = g['bas_tarih']
+        if ybb.get('tl') is None:
+            ybb['durum'] = 'veri yok'
+    ybb['yilbasi_str'] = ybb_baz.isoformat() if ybb_baz else None
+    donemler['ybb'] = ybb
+
+    return {'durum': 'ok', 'son_tarih': son_t.isoformat(), 'donemler': donemler,
+            'tutarlilik': reel_bist_tutarlilik(donemler, seriler, son_t)}
+
+
+def reel_bist_tutarlilik(donemler: dict, seriler: dict, son_t: dt.date) -> list:
+    """Saf fonksiyon: (1+TL)/(1+USDTRY değişimi)−1 ≈ USD getirisi (±%0,1) kontrolü.
+
+    USDTRY değişimi XU100/USDTRY serisinden TÜRETİLMEZ; ham kur serisi oransal
+    olarak yeniden hesaplanır: kur_oran = (TL baz değeri / USD baz değeri) oranı.
+    """
+    sonuclar = []
+    tl = [(_g13_tarih(t), v) for t, v in seriler['tl']]
+    usd = [(_g13_tarih(t), v) for t, v in seriler['usd']]
+    for kod, d in (donemler or {}).items():
+        if not isinstance(d, dict):
+            continue
+        if d.get('tl') is None or d.get('usd') is None or not d.get('bas_tarih'):
+            sonuclar.append({'donem': kod, 'durum': 'veri yok'})
+            continue
+        bas = _g13_tarih(d['bas_tarih'])
+        tl_son = _g13_baz(tl, son_t, 0)
+        tl_bas = _g13_baz(tl, bas, 0)
+        usd_son = _g13_baz(usd, son_t, 0)
+        usd_bas = _g13_baz(usd, bas, 0)
+        if not all((tl_son, tl_bas, usd_son, usd_bas)):
+            sonuclar.append({'donem': kod, 'durum': 'veri yok'})
+            continue
+        # ima edilen USDTRY değişimi = (TL/USD oranı) — oran = XU100 / (XU100/USDTRY)
+        kur_oran = (tl_son[1] / usd_son[1]) / (tl_bas[1] / usd_bas[1])
+        beklenen = ((1 + d['tl'] / 100) / kur_oran - 1) * 100
+        fark = beklenen - d['usd']
+        sonuclar.append({'donem': kod, 'beklenen_usd_pct': round(beklenen, 3),
+                         'usd_pct': d['usd'], 'fark_pct': round(fark, 4),
+                         'esik_pct': G13_TUTARLILIK_TOL_PCT,
+                         'ok': abs(fark) <= G13_TUTARLILIK_TOL_PCT})
+    return sonuclar
+
+
+# ── Türkiye risk kartı ────────────────────────────────────────────────────
+
+def reel_faiz(politika_faizi, yillik_tufe):
+    """Saf fonksiyon: reel faiz = politika faizi − yıllık TÜFE (puan). Eksik girdi → None."""
+    p, t = _g13_sayi(politika_faizi), _g13_sayi(yillik_tufe)
+    if p is None or t is None:
+        return None
+    return round(p - t, 2)
+
+
+def tahvil_getirileri(getiri_json: dict):
+    """Saf fonksiyon: getiri.json'dan TR 2Y/10Y. Yoksa {'durum': 'veri yok'} — uydurma yok."""
+    rows = (getiri_json or {}).get('tahvil') or []
+    out = {}
+    for r in rows:
+        vade = str((r or {}).get('vade') or '').upper()
+        g = _g13_sayi((r or {}).get('getiri'))
+        if vade in ('2Y', '10Y') and g is not None:
+            out[vade] = g
+    blok = {'2Y': out.get('2Y'), '10Y': out.get('10Y'),
+            'durum': (getiri_json or {}).get('tahvil_durum') or ('ok' if out else 'veri yok'),
+            'kaynak': (getiri_json or {}).get('kaynak')}
+    eksik = [k for k in ('2Y', '10Y') if out.get(k) is None]
+    if eksik:
+        blok['eksik'] = eksik
+        blok['not'] = 'getiri.json tahvil verisi boş/eksik: ' + ', '.join(eksik)
+    return blok
+
+
+def ppk_tarihleri_parse(html: str, yil: int):
+    """Saf fonksiyon: TCMB PPK sayfası HTML → karar tarihleri (ISO), artan sıralı.
+
+    Sayfada "Para Politikası Kurulu Toplantı Kararı" tablosu vardır; ilk sütun
+    KARAR tarihidir. Yalnız `yil` yılına ait satırlar alınır. Tarih uydurulmaz —
+    tablo yoksa boş liste döner.
+    """
+    if not html:
+        return []
+    try:
+        from bs4 import BeautifulSoup
+    except ImportError:
+        import re as _re
+        desen = _re.compile(r'(\d{1,2})\s*(Ocak|Şubat|Subat|Mart|Nisan|Mayıs|Mayis|Haziran|Temmuz|'
+                            r'Ağustos|Agustos|Eylül|Eylul|Ekim|Kasım|Kasim|Aralık|Aralik)\s*(\d{4})',
+                            _re.IGNORECASE)
+        bulunan = set()
+        for m in desen.finditer(html.replace('&nbsp;', ' ')):
+            ay = TR_AYLAR.get(m.group(2).lower())
+            if ay and int(m.group(3)) == yil:
+                try:
+                    bulunan.add(dt.date(int(m.group(3)), ay, int(m.group(1))).isoformat())
+                except ValueError:
+                    continue
+        return sorted(bulunan)
+    soup = BeautifulSoup(html, 'html.parser')
+    tarihler = set()
+    for tr in soup.find_all('tr'):
+        hucreler = tr.find_all(['td', 'th'])
+        if not hucreler:
+            continue
+        metin = hucreler[0].get_text(' ', strip=True).replace('\xa0', ' ')
+        m = re.match(r'^(\d{1,2})\s+([A-Za-zÇĞİÖŞÜçğıöşü]+)\s+(\d{4})$', metin)
+        if not m:
+            continue
+        ay = TR_AYLAR.get(m.group(2).lower())
+        if not ay or int(m.group(3)) != yil:
+            continue
+        try:
+            tarihler.add(dt.date(yil, ay, int(m.group(1))).isoformat())
+        except ValueError:
+            continue
+    return sorted(tarihler)
+
+
+def sonraki_ppk(tarihler: list, bugun=None):
+    """Saf fonksiyon: bugünden SONRAKİ ilk PPK karar tarihi + geri sayım (takvim günü)."""
+    bugun = bugun or dt.date.today()
+    bugun = _g13_tarih(bugun)
+    for t in sorted(tarihler or []):
+        try:
+            tt = _g13_tarih(t)
+        except ValueError:
+            continue
+        if tt >= bugun:
+            return {'tarih': tt.isoformat(), 'kalan_gun': (tt - bugun).days}
+    return {'durum': 'veri yok', 'not': 'tarihler arasında bugünden sonraki PPK yok'}
+
+
+def ppk_sayfa_url(yil: int) -> str:
+    return ('https://www.tcmb.gov.tr/wps/wcm/connect/TR/TCMB+TR/Main+Menu/Temel+Faaliyetler/'
+            f'Para+Politikasi/PPK/{yil}')
+
+
+def ppk_takvimi(bugun=None) -> dict:
+    """Ağ: TCMB PPK sayfaları (bu yıl + gelecek yıl) → tarihler + sonraki toplantı."""
+    bugun = _g13_tarih(bugun or dt.date.today())
+    tum, hatalar, kaynak = [], [], []
+    try:
+        import httpx
+    except ImportError:
+        return {'durum': 'veri yok', 'hata': 'httpx yok'}
+    for yil in (bugun.year, bugun.year + 1):
+        try:
+            r = httpx.get(ppk_sayfa_url(yil), timeout=25, follow_redirects=True, headers=HEADERS)
+            if r.status_code != 200:
+                hatalar.append(f'{yil}: HTTP {r.status_code}')
+                continue
+            t = ppk_tarihleri_parse(r.text, yil)
+            if t:
+                tum.extend(t)
+                kaynak.append(ppk_sayfa_url(yil))
+            else:
+                hatalar.append(f'{yil}: tablo bulunamadı')
+        except Exception as e:
+            hatalar.append(f'{yil}: {str(e)[:60]}')
+    tum = sorted(set(tum))
+    blok = {'tarihler': tum, 'kaynak': kaynak[0] if kaynak else None, 'hatalar': hatalar}
+    gereken = [t for t in tum if _g13_tarih(t) >= bugun]
+    blok['gecmis'] = [t for t in tum if _g13_tarih(t) < bugun][-3:]
+    if gereken:
+        s = sonraki_ppk(gereken, bugun)
+        blok['sonraki'] = s
+        blok['gelecek'] = gereken[:4]
+        blok['durum'] = 'ok'
+        # gelecek yıl sayfası okunamadıysa uyarı (tarih uydurulmaz)
+        gy_ok = any(str(bugun.year + 1) in (k or '') for k in kaynak)
+        if not gy_ok:
+            blok['uyari'] = f'{bugun.year + 1} takvimi alınamadı — liste {bugun.year} sonuyla sınırlı'
+    else:
+        blok['durum'] = 'veri yok'
+        blok['not'] = 'TCMB sayfasında bugünden sonraki PPK tarihi bulunamadı'
+    return blok
+
+
+def evds_anahtar_var() -> bool:
+    return bool(os.environ.get('EVDS_KEY', '').strip())
+
+
+def makro_risk_blogu(getiri_json: dict | None = None, faiz: dict | None = None,
+                     tufe: dict | None = None, cd_verisi=None) -> dict:
+    """Saf fonksiyon: TR risk kartı bloğu (rezerv/CDS hariç — ağ tarafı `tr_risk_blogu`).
+
+    Kural: değer yoksa alan None + 'veri yok' açıklaması; uydurma sayı yok.
+    """
+    blok = {'uretildi': utc_now_iso()}
+    if getiri_json is None:
+        try:
+            getiri_json = json.loads((DATA_DIR / 'getiri.json').read_text(encoding='utf-8'))
+        except Exception:
+            getiri_json = {}
+    tahvil = tahvil_getirileri(getiri_json)
+    if tahvil.get('2Y') is None and tahvil.get('10Y') is None:
+        tahvil['goster'] = 'tahvil_durum'
+        tahvil['tahvil_durum'] = (getiri_json or {}).get('tahvil_durum') or 'veri yok'
+        tahvil['metin'] = f'Tahvil getirisi yok — kaynak durumu: {tahvil["tahvil_durum"]}'
+    blok['tahvil'] = tahvil
+
+    faiz = faiz if faiz is not None else ((tufe or {}).get('_faiz') or {})
+    pol = _g13_sayi((faiz or {}).get('faiz'))
+    tufe_y = _g13_sayi((tufe or {}).get('yillik'))
+    blok['politika'] = {'faiz': pol, 'uygulama': (faiz or {}).get('tarih'),
+                        'karar': (faiz or {}).get('karar_tarihi'),
+                        'durum': 'ok' if pol is not None else 'veri yok'}
+    blok['tufe'] = {'yillik': tufe_y, 'tarih': (tufe or {}).get('tarih'),
+                    'durum': 'ok' if tufe_y is not None else 'veri yok'}
+    rf = reel_faiz(pol, tufe_y)
+    blok['reel_faiz'] = {'deger': rf, 'formul': 'politika faizi − yıllık TÜFE',
+                         'durum': 'ok' if rf is not None else 'veri yok'}
+    blok['reel_faiz']['yorum'] = (None if rf is None else
+                                  ('POZİTİF reel faiz → TL mevduat cazip, altın/dövize baskı'
+                                   if rf > 0 else
+                                   'NEGATİF reel faiz → altın/döviz talebi güçlü'))
+
+    # TCMB rezervleri — EVDS anahtarı şart (secret adı: EVDS_KEY)
+    blok['rezerv'] = {'durum': 'anahtar yok' if not evds_anahtar_var() else 'anahtar var',
+                      'secret': 'EVDS_KEY',
+                      'metin': ('anahtar yok — TCMB rezervleri için GitHub Secrets\'a EVDS_KEY eklenmeli'
+                                if not evds_anahtar_var()
+                                else 'anahtar var — rezerv serisi bu sürümde çekilmiyor (EVDS seri kodu bekleniyor)')}
+    # 5Y CDS — anahtarsız güvenilir kaynak yok → EKLENMEDİ
+    blok['cds'] = {'durum': 'eklenmedi',
+                   'metin': '5Y CDS: anahtarsız güvenilir kaynak bulunamadı — bilinçli olarak eklenmedi'}
+    blok['cds'].update(cd_verisi or {})
+    return blok
+
+
+def tr_risk_blogu(getiri_json=None, faiz=None, tufe=None) -> dict:
+    """Ağ: TR risk kartı = makro_risk_blogu + PPK takvimi (TCMB parse)."""
+    blok = makro_risk_blogu(getiri_json, faiz, tufe)
+    try:
+        blok['ppk'] = ppk_takvimi()
+    except Exception as e:
+        blok['ppk'] = {'durum': 'veri yok', 'hata': str(e)[:80]}
+    return blok
+
+
+def reel_bist_verisi(endeks: dict | None) -> dict:
+    """Ağ: XU100 (G09 tam serisi) + USDTRY + gram altın 1 yıllık seriler → reel BIST bloğu.
+
+    XU100 serisi G09'daki `endeks['seri']` (yeniden indirilmez). Kur: yfinance USDTRY=X,
+    gram altın: ons (GC=F) / 31,1034768 × USDTRY — panel manşet gram yöntemiyle aynı.
+    Kaynak düşerse ilgili bacak 'veri yok'; uydurma değer yok.
+    """
+    blok = {'durum': 'veri yok', 'kaynak': {}}
+    xu = [(_g13_tarih(t), v) for t, v in ((endeks or {}).get('seri') or [])]
+    if not xu:
+        blok['not'] = 'XU100 serisi (G09) yok — reel BIST hesaplanamadı'
+        return blok
+    blok['kaynak']['xu100'] = 'yfinance XU100.IS (G09 tam seri)'
+    kur, ons = [], []
+    try:
+        import yfinance as yf
+        import warnings
+        warnings.filterwarnings('ignore')
+        h = yf.Ticker('USDTRY=X').history(period='1y', interval='1d').dropna()
+        kur = [(_g13_tarih(ix), float(v)) for ix, v in h['Close'].items()]
+        blok['kaynak']['usdtry'] = 'yfinance USDTRY=X'
+    except Exception as e:
+        log(f"G13 USDTRY hata: {str(e)[:50]}")
+        blok['kur_hata'] = str(e)[:80]
+    try:
+        import yfinance as yf
+        import warnings
+        warnings.filterwarnings('ignore')
+        g = yf.Ticker('GC=F').history(period='1y', interval='1d').dropna()
+        ons = [(_g13_tarih(ix), float(v)) for ix, v in g['Close'].items()]
+        blok['kaynak']['ons'] = 'yfinance GC=F'
+    except Exception as e:
+        log(f"G13 ons hata: {str(e)[:50]}")
+        blok['ons_hata'] = str(e)[:80]
+    if not kur or not ons:
+        blok['not'] = 'USDTRY veya ons altın serisi alınamadı — USD/altın bazlı getiri hesaplanamadı'
+        if kur:
+            blok['kur_seri'] = [[t.isoformat(), round(v, 4)] for t, v in kur]
+        return blok
+    hizali = seri_eslestir(xu, kur, ons)
+    gram = [(t, vals[1] / ONS_GRAM_G13 * vals[2]) for t, vals in hizali]
+    seriler = reel_bist_serileri(xu, kur, gram)
+    if seriler.get('durum') != 'ok':
+        blok['not'] = 'seriler hizalanamadı (ortak gün yok)'
+        return blok
+    blok.update(seriler)
+    blok['getiriler'] = reel_bist_getirileri(seriler)
+    blok['kaynak']['gram_altin'] = 'ons(GC=F) / 31,1034768 × USDTRY'
+    return blok
+
+
 def takvim_cek(gun_sayisi: int = 7) -> list:
     """Ekonomik takvim — doviz.com parse (TR + ABD önemli olaylar)."""
     try:
@@ -2028,6 +2496,21 @@ def main():
     faiz = tcmb_faizi()
     tufe = tufe_verisi()
 
+    # 3b. G13 — reel BIST (XU100 / USDTRY, XU100 / gram altın) + TR risk kartı
+    try:
+        reel_bist = reel_bist_verisi(endeks)
+    except Exception as e:
+        log(f"G13 reel bist hata: {str(e)[:60]}")
+        reel_bist = {'durum': 'veri yok', 'hata': str(e)[:80]}
+    try:
+        tr_risk = tr_risk_blogu(faiz=faiz, tufe=tufe)
+    except Exception as e:
+        log(f"G13 tr risk hata: {str(e)[:60]}")
+        tr_risk = {'durum': 'veri yok', 'hata': str(e)[:80]}
+    log(f"G13: reel_bist={reel_bist.get('durum')} | tr_risk reel_faiz="
+        f"{(tr_risk.get('reel_faiz') or {}).get('deger')} | ppk="
+        f"{((tr_risk.get('ppk') or {}).get('sonraki') or {}).get('tarih')}")
+
     # 4. Sinyaller (G05 — yeni halka arz bayrakları: takvim.json'daki halka_arz + ilk bar tarihleri)
     halka_arz = []
     try:
@@ -2132,6 +2615,8 @@ def main():
         'saglik': saglik,
         'endeks': endeks,
         'makro': {'fiyatlar': fiyatlar, 'faiz': faiz, 'tufe': tufe},
+        'reel_bist': reel_bist,
+        'tr_risk': tr_risk,
         'takvim': takvim,
         'sinyaller': sinyaller,
         'test_senaryolari': senaryolar,
