@@ -327,7 +327,11 @@ def cek_yfinance(bist_list: list) -> dict:
 
 
 def endeks_verisi() -> dict | None:
-    """BIST 100 endeks — yfinance XU100.IS (^XU100.IS sembolü Yahoo'da yok)."""
+    """BIST 100 endeks — yfinance XU100.IS (^XU100.IS sembolü Yahoo'da yok).
+
+    G09: eski alanlar (deger/degisim_yuzde/tarih) AYNEN korunur; RS20/RS60 için
+    tam kapanış serisi `seri` (tarih→kapanış) ve `seri_son` (son 80 gün) eklendi.
+    """
     try:
         import yfinance as yf
         import pandas as pd
@@ -338,10 +342,14 @@ def endeks_verisi() -> dict | None:
             df = df.xs("XU100.IS", axis=1, level="Ticker")
         son = df.iloc[-1]
         onceki = df.iloc[-2] if len(df) > 1 else son
+        kapanis = df['Close'].dropna()
         return {
             'deger': round(float(son['Close']), 2),
             'degisim_yuzde': round((float(son['Close']) / float(onceki['Close']) - 1) * 100, 2),
             'tarih': str(df.index[-1].date()),
+            # G09 — tam seri (gölge mod: sadece RS hesabı için okunur)
+            'seri': [[str(ix.date()), round(float(v), 2)] for ix, v in kapanis.items()],
+            'seri_son': [round(float(v), 2) for v in kapanis.iloc[-80:]],
         }
     except Exception as e:
         log(f"Endeks hata: {str(e)[:60]}")
@@ -763,7 +771,45 @@ def tufe_verisi() -> dict:
         return {}
 
 
-def sinyalleri_hesapla(hisse_veri: dict, ipo: dict | None = None) -> dict:
+def golge_gostergeler(df, endeks: dict | None) -> dict:
+    """G09 — gölge mod göstergeleri. SADECE hesaplama/log/UI içindir.
+
+    skor ve sinyal hesabına DAHİL EDİLMEZ. Ağa çıkmaz (saf fonksiyon).
+    df: HGDG_TARIH + HGDG_KAPANIS/HGDG_HACIM/HGDG_MIN/HGDG_MAX kolonlu DataFrame
+        (tarih sıralı, ham veri — tüm indikatörler henüz hesaplanmamış olabilir).
+    Hesaplanamayan alan None döner (uydurma yok).
+    """
+    from indikatorler import rs_degisim, hacim_orani, vol20, zirve_uzak, trend_atr, sma, atr
+    import pandas as pd
+
+    g = {'RS20': None, 'RS60': None, 'HACIM_ORAN': None, 'VOL20': None,
+         'ZIRVE_UZAK': None, 'TREND_ATR': None}
+    try:
+        kapanis = df['HGDG_KAPANIS'].astype(float).reset_index(drop=True)
+        hacim = df['HGDG_HACIM'].astype(float).reset_index(drop=True)
+        tarihler = pd.to_datetime(df['HGDG_TARIH']).dt.strftime('%Y-%m-%d').reset_index(drop=True)
+        g['HACIM_ORAN'] = hacim_orani(hacim)
+        g['VOL20'] = vol20(kapanis)
+        g['ZIRVE_UZAK'] = zirve_uzak(kapanis)
+        g['TREND_ATR'] = trend_atr(kapanis, sma(kapanis, 50), atr(df['HGDG_MAX'].astype(float),
+                                                                 df['HGDG_MIN'].astype(float), kapanis))
+        # RS20/RS60 — endeks tam serisi varsa tarih bazlı hizala
+        seri = (endeks or {}).get('seri') or []
+        if seri:
+            end_s = pd.Series({str(t)[:10]: float(v) for t, v in seri}, dtype=float)
+            hisse_s = pd.Series(kapanis.values, index=tarihler.values, dtype=float)
+            hisse_s = hisse_s[~hisse_s.index.duplicated(keep='last')].sort_index()
+            ortak = hisse_s.index.intersection(end_s.index)
+            if len(ortak) >= 21:
+                h, e = hisse_s.loc[ortak], end_s.loc[ortak]
+                g['RS20'] = rs_degisim(h, e, 20)
+                g['RS60'] = rs_degisim(h, e, 60)
+    except Exception:
+        return g
+    return g
+
+
+def sinyalleri_hesapla(hisse_veri: dict, ipo: dict | None = None, endeks: dict | None = None) -> dict:
     """OHLCV verisinden indikatör + sinyal hesapla (indikatorler.py mantığı).
 
     G05 filtreleri (saf, ağsız):
@@ -863,6 +909,8 @@ def sinyalleri_hesapla(hisse_veri: dict, ipo: dict | None = None) -> dict:
                 'ipo_yeni': sembol in ipo,
                 'tedbir': None,
                 **({'ipo_tarih': ipo[sembol]} if sembol in ipo else {}),
+                # ── G09 gölge mod (skor/sinyal hesabına GİRMEZ) ──
+                **golge_gostergeler(df, endeks),
             })
         except Exception:
             continue
@@ -1544,7 +1592,9 @@ def tam_kesit_log(tum: list, endeks: dict | None, kaynak: str) -> None:
         return
     gun = max(r['tarih'] for r in tum)
     alanlar = ('sembol', 'tarih', 'fiyat', 'skor', 'sinyal', 'trend', 'rsi', 'mfi', 'macd_hist',
-               'squeeze', 'ay_oncesi', 'stop', 'hedef')
+               'squeeze', 'ay_oncesi', 'stop', 'hedef',
+               # G09 — gölge mod göstergeleri (denetim IC'si için kaydedilir)
+               'RS20', 'RS60', 'HACIM_ORAN', 'VOL20', 'ZIRVE_UZAK', 'TREND_ATR')
     satir = {'t': utc_now_iso(), 'gun': gun, 'kaynak': kaynak, 'endeks': endeks,
              'rows': [{k: r.get(k) for k in alanlar} for r in tum if r.get('tarih') == gun]}
     log_dir = DATA_DIR / 'log'
@@ -1648,7 +1698,7 @@ def main():
     ipo = ipo_bayraklari(halka_arz, islem_gunleri)
     if ipo:
         log(f"G05: yeni halka arz = {len(ipo)} ({', '.join(sorted(ipo))})")
-    sinyaller = sinyalleri_hesapla(hisse_veri, ipo) if hisse_veri else {'al': [], 'tut': [], 'sat': [], 'izle': [], 'riskli': [], 'toplam': 0, 'hesap_tarihi': ''}
+    sinyaller = sinyalleri_hesapla(hisse_veri, ipo, endeks) if hisse_veri else {'al': [], 'tut': [], 'sat': [], 'izle': [], 'riskli': [], 'toplam': 0, 'hesap_tarihi': ''}
 
     # 5. Test senaryoları
     senaryolar = test_senaryolari(hisse_veri) if hisse_veri else {}
@@ -1698,6 +1748,29 @@ def main():
         f"MSS↑{len(ict_tarama.get('mss_yukari', []))} MSS↓{len(ict_tarama.get('mss_asagi', []))} "
         f"OB-içi={len(ict_tarama.get('ob_ici', []))}")
 
+    # 5h2. G09 — piyasa genişliği (100 hissenin TAMAMINDAN, gölge mod)
+    # Bağımsız try/except: düşerse diğer bloklar yazılmaya devam eder.
+    genislik = {'durum': 'veri yok'}
+    if hisse_veri:
+        try:
+            from indikatorler import genislik_hesapla
+            import pandas as _pd
+            seriler = {}
+            for _s, _rows in hisse_veri.items():
+                if not _rows:
+                    continue
+                _df = _pd.DataFrame(_rows).sort_values('tarih')
+                seriler[_s] = _pd.DataFrame({'HGDG_KAPANIS': _df['kapanis'].astype(float)})
+            genislik = genislik_hesapla(seriler)
+            genislik['tarih'] = endeks.get('tarih') if endeks else None
+            log(f"G09 genişlik: MA50 üstü %{genislik.get('ma50_ustu_yuzde')} · "
+                f"yükselen {genislik.get('yukselen')} / düşen {genislik.get('dusen')} · "
+                f"52h zirve {genislik.get('yeni_zirve_52h')} / dip {genislik.get('yeni_dip_52h')} "
+                f"({genislik.get('hisse')} hisse)")
+        except Exception as e:
+            log(f"G09 genişlik hata: {str(e)[:60]}")
+            genislik = {'durum': 'veri yok'}
+
     log(f"Haberler: {len(haberler)} | Fonlar: {len(fonlar.get('fonlar', []))} | "
         f"Sektör: {len(sektor_list)} | Temel analiz: {len(temel)} | "
         f"Doğruluk: {sinyal_gecmisi.get('toplam')} sinyal")
@@ -1726,6 +1799,7 @@ def main():
         'sinyal_gecmisi': sinyal_gecmisi,
         'gece_analizi': gece,
         'ict_tarama': ict_tarama,
+        'genislik': genislik,
     }
     (DATA_DIR / 'piyasa.json').write_text(json.dumps(paket, ensure_ascii=False, indent=1), encoding='utf-8')
     log(f"piyasa.json yazıldı: {os.path.getsize(DATA_DIR / 'piyasa.json')} byte")

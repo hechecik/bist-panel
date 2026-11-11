@@ -327,6 +327,26 @@ function rsiYorum(r) {
   if (r.rsi >= 45) return `<span style="color:var(--tx)">${fmt(r.rsi,0)} nötr</span>`;
   return `<span style="color:var(--warn)">${fmt(r.rsi,0)} zayıf</span>`;
 }
+/* G09 — gölge mod göstergeleri (skor/sinyale girmez, sadece gösterim) */
+function hacimOranHtml(r) {
+  if (r.HACIM_ORAN == null) return '—';
+  const v = r.HACIM_ORAN;
+  const renk = v >= 2 ? 'var(--up)' : (v <= 0.6 ? 'var(--tx2)' : 'var(--tx)');
+  return `<span style="color:${renk}" title="${v >= 1.5 ? 'Ortalamanın belirgin üzerinde hacim' : v <= 0.6 ? 'Ortalamanın altında hacim' : 'Normal hacim'}">${fmt(v,2)}×</span>`;
+}
+/* G09 — piyasa genişliği kartı (piyasa sekmesi) */
+function genislikHtml(g) {
+  if (!g || g.durum === 'veri yok' || g.ma50_ustu_yuzde == null) return '';
+  const renk = g.ma50_ustu_yuzde >= 60 ? 'var(--up)' : (g.ma50_ustu_yuzde <= 40 ? 'var(--down)' : 'var(--warn)');
+  return `<h2>📐 Piyasa Genişliği <span class="cnt">${g.hisse || ''} hisse · ${g.tarih || ''}</span></h2>` +
+    `<div class="cards">` +
+    `<div class="card"><div class="t">MA50 üstü</div><div class="v" style="color:${renk}">%${fmt(g.ma50_ustu_yuzde,1)}</div><div class="t">${g.ma50_ustu == null ? '' : g.ma50_ustu + ' hisse'}</div></div>` +
+    `<div class="card"><div class="t">Yükselen</div><div class="v up">${g.yukselen == null ? '—' : g.yukselen}</div></div>` +
+    `<div class="card"><div class="t">Düşen</div><div class="v down">${g.dusen == null ? '—' : g.dusen}</div></div>` +
+    `<div class="card"><div class="t">52h zirve</div><div class="v up">${g.yeni_zirve_52h == null ? '—' : g.yeni_zirve_52h}</div></div>` +
+    `<div class="card"><div class="t">52h dip</div><div class="v down">${g.yeni_dip_52h == null ? '—' : g.yeni_dip_52h}</div></div>` +
+    `</div>`;
+}
 function mfiYorum(r) {
   if (r.mfi == null) return '—';
   const renk = r.para === 'GİRİŞ' ? 'var(--up)' : (r.para === 'ÇIKIŞ' ? 'var(--down)' : 'var(--tx)');
@@ -396,7 +416,7 @@ function bayatBantGuncelle() {
 }
 
 /* ── TABLO ── */
-const KOLONLAR = ['Hisse','Grafik','Fiyat','1A','Skor','Sinyal','Trend','Para','RSI','MFI','Squeeze','S1/R1','SL/Hdf','Neden','📈'];
+const KOLONLAR = ['Hisse','Grafik','Fiyat','1A','RS20','Hacim','Skor','Sinyal','Trend','Para','RSI','MFI','Squeeze','S1/R1','SL/Hdf','Neden','📈'];
 
 function hisseSatir(r, durum) {
   const onceki = durum.detay.get(r.sembol);
@@ -410,6 +430,8 @@ function hisseSatir(r, durum) {
     `<td>${sparkSVG(r)}</td>` +
     `<td>${fmt(r.fiyat)}</td>` +
     `<td class="${ok(r.ay_oncesi)}">${r.ay_oncesi == null ? '—' : yuzde(r.ay_oncesi)}</td>` +
+    `<td class="${ok(r.RS20)}" title="RS20 — hisse/XU100 oranının 20 günlük değişimi">${r.RS20 == null ? '—' : yuzde(r.RS20)}</td>` +
+    `<td title="Hacim oranı — bugünkü hacim / 20 günlük medyan">${hacimOranHtml(r)}</td>` +
     `<td style="color:${r.skor>=3?'var(--up)':r.skor<=-3?'var(--down)':'var(--warn)'};font-weight:700">${r.skor>0?'+':''}${r.skor}</td>` +
     `<td>${badge(r.sinyal)}</td>` +
     `<td>${trendHtml(r)}</td>` +
@@ -433,6 +455,12 @@ function hisseSatir(r, durum) {
       `<li>Son bar: <b>${r.tarih || '—'}</b></li>` +
       `<li>1A getiri: <b class="${ok(r.ay_oncesi)}">${r.ay_oncesi == null ? '—' : yuzde(r.ay_oncesi)}</b></li>` +
       `<li>MACD hist: <b>${r.macd_hist == null ? '—' : r.macd_hist}</b></li>` +
+      `<li>RS20 (XU100'e göre): <b class="${ok(r.RS20)}">${r.RS20 == null ? '—' : yuzde(r.RS20)}</b></li>` +
+      `<li>RS60: <b class="${ok(r.RS60)}">${r.RS60 == null ? '—' : yuzde(r.RS60)}</b></li>` +
+      `<li>Hacim oranı (20g medyan): <b>${r.HACIM_ORAN == null ? '—' : fmt(r.HACIM_ORAN,2) + '×'}</b></li>` +
+      `<li>VOL20 (günlük getiri std): <b>${r.VOL20 == null ? '—' : '%' + fmt(r.VOL20,2)}</b></li>` +
+      `<li>52h zirveye uzaklık: <b>${r.ZIRVE_UZAK == null ? '—' : yuzde(r.ZIRVE_UZAK)}</b></li>` +
+      `<li>Trend/ATR: <b>${r.TREND_ATR == null ? '—' : fmt(r.TREND_ATR,2)}</b></li>` +
       `<li>Analiz: <b>${durum.hesapTarihi || '—'}</b></li></ul></div>` +
       `<div><div class="k">🔎 G05 Filtre</div><ul>` +
       `<li>Kilit: <b>${r.kilit || 'yok'}</b></li>` +
@@ -552,6 +580,7 @@ function renderPiyasa(d) {
   }
 
   // 3+6 — Portföy + alarmlar
+  html += genislikHtml(d.genislik);
   html += portfoyHtml();
 
   html += `<div class="toolbar">
@@ -685,9 +714,10 @@ function filtrele() {
 function csvIndir() {
   const d = PIYASA_VERI; if (!d) return;
   const satirlar = [...(d.sinyaller.al||[]), ...(d.sinyaller.tut||[]), ...(d.sinyaller.sat||[]), ...(d.sinyaller.izle||[]), ...(d.sinyaller.riskli||[])];
-  const baslik = 'Hisse,Fiyat,1A%,Skor,Sinyal,Trend,Para,RSI,MFI,Squeeze,S1,R1,Stop,Hedef,Kilit,IpoYeni,Riskli,LikiditeTL,Filtre';
+  const baslik = 'Hisse,Fiyat,1A%,RS20,RS60,HacimOran,VOL20,ZirveUzak,TrendATR,Skor,Sinyal,Trend,Para,RSI,MFI,Squeeze,S1,R1,Stop,Hedef,Kilit,IpoYeni,Riskli,LikiditeTL,Filtre';
   const csv = [baslik, ...satirlar.map(r =>
-    [r.sembol, r.fiyat, r.ay_oncesi ?? '', r.skor, r.sinyal, r.trend, r.para, r.rsi, r.mfi,
+    [r.sembol, r.fiyat, r.ay_oncesi ?? '', r.RS20 ?? '', r.RS60 ?? '', r.HACIM_ORAN ?? '', r.VOL20 ?? '',
+     r.ZIRVE_UZAK ?? '', r.TREND_ATR ?? '', r.skor, r.sinyal, r.trend, r.para, r.rsi, r.mfi,
      r.squeeze, r.s1 ?? '', r.r1 ?? '', r.stop ?? '', r.hedef ?? '',
      r.kilit ?? '', r.ipo_yeni ? 'EVET' : '', r.riskli ?? '',
      r.likidite_tl == null ? '' : Math.round(r.likidite_tl), r.filtre ?? ''].join(','))].join('\n');

@@ -140,6 +140,13 @@ def main():
         'mfi': lambda r: r.get('mfi'),
         'macd_hist/fiyat': lambda r: (r.get('macd_hist') or 0) / r['fiyat'] if r.get('fiyat') else None,
         'ay_getirisi': lambda r: r.get('ay_oncesi'),
+        # G09 — gölge mod göstergeleri (skor/sinyale GİRMEZ, sadece IC ölçümü)
+        'RS20': lambda r: r.get('RS20'),
+        'RS60': lambda r: r.get('RS60'),
+        'HACIM_ORAN': lambda r: r.get('HACIM_ORAN'),
+        'VOL20': lambda r: r.get('VOL20'),
+        'ZIRVE_UZAK': lambda r: r.get('ZIRVE_UZAK'),
+        'TREND_ATR': lambda r: r.get('TREND_ATR'),
     }
     for h in a.ufuk:
         gunluk = collections.defaultdict(list)
