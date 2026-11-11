@@ -1,6 +1,17 @@
 // Service Worker — çevrimdışı önbellek (PWA)
-const CACHE = 'bist-panel-v1';
-const CORE = ['/', '/index.html', '/manifest.json'];
+const CACHE = 'bist-panel-v5';
+const CORE = ['/', '/index.html', '/manifest.json',
+  // G06: ön yüz bölündü — CSS ve JS ayrı dosyalar
+  '/css/app.css', '/js/core.js', '/js/main.js',
+  // G06 parça 2: bölüm dosyaları
+  '/js/bolum/piyasa.js', '/js/bolum/grafik.js', '/js/bolum/karne.js',
+  // G06 parça 3: bölüm dosyaları
+  '/js/bolum/haber.js', '/js/bolum/fon.js', '/js/bolum/getiri.js', '/js/bolum/takvim.js',
+  // G06 parça 4: bölüm dosyaları
+  '/js/bolum/kripto.js', '/js/bolum/ict.js', '/js/bolum/altin.js', '/js/bolum/altin-makro.js',
+  // G06 parça 4b: 15 KB sınırı için ayrılan yardımcı/alt bölümler
+  '/js/bolum/piyasa-yardimci.js', '/js/bolum/piyasa-tablo.js', '/js/bolum/piyasa-filtre.js',
+  '/js/bolum/piyasa-reel.js', '/js/bolum/karne-risk.js', '/js/bolum/portfoy.js'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).then(() => self.skipWaiting()));

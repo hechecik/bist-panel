@@ -23,7 +23,28 @@ Canlı adres: https://hechecik.github.io/bist-panel/
 ## Dosya haritası
 | Yol | İçerik | Not |
 |---|---|---|
-| `index.html` | Tüm ön yüz (CSS + JS tek dosyada, ~90 KB) | **Bütün olarak okuma.** Önce `grep -n "function render" index.html`, sonra ilgili satır aralığını oku |
+| `index.html` | Ön yüz iskeleti (HTML + `<script type="module" src="js/main.js">`) | 3,2 KB — sadece nav + boş `<section>`'lar |
+| `css/app.css` | Tüm stiller (eski `<style>` içeriği) | `grep -n "^\.\|^#" css/app.css` ile sınıf ara |
+| `js/main.js` | Giriş noktası: core + bölüm import'ları, `init()`, 15 dk `setInterval`, SW kaydı | 5,7 KB — render fonksiyonu **yok** |
+| `js/core.js` | Ortak yardımcılar: `utcTarih`, `fmt`, `yuzde`, `ok`, `alEsc`, `pfOk/pfRenk`, `tazelik`, bayat bant, `sekmeKur`, paylaşılan `durum` | Hepsi export edilir |
+| `js/bolum/piyasa.js` | `renderPiyasa`, özet kartlar, makro, gece analizi, tablo kurulumu | Piyasa sekmesinin girişi (9,6 KB) |
+| `js/bolum/piyasa-tablo.js` | `KOLONLAR`, `hisseSatir`, `tabloBolum` | Satır + detay satırı HTML'i (4,8 KB) |
+| `js/bolum/piyasa-filtre.js` | `filtrele`, `csvIndir` | Arama/sinyal/trend/squeeze filtresi, CSV (2,6 KB) |
+| `js/bolum/piyasa-yardimci.js` | `badge`, `g05Cipleri`, `rsiYorum`, `hacimOranHtml`, `genislikHtml`, `mfiYorum`, `trendHtml`, `squeezeHtml`, `sparkSVG` | Tablo hücre yardımcıları (12,1 KB) |
+| `js/bolum/piyasa-reel.js` | `reelBistGrafik`, `reelBistTablo`, `trRiskHtml` | G13 reel BIST + TR risk kartı (6,8 KB) |
+| `js/bolum/portfoy.js` | Portföy + fiyat alarmları (localStorage), `alarmKontrol` | `PIYASA_VERI`'yi canlı import eder (6,4 KB) |
+| `js/bolum/grafik.js` | `renderGrafik`, `tvYukle`, `grafikModal/Kapat` | TradingView mum modalı (4,1 KB) |
+| `js/bolum/karne.js` | `renderSenaryo`, karne tabloları | `karne-risk.js`'i import eder (11,5 KB) |
+| `js/bolum/karne-risk.js` | `riskHesapKur`, `riskDoldur`, `riskStopYuzde`, `riskHesapla` | Risk/pozisyon hesaplayıcı (5,4 KB) |
+| `js/bolum/haber.js` | `renderHaber`, `haberFiltrele`, `chip`, `zamanGecmis` | Haber filtreleri + mini takvim (5,9 KB) |
+| `js/bolum/fon.js` | `renderFon` — fon risk iştahı, getiri, dağılım, temel analiz | (4,9 KB) |
+| `js/bolum/getiri.js` | `getiriYukle` — tahvil/eurobond | (2,8 KB) |
+| `js/bolum/takvim.js` | `takvimYukle` — halka arz/temettü | (3,3 KB) |
+| `js/bolum/kripto.js` | `renderKripto`, `kriptoYukle`, `krFiyat`, `krBuyuk` | `KRIPTO_VERI` burada (5,2 KB) |
+| `js/bolum/ict.js` | `renderIct`, `ictYukle`, `ictListe`, `ictYon` | ICT taraması (8,1 KB) |
+| `js/bolum/altin.js` | `renderAltin`, `altinYukle` | `ALTIN_VERI` burada (13,9 KB) |
+| `js/bolum/altin-makro.js` | `altinMakroHtml` — makro/FOMC bloğu | altin.js'ten import edilir (7,0 KB) |
+| `sw.js` | Service worker: `CACHE` sürümü + `CORE` önbellek listesi | **Yeni `js/bolum/` dosyası eklersen `CORE`'a da yaz ve `CACHE` sürümünü artır** |
 | `scripts/veri_cek.py` | Hisse verisi, sinyal, backtest, haber, fon, temel analiz | ~55 KB. `grep -n "^def "` ile fonksiyonu bul |
 | `scripts/indikatorler.py` | RSI, MACD, BB, MFI, OBV, ATR, sinyal skoru | |
 | `scripts/ict.py` | ICT tarayıcı (MSS, FVG, OB, sweep) | |
