@@ -310,7 +310,7 @@ function g05Cipleri(r) {
   if (r.kilit === 'TAVAN') c.push('<span class="tavan" title="Kapanış gün yükseğinde, +%9,5 ve üzeri">🔒 TAVAN</span>');
   if (r.kilit === 'TABAN') c.push('<span class="taban" title="Kapanış gün düşüğünde, −%9,5 ve altı">🔒 TABAN</span>');
   if (r.ipo_yeni) c.push(`<span class="ipo" title="Son 60 iş günü içinde işlem görmeye başladı${r.ipo_tarih ? ' · ilk bar ' + r.ipo_tarih : ''}">🆕 YENİ ARZ</span>`);
-  if (r.riskli) c.push(`<span class="risk" title="${r.riskli}">⚠️ SORUNLU</span>`);
+  if (r.riskli) c.push(`<span class="risk" title="${r.riskli}">⛔ RİSKLİ — ${r.riskli}</span>`);
   if (r.tedbir) c.push(`<span class="tedbir" title="VBTS tedbiri">⛔ TEDBİR: ${r.tedbir}</span>`);
   if (r.likidite_tl != null && r.likidite_tl < 50000000)
     c.push(`<span class="dusuk" title="20 günlük ort. TL hacmi eşiğin altında (50 mn ₺)">💧 ${fmt(r.likidite_tl/1000000,1)} mn ₺</span>`);

@@ -30,6 +30,17 @@ HEADERS = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleW
 # BIST 100 bileşenleri (KAP resmi listesinden sabitlenmiş — repo içinde bist100.txt)
 BIST100_FILE = Path(__file__).resolve().parent.parent / "bist100.txt"
 
+# ══════════════════════════════════════════════════════════════════════════
+# G05 — BIST'e özgü filtre eşikleri (ayarlanabilir parametreler)
+# ══════════════════════════════════════════════════════════════════════════
+LIKIDITE_ESIK_TL = 50_000_000   # 20 günlük ortalama TL hacmi (kapanış × hacim) alt sınırı
+LIKIDITE_PENCERE = 20           # likidite ortalaması için geriye bakılan bar sayısı
+KILIT_ESIK_PCT = 9.5            # ±%9,5 ve kapanış == uç ise tavan/taban kilidi
+RISKLI_TABAN_SAYI = 3           # son RISKLI_PENCERE günde ≥3 taban kilidi → RISKLI
+RISKLI_PENCERE = 10
+IPO_GUN = 60                    # son 60 iş günü içinde işlem görmeye başlayan = yeni halka arz
+KESIN_SAAT_TR = 18.25           # 18:15 TR — bu saatten sonra üretilen sinyal "kesin"
+
 
 def log(msg):
     print(f"[{dt.datetime.now().strftime('%H:%M:%S')}] {msg}", flush=True)
@@ -342,15 +353,9 @@ GRAM_UYARI_ESIK = 1.0  # borsapy gram ile hesaplanan gram arası fark eşiği (%
 
 # ──────────────────────────────────────────────────────────────
 # G05 — BIST'e özgü filtreler (saf fonksiyonlar, ağa çıkmaz)
+# Eşikler dosyanın başında tanımlı: LIKIDITE_ESIK_TL, KILIT_ESIK_PCT, ...
 # ──────────────────────────────────────────────────────────────
-KESIN_SAAT_TR = 18.25          # 18:15 TR — bu saatten sonra üretilen sinyal "kesin"
 TZ_TR = dt.timezone(dt.timedelta(hours=3))
-KILIT_ESIK_PCT = 9.5           # ±%9,5 ve kapanış == uç ise tavan/taban kilidi
-LIKIDITE_ESIK_TL = 50_000_000  # 20 günlük ortalama TL hacmi (kapanış × hacim) alt sınırı
-LIKIDITE_PENCERE = 20
-IPO_GUN = 60                   # son 60 iş günü içinde işlem görmeye başlayan = yeni halka arz
-RISKLI_TABAN_SAYI = 3          # son 10 günde ≥3 taban kilidi → RISKLI
-RISKLI_PENCERE = 10
 
 
 def sinyal_durumu(simdi=None) -> str:
@@ -1424,6 +1429,14 @@ def sinyal_gecmisi_guncelle(sinyaller: dict) -> dict:
     eski kayıtlar temizlenir. Dosya repo'ya commit edilir (Actions).
     """
     GECMIS = DATA_DIR / 'sinyal_gecmisi.json'
+    # G05 — karneye SADECE kesin sinyaller yazılır (18:15 TR sonrası).
+    # Geçici sinyaller karnede yer almaz: gün içi anlık görüntü kesin sonuç değil.
+    if sinyaller.get('durum') != 'kesin':
+        log(f"Sinyal geçmişi: durum={sinyaller.get('durum')} → karneye yazılmadı")
+        try:
+            return json.loads(GECMIS.read_text())
+        except Exception:
+            return {}
     try:
         gecmis = json.loads(GECMIS.read_text())
     except Exception:
