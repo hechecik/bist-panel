@@ -8,17 +8,19 @@ on:
 
 permissions:
   contents: write
+  actions: read
 
 jobs:
   kontrol:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 3
     steps:
-      - uses: actions/checkout@v4
-      - name: Kripto veri cek + zaman damgasi
+      - name: GITHUB_TOKEN yetkileri
+        env:
+          TOK: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          start=$(date -u +%s)
-          python scripts/kripto_cek.py
-          echo "SURE_SN $(( $(date -u +%s) - start ))"
-          echo "URETILDI $(python3 -c "import json;print(json.load(open('data/kripto.json'))['uretildi'])")"
-          git diff --stat data/kripto.json
+          for u in "/repos/hechecik/bist-panel" "/repos/hechecik/bist-panel/actions/permissions"; do
+            echo "GET $u -> $(curl -s -o /dev/null -w '%{http_code}' -H "Authorization: token $TOK" -H "Accept: application/vnd.github+json" "https://api.github.com$u")"
+          done
+          echo "POST dispatch -> $(curl -s -o /dev/null -w '%{http_code}' -X POST -H "Authorization: token $TOK" -H "Accept: application/vnd.github+json" "https://api.github.com/repos/hechecik/bist-panel/actions/workflows/af-kontrol.yml/dispatches" -d '{"ref":"main"}')"
+          echo "SCHEMA $(date -u +%H:%M)"
