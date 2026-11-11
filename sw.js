@@ -1,8 +1,10 @@
 // Service Worker — çevrimdışı önbellek (PWA)
-const CACHE = 'bist-panel-v2';
+const CACHE = 'bist-panel-v3';
 const CORE = ['/', '/index.html', '/manifest.json',
   // G06: ön yüz bölündü — CSS ve JS ayrı dosyalar
-  '/css/app.css', '/js/main.js', '/js/core.js'];
+  '/css/app.css', '/js/core.js', '/js/main.js',
+  // G06 parça 2: bölüm dosyaları
+  '/js/bolum/piyasa.js', '/js/bolum/grafik.js', '/js/bolum/karne.js'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).then(() => self.skipWaiting()));

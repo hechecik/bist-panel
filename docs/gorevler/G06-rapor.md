@@ -1,5 +1,13 @@
 # G06 — Rapor (parça 1/4 tamamlandı)
 
+## Nerede kaldım (parça 2 — tamam)
+- `js/main.js` 1603 satır / 104.902 B → **814 satır / 52.954 B**.
+- Taşınanlar: `js/bolum/piyasa.js` (33.508 B, 533 satır — badge/g05 yardımcıları, reelBist*, trRisk, hisseSatir/tabloBolum, `durum`, PIYASA_VERI, renderPiyasa, grafikModal/Kapat, filtrele, csvIndir, portföy+alarmlar), `js/bolum/grafik.js` (4.134 B, 74 satır), `js/bolum/karne.js` (16.441 B, 220 satır).
+- main.js bunları import edip window'a bağlıyor; bölüm dosyaları kendi window bağlarını kuruyor (inline onclick/oninput/onchange bozulmadı).
+- `sw.js`: CACHE `bist-panel-v3`, CORE'a 3 bölüm dosyası eklendi.
+- Doğrulama: 284 test passed; 9 sekme tıklanır, konsol hatası yok; modal, filtre, CSV, portföy ekle/sil, risk hesabı elle test edildi.
+- **Sırada (parça 3):** haber / fon / takvim / getiri, ardından kripto / ICT / altın bölümleri.
+
 ## Nerede kaldım (sonraki oturum için)
 
 **Tamamlanan (parça 1):**
