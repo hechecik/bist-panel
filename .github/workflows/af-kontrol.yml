@@ -8,21 +8,11 @@ on:
 
 permissions:
   contents: read
-  actions: read
 
 jobs:
   kontrol:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
-    env:
-      TOK: ${{ secrets.GITHUB_TOKEN }}
+    timeout-minutes: 3
     steps:
-      - name: GH cron teshisi
-        run: |
-          set -x
-          date -u
-          curl -s -o /dev/null -w "repo:%{http_code}\n" -H "Authorization: token $TOK" -H "Accept: application/vnd.github+json" "https://api.github.com/repos/hechecik/bist-panel"
-          curl -s -o /dev/null -w "perms:%{http_code}\n" -H "Authorization: token $TOK" -H "Accept: application/vnd.github+json" "https://api.github.com/repos/hechecik/bist-panel/actions/permissions"
-          curl -s -o /dev/null -w "runs:%{http_code}\n" -H "Authorization: token $TOK" -H "Accept: application/vnd.github+json" "https://api.github.com/repos/hechecik/bist-panel/actions/runs?per_page=1"
-          curl -s -H "Authorization: token $TOK" -H "Accept: application/vnd.github+json" "https://api.github.com/repos/hechecik/bist-panel/actions/workflows" | head -c 400
-          echo
+      - name: Deneme
+        run: echo "RUNNER_OK $(date -u +%H:%M)"
