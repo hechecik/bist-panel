@@ -4,8 +4,10 @@
 **Dokunulacak dosyalar:** `scripts/veri_cek.py` (`cek_borsapy`, `cek_yfinance`, `veri_saglik_kontrolu`, `test_senaryolari`), `tests/`
 
 ## Neden
+> **Düzeltme (11.11.2026):** RALYH düşüşü bölünme DEĞİL, gerçek çöküştür — 23 Eylül'den itibaren ardışık −%10 taban serisi, 19.10.2026 konkordato geçici mühlet, 21.10.2026'dan itibaren Yakın İzleme Pazarı (KAP). Aşağıdaki RALYH kaydı bu nedenle **geçersizdir**; dedektör bu tür serilere dokunmaz.
+
 - Fiyatlar bölünmeye göre düzeltilmemiş. Backtest'te RALYH 273,5 → 5,02 TL (−%98) görünüyor.
-- Git geçmişinde 3 bölünme tespit edildi: RALYH −%40, REEDR −%33, KLRHO −%46.
+- Git geçmişinde 3 adet marj aşan tek günlük düşüş tespit edildi: RALYH −%40 (bölünme değil, gerçek çöküş — geçersiz), REEDR −%33, KLRHO −%46 (26→27 Ağustos, tek günde −%45,6 — gerçek bölünme örneği).
 - Bu kırılmalar backtest ortalamalarını, MA/RSI/ATR hesaplarını ve stop-loss sonuçlarını bozuyor.
 
 ## Adımlar
@@ -21,7 +23,7 @@
 
 ## Kabul kriterleri
 - [ ] `tests/test_bolunme.py`: sentetik seride 1:20 bölünme → düzeltme sonrası maksimum günlük düşüş < %11.
-- [ ] Gerçek çalıştırmada `test_senaryolari.ertesi_gun_acilis.en_kotu.getiri_yuzde` > −%60 (ya da düzeltme listesinde gerekçesi var).
+- [ ] Tek günde ≤ −%30 (BIST marjını aşan) düşüşler düzeltilir; ardışık taban serileri gerçek fiyattır, dokunulmaz.
 - [ ] `pytest` testlerinin tamamı geçiyor.
 
 ## Yapma

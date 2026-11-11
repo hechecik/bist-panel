@@ -25,6 +25,7 @@
 5. **VBTS tedbirleri (isteğe bağlı):**
    - Ağsız bir kaynak bulunabiliyorsa (KAP veya BIST duyuru sayfası) tedbirli hisse listesini çek, `tedbir` alanına yaz ve sinyal üretme.
    - Kaynak bulunamazsa uydurma. Raporda "VBTS kaynağı bulunamadı" yaz.
+6. **Sorunlu hisse filtresi:** Yakın İzleme Pazarı'ndaki, konkordato/iflas bildirimi olan veya son 10 günde ≥3 taban kilidi yaşayan hisselere AL sinyali üretme, sinyal: 'RISKLI' yaz, UI'da ⛔ rozeti göster. Backtest'te taban kilitli günde çıkış yapılamaz; çıkış ilk kilitsiz güne kaydırılır (stop-loss dahil).
 
 ## Kabul kriterleri
 - [ ] `tests/test_filtreler.py`: kilit tespiti ve likidite eşiği için en az 4 test.

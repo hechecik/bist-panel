@@ -11,6 +11,7 @@
 - **Veri:** `data/piyasa.json`'un git geçmişindeki **135 snapshot** (23 Ağustos – 10 Kasım 2026, 41 işlem günü).
 - **Fiyat paneli:** Her snapshot'taki hisse başına 30 kapanış (spark) BIST takvimine hizalandı. 100 hisse için günlük kapanış paneli yeniden kuruldu: 101.985 nokta tutarlı, 1.481 nokta çakışık (%1,4). Çakışmaların kaynağı gün içi snapshot'ların kapanıştan farklı olması; her gün için son değer esas alındı.
 - **Bölünme filtresi:** Günlük ±%30'dan büyük sıçramalar dışlandı. 3 vaka çıktı: RALYH −%40, REEDR −%33, KLRHO −%46.
+  - **Düzeltme (11.11.2026):** RALYH düşüşü bölünme değil, konkordato sonrası gerçek taban serisidir. Backtest'teki büyük kayıpların bir kısmı gerçektir; asıl sorun çıkış kuralı yokluğu ve taban kilidinin modellenmemesidir.
 - **Hedef değişken:** 1, 5 ve 10 iş günü sonraki getiri, **piyasaya göre fazla getiri** olarak (aynı günün eşit ağırlıklı evren ortalaması). XU100 ile de kontrol edildi.
 - **İstatistik:**
   - Gün bazında kesitsel ortalama ve Spearman IC (özellik sırası ile ileri getiri sırası arasındaki korelasyon).
@@ -156,6 +157,8 @@ XU100'e göre 5 günlük sonuç: **AL tarafı −%2,35, SAT tarafı −%2,24**. 
 ## 8. Yama: `bist-panel-p0.patch`
 
 Uygulama: `git am bist-panel-p0.patch` · Test: `python -m pytest tests -q` (6/6 geçiyor, ağ bağlantısı gerekmez)
+
+> **Düzeltme (11.11.2026):** RALYH düşüşü bölünme değil, konkordato sonrası gerçek taban serisidir. Backtest'teki büyük kayıpların bir kısmı gerçektir; asıl sorun çıkış kuralı yokluğu ve taban kilidinin modellenmemesidir.
 
 | Değişiklik | Dosya |
 |---|---|
