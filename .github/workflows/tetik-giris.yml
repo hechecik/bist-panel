@@ -1,0 +1,91 @@
+name: tetik-giris
+
+# BAKIM (11.11.2026) — harici zamanlayici (cron-job.org) giris kapisi.
+#
+# Sorun: GitHub'in kendi schedule mekanizmasi bu repoda fiilen tetiklenmiyor
+# (14 gunluk gecmiste schedule payi 0; kripto 30 dk'lik dilimlerde ~9 saat bos).
+# Yedek cozum harici zamanlayici; ancak cron-job.org URL/body'sini acik metin
+# saklar ve public repoda 30 gunluk run loglari herkese aciktir.
+#
+# Bu yuzden harici cagri GITHUB_TOKEN ile yapilmaz. Dogrulama:
+#   request body = {"event_type":"harici-<tip>",
+#                   "client_payload":{"ts":<unix>,"sign":hmac_sha256(CRONJOB_SECRET,ts)}}
+# - secret yalnizca Actions secret olarak durur (repoda/kodda yok)
+# - HMAC: imza yalnizca secret'i bilen tarafta uretilebilir → istek gercekten
+#   bizim zamanlayicidan geliyor, rastgele biri dispatch atamaz
+# - ts: 10 dakikadan eski imza reddedilir (tekrar oynatma engeli). Log'a
+#   sign basilmaz, sadece "OK/eski/imza hatali" yazilir.
+on:
+  repository_dispatch:
+    types: [harici-veri, harici-altin, harici-kripto, harici-ek]
+
+permissions:
+  contents: read
+  actions: write
+
+concurrency:
+  group: tetik-giris
+  cancel-in-progress: false
+
+jobs:
+  dogrula:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Imza dogrula + hedef akisi baslat
+        env:
+          TOK: ${{ secrets.GITHUB_TOKEN }}
+          SECRET: ${{ secrets.CRONJOB_SECRET }}
+          TIP: ${{ github.event.action }}
+          TS: ${{ github.event.client_payload.ts }}
+          SIGN: ${{ github.event.client_payload.sign }}
+        run: |
+          python3 - <<'PY'
+          import hashlib, hmac, json, os, sys, time, urllib.error, urllib.request
+
+          REPO = "hechecik/bist-panel"
+          AKIS = {"harici-veri": "veri-cek", "harici-altin": "altin-cek",
+                  "harici-kripto": "kripto-cek", "harici-ek": "ek-veri-cek"}
+          PEN_PENCERE = 600  # saniye
+
+          tip = (os.environ.get("TIP") or "").strip()
+          secret = os.environ.get("SECRET") or ""
+          ts = (os.environ.get("TS") or "").strip()
+          sign = (os.environ.get("SIGN") or "").strip()
+
+          if not secret:
+              print("CRONJOB_SECRET tanimli degil — harici tetik kullanilamiyor")
+              sys.exit(1)          # sessiz gecme yok: eksik yapilandirma kirmizi
+          if tip not in AKIS:
+              print("bilinmeyen tip:", tip)
+              sys.exit(1)
+          try:
+              ts_i = int(ts)
+          except ValueError:
+              print("ts gecersiz")
+              sys.exit(1)
+          yas = abs(time.time() - ts_i)
+          if yas > PEN_PENCERE:
+              print(f"imza suresi gecmis ({yas:.0f} sn) — reddedildi")
+              sys.exit(1)
+          beklenen = hmac.new(secret.encode(), f"{ts_i}".encode(), hashlib.sha256).hexdigest()
+          if not hmac.compare_digest(beklenen, sign):
+              print("imza hatali — reddedildi")
+              sys.exit(1)
+          print(f"imza OK ({yas:.0f} sn) tip={tip}")
+
+          hedef = AKIS[tip]
+          req = urllib.request.Request(
+              f"https://api.github.com/repos/{REPO}/actions/workflows/{hedef}.yml/dispatches",
+              data=json.dumps({"ref": "main"}).encode(), method="POST")
+          req.add_header("Authorization", "token " + os.environ["TOK"])
+          req.add_header("Accept", "application/vnd.github+json")
+          req.add_header("Content-Type", "application/json")
+          req.add_header("User-Agent", "bist-panel-tetik-giris")
+          try:
+              with urllib.request.urlopen(req, timeout=30) as r:
+                  print(f"workflow_dispatch {hedef} -> HTTP {r.status}")
+          except urllib.error.HTTPError as e:
+              print(f"workflow_dispatch {hedef} -> HATA {e.code}")
+              sys.exit(1)
+          PY
