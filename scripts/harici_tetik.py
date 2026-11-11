@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
-"""bist-panel harici tetikleyici — cron-job.org yerine.
+"""bist-panel harici tetikleyici — Hermes cron ile calisir.
+
+Token koda YAZILMAZ; ortam degiskeninden okunur (GITHUB_TOKEN / GH_TOKEN).
+Yoksa yerel makinede ~/.git-credentials dosyasina duser (repoda boyle bir dosya yok).
 
 Neden: GitHub'in kendi `schedule` mekanizmasi bu repoda fiilen tetiklenmiyor.
 cron-job.org hesabi/kimligi yok; fine-grained PAT de paneldan elle uretilmeli.
 Elimizdeki token `workflow` scope'lu ve workflow_dispatch cagirabiliyor (204).
 
 Bu script: zamanlanmis is akislarindan gecikmis olani workflow_dispatch ile tetikler.
+Zaman pencereleri Europe/Istanbul (UTC+3) ile hesaplanir.
 Cikti: yalnizca GERCEK bir aksiyon alindiginda satir basar (sessiz watchdog deseni).
-
-Token: koda YAZILMAZ. Once ortam degiskeni (GITHUB_TOKEN / GH_TOKEN), yoksa
-~/.git-credentials dosyasindan okunur.
 """
 import datetime as dt
 import json
