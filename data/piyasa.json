@@ -1,5 +1,5 @@
 {
- "uretildi": "2026-11-11T13:27:21",
+ "uretildi": "2026-11-11T12:43:06+00:00",
  "kaynak": "borsapy-tv",
  "saglik": {
   "durum": "OK",
@@ -11,8 +11,8 @@
   "sorunlar": []
  },
  "endeks": {
-  "deger": 11724.05,
-  "degisim_yuzde": 0.53,
+  "deger": 11759.16,
+  "degisim_yuzde": 0.83,
   "tarih": "2026-11-11"
  },
  "makro": {
@@ -50,35 +50,35 @@
    "ons-altin": {
     "ad": "ONS ALTIN",
     "birim": "USD/ons",
-    "fiyat": 4052.3,
-    "degisim": 0.55
+    "fiyat": 4051.3,
+    "degisim": 0.52
    },
    "^VIX": {
     "ad": "VIX KORKU",
     "birim": "seviye",
-    "fiyat": 18.48,
-    "degisim": -5.04,
+    "fiyat": 18.49,
+    "degisim": -4.98,
     "ters": true
    },
    "NG=F": {
     "ad": "DOĞALGAZ",
     "birim": "USD",
-    "fiyat": 3.38,
-    "degisim": 2.46,
+    "fiyat": 3.31,
+    "degisim": 0.27,
     "ters": false
    },
    "HG=F": {
     "ad": "BAKIR",
     "birim": "USD/lb",
     "fiyat": 6.29,
-    "degisim": 1.1,
+    "degisim": 1.15,
     "ters": false
    },
    "ZW=F": {
     "ad": "BUĞDAY",
     "birim": "USc/buşel",
-    "fiyat": 594.25,
-    "degisim": 0.25,
+    "fiyat": 591.5,
+    "degisim": -0.21,
     "ters": false
    }
   },
@@ -273,20 +273,20 @@
   "al": [
    {
     "sembol": "AKSA",
-    "fiyat": 10.55,
+    "fiyat": 10.57,
     "skor": 3,
     "sinyal": "DİKKAT_AL",
     "trend": "YATAY",
-    "rsi": 53.7,
-    "mfi": 64.9,
+    "rsi": 54.0,
+    "mfi": 64.7,
     "para": "GİRİŞ",
-    "s1": 10.38,
+    "s1": 10.4,
     "r1": 10.66,
-    "stop": 9.84,
-    "hedef": 11.62,
+    "stop": 9.86,
+    "hedef": 11.64,
     "squeeze": "SQUEEZE",
-    "ay_oncesi": 0.0,
-    "macd_hist": 0.059,
+    "ay_oncesi": 0.19,
+    "macd_hist": 0.06,
     "spark": [
      10.25,
      10.48,
@@ -317,260 +317,32 @@
      9.96,
      10.44,
      10.35,
-     10.55
+     10.57
     ],
     "nedenler": [
      "RSI 54 → nötr, yön belirsiz",
-     "MACD sinyal çizgisinin üzerinde (hist 0.059) → alım momentumu",
+     "MACD sinyal çizgisinin üzerinde (hist 0.060) → alım momentumu",
      "MFI 65 → net PARA GİRİŞİ (kurumsal alım izi)",
      "PİVOT: fiyat pivot (10.49 TL) üzerinde, 1. Direnç (R1) 10.66 TL'ye marj var"
     ],
     "tarih": "2026-11-11"
    },
    {
-    "sembol": "TUKAS",
-    "fiyat": 2.17,
-    "skor": 2,
-    "sinyal": "DİKKAT_AL",
-    "trend": "YATAY",
-    "rsi": 65.7,
-    "mfi": 79.1,
-    "para": "GİRİŞ",
-    "s1": 2.12,
-    "r1": 2.26,
-    "stop": 1.95,
-    "hedef": 2.51,
-    "squeeze": "NORMAL",
-    "ay_oncesi": 8.5,
-    "macd_hist": 0.044,
-    "spark": [
-     1.94,
-     1.94,
-     1.94,
-     1.94,
-     1.96,
-     1.96,
-     1.99,
-     2.0,
-     1.98,
-     1.97,
-     1.94,
-     1.99,
-     1.95,
-     1.95,
-     2.01,
-     1.95,
-     1.91,
-     1.86,
-     1.83,
-     1.84,
-     1.87,
-     1.77,
-     1.67,
-     1.69,
-     1.78,
-     1.81,
-     1.87,
-     2.05,
-     2.14,
-     2.17
-    ],
-    "nedenler": [
-     "RSI 66 → güçlü ama aşırı değil, sağlıklı bölge",
-     "MACD sinyal çizgisinin üzerinde (hist 0.044) → alım momentumu",
-     "MFI 79 → net PARA GİRİŞİ (kurumsal alım izi)",
-     "PİVOT: fiyat pivot (2.21 TL) altında, 1. Destek (S1) 2.12 TL'ye marj var",
-     "ICT: direnç 2.25 TL kırıldı ama kapanış altına döndü (2.17 TL) → yukarı tuzak — satıcı kontrolü ele aldı"
-    ],
-    "tarih": "2026-11-11"
-   }
-  ],
-  "tut": [
-   {
-    "sembol": "AKBNK",
-    "fiyat": 70.7,
-    "skor": 1,
-    "sinyal": "TUT",
-    "trend": "YATAY",
-    "rsi": 59.7,
-    "mfi": 55.6,
-    "para": "GİRİŞ",
-    "s1": 69.97,
-    "r1": 71.37,
-    "stop": 65.83,
-    "hedef": 78.0,
-    "squeeze": "NORMAL",
-    "ay_oncesi": 4.2,
-    "macd_hist": 0.961,
-    "spark": [
-     67.0,
-     67.55,
-     67.1,
-     68.95,
-     69.5,
-     69.25,
-     68.15,
-     67.85,
-     68.35,
-     68.75,
-     67.1,
-     68.0,
-     66.85,
-     67.15,
-     68.3,
-     67.2,
-     64.6,
-     63.35,
-     65.0,
-     64.3,
-     63.0,
-     60.9,
-     63.3,
-     62.25,
-     66.2,
-     67.2,
-     68.65,
-     70.95,
-     70.7,
-     70.7
-    ],
-    "nedenler": [
-     "RSI 60 → güçlü ama aşırı değil, sağlıklı bölge",
-     "MACD sinyal çizgisinin üzerinde (hist 0.961) → alım momentumu",
-     "MFI 56 → net PARA GİRİŞİ (kurumsal alım izi)",
-     "PİVOT: fiyat pivot (70.63 TL) üzerinde, 1. Direnç (R1) 71.37 TL'ye marj var"
-    ],
-    "tarih": "2026-11-11"
-   },
-   {
-    "sembol": "CVKMD",
-    "fiyat": 13.5,
-    "skor": 1,
-    "sinyal": "TUT",
-    "trend": "YATAY",
-    "rsi": 53.8,
-    "mfi": 57.5,
-    "para": "GİRİŞ",
-    "s1": 13.3,
-    "r1": 13.88,
-    "stop": 11.77,
-    "hedef": 16.1,
-    "squeeze": "NORMAL",
-    "ay_oncesi": -2.88,
-    "macd_hist": 0.295,
-    "spark": [
-     12.11,
-     12.66,
-     12.86,
-     12.45,
-     12.37,
-     12.09,
-     12.91,
-     13.9,
-     13.19,
-     12.92,
-     12.12,
-     12.79,
-     12.3,
-     11.6,
-     12.22,
-     11.68,
-     12.02,
-     11.98,
-     12.47,
-     12.28,
-     12.38,
-     11.15,
-     11.33,
-     11.55,
-     12.7,
-     13.51,
-     14.54,
-     14.69,
-     13.61,
-     13.5
-    ],
-    "nedenler": [
-     "RSI 54 → nötr, yön belirsiz",
-     "MACD sinyal çizgisinin üzerinde (hist 0.295) → alım momentumu",
-     "MFI 57 → net PARA GİRİŞİ (kurumsal alım izi)",
-     "PİVOT: fiyat pivot (13.67 TL) altında, 1. Destek (S1) 13.30 TL'ye marj var",
-     "ICT: fiyat 2 bar önceki düşüğün (14.50 TL) altında boşluk bıraktı — kurumsal satış izi"
-    ],
-    "tarih": "2026-11-11"
-   },
-   {
-    "sembol": "CIMSA",
-    "fiyat": 42.46,
-    "skor": 1,
-    "sinyal": "TUT",
-    "trend": "YATAY",
-    "rsi": 58.4,
-    "mfi": 65.8,
-    "para": "GİRİŞ",
-    "s1": 42.02,
-    "r1": 42.84,
-    "stop": 39.85,
-    "hedef": 46.38,
-    "squeeze": "NORMAL",
-    "ay_oncesi": 2.86,
-    "macd_hist": 0.525,
-    "spark": [
-     41.68,
-     41.24,
-     41.8,
-     42.46,
-     41.56,
-     40.92,
-     41.12,
-     41.28,
-     40.22,
-     39.98,
-     40.28,
-     39.84,
-     38.38,
-     38.42,
-     40.26,
-     39.56,
-     38.54,
-     37.44,
-     37.62,
-     39.6,
-     39.7,
-     38.96,
-     39.64,
-     39.96,
-     41.68,
-     42.5,
-     42.48,
-     42.68,
-     42.24,
-     42.46
-    ],
-    "nedenler": [
-     "RSI 58 → güçlü ama aşırı değil, sağlıklı bölge",
-     "MACD sinyal çizgisinin üzerinde (hist 0.525) → alım momentumu",
-     "MFI 66 → net PARA GİRİŞİ (kurumsal alım izi)",
-     "PİVOT: fiyat pivot (42.40 TL) üzerinde, 1. Direnç (R1) 42.84 TL'ye marj var"
-    ],
-    "tarih": "2026-11-11"
-   },
-   {
     "sembol": "ENJSA",
-    "fiyat": 119.2,
-    "skor": 1,
-    "sinyal": "TUT",
-    "trend": "YATAY",
-    "rsi": 58.0,
-    "mfi": 60.9,
+    "fiyat": 119.3,
+    "skor": 3,
+    "sinyal": "DİKKAT_AL",
+    "trend": "YUKARI",
+    "rsi": 58.2,
+    "mfi": 61.1,
     "para": "GİRİŞ",
-    "s1": 117.63,
-    "r1": 120.43,
-    "stop": 110.48,
-    "hedef": 132.28,
+    "s1": 117.7,
+    "r1": 120.5,
+    "stop": 110.58,
+    "hedef": 132.38,
     "squeeze": "NORMAL",
-    "ay_oncesi": 5.11,
-    "macd_hist": 0.719,
+    "ay_oncesi": 5.2,
+    "macd_hist": 0.726,
     "spark": [
      105.4,
      108.7,
@@ -601,33 +373,33 @@
      122.0,
      120.6,
      119.0,
-     119.2
+     119.3
     ],
     "nedenler": [
      "RSI 58 → güçlü ama aşırı değil, sağlıklı bölge",
-     "MACD sinyal çizgisinin üzerinde (hist 0.719) → alım momentumu",
+     "MACD sinyal çizgisinin üzerinde (hist 0.726) → alım momentumu",
      "MFI 61 → net PARA GİRİŞİ (kurumsal alım izi)",
-     "PİVOT: fiyat pivot (118.87 TL) üzerinde, 1. Direnç (R1) 120.43 TL'ye marj var",
+     "PİVOT: fiyat pivot (118.90 TL) üzerinde, 1. Direnç (R1) 120.50 TL'ye marj var",
      "ICT: fiyat 2 bar önceki düşüğün (120.60 TL) altında boşluk bıraktı — kurumsal satış izi"
     ],
     "tarih": "2026-11-11"
    },
    {
     "sembol": "ENERY",
-    "fiyat": 13.88,
-    "skor": 1,
-    "sinyal": "TUT",
-    "trend": "YATAY",
-    "rsi": 54.7,
+    "fiyat": 13.9,
+    "skor": 3,
+    "sinyal": "DİKKAT_AL",
+    "trend": "YUKARI",
+    "rsi": 54.9,
     "mfi": 57.5,
     "para": "GİRİŞ",
-    "s1": 13.69,
-    "r1": 14.13,
-    "stop": 12.74,
-    "hedef": 15.59,
+    "s1": 13.7,
+    "r1": 14.14,
+    "stop": 12.76,
+    "hedef": 15.61,
     "squeeze": "SQUEEZE",
-    "ay_oncesi": -2.8,
-    "macd_hist": 0.019,
+    "ay_oncesi": -2.66,
+    "macd_hist": 0.021,
     "spark": [
      13.22,
      13.53,
@@ -658,32 +430,372 @@
      14.05,
      14.25,
      14.15,
-     13.88
+     13.9
     ],
     "nedenler": [
      "RSI 55 → nötr, yön belirsiz",
-     "MACD sinyal çizgisinin üzerinde (hist 0.019) → alım momentumu",
+     "MACD sinyal çizgisinin üzerinde (hist 0.021) → alım momentumu",
      "MFI 57 → net PARA GİRİŞİ (kurumsal alım izi)",
-     "PİVOT: fiyat pivot (13.94 TL) altında, 1. Destek (S1) 13.69 TL'ye marj var"
+     "PİVOT: fiyat pivot (13.95 TL) altında, 1. Destek (S1) 13.70 TL'ye marj var"
+    ],
+    "tarih": "2026-11-11"
+   },
+   {
+    "sembol": "OTKAR",
+    "fiyat": 313.75,
+    "skor": 2,
+    "sinyal": "DİKKAT_AL",
+    "trend": "YATAY",
+    "rsi": 51.8,
+    "mfi": 50.9,
+    "para": "NÖTR",
+    "s1": 309.58,
+    "r1": 316.33,
+    "stop": 290.57,
+    "hedef": 348.52,
+    "squeeze": "SQUEEZE",
+    "ay_oncesi": -9.58,
+    "macd_hist": 0.812,
+    "spark": [
+     281.5,
+     309.5,
+     340.25,
+     340.5,
+     341.25,
+     336.75,
+     344.0,
+     347.0,
+     336.5,
+     334.5,
+     327.0,
+     323.0,
+     310.0,
+     296.0,
+     314.25,
+     308.0,
+     303.0,
+     304.75,
+     295.25,
+     303.0,
+     307.5,
+     300.0,
+     304.0,
+     301.0,
+     316.0,
+     307.0,
+     306.5,
+     306.25,
+     308.0,
+     313.75
+    ],
+    "nedenler": [
+     "RSI 52 → nötr, yön belirsiz",
+     "MACD sinyal çizgisinin üzerinde (hist 0.812) → alım momentumu",
+     "MFI 51 → nötr para akışı",
+     "PİVOT: fiyat pivot (312.17 TL) üzerinde, 1. Direnç (R1) 316.33 TL'ye marj var"
+    ],
+    "tarih": "2026-11-11"
+   },
+   {
+    "sembol": "TUKAS",
+    "fiyat": 2.26,
+    "skor": 2,
+    "sinyal": "DİKKAT_AL",
+    "trend": "YATAY",
+    "rsi": 69.2,
+    "mfi": 78.2,
+    "para": "GİRİŞ",
+    "s1": 2.18,
+    "r1": 2.32,
+    "stop": 2.04,
+    "hedef": 2.6,
+    "squeeze": "NORMAL",
+    "ay_oncesi": 13.0,
+    "macd_hist": 0.05,
+    "spark": [
+     1.94,
+     1.94,
+     1.94,
+     1.94,
+     1.96,
+     1.96,
+     1.99,
+     2.0,
+     1.98,
+     1.97,
+     1.94,
+     1.99,
+     1.95,
+     1.95,
+     2.01,
+     1.95,
+     1.91,
+     1.86,
+     1.83,
+     1.84,
+     1.87,
+     1.77,
+     1.67,
+     1.69,
+     1.78,
+     1.81,
+     1.87,
+     2.05,
+     2.14,
+     2.26
+    ],
+    "nedenler": [
+     "RSI 69 → güçlü ama aşırı değil, sağlıklı bölge",
+     "MACD sinyal çizgisinin üzerinde (hist 0.050) → alım momentumu",
+     "MFI 78 → net PARA GİRİŞİ (kurumsal alım izi)",
+     "PİVOT: fiyat pivot (2.24 TL) üzerinde, 1. Direnç (R1) 2.32 TL'ye marj var",
+     "ICT: fiyat 2 bar önceki yükseğin (2.05 TL) üzerinde boşluk bıraktı — kurumsal alım izi"
+    ],
+    "tarih": "2026-11-11"
+   }
+  ],
+  "tut": [
+   {
+    "sembol": "AKBNK",
+    "fiyat": 70.8,
+    "skor": 1,
+    "sinyal": "TUT",
+    "trend": "YATAY",
+    "rsi": 59.9,
+    "mfi": 55.8,
+    "para": "GİRİŞ",
+    "s1": 70.03,
+    "r1": 71.43,
+    "stop": 65.93,
+    "hedef": 78.1,
+    "squeeze": "NORMAL",
+    "ay_oncesi": 4.35,
+    "macd_hist": 0.968,
+    "spark": [
+     67.0,
+     67.55,
+     67.1,
+     68.95,
+     69.5,
+     69.25,
+     68.15,
+     67.85,
+     68.35,
+     68.75,
+     67.1,
+     68.0,
+     66.85,
+     67.15,
+     68.3,
+     67.2,
+     64.6,
+     63.35,
+     65.0,
+     64.3,
+     63.0,
+     60.9,
+     63.3,
+     62.25,
+     66.2,
+     67.2,
+     68.65,
+     70.95,
+     70.7,
+     70.8
+    ],
+    "nedenler": [
+     "RSI 60 → güçlü ama aşırı değil, sağlıklı bölge",
+     "MACD sinyal çizgisinin üzerinde (hist 0.968) → alım momentumu",
+     "MFI 56 → net PARA GİRİŞİ (kurumsal alım izi)",
+     "PİVOT: fiyat pivot (70.67 TL) üzerinde, 1. Direnç (R1) 71.43 TL'ye marj var"
+    ],
+    "tarih": "2026-11-11"
+   },
+   {
+    "sembol": "CVKMD",
+    "fiyat": 13.59,
+    "skor": 1,
+    "sinyal": "TUT",
+    "trend": "YATAY",
+    "rsi": 54.4,
+    "mfi": 57.7,
+    "para": "GİRİŞ",
+    "s1": 13.41,
+    "r1": 13.91,
+    "stop": 11.87,
+    "hedef": 16.17,
+    "squeeze": "NORMAL",
+    "ay_oncesi": -2.23,
+    "macd_hist": 0.3,
+    "spark": [
+     12.11,
+     12.66,
+     12.86,
+     12.45,
+     12.37,
+     12.09,
+     12.91,
+     13.9,
+     13.19,
+     12.92,
+     12.12,
+     12.79,
+     12.3,
+     11.6,
+     12.22,
+     11.68,
+     12.02,
+     11.98,
+     12.47,
+     12.28,
+     12.38,
+     11.15,
+     11.33,
+     11.55,
+     12.7,
+     13.51,
+     14.54,
+     14.69,
+     13.61,
+     13.59
+    ],
+    "nedenler": [
+     "RSI 54 → nötr, yön belirsiz",
+     "MACD sinyal çizgisinin üzerinde (hist 0.300) → alım momentumu",
+     "MFI 58 → net PARA GİRİŞİ (kurumsal alım izi)",
+     "PİVOT: fiyat pivot (13.73 TL) altında, 1. Destek (S1) 13.41 TL'ye marj var",
+     "ICT: fiyat 2 bar önceki düşüğün (14.50 TL) altında boşluk bıraktı — kurumsal satış izi"
+    ],
+    "tarih": "2026-11-11"
+   },
+   {
+    "sembol": "CIMSA",
+    "fiyat": 42.32,
+    "skor": 1,
+    "sinyal": "TUT",
+    "trend": "YATAY",
+    "rsi": 57.8,
+    "mfi": 66.0,
+    "para": "GİRİŞ",
+    "s1": 41.93,
+    "r1": 42.75,
+    "stop": 39.71,
+    "hedef": 46.24,
+    "squeeze": "NORMAL",
+    "ay_oncesi": 2.52,
+    "macd_hist": 0.516,
+    "spark": [
+     41.68,
+     41.24,
+     41.8,
+     42.46,
+     41.56,
+     40.92,
+     41.12,
+     41.28,
+     40.22,
+     39.98,
+     40.28,
+     39.84,
+     38.38,
+     38.42,
+     40.26,
+     39.56,
+     38.54,
+     37.44,
+     37.62,
+     39.6,
+     39.7,
+     38.96,
+     39.64,
+     39.96,
+     41.68,
+     42.5,
+     42.48,
+     42.68,
+     42.24,
+     42.32
+    ],
+    "nedenler": [
+     "RSI 58 → güçlü ama aşırı değil, sağlıklı bölge",
+     "MACD sinyal çizgisinin üzerinde (hist 0.516) → alım momentumu",
+     "MFI 66 → net PARA GİRİŞİ (kurumsal alım izi)",
+     "PİVOT: fiyat pivot (42.35 TL) altında, 1. Destek (S1) 41.93 TL'ye marj var"
+    ],
+    "tarih": "2026-11-11"
+   },
+   {
+    "sembol": "EKGYO",
+    "fiyat": 18.56,
+    "skor": 1,
+    "sinyal": "TUT",
+    "trend": "ASAĞI",
+    "rsi": 53.9,
+    "mfi": 56.1,
+    "para": "GİRİŞ",
+    "s1": 18.27,
+    "r1": 18.72,
+    "stop": 17.07,
+    "hedef": 20.79,
+    "squeeze": "NORMAL",
+    "ay_oncesi": -6.5,
+    "macd_hist": 0.203,
+    "spark": [
+     18.44,
+     19.03,
+     19.07,
+     19.91,
+     19.75,
+     19.6,
+     19.61,
+     19.85,
+     19.73,
+     19.68,
+     19.51,
+     19.8,
+     19.04,
+     18.25,
+     19.03,
+     18.57,
+     17.75,
+     17.02,
+     16.84,
+     16.99,
+     17.08,
+     16.19,
+     16.77,
+     16.57,
+     17.49,
+     17.45,
+     17.66,
+     18.32,
+     18.38,
+     18.56
+    ],
+    "nedenler": [
+     "RSI 54 → nötr, yön belirsiz",
+     "MACD sinyal çizgisinin üzerinde (hist 0.203) → alım momentumu",
+     "MFI 56 → net PARA GİRİŞİ (kurumsal alım izi)",
+     "PİVOT: fiyat pivot (18.44 TL) üzerinde, 1. Direnç (R1) 18.72 TL'ye marj var"
     ],
     "tarih": "2026-11-11"
    },
    {
     "sembol": "FROTO",
-    "fiyat": 74.0,
+    "fiyat": 74.35,
     "skor": 1,
     "sinyal": "TUT",
     "trend": "YATAY",
-    "rsi": 56.0,
-    "mfi": 74.9,
+    "rsi": 56.9,
+    "mfi": 75.3,
     "para": "GİRİŞ",
-    "s1": 73.03,
-    "r1": 75.58,
-    "stop": 68.22,
-    "hedef": 82.67,
+    "s1": 73.53,
+    "r1": 75.68,
+    "stop": 68.63,
+    "hedef": 82.93,
     "squeeze": "NORMAL",
-    "ay_oncesi": -0.87,
-    "macd_hist": 1.211,
+    "ay_oncesi": -0.4,
+    "macd_hist": 1.233,
     "spark": [
      73.55,
      75.45,
@@ -714,13 +826,13 @@
      73.15,
      74.45,
      75.9,
-     74.0
+     74.35
     ],
     "nedenler": [
-     "RSI 56 → güçlü ama aşırı değil, sağlıklı bölge",
-     "MACD sinyal çizgisinin üzerinde (hist 1.211) → alım momentumu",
+     "RSI 57 → güçlü ama aşırı değil, sağlıklı bölge",
+     "MACD sinyal çizgisinin üzerinde (hist 1.233) → alım momentumu",
      "MFI 75 → net PARA GİRİŞİ (kurumsal alım izi)",
-     "PİVOT: fiyat pivot (74.62 TL) altında, 1. Destek (S1) 73.03 TL'ye marj var"
+     "PİVOT: fiyat pivot (74.87 TL) altında, 1. Destek (S1) 73.53 TL'ye marj var"
     ],
     "tarih": "2026-11-11"
    },
@@ -731,7 +843,7 @@
     "sinyal": "TUT",
     "trend": "ASAĞI",
     "rsi": 41.8,
-    "mfi": 89.7,
+    "mfi": 89.6,
     "para": "GİRİŞ",
     "s1": 73.4,
     "r1": 79.3,
@@ -782,20 +894,20 @@
    },
    {
     "sembol": "KUYAS",
-    "fiyat": 10.78,
+    "fiyat": 10.74,
     "skor": 1,
     "sinyal": "TUT",
     "trend": "ASAĞI",
-    "rsi": 31.6,
-    "mfi": 61.2,
+    "rsi": 31.4,
+    "mfi": 61.0,
     "para": "GİRİŞ",
-    "s1": 10.25,
-    "r1": 11.09,
-    "stop": 7.97,
-    "hedef": 15.0,
+    "s1": 10.24,
+    "r1": 11.04,
+    "stop": 7.93,
+    "hedef": 14.95,
     "squeeze": "SQUEEZE",
-    "ay_oncesi": -16.17,
-    "macd_hist": 1.694,
+    "ay_oncesi": -16.49,
+    "macd_hist": 1.691,
     "spark": [
      26.82,
      24.14,
@@ -826,89 +938,33 @@
      8.72,
      9.59,
      10.03,
-     10.78
+     10.74
     ],
     "nedenler": [
-     "RSI 32 → nötr, yön belirsiz",
-     "MACD sinyal çizgisinin üzerinde (hist 1.694) → alım momentumu",
+     "RSI 31 → nötr, yön belirsiz",
+     "MACD sinyal çizgisinin üzerinde (hist 1.691) → alım momentumu",
      "MFI 61 → net PARA GİRİŞİ (kurumsal alım izi)",
-     "PİVOT: fiyat pivot (10.56 TL) üzerinde, 1. Direnç (R1) 11.09 TL'ye marj var",
+     "PİVOT: fiyat pivot (10.53 TL) üzerinde, 1. Direnç (R1) 11.04 TL'ye marj var",
      "ICT: fiyat 2 bar önceki yükseğin (9.59 TL) üzerinde boşluk bıraktı — kurumsal alım izi"
     ],
     "tarih": "2026-11-11"
    },
    {
-    "sembol": "TAVHL",
-    "fiyat": 300.75,
-    "skor": 1,
-    "sinyal": "TUT",
-    "trend": "YATAY",
-    "rsi": 65.7,
-    "mfi": 67.4,
-    "para": "GİRİŞ",
-    "s1": 297.92,
-    "r1": 305.17,
-    "stop": 277.9,
-    "hedef": 335.02,
-    "squeeze": "NORMAL",
-    "ay_oncesi": 9.46,
-    "macd_hist": 4.285,
-    "spark": [
-     261.25,
-     262.0,
-     266.25,
-     274.5,
-     275.5,
-     275.25,
-     275.75,
-     274.75,
-     266.5,
-     268.25,
-     271.25,
-     271.0,
-     270.5,
-     274.0,
-     286.25,
-     287.0,
-     267.0,
-     265.0,
-     266.5,
-     264.75,
-     254.5,
-     250.0,
-     262.0,
-     267.25,
-     278.75,
-     291.0,
-     294.5,
-     303.75,
-     302.0,
-     300.75
-    ],
-    "nedenler": [
-     "RSI 66 → güçlü ama aşırı değil, sağlıklı bölge",
-     "MACD sinyal çizgisinin üzerinde (hist 4.285) → alım momentumu",
-     "MFI 67 → net PARA GİRİŞİ (kurumsal alım izi)",
-     "PİVOT: fiyat pivot (302.33 TL) altında, 1. Destek (S1) 297.92 TL'ye marj var"
-    ],
-    "tarih": "2026-11-11"
-   },
-   {
     "sembol": "TRENJ",
-    "fiyat": 77.6,
+    "fiyat": 77.7,
     "skor": 1,
     "sinyal": "TUT",
     "trend": "ASAĞI",
-    "rsi": 42.8,
-    "mfi": 58.8,
+    "rsi": 43.0,
+    "mfi": 58.6,
     "para": "GİRİŞ",
-    "s1": 75.98,
-    "r1": 80.53,
-    "stop": 68.83,
-    "hedef": 90.76,
+    "s1": 76.05,
+    "r1": 80.6,
+    "stop": 68.93,
+    "hedef": 90.86,
     "squeeze": "NORMAL",
-    "ay_oncesi": -21.18,
-    "macd_hist": 1.076,
+    "ay_oncesi": -21.08,
+    "macd_hist": 1.082,
     "spark": [
      95.85,
      92.4,
@@ -939,90 +995,147 @@
      75.7,
      77.6,
      77.75,
-     77.6
+     77.7
     ],
     "nedenler": [
      "RSI 43 → nötr, yön belirsiz",
-     "MACD sinyal çizgisinin üzerinde (hist 1.076) → alım momentumu",
+     "MACD sinyal çizgisinin üzerinde (hist 1.082) → alım momentumu",
      "MFI 59 → net PARA GİRİŞİ (kurumsal alım izi)",
-     "PİVOT: fiyat pivot (78.92 TL) altında, 1. Destek (S1) 75.98 TL'ye marj var"
+     "PİVOT: fiyat pivot (78.95 TL) altında, 1. Destek (S1) 76.05 TL'ye marj var"
+    ],
+    "tarih": "2026-11-11"
+   },
+   {
+    "sembol": "TCELL",
+    "fiyat": 96.5,
+    "skor": 1,
+    "sinyal": "TUT",
+    "trend": "ASAĞI",
+    "rsi": 53.7,
+    "mfi": 63.6,
+    "para": "GİRİŞ",
+    "s1": 95.52,
+    "r1": 97.77,
+    "stop": 90.31,
+    "hedef": 105.79,
+    "squeeze": "NORMAL",
+    "ay_oncesi": -2.08,
+    "macd_hist": 0.653,
+    "spark": [
+     96.1,
+     97.7,
+     97.8,
+     100.5,
+     100.7,
+     99.4,
+     100.2,
+     98.55,
+     97.25,
+     99.45,
+     98.3,
+     97.85,
+     96.8,
+     96.2,
+     97.65,
+     95.0,
+     93.3,
+     90.1,
+     90.4,
+     91.1,
+     91.15,
+     90.1,
+     91.95,
+     93.8,
+     93.95,
+     91.8,
+     90.0,
+     92.1,
+     97.75,
+     96.5
+    ],
+    "nedenler": [
+     "RSI 54 → nötr, yön belirsiz",
+     "MACD sinyal çizgisinin üzerinde (hist 0.653) → alım momentumu",
+     "MFI 64 → net PARA GİRİŞİ (kurumsal alım izi)",
+     "PİVOT: fiyat pivot (96.78 TL) altında, 1. Destek (S1) 95.52 TL'ye marj var",
+     "ICT: fiyat 2 bar önceki yükseğin (92.40 TL) üzerinde boşluk bıraktı — kurumsal alım izi"
+    ],
+    "tarih": "2026-11-11"
+   },
+   {
+    "sembol": "ISCTR",
+    "fiyat": 13.68,
+    "skor": 1,
+    "sinyal": "TUT",
+    "trend": "YATAY",
+    "rsi": 63.1,
+    "mfi": 71.8,
+    "para": "GİRİŞ",
+    "s1": 13.53,
+    "r1": 13.81,
+    "stop": 12.8,
+    "hedef": 15.0,
+    "squeeze": "NORMAL",
+    "ay_oncesi": 7.97,
+    "macd_hist": 0.174,
+    "spark": [
+     12.2,
+     12.51,
+     12.45,
+     12.87,
+     12.87,
+     12.97,
+     12.79,
+     12.67,
+     12.7,
+     13.05,
+     13.01,
+     13.1,
+     12.89,
+     12.86,
+     13.08,
+     12.87,
+     12.42,
+     12.17,
+     12.26,
+     12.29,
+     12.12,
+     11.65,
+     12.32,
+     12.31,
+     12.87,
+     13.05,
+     13.29,
+     13.7,
+     13.66,
+     13.68
+    ],
+    "nedenler": [
+     "RSI 63 → güçlü ama aşırı değil, sağlıklı bölge",
+     "MACD sinyal çizgisinin üzerinde (hist 0.174) → alım momentumu",
+     "MFI 72 → net PARA GİRİŞİ (kurumsal alım izi)",
+     "PİVOT: fiyat pivot (13.67 TL) üzerinde, 1. Direnç (R1) 13.81 TL'ye marj var"
     ],
     "tarih": "2026-11-11"
    }
   ],
   "sat": [
    {
-    "sembol": "AKSEN",
-    "fiyat": 70.95,
-    "skor": -2,
-    "sinyal": "DİKKAT_SAT",
-    "trend": "ASAĞI",
-    "rsi": 54.1,
-    "mfi": 53.0,
-    "para": "NÖTR",
-    "s1": 68.98,
-    "r1": 72.33,
-    "stop": 63.38,
-    "hedef": 82.3,
-    "squeeze": "NORMAL",
-    "ay_oncesi": -3.93,
-    "macd_hist": 0.965,
-    "spark": [
-     72.9,
-     72.35,
-     74.2,
-     72.85,
-     71.45,
-     71.75,
-     72.25,
-     73.85,
-     71.75,
-     73.3,
-     72.9,
-     71.4,
-     68.9,
-     69.0,
-     70.85,
-     69.05,
-     66.2,
-     60.6,
-     64.3,
-     65.1,
-     67.3,
-     60.6,
-     62.1,
-     63.0,
-     67.5,
-     66.55,
-     68.55,
-     69.95,
-     68.95,
-     70.95
-    ],
-    "nedenler": [
-     "RSI 54 → nötr, yön belirsiz",
-     "MACD sinyal çizgisinin üzerinde (hist 0.965) → alım momentumu",
-     "MFI 53 → nötr para akışı",
-     "PİVOT: fiyat pivot (70.37 TL) üzerinde, 1. Direnç (R1) 72.33 TL'ye marj var"
-    ],
-    "tarih": "2026-11-11"
-   },
-   {
     "sembol": "ALARK",
-    "fiyat": 103.4,
+    "fiyat": 104.2,
     "skor": -2,
     "sinyal": "DİKKAT_SAT",
     "trend": "ASAĞI",
-    "rsi": 52.4,
-    "mfi": 48.4,
+    "rsi": 53.7,
+    "mfi": 48.2,
     "para": "NÖTR",
-    "s1": 102.43,
-    "r1": 105.13,
-    "stop": 95.2,
-    "hedef": 115.69,
+    "s1": 102.97,
+    "r1": 105.67,
+    "stop": 96.0,
+    "hedef": 116.49,
     "squeeze": "NORMAL",
-    "ay_oncesi": -5.14,
-    "macd_hist": 0.799,
+    "ay_oncesi": -4.4,
+    "macd_hist": 0.85,
     "spark": [
      98.65,
      101.9,
@@ -1053,33 +1166,89 @@
      101.8,
      98.7,
      104.7,
-     103.4
+     104.2
     ],
     "nedenler": [
-     "RSI 52 → nötr, yön belirsiz",
-     "MACD sinyal çizgisinin üzerinde (hist 0.799) → alım momentumu",
+     "RSI 54 → nötr, yön belirsiz",
+     "MACD sinyal çizgisinin üzerinde (hist 0.850) → alım momentumu",
      "MFI 48 → nötr para akışı",
-     "PİVOT: fiyat pivot (104.17 TL) altında, 1. Destek (S1) 102.43 TL'ye marj var",
+     "PİVOT: fiyat pivot (104.43 TL) altında, 1. Destek (S1) 102.97 TL'ye marj var",
      "ICT: fiyat 2 bar önceki yükseğin (102.80 TL) üzerinde boşluk bıraktı — kurumsal alım izi"
     ],
     "tarih": "2026-11-11"
    },
    {
-    "sembol": "BTCIM",
-    "fiyat": 2.01,
+    "sembol": "AEFES",
+    "fiyat": 16.51,
     "skor": -2,
     "sinyal": "DİKKAT_SAT",
     "trend": "ASAĞI",
-    "rsi": 53.7,
-    "mfi": 57.8,
-    "para": "GİRİŞ",
-    "s1": 1.93,
-    "r1": 2.08,
-    "stop": 1.73,
-    "hedef": 2.43,
+    "rsi": 42.4,
+    "mfi": 45.1,
+    "para": "NÖTR",
+    "s1": 16.34,
+    "r1": 16.7,
+    "stop": 15.3,
+    "hedef": 18.32,
     "squeeze": "NORMAL",
-    "ay_oncesi": -3.37,
-    "macd_hist": 0.106,
+    "ay_oncesi": -11.05,
+    "macd_hist": 0.103,
+    "spark": [
+     17.68,
+     17.81,
+     18.04,
+     18.08,
+     18.67,
+     18.15,
+     18.36,
+     18.56,
+     18.53,
+     18.5,
+     18.24,
+     18.07,
+     17.5,
+     17.35,
+     17.69,
+     16.88,
+     16.27,
+     16.22,
+     15.81,
+     16.26,
+     15.9,
+     15.43,
+     16.24,
+     16.61,
+     16.69,
+     16.77,
+     16.85,
+     16.94,
+     16.62,
+     16.51
+    ],
+    "nedenler": [
+     "RSI 42 → nötr, yön belirsiz",
+     "MACD sinyal çizgisinin üzerinde (hist 0.103) → alım momentumu",
+     "MFI 45 → nötr para akışı",
+     "PİVOT: fiyat pivot (16.53 TL) altında, 1. Destek (S1) 16.34 TL'ye marj var"
+    ],
+    "tarih": "2026-11-11"
+   },
+   {
+    "sembol": "BTCIM",
+    "fiyat": 2.05,
+    "skor": -2,
+    "sinyal": "DİKKAT_SAT",
+    "trend": "ASAĞI",
+    "rsi": 55.4,
+    "mfi": 57.5,
+    "para": "GİRİŞ",
+    "s1": 1.95,
+    "r1": 2.1,
+    "stop": 1.77,
+    "hedef": 2.47,
+    "squeeze": "NORMAL",
+    "ay_oncesi": -1.44,
+    "macd_hist": 0.108,
     "spark": [
      1.86,
      1.92,
@@ -1110,32 +1279,33 @@
      1.88,
      1.92,
      1.9,
-     2.01
+     2.05
     ],
     "nedenler": [
-     "RSI 54 → nötr, yön belirsiz",
-     "MACD sinyal çizgisinin üzerinde (hist 0.106) → alım momentumu",
-     "MFI 58 → net PARA GİRİŞİ (kurumsal alım izi)",
-     "PİVOT: fiyat pivot (1.99 TL) üzerinde, 1. Direnç (R1) 2.08 TL'ye marj var"
+     "RSI 55 → güçlü ama aşırı değil, sağlıklı bölge",
+     "MACD sinyal çizgisinin üzerinde (hist 0.108) → alım momentumu",
+     "MFI 57 → net PARA GİRİŞİ (kurumsal alım izi)",
+     "PİVOT: fiyat pivot (2.01 TL) üzerinde, 1. Direnç (R1) 2.10 TL'ye marj var",
+     "ICT: kapanış son 20 barın zirvesini (2.01 TL) geçti"
     ],
     "tarih": "2026-11-11"
    },
    {
     "sembol": "BERA",
-    "fiyat": 10.34,
+    "fiyat": 10.39,
     "skor": -2,
     "sinyal": "DİKKAT_SAT",
     "trend": "ASAĞI",
-    "rsi": 48.0,
-    "mfi": 47.2,
+    "rsi": 48.8,
+    "mfi": 47.7,
     "para": "NÖTR",
-    "s1": 10.19,
-    "r1": 10.55,
-    "stop": 9.35,
-    "hedef": 11.82,
+    "s1": 10.25,
+    "r1": 10.58,
+    "stop": 9.4,
+    "hedef": 11.87,
     "squeeze": "NORMAL",
-    "ay_oncesi": -12.0,
-    "macd_hist": 0.165,
+    "ay_oncesi": -11.57,
+    "macd_hist": 0.168,
     "spark": [
      11.55,
      12.48,
@@ -1166,32 +1336,33 @@
      9.93,
      10.06,
      10.27,
-     10.34
+     10.39
     ],
     "nedenler": [
-     "RSI 48 → nötr, yön belirsiz",
-     "MACD sinyal çizgisinin üzerinde (hist 0.165) → alım momentumu",
-     "MFI 47 → nötr para akışı",
-     "PİVOT: fiyat pivot (10.41 TL) altında, 1. Destek (S1) 10.19 TL'ye marj var"
+     "RSI 49 → nötr, yön belirsiz",
+     "MACD sinyal çizgisinin üzerinde (hist 0.168) → alım momentumu",
+     "MFI 48 → nötr para akışı",
+     "PİVOT: fiyat pivot (10.43 TL) altında, 1. Destek (S1) 10.25 TL'ye marj var",
+     "ICT: fiyat 2 bar önceki yükseğin (10.26 TL) üzerinde boşluk bıraktı — kurumsal alım izi"
     ],
     "tarih": "2026-11-11"
    },
    {
     "sembol": "BRSAN",
-    "fiyat": 641.5,
+    "fiyat": 643.0,
     "skor": -2,
     "sinyal": "DİKKAT_SAT",
     "trend": "ASAĞI",
-    "rsi": 46.5,
-    "mfi": 47.0,
+    "rsi": 46.8,
+    "mfi": 47.1,
     "para": "NÖTR",
-    "s1": 634.33,
-    "r1": 653.33,
-    "stop": 580.59,
-    "hedef": 732.87,
+    "s1": 635.33,
+    "r1": 654.33,
+    "stop": 582.09,
+    "hedef": 734.37,
     "squeeze": "SQUEEZE",
-    "ay_oncesi": -2.66,
-    "macd_hist": 1.693,
+    "ay_oncesi": -2.43,
+    "macd_hist": 1.789,
     "spark": [
      625.0,
      670.5,
@@ -1222,33 +1393,33 @@
      682.0,
      685.0,
      655.0,
-     641.5
+     643.0
     ],
     "nedenler": [
-     "RSI 46 → nötr, yön belirsiz",
-     "MACD sinyal çizgisinin üzerinde (hist 1.693) → alım momentumu",
+     "RSI 47 → nötr, yön belirsiz",
+     "MACD sinyal çizgisinin üzerinde (hist 1.789) → alım momentumu",
      "MFI 47 → nötr para akışı",
-     "PİVOT: fiyat pivot (646.17 TL) altında, 1. Destek (S1) 634.33 TL'ye marj var",
+     "PİVOT: fiyat pivot (646.67 TL) altında, 1. Destek (S1) 635.33 TL'ye marj var",
      "ICT: fiyat 2 bar önceki düşüğün (665.00 TL) altında boşluk bıraktı — kurumsal satış izi"
     ],
     "tarih": "2026-11-11"
    },
    {
     "sembol": "ESEN",
-    "fiyat": 2.1,
+    "fiyat": 2.11,
     "skor": -2,
     "sinyal": "DİKKAT_SAT",
     "trend": "ASAĞI",
-    "rsi": 43.3,
-    "mfi": 53.6,
+    "rsi": 43.9,
+    "mfi": 53.2,
     "para": "NÖTR",
-    "s1": 2.06,
+    "s1": 2.07,
     "r1": 2.16,
-    "stop": 1.89,
-    "hedef": 2.42,
+    "stop": 1.9,
+    "hedef": 2.43,
     "squeeze": "NORMAL",
-    "ay_oncesi": -16.33,
-    "macd_hist": 0.057,
+    "ay_oncesi": -15.94,
+    "macd_hist": 0.058,
     "spark": [
      2.48,
      2.61,
@@ -1279,70 +1450,13 @@
      2.1,
      2.17,
      2.08,
-     2.1
+     2.11
     ],
     "nedenler": [
-     "RSI 43 → nötr, yön belirsiz",
-     "MACD sinyal çizgisinin üzerinde (hist 0.057) → alım momentumu",
-     "MFI 54 → nötr para akışı",
-     "PİVOT: fiyat pivot (2.12 TL) altında, 1. Destek (S1) 2.06 TL'ye marj var"
-    ],
-    "tarih": "2026-11-11"
-   },
-   {
-    "sembol": "EUPWR",
-    "fiyat": 36.14,
-    "skor": -2,
-    "sinyal": "DİKKAT_SAT",
-    "trend": "ASAĞI",
-    "rsi": 35.1,
-    "mfi": 27.4,
-    "para": "ÇIKIŞ",
-    "s1": 35.29,
-    "r1": 37.85,
-    "stop": 28.17,
-    "hedef": 48.09,
-    "squeeze": "NORMAL",
-    "ay_oncesi": -27.17,
-    "macd_hist": 0.905,
-    "spark": [
-     50.1,
-     54.35,
-     55.3,
-     53.0,
-     51.3,
-     48.64,
-     49.98,
-     49.62,
-     48.96,
-     48.0,
-     46.16,
-     47.22,
-     46.0,
-     42.26,
-     43.38,
-     39.06,
-     37.62,
-     36.18,
-     39.78,
-     40.3,
-     41.0,
-     39.44,
-     39.0,
-     39.62,
-     43.02,
-     40.82,
-     42.0,
-     44.6,
-     40.14,
-     36.14
-    ],
-    "nedenler": [
-     "RSI 35 → nötr, yön belirsiz",
-     "MACD sinyal çizgisinin üzerinde (hist 0.905) → alım momentumu",
-     "MFI 27 → PARA ÇIKIŞI, satış baskısı hakim",
-     "PİVOT: fiyat pivot (36.99 TL) altında, 1. Destek (S1) 35.29 TL'ye marj var",
-     "ICT: fiyat 2 bar önceki düşüğün (42.40 TL) altında boşluk bıraktı — kurumsal satış izi"
+     "RSI 44 → nötr, yön belirsiz",
+     "MACD sinyal çizgisinin üzerinde (hist 0.058) → alım momentumu",
+     "MFI 53 → nötr para akışı",
+     "PİVOT: fiyat pivot (2.13 TL) altında, 1. Destek (S1) 2.07 TL'ye marj var"
     ],
     "tarih": "2026-11-11"
    },
@@ -1405,20 +1519,20 @@
    },
    {
     "sembol": "GENIL",
-    "fiyat": 4.38,
+    "fiyat": 4.4,
     "skor": -2,
     "sinyal": "DİKKAT_SAT",
     "trend": "ASAĞI",
-    "rsi": 42.8,
-    "mfi": 48.9,
+    "rsi": 43.1,
+    "mfi": 48.8,
     "para": "NÖTR",
-    "s1": 4.32,
-    "r1": 4.49,
-    "stop": 3.63,
-    "hedef": 5.5,
+    "s1": 4.33,
+    "r1": 4.5,
+    "stop": 3.65,
+    "hedef": 5.52,
     "squeeze": "NORMAL",
-    "ay_oncesi": -6.21,
-    "macd_hist": 0.242,
+    "ay_oncesi": -5.78,
+    "macd_hist": 0.243,
     "spark": [
      5.85,
      5.55,
@@ -1449,32 +1563,32 @@
      4.3,
      4.47,
      4.41,
-     4.38
+     4.4
     ],
     "nedenler": [
      "RSI 43 → nötr, yön belirsiz",
-     "MACD sinyal çizgisinin üzerinde (hist 0.242) → alım momentumu",
+     "MACD sinyal çizgisinin üzerinde (hist 0.243) → alım momentumu",
      "MFI 49 → nötr para akışı",
-     "PİVOT: fiyat pivot (4.42 TL) altında, 1. Destek (S1) 4.32 TL'ye marj var"
+     "PİVOT: fiyat pivot (4.43 TL) altında, 1. Destek (S1) 4.33 TL'ye marj var"
     ],
     "tarih": "2026-11-11"
    },
    {
     "sembol": "GESAN",
-    "fiyat": 32.12,
+    "fiyat": 32.4,
     "skor": -2,
     "sinyal": "DİKKAT_SAT",
     "trend": "ASAĞI",
-    "rsi": 38.0,
-    "mfi": 53.7,
+    "rsi": 38.5,
+    "mfi": 54.0,
     "para": "NÖTR",
-    "s1": 31.48,
-    "r1": 33.28,
-    "stop": 26.51,
-    "hedef": 40.54,
+    "s1": 31.73,
+    "r1": 33.43,
+    "stop": 26.8,
+    "hedef": 40.79,
     "squeeze": "SQUEEZE",
-    "ay_oncesi": -23.41,
-    "macd_hist": 1.113,
+    "ay_oncesi": -22.75,
+    "macd_hist": 1.131,
     "spark": [
      39.76,
      42.6,
@@ -1505,14 +1619,70 @@
      36.1,
      37.92,
      34.14,
-     32.12
+     32.4
     ],
     "nedenler": [
      "RSI 38 → nötr, yön belirsiz",
-     "MACD sinyal çizgisinin üzerinde (hist 1.113) → alım momentumu",
+     "MACD sinyal çizgisinin üzerinde (hist 1.131) → alım momentumu",
      "MFI 54 → nötr para akışı",
-     "PİVOT: fiyat pivot (32.64 TL) altında, 1. Destek (S1) 31.48 TL'ye marj var",
+     "PİVOT: fiyat pivot (32.77 TL) altında, 1. Destek (S1) 31.73 TL'ye marj var",
      "ICT: fiyat 2 bar önceki düşüğün (36.70 TL) altında boşluk bıraktı — kurumsal satış izi"
+    ],
+    "tarih": "2026-11-11"
+   },
+   {
+    "sembol": "GUBRF",
+    "fiyat": 284.75,
+    "skor": -2,
+    "sinyal": "DİKKAT_SAT",
+    "trend": "ASAĞI",
+    "rsi": 36.5,
+    "mfi": 45.4,
+    "para": "NÖTR",
+    "s1": 280.67,
+    "r1": 291.67,
+    "stop": 246.85,
+    "hedef": 341.6,
+    "squeeze": "NORMAL",
+    "ay_oncesi": -31.88,
+    "macd_hist": 3.867,
+    "spark": [
+     411.25,
+     414.75,
+     419.75,
+     416.0,
+     410.75,
+     396.75,
+     407.5,
+     418.0,
+     403.75,
+     406.0,
+     391.0,
+     394.5,
+     372.75,
+     356.25,
+     373.25,
+     354.5,
+     331.5,
+     298.5,
+     274.25,
+     278.75,
+     278.0,
+     250.25,
+     275.25,
+     272.75,
+     283.5,
+     289.75,
+     289.25,
+     307.0,
+     288.0,
+     284.75
+    ],
+    "nedenler": [
+     "RSI 36 → nötr, yön belirsiz",
+     "MACD sinyal çizgisinin üzerinde (hist 3.867) → alım momentumu",
+     "MFI 45 → nötr para akışı",
+     "PİVOT: fiyat pivot (287.58 TL) altında, 1. Destek (S1) 280.67 TL'ye marj var"
     ],
     "tarih": "2026-11-11"
    }
@@ -1521,15 +1691,15 @@
    "asiri_satim": [
     {
      "sembol": "TURSG",
-     "fiyat": 3.26,
-     "rsi": 27.3,
+     "fiyat": 3.28,
+     "rsi": 27.5,
      "sinyal": "TUT",
      "skor": 1
     },
     {
      "sembol": "DSTKF",
-     "fiyat": 71.35,
-     "rsi": 11.6,
+     "fiyat": 72.2,
+     "rsi": 11.8,
      "sinyal": "TUT",
      "skor": 0
     },
@@ -1556,8 +1726,8 @@
     },
     {
      "sembol": "SOKM",
-     "fiyat": 46.36,
-     "rsi": 25.8,
+     "fiyat": 46.44,
+     "rsi": 25.9,
      "sinyal": "DİKKAT_SAT",
      "skor": -3
     }
@@ -1566,775 +1736,796 @@
    "macd_guclu": [
     {
      "sembol": "AKSA",
-     "fiyat": 10.55,
-     "rsi": 53.7,
+     "fiyat": 10.57,
+     "rsi": 54.0,
      "sinyal": "DİKKAT_AL",
      "skor": 3
     },
     {
+     "sembol": "ENJSA",
+     "fiyat": 119.3,
+     "rsi": 58.2,
+     "sinyal": "DİKKAT_AL",
+     "skor": 3
+    },
+    {
+     "sembol": "ENERY",
+     "fiyat": 13.9,
+     "rsi": 54.9,
+     "sinyal": "DİKKAT_AL",
+     "skor": 3
+    },
+    {
+     "sembol": "OTKAR",
+     "fiyat": 313.75,
+     "rsi": 51.8,
+     "sinyal": "DİKKAT_AL",
+     "skor": 2
+    },
+    {
      "sembol": "TUKAS",
-     "fiyat": 2.17,
-     "rsi": 65.7,
+     "fiyat": 2.26,
+     "rsi": 69.2,
      "sinyal": "DİKKAT_AL",
      "skor": 2
     }
    ]
   },
   "toplam": 100,
-  "hesap_tarihi": "11.11.2026 13:26"
+  "hesap_tarihi": "11.11.2026 20:41"
  },
  "test_senaryolari": {
   "pazartesi_acilis": {
    "ad": "Pazartesi açılışında al",
-   "islem": 183,
-   "ortalama": -23.8,
-   "kazanan": 25,
-   "kaybeden": 158,
+   "islem": 1781,
+   "ortalama": -24.0,
+   "kazanan": 389,
+   "kaybeden": 1392,
    "en_iyi": {
-    "sembol": "ENERY",
-    "tarih": "2026-06-15",
-    "giris": 9.37,
-    "bugun": 13.88,
-    "getiri_yuzde": 48.1,
+    "sembol": "TKFEN",
+    "tarih": "2026-01-26",
+    "giris": 73.75,
+    "bugun": 202.8,
+    "getiri_yuzde": 175.0,
     "stop_getiri_yuzde": -5.0,
     "stop_calismis": true,
-    "sinyal_tarih": "2026-06-15",
-    "skor": 2
+    "sinyal_tarih": "2026-01-26",
+    "skor": 5
    },
    "en_kotu": {
     "sembol": "RALYH",
-    "tarih": "2026-07-20",
-    "giris": 242.7,
+    "tarih": "2026-05-11",
+    "giris": 394.0,
     "bugun": 4.52,
-    "getiri_yuzde": -98.1,
+    "getiri_yuzde": -98.9,
     "stop_getiri_yuzde": -5.0,
     "stop_calismis": true,
-    "sinyal_tarih": "2026-07-20",
+    "sinyal_tarih": "2026-05-11",
     "skor": 3
    },
    "islemler": [
     {
-     "sembol": "ENERY",
-     "tarih": "2026-06-15",
-     "giris": 9.37,
-     "bugun": 13.88,
-     "getiri_yuzde": 48.1,
+     "sembol": "TKFEN",
+     "tarih": "2026-01-26",
+     "giris": 73.75,
+     "bugun": 202.8,
+     "getiri_yuzde": 175.0,
      "stop_getiri_yuzde": -5.0,
      "stop_calismis": true,
-     "sinyal_tarih": "2026-06-15",
+     "sinyal_tarih": "2026-01-26",
+     "skor": 5
+    },
+    {
+     "sembol": "TKFEN",
+     "tarih": "2026-02-02",
+     "giris": 76.0,
+     "bugun": 202.8,
+     "getiri_yuzde": 166.8,
+     "stop_getiri_yuzde": -5.0,
+     "stop_calismis": true,
+     "sinyal_tarih": "2026-02-02",
+     "skor": 3
+    },
+    {
+     "sembol": "TKFEN",
+     "tarih": "2026-03-09",
+     "giris": 78.75,
+     "bugun": 202.8,
+     "getiri_yuzde": 157.5,
+     "stop_getiri_yuzde": 157.5,
+     "stop_calismis": false,
+     "sinyal_tarih": "2026-03-09",
+     "skor": 2
+    },
+    {
+     "sembol": "CVKMD",
+     "tarih": "2025-09-22",
+     "giris": 5.65,
+     "bugun": 13.59,
+     "getiri_yuzde": 140.5,
+     "stop_getiri_yuzde": 140.5,
+     "stop_calismis": false,
+     "sinyal_tarih": "2025-09-22",
+     "skor": 5
+    },
+    {
+     "sembol": "CVKMD",
+     "tarih": "2025-09-01",
+     "giris": 5.72,
+     "bugun": 13.59,
+     "getiri_yuzde": 137.6,
+     "stop_getiri_yuzde": -5.0,
+     "stop_calismis": true,
+     "sinyal_tarih": "2025-09-01",
+     "skor": 4
+    },
+    {
+     "sembol": "TKFEN",
+     "tarih": "2026-02-09",
+     "giris": 85.65,
+     "bugun": 202.8,
+     "getiri_yuzde": 136.8,
+     "stop_getiri_yuzde": -5.0,
+     "stop_calismis": true,
+     "sinyal_tarih": "2026-02-09",
      "skor": 2
     },
     {
      "sembol": "TKFEN",
-     "tarih": "2026-07-13",
-     "giris": 140.8,
-     "bugun": 203.0,
-     "getiri_yuzde": 44.2,
-     "stop_getiri_yuzde": 44.2,
+     "tarih": "2026-02-16",
+     "giris": 85.9,
+     "bugun": 202.8,
+     "getiri_yuzde": 136.1,
+     "stop_getiri_yuzde": -5.0,
+     "stop_calismis": true,
+     "sinyal_tarih": "2026-02-16",
+     "skor": 3
+    },
+    {
+     "sembol": "CVKMD",
+     "tarih": "2025-09-29",
+     "giris": 6.03,
+     "bugun": 13.59,
+     "getiri_yuzde": 125.3,
+     "stop_getiri_yuzde": 125.3,
      "stop_calismis": false,
-     "sinyal_tarih": "2026-07-13",
+     "sinyal_tarih": "2025-09-29",
      "skor": 3
     },
     {
-     "sembol": "GARAN",
-     "tarih": "2026-09-07",
-     "giris": 133.6,
-     "bugun": 154.2,
-     "getiri_yuzde": 15.4,
-     "stop_getiri_yuzde": -5.0,
-     "stop_calismis": true,
-     "sinyal_tarih": "2026-09-07",
-     "skor": 3
-    },
-    {
-     "sembol": "GARAN",
-     "tarih": "2026-06-15",
-     "giris": 140.8,
-     "bugun": 154.2,
-     "getiri_yuzde": 9.5,
-     "stop_getiri_yuzde": -5.0,
-     "stop_calismis": true,
-     "sinyal_tarih": "2026-06-15",
-     "skor": 2
-    },
-    {
-     "sembol": "TAVHL",
-     "tarih": "2026-10-19",
-     "giris": 275.75,
-     "bugun": 300.75,
-     "getiri_yuzde": 9.1,
-     "stop_getiri_yuzde": -5.0,
-     "stop_calismis": true,
-     "sinyal_tarih": "2026-10-19",
-     "skor": 2
-    },
-    {
-     "sembol": "TAVHL",
-     "tarih": "2026-09-21",
-     "giris": 276.25,
-     "bugun": 300.75,
-     "getiri_yuzde": 8.9,
-     "stop_getiri_yuzde": -5.0,
-     "stop_calismis": true,
-     "sinyal_tarih": "2026-09-21",
-     "skor": 2
-    },
-    {
-     "sembol": "GARAN",
-     "tarih": "2026-06-22",
-     "giris": 142.4,
-     "bugun": 154.2,
-     "getiri_yuzde": 8.3,
-     "stop_getiri_yuzde": -5.0,
-     "stop_calismis": true,
-     "sinyal_tarih": "2026-06-22",
-     "skor": 3
-    },
-    {
-     "sembol": "TAVHL",
-     "tarih": "2026-08-03",
-     "giris": 278.25,
-     "bugun": 300.75,
-     "getiri_yuzde": 8.1,
-     "stop_getiri_yuzde": -5.0,
-     "stop_calismis": true,
-     "sinyal_tarih": "2026-08-03",
-     "skor": 2
-    },
-    {
-     "sembol": "ENJSA",
-     "tarih": "2026-08-03",
-     "giris": 110.4,
-     "bugun": 119.2,
-     "getiri_yuzde": 8.0,
-     "stop_getiri_yuzde": -5.0,
-     "stop_calismis": true,
-     "sinyal_tarih": "2026-08-03",
-     "skor": 3
-    },
-    {
-     "sembol": "ENJSA",
-     "tarih": "2026-10-05",
-     "giris": 112.6,
-     "bugun": 119.2,
-     "getiri_yuzde": 5.9,
-     "stop_getiri_yuzde": -5.0,
-     "stop_calismis": true,
-     "sinyal_tarih": "2026-10-05",
-     "skor": 3
-    },
-    {
-     "sembol": "TUKAS",
-     "tarih": "2026-11-09",
-     "giris": 2.05,
-     "bugun": 2.17,
-     "getiri_yuzde": 5.9,
-     "stop_getiri_yuzde": 5.9,
+     "sembol": "CVKMD",
+     "tarih": "2025-10-06",
+     "giris": 6.67,
+     "bugun": 13.59,
+     "getiri_yuzde": 103.7,
+     "stop_getiri_yuzde": 103.7,
      "stop_calismis": false,
-     "sinyal_tarih": "2026-11-09",
+     "sinyal_tarih": "2025-10-06",
      "skor": 3
     },
     {
-     "sembol": "TAVHL",
-     "tarih": "2026-06-15",
-     "giris": 290.0,
-     "bugun": 300.75,
-     "getiri_yuzde": 3.7,
+     "sembol": "TUPRS",
+     "tarih": "2025-09-01",
+     "giris": 174.0,
+     "bugun": 351.5,
+     "getiri_yuzde": 102.0,
      "stop_getiri_yuzde": -5.0,
      "stop_calismis": true,
-     "sinyal_tarih": "2026-06-15",
+     "sinyal_tarih": "2025-09-01",
+     "skor": 5
+    },
+    {
+     "sembol": "CVKMD",
+     "tarih": "2025-11-17",
+     "giris": 6.91,
+     "bugun": 13.59,
+     "getiri_yuzde": 96.8,
+     "stop_getiri_yuzde": -5.0,
+     "stop_calismis": true,
+     "sinyal_tarih": "2025-11-17",
+     "skor": 4
+    },
+    {
+     "sembol": "TUPRS",
+     "tarih": "2025-09-15",
+     "giris": 184.4,
+     "bugun": 351.5,
+     "getiri_yuzde": 90.6,
+     "stop_getiri_yuzde": -5.0,
+     "stop_calismis": true,
+     "sinyal_tarih": "2025-09-15",
      "skor": 2
     },
     {
-     "sembol": "MPARK",
-     "tarih": "2026-08-10",
-     "giris": 427.0,
-     "bugun": 438.75,
-     "getiri_yuzde": 2.8,
+     "sembol": "TUPRS",
+     "tarih": "2025-09-29",
+     "giris": 187.4,
+     "bugun": 351.5,
+     "getiri_yuzde": 87.6,
      "stop_getiri_yuzde": -5.0,
      "stop_calismis": true,
-     "sinyal_tarih": "2026-08-10",
-     "skor": 2
+     "sinyal_tarih": "2025-09-29",
+     "skor": 3
     },
     {
-     "sembol": "ALARK",
-     "tarih": "2026-06-08",
-     "giris": 101.1,
-     "bugun": 103.4,
-     "getiri_yuzde": 2.3,
+     "sembol": "ASELS",
+     "tarih": "2025-09-15",
+     "giris": 185.2,
+     "bugun": 346.0,
+     "getiri_yuzde": 86.8,
      "stop_getiri_yuzde": -5.0,
      "stop_calismis": true,
-     "sinyal_tarih": "2026-06-08",
-     "skor": 2
+     "sinyal_tarih": "2025-09-15",
+     "skor": 3
     },
     {
-     "sembol": "KCHOL",
-     "tarih": "2026-07-20",
-     "giris": 201.0,
-     "bugun": 204.9,
-     "getiri_yuzde": 1.9,
+     "sembol": "AKSEN",
+     "tarih": "2025-09-15",
+     "giris": 39.0,
+     "bugun": 71.6,
+     "getiri_yuzde": 83.6,
      "stop_getiri_yuzde": -5.0,
      "stop_calismis": true,
-     "sinyal_tarih": "2026-07-20",
+     "sinyal_tarih": "2025-09-15",
      "skor": 2
     }
    ]
   },
   "ertesi_gun_acilis": {
    "ad": "Sinyal ertesi gün açılışında al",
-   "islem": 840,
-   "ortalama": -23.5,
-   "kazanan": 160,
-   "kaybeden": 680,
+   "islem": 8426,
+   "ortalama": -23.9,
+   "kazanan": 1936,
+   "kaybeden": 6490,
    "en_iyi": {
-    "sembol": "ENERY",
-    "tarih": "2026-06-02",
-    "giris": 8.99,
-    "bugun": 13.88,
-    "getiri_yuzde": 54.4,
+    "sembol": "TKFEN",
+    "tarih": "2026-01-23",
+    "giris": 71.0,
+    "bugun": 202.8,
+    "getiri_yuzde": 185.6,
     "stop_getiri_yuzde": -5.0,
     "stop_calismis": true,
-    "sinyal_tarih": "2026-06-02",
-    "skor": 3
+    "sinyal_tarih": "2026-01-23",
+    "skor": 5
    },
    "en_kotu": {
     "sembol": "RALYH",
-    "tarih": "2026-08-18",
-    "giris": 265.5,
+    "tarih": "2026-05-11",
+    "giris": 394.0,
     "bugun": 4.52,
-    "getiri_yuzde": -98.3,
+    "getiri_yuzde": -98.9,
     "stop_getiri_yuzde": -5.0,
     "stop_calismis": true,
-    "sinyal_tarih": "2026-08-18",
-    "skor": 2
+    "sinyal_tarih": "2026-05-11",
+    "skor": 3
    },
    "islemler": [
     {
-     "sembol": "ENERY",
-     "tarih": "2026-06-02",
-     "giris": 8.99,
-     "bugun": 13.88,
-     "getiri_yuzde": 54.4,
+     "sembol": "TKFEN",
+     "tarih": "2026-01-23",
+     "giris": 71.0,
+     "bugun": 202.8,
+     "getiri_yuzde": 185.6,
      "stop_getiri_yuzde": -5.0,
      "stop_calismis": true,
-     "sinyal_tarih": "2026-06-02",
-     "skor": 3
-    },
-    {
-     "sembol": "ENERY",
-     "tarih": "2026-06-15",
-     "giris": 9.37,
-     "bugun": 13.88,
-     "getiri_yuzde": 48.1,
-     "stop_getiri_yuzde": -5.0,
-     "stop_calismis": true,
-     "sinyal_tarih": "2026-06-15",
-     "skor": 2
-    },
-    {
-     "sembol": "ENERY",
-     "tarih": "2026-06-16",
-     "giris": 9.5,
-     "bugun": 13.88,
-     "getiri_yuzde": 46.1,
-     "stop_getiri_yuzde": -5.0,
-     "stop_calismis": true,
-     "sinyal_tarih": "2026-06-16",
-     "skor": 2
-    },
-    {
-     "sembol": "ENERY",
-     "tarih": "2026-08-26",
-     "giris": 9.59,
-     "bugun": 13.88,
-     "getiri_yuzde": 44.7,
-     "stop_getiri_yuzde": 44.7,
-     "stop_calismis": false,
-     "sinyal_tarih": "2026-08-26",
-     "skor": 2
+     "sinyal_tarih": "2026-01-23",
+     "skor": 5
     },
     {
      "sembol": "TKFEN",
-     "tarih": "2026-07-13",
-     "giris": 140.8,
-     "bugun": 203.0,
-     "getiri_yuzde": 44.2,
-     "stop_getiri_yuzde": 44.2,
-     "stop_calismis": false,
-     "sinyal_tarih": "2026-07-13",
-     "skor": 3
-    },
-    {
-     "sembol": "ENERY",
-     "tarih": "2026-08-27",
-     "giris": 9.64,
-     "bugun": 13.88,
-     "getiri_yuzde": 44.0,
-     "stop_getiri_yuzde": 44.0,
-     "stop_calismis": false,
-     "sinyal_tarih": "2026-08-27",
-     "skor": 2
-    },
-    {
-     "sembol": "TKFEN",
-     "tarih": "2026-07-03",
-     "giris": 141.2,
-     "bugun": 203.0,
-     "getiri_yuzde": 43.8,
+     "tarih": "2026-01-22",
+     "giris": 72.0,
+     "bugun": 202.8,
+     "getiri_yuzde": 181.7,
      "stop_getiri_yuzde": -5.0,
      "stop_calismis": true,
-     "sinyal_tarih": "2026-07-03",
+     "sinyal_tarih": "2026-01-22",
      "skor": 3
     },
     {
      "sembol": "TKFEN",
-     "tarih": "2026-07-14",
-     "giris": 141.9,
-     "bugun": 203.0,
-     "getiri_yuzde": 43.1,
-     "stop_getiri_yuzde": 43.1,
-     "stop_calismis": false,
-     "sinyal_tarih": "2026-07-14",
+     "tarih": "2026-01-26",
+     "giris": 73.75,
+     "bugun": 202.8,
+     "getiri_yuzde": 175.0,
+     "stop_getiri_yuzde": -5.0,
+     "stop_calismis": true,
+     "sinyal_tarih": "2026-01-26",
+     "skor": 5
+    },
+    {
+     "sembol": "TKFEN",
+     "tarih": "2026-01-27",
+     "giris": 74.25,
+     "bugun": 202.8,
+     "getiri_yuzde": 173.1,
+     "stop_getiri_yuzde": -5.0,
+     "stop_calismis": true,
+     "sinyal_tarih": "2026-01-27",
+     "skor": 4
+    },
+    {
+     "sembol": "TKFEN",
+     "tarih": "2026-01-29",
+     "giris": 75.7,
+     "bugun": 202.8,
+     "getiri_yuzde": 167.9,
+     "stop_getiri_yuzde": -5.0,
+     "stop_calismis": true,
+     "sinyal_tarih": "2026-01-29",
+     "skor": 2
+    },
+    {
+     "sembol": "TKFEN",
+     "tarih": "2026-02-02",
+     "giris": 76.0,
+     "bugun": 202.8,
+     "getiri_yuzde": 166.8,
+     "stop_getiri_yuzde": -5.0,
+     "stop_calismis": true,
+     "sinyal_tarih": "2026-02-02",
      "skor": 3
     },
     {
      "sembol": "TKFEN",
-     "tarih": "2026-07-01",
-     "giris": 142.3,
-     "bugun": 203.0,
-     "getiri_yuzde": 42.7,
+     "tarih": "2026-01-30",
+     "giris": 76.5,
+     "bugun": 202.8,
+     "getiri_yuzde": 165.1,
      "stop_getiri_yuzde": -5.0,
      "stop_calismis": true,
-     "sinyal_tarih": "2026-07-01",
-     "skor": 3
+     "sinyal_tarih": "2026-01-30",
+     "skor": 2
     },
     {
-     "sembol": "ENERY",
-     "tarih": "2026-06-23",
-     "giris": 9.75,
-     "bugun": 13.88,
-     "getiri_yuzde": 42.4,
+     "sembol": "TKFEN",
+     "tarih": "2026-01-28",
+     "giris": 77.5,
+     "bugun": 202.8,
+     "getiri_yuzde": 161.7,
      "stop_getiri_yuzde": -5.0,
      "stop_calismis": true,
-     "sinyal_tarih": "2026-06-23",
+     "sinyal_tarih": "2026-01-28",
+     "skor": 4
+    },
+    {
+     "sembol": "TKFEN",
+     "tarih": "2026-02-26",
+     "giris": 78.6,
+     "bugun": 202.8,
+     "getiri_yuzde": 158.0,
+     "stop_getiri_yuzde": -5.0,
+     "stop_calismis": true,
+     "sinyal_tarih": "2026-02-26",
      "skor": 3
     },
     {
      "sembol": "TKFEN",
-     "tarih": "2026-07-16",
-     "giris": 143.5,
-     "bugun": 203.0,
-     "getiri_yuzde": 41.5,
-     "stop_getiri_yuzde": 41.5,
+     "tarih": "2026-03-09",
+     "giris": 78.75,
+     "bugun": 202.8,
+     "getiri_yuzde": 157.5,
+     "stop_getiri_yuzde": 157.5,
      "stop_calismis": false,
-     "sinyal_tarih": "2026-07-16",
+     "sinyal_tarih": "2026-03-09",
+     "skor": 2
+    },
+    {
+     "sembol": "TKFEN",
+     "tarih": "2026-02-06",
+     "giris": 79.05,
+     "bugun": 202.8,
+     "getiri_yuzde": 156.5,
+     "stop_getiri_yuzde": -5.0,
+     "stop_calismis": true,
+     "sinyal_tarih": "2026-02-06",
      "skor": 3
     },
     {
-     "sembol": "ENERY",
-     "tarih": "2026-06-24",
-     "giris": 9.83,
-     "bugun": 13.88,
-     "getiri_yuzde": 41.2,
+     "sembol": "CVKMD",
+     "tarih": "2025-09-16",
+     "giris": 5.34,
+     "bugun": 13.59,
+     "getiri_yuzde": 154.3,
+     "stop_getiri_yuzde": 154.3,
+     "stop_calismis": false,
+     "sinyal_tarih": "2025-09-16",
+     "skor": 2
+    },
+    {
+     "sembol": "CVKMD",
+     "tarih": "2025-09-17",
+     "giris": 5.34,
+     "bugun": 13.59,
+     "getiri_yuzde": 154.3,
+     "stop_getiri_yuzde": 154.3,
+     "stop_calismis": false,
+     "sinyal_tarih": "2025-09-17",
+     "skor": 2
+    },
+    {
+     "sembol": "TKFEN",
+     "tarih": "2026-02-03",
+     "giris": 79.75,
+     "bugun": 202.8,
+     "getiri_yuzde": 154.3,
      "stop_getiri_yuzde": -5.0,
      "stop_calismis": true,
-     "sinyal_tarih": "2026-06-24",
+     "sinyal_tarih": "2026-02-03",
+     "skor": 4
+    },
+    {
+     "sembol": "TKFEN",
+     "tarih": "2026-03-10",
+     "giris": 80.5,
+     "bugun": 202.8,
+     "getiri_yuzde": 151.9,
+     "stop_getiri_yuzde": 151.9,
+     "stop_calismis": false,
+     "sinyal_tarih": "2026-03-10",
      "skor": 3
-    },
-    {
-     "sembol": "TUPRS",
-     "tarih": "2026-07-03",
-     "giris": 248.3,
-     "bugun": 350.5,
-     "getiri_yuzde": 41.2,
-     "stop_getiri_yuzde": 41.2,
-     "stop_calismis": false,
-     "sinyal_tarih": "2026-07-03",
-     "skor": 2
-    },
-    {
-     "sembol": "ENERY",
-     "tarih": "2026-06-17",
-     "giris": 9.84,
-     "bugun": 13.88,
-     "getiri_yuzde": 41.1,
-     "stop_getiri_yuzde": -5.0,
-     "stop_calismis": true,
-     "sinyal_tarih": "2026-06-17",
-     "skor": 2
-    },
-    {
-     "sembol": "ENERY",
-     "tarih": "2026-08-28",
-     "giris": 9.84,
-     "bugun": 13.88,
-     "getiri_yuzde": 41.1,
-     "stop_getiri_yuzde": 41.1,
-     "stop_calismis": false,
-     "sinyal_tarih": "2026-08-28",
-     "skor": 2
     }
    ]
   },
   "stop_losslu": {
    "ad": "Ertesi gün açılış + %5 stop-loss",
-   "islem": 840,
-   "ortalama": -4.1,
-   "kazanan": 36,
-   "kaybeden": 804,
+   "islem": 8426,
+   "ortalama": -2.5,
+   "kazanan": 541,
+   "kaybeden": 7885,
    "en_iyi": {
-    "sembol": "ENERY",
-    "tarih": "2026-08-26",
-    "giris": 9.59,
-    "bugun": 13.88,
-    "getiri_yuzde": 44.7,
-    "stop_getiri_yuzde": 44.7,
+    "sembol": "TKFEN",
+    "tarih": "2026-03-09",
+    "giris": 78.75,
+    "bugun": 202.8,
+    "getiri_yuzde": 157.5,
+    "stop_getiri_yuzde": 157.5,
     "stop_calismis": false,
-    "sinyal_tarih": "2026-08-26",
+    "sinyal_tarih": "2026-03-09",
     "skor": 2
    },
    "en_kotu": {
     "sembol": "AKBNK",
-    "tarih": "2026-06-16",
-    "giris": 77.4,
-    "bugun": 70.7,
-    "getiri_yuzde": -8.7,
+    "tarih": "2025-08-27",
+    "giris": 69.1,
+    "bugun": 70.8,
+    "getiri_yuzde": 2.5,
     "stop_getiri_yuzde": -5.0,
     "stop_calismis": true,
-    "sinyal_tarih": "2026-06-16",
-    "skor": 2
+    "sinyal_tarih": "2025-08-27",
+    "skor": 3
    },
    "islemler": [
     {
-     "sembol": "ENERY",
-     "tarih": "2026-08-26",
-     "giris": 9.59,
-     "bugun": 13.88,
-     "getiri_yuzde": 44.7,
-     "stop_getiri_yuzde": 44.7,
+     "sembol": "TKFEN",
+     "tarih": "2026-03-09",
+     "giris": 78.75,
+     "bugun": 202.8,
+     "getiri_yuzde": 157.5,
+     "stop_getiri_yuzde": 157.5,
      "stop_calismis": false,
-     "sinyal_tarih": "2026-08-26",
+     "sinyal_tarih": "2026-03-09",
+     "skor": 2
+    },
+    {
+     "sembol": "CVKMD",
+     "tarih": "2025-09-16",
+     "giris": 5.34,
+     "bugun": 13.59,
+     "getiri_yuzde": 154.3,
+     "stop_getiri_yuzde": 154.3,
+     "stop_calismis": false,
+     "sinyal_tarih": "2025-09-16",
+     "skor": 2
+    },
+    {
+     "sembol": "CVKMD",
+     "tarih": "2025-09-17",
+     "giris": 5.34,
+     "bugun": 13.59,
+     "getiri_yuzde": 154.3,
+     "stop_getiri_yuzde": 154.3,
+     "stop_calismis": false,
+     "sinyal_tarih": "2025-09-17",
      "skor": 2
     },
     {
      "sembol": "TKFEN",
-     "tarih": "2026-07-13",
-     "giris": 140.8,
-     "bugun": 203.0,
-     "getiri_yuzde": 44.2,
-     "stop_getiri_yuzde": 44.2,
+     "tarih": "2026-03-10",
+     "giris": 80.5,
+     "bugun": 202.8,
+     "getiri_yuzde": 151.9,
+     "stop_getiri_yuzde": 151.9,
      "stop_calismis": false,
-     "sinyal_tarih": "2026-07-13",
+     "sinyal_tarih": "2026-03-10",
      "skor": 3
     },
     {
-     "sembol": "ENERY",
-     "tarih": "2026-08-27",
-     "giris": 9.64,
-     "bugun": 13.88,
-     "getiri_yuzde": 44.0,
-     "stop_getiri_yuzde": 44.0,
+     "sembol": "CVKMD",
+     "tarih": "2025-09-18",
+     "giris": 5.52,
+     "bugun": 13.59,
+     "getiri_yuzde": 146.1,
+     "stop_getiri_yuzde": 146.1,
      "stop_calismis": false,
-     "sinyal_tarih": "2026-08-27",
+     "sinyal_tarih": "2025-09-18",
      "skor": 2
+    },
+    {
+     "sembol": "CVKMD",
+     "tarih": "2025-09-22",
+     "giris": 5.65,
+     "bugun": 13.59,
+     "getiri_yuzde": 140.5,
+     "stop_getiri_yuzde": 140.5,
+     "stop_calismis": false,
+     "sinyal_tarih": "2025-09-22",
+     "skor": 5
+    },
+    {
+     "sembol": "CVKMD",
+     "tarih": "2025-09-23",
+     "giris": 5.71,
+     "bugun": 13.59,
+     "getiri_yuzde": 138.1,
+     "stop_getiri_yuzde": 138.1,
+     "stop_calismis": false,
+     "sinyal_tarih": "2025-09-23",
+     "skor": 5
+    },
+    {
+     "sembol": "CVKMD",
+     "tarih": "2025-09-19",
+     "giris": 5.76,
+     "bugun": 13.59,
+     "getiri_yuzde": 135.8,
+     "stop_getiri_yuzde": 135.8,
+     "stop_calismis": false,
+     "sinyal_tarih": "2025-09-19",
+     "skor": 2
+    },
+    {
+     "sembol": "CVKMD",
+     "tarih": "2025-09-24",
+     "giris": 5.87,
+     "bugun": 13.59,
+     "getiri_yuzde": 131.7,
+     "stop_getiri_yuzde": 131.7,
+     "stop_calismis": false,
+     "sinyal_tarih": "2025-09-24",
+     "skor": 5
     },
     {
      "sembol": "TKFEN",
-     "tarih": "2026-07-14",
-     "giris": 141.9,
-     "bugun": 203.0,
-     "getiri_yuzde": 43.1,
-     "stop_getiri_yuzde": 43.1,
+     "tarih": "2026-03-24",
+     "giris": 88.5,
+     "bugun": 202.8,
+     "getiri_yuzde": 129.2,
+     "stop_getiri_yuzde": 129.2,
      "stop_calismis": false,
-     "sinyal_tarih": "2026-07-14",
+     "sinyal_tarih": "2026-03-24",
+     "skor": 2
+    },
+    {
+     "sembol": "CVKMD",
+     "tarih": "2025-09-26",
+     "giris": 5.97,
+     "bugun": 13.59,
+     "getiri_yuzde": 127.5,
+     "stop_getiri_yuzde": 127.5,
+     "stop_calismis": false,
+     "sinyal_tarih": "2025-09-26",
+     "skor": 5
+    },
+    {
+     "sembol": "CVKMD",
+     "tarih": "2025-09-29",
+     "giris": 6.03,
+     "bugun": 13.59,
+     "getiri_yuzde": 125.3,
+     "stop_getiri_yuzde": 125.3,
+     "stop_calismis": false,
+     "sinyal_tarih": "2025-09-29",
      "skor": 3
     },
     {
      "sembol": "TKFEN",
-     "tarih": "2026-07-16",
-     "giris": 143.5,
-     "bugun": 203.0,
-     "getiri_yuzde": 41.5,
-     "stop_getiri_yuzde": 41.5,
+     "tarih": "2026-03-25",
+     "giris": 90.5,
+     "bugun": 202.8,
+     "getiri_yuzde": 124.1,
+     "stop_getiri_yuzde": 124.1,
      "stop_calismis": false,
-     "sinyal_tarih": "2026-07-16",
+     "sinyal_tarih": "2026-03-25",
      "skor": 3
     },
     {
-     "sembol": "TUPRS",
-     "tarih": "2026-07-03",
-     "giris": 248.3,
-     "bugun": 350.5,
-     "getiri_yuzde": 41.2,
-     "stop_getiri_yuzde": 41.2,
+     "sembol": "CVKMD",
+     "tarih": "2025-09-30",
+     "giris": 6.11,
+     "bugun": 13.59,
+     "getiri_yuzde": 122.3,
+     "stop_getiri_yuzde": 122.3,
      "stop_calismis": false,
-     "sinyal_tarih": "2026-07-03",
-     "skor": 2
-    },
-    {
-     "sembol": "ENERY",
-     "tarih": "2026-08-28",
-     "giris": 9.84,
-     "bugun": 13.88,
-     "getiri_yuzde": 41.1,
-     "stop_getiri_yuzde": 41.1,
-     "stop_calismis": false,
-     "sinyal_tarih": "2026-08-28",
-     "skor": 2
-    },
-    {
-     "sembol": "TKFEN",
-     "tarih": "2026-07-17",
-     "giris": 145.5,
-     "bugun": 203.0,
-     "getiri_yuzde": 39.5,
-     "stop_getiri_yuzde": 39.5,
-     "stop_calismis": false,
-     "sinyal_tarih": "2026-07-17",
+     "sinyal_tarih": "2025-09-30",
      "skor": 3
     },
     {
      "sembol": "TKFEN",
-     "tarih": "2026-07-28",
-     "giris": 150.4,
-     "bugun": 203.0,
-     "getiri_yuzde": 35.0,
-     "stop_getiri_yuzde": 35.0,
+     "tarih": "2026-03-26",
+     "giris": 93.1,
+     "bugun": 202.8,
+     "getiri_yuzde": 117.8,
+     "stop_getiri_yuzde": 117.8,
      "stop_calismis": false,
-     "sinyal_tarih": "2026-07-28",
-     "skor": 3
-    },
-    {
-     "sembol": "TKFEN",
-     "tarih": "2026-07-31",
-     "giris": 156.3,
-     "bugun": 203.0,
-     "getiri_yuzde": 29.9,
-     "stop_getiri_yuzde": 29.9,
-     "stop_calismis": false,
-     "sinyal_tarih": "2026-07-31",
-     "skor": 3
-    },
-    {
-     "sembol": "ODINE",
-     "tarih": "2026-11-06",
-     "giris": 60.1,
-     "bugun": 68.05,
-     "getiri_yuzde": 13.2,
-     "stop_getiri_yuzde": 13.2,
-     "stop_calismis": false,
-     "sinyal_tarih": "2026-11-06",
-     "skor": 2
-    },
-    {
-     "sembol": "BRSAN",
-     "tarih": "2026-08-05",
-     "giris": 577.0,
-     "bugun": 641.5,
-     "getiri_yuzde": 11.2,
-     "stop_getiri_yuzde": 11.2,
-     "stop_calismis": false,
-     "sinyal_tarih": "2026-08-05",
-     "skor": 2
-    },
-    {
-     "sembol": "THYAO",
-     "tarih": "2026-11-05",
-     "giris": 290.0,
-     "bugun": 316.25,
-     "getiri_yuzde": 9.1,
-     "stop_getiri_yuzde": 9.1,
-     "stop_calismis": false,
-     "sinyal_tarih": "2026-11-05",
-     "skor": 2
-    },
-    {
-     "sembol": "PGSUS",
-     "tarih": "2026-11-06",
-     "giris": 143.4,
-     "bugun": 156.0,
-     "getiri_yuzde": 8.8,
-     "stop_getiri_yuzde": 8.8,
-     "stop_calismis": false,
-     "sinyal_tarih": "2026-11-06",
-     "skor": 2
-    },
-    {
-     "sembol": "BRSAN",
-     "tarih": "2026-08-06",
-     "giris": 590.0,
-     "bugun": 641.5,
-     "getiri_yuzde": 8.7,
-     "stop_getiri_yuzde": 8.7,
-     "stop_calismis": false,
-     "sinyal_tarih": "2026-08-06",
+     "sinyal_tarih": "2026-03-26",
      "skor": 2
     }
    ]
   },
   "hisse_bazli": [
    {
-    "sembol": "ENERY",
-    "toplam_getiri": 486.3,
-    "islem_sayisi": 20,
-    "basari_orani": 80,
-    "max_dusus": -3.1
+    "sembol": "TUPRS",
+    "toplam_getiri": 6204.9,
+    "islem_sayisi": 132,
+    "basari_orani": 87,
+    "max_dusus": -15.8
    },
    {
     "sembol": "TKFEN",
-    "toplam_getiri": 319.7,
-    "islem_sayisi": 8,
-    "basari_orani": 100,
-    "max_dusus": 29.9
+    "toplam_getiri": 6158.9,
+    "islem_sayisi": 100,
+    "basari_orani": 77,
+    "max_dusus": -26.3
    },
    {
-    "sembol": "GARAN",
-    "toplam_getiri": 240.0,
-    "islem_sayisi": 18,
-    "basari_orani": 100,
-    "max_dusus": 6.3
-   },
-   {
-    "sembol": "TAVHL",
-    "toplam_getiri": 187.7,
-    "islem_sayisi": 30,
-    "basari_orani": 87,
-    "max_dusus": -2.4
+    "sembol": "CVKMD",
+    "toplam_getiri": 4508.6,
+    "islem_sayisi": 127,
+    "basari_orani": 54,
+    "max_dusus": -26.5
    },
    {
     "sembol": "ENJSA",
-    "toplam_getiri": 101.0,
-    "islem_sayisi": 24,
+    "toplam_getiri": 3045.5,
+    "islem_sayisi": 152,
     "basari_orani": 88,
-    "max_dusus": -3.5
-   },
-   {
-    "sembol": "YKBNK",
-    "toplam_getiri": 49.1,
-    "islem_sayisi": 20,
-    "basari_orani": 70,
     "max_dusus": -5.9
    },
    {
-    "sembol": "BRSAN",
-    "toplam_getiri": 42.3,
-    "islem_sayisi": 19,
-    "basari_orani": 63,
-    "max_dusus": -11.2
+    "sembol": "ENERY",
+    "toplam_getiri": 1902.3,
+    "islem_sayisi": 78,
+    "basari_orani": 88,
+    "max_dusus": -5.1
    },
    {
-    "sembol": "TUPRS",
-    "toplam_getiri": 41.2,
-    "islem_sayisi": 1,
-    "basari_orani": 100,
-    "max_dusus": 41.2
-   },
-   {
-    "sembol": "MPARK",
-    "toplam_getiri": 10.7,
-    "islem_sayisi": 21,
-    "basari_orani": 52,
-    "max_dusus": -1.8
-   },
-   {
-    "sembol": "ISCTR",
-    "toplam_getiri": 1.5,
-    "islem_sayisi": 9,
-    "basari_orani": 67,
-    "max_dusus": -9.4
-   },
-   {
-    "sembol": "TUKAS",
-    "toplam_getiri": -5.9,
-    "islem_sayisi": 6,
-    "basari_orani": 50,
-    "max_dusus": -8.8
-   },
-   {
-    "sembol": "THYAO",
-    "toplam_getiri": -13.3,
-    "islem_sayisi": 9,
-    "basari_orani": 22,
-    "max_dusus": -6.1
-   },
-   {
-    "sembol": "CIMSA",
-    "toplam_getiri": -14.2,
-    "islem_sayisi": 2,
-    "basari_orani": 50,
-    "max_dusus": -16.2
-   },
-   {
-    "sembol": "TSKB",
-    "toplam_getiri": -16.5,
-    "islem_sayisi": 4,
-    "basari_orani": 50,
-    "max_dusus": -13.5
-   },
-   {
-    "sembol": "ULKER",
-    "toplam_getiri": -19.9,
-    "islem_sayisi": 1,
-    "basari_orani": 0,
-    "max_dusus": -19.9
-   },
-   {
-    "sembol": "SISE",
-    "toplam_getiri": -21.0,
-    "islem_sayisi": 1,
-    "basari_orani": 0,
-    "max_dusus": -21.0
-   },
-   {
-    "sembol": "FROTO",
-    "toplam_getiri": -26.2,
-    "islem_sayisi": 4,
-    "basari_orani": 0,
+    "sembol": "BIMAS",
+    "toplam_getiri": 1776.2,
+    "islem_sayisi": 143,
+    "basari_orani": 65,
     "max_dusus": -12.0
    },
    {
-    "sembol": "GSRAY",
-    "toplam_getiri": -31.8,
-    "islem_sayisi": 1,
-    "basari_orani": 0,
-    "max_dusus": -31.8
+    "sembol": "ASELS",
+    "toplam_getiri": 1715.6,
+    "islem_sayisi": 121,
+    "basari_orani": 56,
+    "max_dusus": -20.8
    },
    {
-    "sembol": "BRYAT",
-    "toplam_getiri": -33.7,
-    "islem_sayisi": 1,
-    "basari_orani": 0,
-    "max_dusus": -33.7
+    "sembol": "HALKB",
+    "toplam_getiri": 1344.8,
+    "islem_sayisi": 105,
+    "basari_orani": 56,
+    "max_dusus": -17.4
    },
    {
-    "sembol": "PGSUS",
-    "toplam_getiri": -34.9,
-    "islem_sayisi": 5,
-    "basari_orani": 20,
-    "max_dusus": -15.8
+    "sembol": "KRDMD",
+    "toplam_getiri": 1150.1,
+    "islem_sayisi": 136,
+    "basari_orani": 57,
+    "max_dusus": -20.3
+   },
+   {
+    "sembol": "BRSAN",
+    "toplam_getiri": 1091.5,
+    "islem_sayisi": 124,
+    "basari_orani": 65,
+    "max_dusus": -16.7
+   },
+   {
+    "sembol": "CCOLA",
+    "toplam_getiri": 1077.8,
+    "islem_sayisi": 121,
+    "basari_orani": 56,
+    "max_dusus": -18.8
+   },
+   {
+    "sembol": "AKSEN",
+    "toplam_getiri": 814.0,
+    "islem_sayisi": 124,
+    "basari_orani": 48,
+    "max_dusus": -33.2
+   },
+   {
+    "sembol": "GARAN",
+    "toplam_getiri": 517.7,
+    "islem_sayisi": 76,
+    "basari_orani": 82,
+    "max_dusus": -7.0
+   },
+   {
+    "sembol": "KCHOL",
+    "toplam_getiri": 437.7,
+    "islem_sayisi": 120,
+    "basari_orani": 60,
+    "max_dusus": -9.3
+   },
+   {
+    "sembol": "MPARK",
+    "toplam_getiri": 273.5,
+    "islem_sayisi": 95,
+    "basari_orani": 53,
+    "max_dusus": -11.5
+   },
+   {
+    "sembol": "YKBNK",
+    "toplam_getiri": 264.0,
+    "islem_sayisi": 105,
+    "basari_orani": 65,
+    "max_dusus": -12.9
+   },
+   {
+    "sembol": "TAVHL",
+    "toplam_getiri": 173.5,
+    "islem_sayisi": 108,
+    "basari_orani": 57,
+    "max_dusus": -17.5
+   },
+   {
+    "sembol": "ALARK",
+    "toplam_getiri": 110.0,
+    "islem_sayisi": 118,
+    "basari_orani": 42,
+    "max_dusus": -11.4
+   },
+   {
+    "sembol": "TRMET",
+    "toplam_getiri": 45.6,
+    "islem_sayisi": 120,
+    "basari_orani": 49,
+    "max_dusus": -31.4
+   },
+   {
+    "sembol": "THYAO",
+    "toplam_getiri": 20.5,
+    "islem_sayisi": 73,
+    "basari_orani": 36,
+    "max_dusus": -8.3
    }
   ],
   "sermaye": {
    "pazartesi": {
     "baslangic": 100000.0,
-    "sonuc": 70090.0,
-    "kar_zarar": -29910.0,
+    "sonuc": 95420.0,
+    "kar_zarar": -4580.0,
     "islem": 10,
     "tahsis": 10000.0,
     "strateji": "skor≥3"
    },
    "ertesi": {
     "baslangic": 100000.0,
-    "sonuc": 90310.0,
-    "kar_zarar": -9690.0,
+    "sonuc": 107610.0,
+    "kar_zarar": 7610.0,
     "islem": 10,
     "tahsis": 10000.0,
     "strateji": "skor≥3"
    },
    "stop": {
     "baslangic": 100000.0,
-    "sonuc": 95000.0,
-    "kar_zarar": -5000.0,
+    "sonuc": 100620.0,
+    "kar_zarar": 620.0,
     "islem": 10,
     "tahsis": 10000.0,
     "strateji": "skor≥3"
@@ -2343,270 +2534,6 @@
   "aciklama": "Senaryolar GERÇEK veriyle hesaplanır: sinyal günü kapanışında AL/DİKKAT_AL üreten hisse, ertesi gün açılıştan alınır ve bugünkü kapanışla kar/zarar ölçülür. Stop-loss senaryosu giriş sonrası -%5 düşüşte çıkış varsayar."
  },
  "haberler": [
-  {
-   "baslik": "Bessent reportedly moved to military base over Iranian threats on his life",
-   "kaynak": "CNBC Dünya",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.cnbc.com/2026/11/11/us-iran-war-trump-hormuz-bessent-threats.html",
-   "yayin_tarihi": "2026-11-11T13:21:29+00:00",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "Nissan cuts sales forecast again on China woes as CEO outlines plan to fight back",
-   "kaynak": "CNBC Dünya",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.cnbc.com/2026/11/11/nissan-sales-forecast-earnings-china.html",
-   "yayin_tarihi": "2026-11-11T13:18:48+00:00",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "Fed's Goolsbee calls inflation report 'borderline disturbing' as central bank weighs more hikes",
-   "kaynak": "CNBC Dünya",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.cnbc.com/2026/11/11/goolsbee-october-inflation-fed-rates-disturbing-distressing.html",
-   "yayin_tarihi": "2026-11-11T13:16:31+00:00",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "OPEC'in günlük ham petrol üretiminde 2 milyon varillik artış",
-   "kaynak": "Bloomberg HT",
-   "kategori": "bist",
-   "dil": "tr",
-   "yon": "pozitif",
-   "etiket": "🟢 Pozitif",
-   "sembol": "",
-   "link": "https://www.bloomberght.com/opec-in-gunluk-ham-petrol-uretiminde-2-milyon-varillik-artis-3794224",
-   "yayin_tarihi": "2026-11-11T13:16:25+00:00",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "Elizabeth Warren wants to ‘break up Big Medicine,’ warns insurers will ‘squeeze every penny’ out of you. Is yours?",
-   "kaynak": "Moneywise",
-   "kategori": "altin-maden",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "GC=F",
-   "link": "",
-   "yayin_tarihi": "2026-11-11T13:15:00",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "Minerals 260 secures $282m funding for Bullabulling gold project",
-   "kaynak": "Mining Technology",
-   "kategori": "altin-maden",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "GC=F",
-   "link": "",
-   "yayin_tarihi": "2026-11-11T12:57:02",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "Tech lifts world stocks as CoreWeave revives AI trade",
-   "kaynak": "Investing.com",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.investing.com/news/economy-news/bonds-reel-as-hot-inflation-fuels-jumbo-fed-hike-fears-5017511",
-   "yayin_tarihi": "2026-11-11T12:54:23",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "Iran security chief rejects transfer of nuclear materials out of the country",
-   "kaynak": "Investing.com",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.investing.com/news/economy-news/iran-security-chief-rejects-transfer-of-nuclear-materials-out-of-the-country-5018735",
-   "yayin_tarihi": "2026-11-11T12:53:10",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "Nvidia's Huang tries to project 'business as usual' in return to office after affair revelation",
-   "kaynak": "CNBC Dünya",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.cnbc.com/2026/11/10/nvidia-jensen-huang-affair-office.html",
-   "yayin_tarihi": "2026-11-11T12:52:26+00:00",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "Server CPU strength persists as AMD and Arm gain share: UBS",
-   "kaynak": "Investing.com",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.investing.com/news/stock-market-news/server-cpu-strength-persists-as-amd-and-arm-gain-share-ubs-5018734",
-   "yayin_tarihi": "2026-11-11T12:52:22",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "Stifel cuts Ambiq Micro stock price target on chip sector weakness",
-   "kaynak": "Investing.com",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.investing.com/news/analyst-ratings/stifel-cuts-ambiq-micro-stock-price-target-on-chip-sector-weakness-93CH-5018731",
-   "yayin_tarihi": "2026-11-11T12:50:55",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "Stifel cuts CoreWeave stock price target on funding concerns",
-   "kaynak": "Investing.com",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.investing.com/news/analyst-ratings/stifel-cuts-coreweave-stock-price-target-on-funding-concerns-93CH-5018730",
-   "yayin_tarihi": "2026-11-11T12:50:54",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "Stifel lowers Ameresco stock price target on valuation review",
-   "kaynak": "Investing.com",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.investing.com/news/analyst-ratings/stifel-lowers-ameresco-stock-price-target-on-valuation-review-93CH-5018729",
-   "yayin_tarihi": "2026-11-11T12:50:53",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "Wall Street analysts turn cautious on Nvidia amid supply issues, Huang uncertainty",
-   "kaynak": "Investing.com",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.investing.com/news/stock-market-news/nvidia-stock-gets-a-rare-wall-street-downgrade-on-supply-issues-5018471",
-   "yayin_tarihi": "2026-11-11T12:50:52",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "Stifel raises 908 Devices stock price target on strong execution",
-   "kaynak": "Investing.com",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.investing.com/news/analyst-ratings/stifel-raises-908-devices-stock-price-target-on-strong-execution-93CH-5018728",
-   "yayin_tarihi": "2026-11-11T12:50:52",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "Earnings call transcript: Conduit shares fall as premium growth slows in Q3 2026",
-   "kaynak": "Investing.com",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "pozitif",
-   "etiket": "🟢 Pozitif",
-   "sembol": "",
-   "link": "https://www.investing.com/news/transcripts/earnings-call-transcript-conduit-shares-fall-as-premium-growth-slows-in-q3-2026-93CH-5018727",
-   "yayin_tarihi": "2026-11-11T12:49:33",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "Paraguay digital bank collapse leaves market traders scrambling for alternatives",
-   "kaynak": "Investing.com",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.investing.com/news/economy-news/paraguay-digital-bank-collapse-leaves-market-traders-scrambling-for-alternatives-5018182",
-   "yayin_tarihi": "2026-11-11T12:48:43",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "Ariana Resources MD on VFEX listing and Dendere-backed funding push for Dokwe",
-   "kaynak": "Proactive",
-   "kategori": "altin-maden",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "GC=F",
-   "link": "",
-   "yayin_tarihi": "2026-11-11T12:48:31",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "Elektrikli otomobilde ikinci el uyarısı",
-   "kaynak": "Habertürk",
-   "kategori": "makro",
-   "dil": "tr",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.haberturk.com/ekonomi/elektrikli-araclarda-kredi-ve-vergi-duzenlemesi-cagrisi-ikinci-el-piyasasi-da-gundemde-3926582",
-   "yayin_tarihi": "2026-11-11T12:48:08+00:00",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "More than half of US retirees live on $2,000 a month or less — and a 22% Social Security cut could hit by 2032",
-   "kaynak": "Moneywise",
-   "kategori": "altin-maden",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "GC=F",
-   "link": "",
-   "yayin_tarihi": "2026-11-11T12:45:00",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "\"En önemli soru yeşil dönüşümün finansmanının nasıl olacağı\"",
-   "kaynak": "Bloomberg HT",
-   "kategori": "bist",
-   "dil": "tr",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.bloomberght.com/en-onemli-soru-yesil-donusumun-finansmaninin-nasil-olacagi-3794217",
-   "yayin_tarihi": "2026-11-11T12:44:10+00:00",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "General strikes to paralyze Spain as protestors clash with police ahead of election campaign",
-   "kaynak": "CNBC Dünya",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.cnbc.com/2026/11/11/spain-protests-general-strikes-election.html",
-   "yayin_tarihi": "2026-11-11T12:39:20+00:00",
-   "tarih": "2026-11-11"
-  },
   {
    "baslik": "OKX TR: Kripto Ekonomisi Artık Finansal Sistemin Kalıcı Bir Parçası",
    "kaynak": "Fortune TR",
@@ -2617,18 +2544,6 @@
    "sembol": "",
    "link": "https://www.fortuneturkey.com/okx-tr-kripto-ekonomisi-artik-finansal-sistemin-kalici-bir-parcasi",
    "yayin_tarihi": "2026-11-11T12:39:08+00:00",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "Mortgage rates jump sharply higher, after easing for four straight weeks. Here's why",
-   "kaynak": "CNBC Dünya",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.cnbc.com/2026/11/11/mortgage-rates-jump-sharply-higher-after-easing-for-4-straight-weeks.html",
-   "yayin_tarihi": "2026-11-11T12:38:32+00:00",
    "tarih": "2026-11-11"
   },
   {
@@ -2692,6 +2607,102 @@
    "tarih": "2026-11-11"
   },
   {
+   "baslik": "Why is Applied Aerospace and Defense stock sliding today?",
+   "kaynak": "Investing.com",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.investing.com/news/stock-market-news/why-is-applied-aerospace-and-defense-stock-sliding-today-93CH-5018613",
+   "yayin_tarihi": "2026-11-11T12:19:51",
+   "tarih": "2026-11-11"
+  },
+  {
+   "baslik": "German Economic Council significantly revised up growth forecast, says chair",
+   "kaynak": "Investing.com",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "pozitif",
+   "etiket": "🟢 Pozitif",
+   "sembol": "",
+   "link": "https://www.investing.com/news/economy-news/german-economic-council-significantly-revised-up-growth-forecast-says-chair-5018572",
+   "yayin_tarihi": "2026-11-11T12:19:26",
+   "tarih": "2026-11-11"
+  },
+  {
+   "baslik": "S&P 500, Nasdaq futures rise as CoreWeave results calm AI jitters",
+   "kaynak": "Investing.com",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.investing.com/news/economy-news/sp-500-nasdaq-futures-rise-after-coreweave-soothes-ai-spending-fears-5018288",
+   "yayin_tarihi": "2026-11-11T12:19:13",
+   "tarih": "2026-11-11"
+  },
+  {
+   "baslik": "Goldman adds another rate hike to Fed outlook after hot inflation data",
+   "kaynak": "Investing.com",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.investing.com/news/economy-news/goldman-expects-additional-fed-rate-hike-in-march-5017688",
+   "yayin_tarihi": "2026-11-11T12:18:56",
+   "tarih": "2026-11-11"
+  },
+  {
+   "baslik": "Innoviz Technologies stock tumbles 27% on revenue miss and weak guidance",
+   "kaynak": "Investing.com",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "negatif",
+   "etiket": "🔴 Negatif",
+   "sembol": "",
+   "link": "https://www.investing.com/news/earnings/innoviz-technologies-stock-tumbles-27-on-revenue-miss-and-weak-guidance-93CH-5018611",
+   "yayin_tarihi": "2026-11-11T12:18:50",
+   "tarih": "2026-11-11"
+  },
+  {
+   "baslik": "CoreWeave sparks AI cloud stock rally, lifts Nvidia as results ease bubble fears",
+   "kaynak": "Investing.com",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.investing.com/news/stock-market-news/coreweave-sparks-ai-cloud-stock-rally-lifts-nvidia-as-results-ease-bubble-fears-5018610",
+   "yayin_tarihi": "2026-11-11T12:18:44",
+   "tarih": "2026-11-11"
+  },
+  {
+   "baslik": "Meta, TikTok join Google to push back on Indonesia’s planned AI copyright law revisions",
+   "kaynak": "Investing.com",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.investing.com/news/stock-market-news/meta-tiktok-join-google-to-push-back-on-indonesias-planned-ai-copyright-law-revisions-5018609",
+   "yayin_tarihi": "2026-11-11T12:18:29",
+   "tarih": "2026-11-11"
+  },
+  {
+   "baslik": "Lemon Tree Hotels Q2 FY27 slides: record quarter drives 90% profit surge",
+   "kaynak": "Investing.com",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "pozitif",
+   "etiket": "🟢 Pozitif",
+   "sembol": "",
+   "link": "https://www.investing.com/news/company-news/lemon-tree-hotels-q2-fy27-slides-record-quarter-drives-90-profit-surge-93CH-5018608",
+   "yayin_tarihi": "2026-11-11T12:18:08",
+   "tarih": "2026-11-11"
+  },
+  {
    "baslik": "\"Güçlü işbirlikleri geliştirmeye devam edeceğiz\"",
    "kaynak": "Habertürk",
    "kategori": "makro",
@@ -2716,6 +2727,30 @@
    "tarih": "2026-11-11"
   },
   {
+   "baslik": "Radcom shares rise 3% on revenue beat despite earnings miss",
+   "kaynak": "Investing.com",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.investing.com/news/earnings/radcom-shares-rise-3-on-revenue-beat-despite-earnings-miss-93CH-5018602",
+   "yayin_tarihi": "2026-11-11T12:17:23",
+   "tarih": "2026-11-11"
+  },
+  {
+   "baslik": "UBS initiates Bill.com stock coverage with buy rating on growth outlook",
+   "kaynak": "Investing.com",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "pozitif",
+   "etiket": "🟢 Pozitif",
+   "sembol": "",
+   "link": "https://www.investing.com/news/analyst-ratings/ubs-initiates-billcom-stock-coverage-with-buy-rating-on-growth-outlook-93CH-5018601",
+   "yayin_tarihi": "2026-11-11T12:16:57",
+   "tarih": "2026-11-11"
+  },
+  {
    "baslik": "Zelenskyy warns Ukraine is 'not real estate' as experts say a Russia peace deal remains elusive",
    "kaynak": "CNBC Dünya",
    "kategori": "global",
@@ -2725,6 +2760,18 @@
    "sembol": "",
    "link": "https://www.cnbc.com/2026/11/11/ukraine-russia-peace-talks-zelenskyy-putin.html",
    "yayin_tarihi": "2026-11-11T12:12:48+00:00",
+   "tarih": "2026-11-11"
+  },
+  {
+   "baslik": "Gold price today, Wednesday, November 11, 2026: Gold prices fall back as inflation concerns broaden",
+   "kaynak": "Yahoo Personal Finance",
+   "kategori": "altin-maden",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "GC=F",
+   "link": "",
+   "yayin_tarihi": "2026-11-11T12:11:48",
    "tarih": "2026-11-11"
   },
   {
@@ -2749,6 +2796,18 @@
    "sembol": "",
    "link": "https://www.bloomberght.com/turkonfedunlu-yesil-donusumde-sirketlerimiz-iyi-durumda-3794214",
    "yayin_tarihi": "2026-11-11T12:02:56+00:00",
+   "tarih": "2026-11-11"
+  },
+  {
+   "baslik": "Bessent reportedly moved to military base over Iranian threats on his life",
+   "kaynak": "CNBC Dünya",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.cnbc.com/2026/11/11/us-iran-war-trump-hormuz-bessent-threats.html",
+   "yayin_tarihi": "2026-11-11T12:02:36+00:00",
    "tarih": "2026-11-11"
   },
   {
@@ -2980,6 +3039,30 @@
    "tarih": "2026-11-11"
   },
   {
+   "baslik": "Ariana Resources MD on VFEX listing and Dendere-backed funding push for Dokwe",
+   "kaynak": "Proactive",
+   "kategori": "altin-maden",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "GC=F",
+   "link": "",
+   "yayin_tarihi": "2026-11-11T10:14:38",
+   "tarih": "2026-11-11"
+  },
+  {
+   "baslik": "Gold Prices Recover Above $4,040 as Investors Assess Federal Reserve Rate Hike Expectations",
+   "kaynak": "InvestorsHub",
+   "kategori": "altin-maden",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "GC=F",
+   "link": "",
+   "yayin_tarihi": "2026-11-11T10:13:49",
+   "tarih": "2026-11-11"
+  },
+  {
    "baslik": "American soldier arrested on suspicion of spying for Russia",
    "kaynak": "CNBC Dünya",
    "kategori": "global",
@@ -3025,6 +3108,18 @@
    "sembol": "",
    "link": "https://www.bloomberght.com/simsek-turkiye-nin-iklim-hedefi-icin-300-milyar-dolar-gerekiyor-3794190",
    "yayin_tarihi": "2026-11-11T10:01:11+00:00",
+   "tarih": "2026-11-11"
+  },
+  {
+   "baslik": "Gold’s Outlook Remains Compelling in Long Term k",
+   "kaynak": "The Wall Street Journal",
+   "kategori": "altin-maden",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "GC=F",
+   "link": "",
+   "yayin_tarihi": "2026-11-11T10:00:00",
    "tarih": "2026-11-11"
   },
   {
@@ -3160,6 +3255,42 @@
    "tarih": "2026-11-11"
   },
   {
+   "baslik": "İklim finansmanında bankaların rolü öne çıkıyor",
+   "kaynak": "Habertürk",
+   "kategori": "makro",
+   "dil": "tr",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.haberturk.com/ekonomi/omur-tan-enerji-donusumu-icin-bankalarin-aktif-rol-almasi-gerekiyor-3926504",
+   "yayin_tarihi": "2026-11-11T08:38:58+00:00",
+   "tarih": "2026-11-11"
+  },
+  {
+   "baslik": "Bloomberg HT \"35'te 35: Geleceğe Güç Vermek\" zirvesinde enerjinin geleceği ele alındı",
+   "kaynak": "Bloomberg HT",
+   "kategori": "bist",
+   "dil": "tr",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.bloomberght.com/bloomberg-ht-35-te-35-gelecege-guc-vermek-zirvesinde-enerjinin-gelecegi-ele-alindi-3794176",
+   "yayin_tarihi": "2026-11-11T08:37:12+00:00",
+   "tarih": "2026-11-11"
+  },
+  {
+   "baslik": "\"Paradigma değişikliği içindeyiz\"",
+   "kaynak": "Bloomberg HT",
+   "kategori": "bist",
+   "dil": "tr",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.bloomberght.com/paradigma-degisikligi-icindeyiz-3794175",
+   "yayin_tarihi": "2026-11-11T08:35:16+00:00",
+   "tarih": "2026-11-11"
+  },
+  {
    "baslik": "Borsa İstanbul'un en değerli şirketleri açıklandı: Zirvede dev isim var - Cumhuriyet",
    "kaynak": "Google News · TR Borsa",
    "kategori": "bist",
@@ -3196,15 +3327,27 @@
    "tarih": "2026-11-11"
   },
   {
-   "baslik": "Borsa güne yükselişle başladı - TRT Haber",
-   "kaynak": "Google News · TR Borsa",
-   "kategori": "bist",
-   "dil": "tr",
+   "baslik": "Inflation jitters throw wrench into US Treasury auction amid jumbo hike fears - South China Morning Post",
+   "kaynak": "Google News · Global",
+   "kategori": "global",
+   "dil": "en",
    "yon": "notr",
    "etiket": "⚪ Nötr",
    "sembol": "",
-   "link": "https://news.google.com/rss/articles/CBMihwFBVV95cUxNRFhJT0dndEN2bnVhcE9EZ1pGc0ZnaWtEX3loTTZyYUJIQi1rTXZNa0M4SUNmTGUyYmpUUU13R0ZpdTd5ODJ4RzlSQVVVOGoyWlgySnBrSkVCQzBIcXlIc3JzVDNlZUtHdFNlUmEzS2RCRlN0clE0ZGp3TnJpcUltZzhPX0VFbWs?oc=5",
-   "yayin_tarihi": "2026-11-11T07:02:00+00:00",
+   "link": "https://news.google.com/rss/articles/CBMi2AFBVV95cUxPYlJ2cXpmdkEtM0g5WXRmVFZVWTloWFRaNHQ0NG1pX05Oa0dUSkRSM2h1eVhfcjF3OXppNGEydVNoSFE1WDdSazFvS3dXV0pVbzVtb2FNYklkb3JQU2tndV9nOUhaNnJHR3BhcThmLVJsZzlYQjluSHFvTjFwZEJuUTZLcTFTN0UzTE9pR1BPU1BXSkthV3haVGdad0pWdzQyMzlHRDRkME5sSFJaSXliaEx3RUR0MDZyLVZNanBjdV9CdXRnNDNPcDZkcUVkTWhadXBrWUtQMXc?oc=5",
+   "yayin_tarihi": "2026-11-11T07:13:56+00:00",
+   "tarih": "2026-11-11"
+  },
+  {
+   "baslik": "BIST 100 kayıplarını telafi ediyor : 11 Kasım 2026 borsa - Manşet Haber",
+   "kaynak": "Google News · TR Borsa",
+   "kategori": "bist",
+   "dil": "tr",
+   "yon": "negatif",
+   "etiket": "🔴 Negatif",
+   "sembol": "",
+   "link": "https://news.google.com/rss/articles/CBMijwFBVV95cUxOYW9OdGVTOHJfMlBMMDN3X1pMaHZtT0N4SWdFOWZOckRYUFlaM3BWdnFNTEl2Uml6VmZ5R3A4WmY3M19pcS1RMEtqTDZWTXJEb3hNQnpCME0waHNWNHZlV2tPdlNJZ1JicnFWeTk1dG4xSWozZ1VnWXhobWJSeE9Ubm01LV96Y2w3VlkzU1YzYw?oc=5",
+   "yayin_tarihi": "2026-11-11T07:08:00+00:00",
    "tarih": "2026-11-11"
   },
   {
@@ -3218,6 +3361,42 @@
    "link": "https://news.google.com/rss/articles/CBMifkFVX3lxTE9GX2ZDVGtaZGxYeWVsY25oSkZlYjE3cElpbExQV0R2dDBFeVkyaWRmS0Q3dFhSNHdhQ1d2XzE5bC1ybmM5dnJmc3BSWWZVUGUySEtReDZsc01YTFFLM1FQN3ZnSWxYZXRTOUtRT3lhendDX055SHhaOF9HelM4Zw?oc=5",
    "yayin_tarihi": "2026-11-11T06:09:00+00:00",
    "tarih": "2026-11-11"
+  },
+  {
+   "baslik": "Investors pivot to defensive stocks as markets enter a ‘state of alert’",
+   "kaynak": "CNBC Dünya",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.cnbc.com/2026/11/11/tech-selloff-defensive-pivot.html",
+   "yayin_tarihi": "2026-11-11T06:00:01+00:00",
+   "tarih": "2026-11-11"
+  },
+  {
+   "baslik": "Hegseth impeachment effort torpedoed in House",
+   "kaynak": "CNBC Dünya",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.cnbc.com/2026/11/10/pete-hegseth-impeachment-massie-iran.html",
+   "yayin_tarihi": "2026-11-10T23:46:41+00:00",
+   "tarih": "2026-11-10"
+  },
+  {
+   "baslik": "Nvidia's Huang tries to project 'business as usual' in return to office after affair revelation",
+   "kaynak": "CNBC Dünya",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.cnbc.com/2026/11/10/nvidia-jensen-huang-affair-office.html",
+   "yayin_tarihi": "2026-11-10T23:11:34+00:00",
+   "tarih": "2026-11-10"
   },
   {
    "baslik": "Fossil CEO says turnaround is ahead of plan as sales return to growth",
@@ -3244,6 +3423,18 @@
    "tarih": "2026-11-10"
   },
   {
+   "baslik": "Mississippi Senate: Scott Colom extends tight lead over Hyde-Smith as ballot deadlines hit",
+   "kaynak": "CNBC Dünya",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.cnbc.com/2026/11/10/mississippi-senate-scott-colom-hyde-smith.html",
+   "yayin_tarihi": "2026-11-10T22:01:52+00:00",
+   "tarih": "2026-11-10"
+  },
+  {
    "baslik": "Gold Futures Fall as Yields, Dollar Rise on U.S. CPI Data",
    "kaynak": "The Wall Street Journal",
    "kategori": "altin-maden",
@@ -3253,6 +3444,18 @@
    "sembol": "SI=F",
    "link": "",
    "yayin_tarihi": "2026-11-10T20:48:00",
+   "tarih": "2026-11-10"
+  },
+  {
+   "baslik": "Credit card debt climbs to a record $1.29 trillion, New York Fed research finds",
+   "kaynak": "CNBC Dünya",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "pozitif",
+   "etiket": "🟢 Pozitif",
+   "sembol": "",
+   "link": "https://www.cnbc.com/2026/11/10/credit-card-debt-record.html",
+   "yayin_tarihi": "2026-11-10T18:08:40+00:00",
    "tarih": "2026-11-10"
   },
   {
@@ -3320,8 +3523,8 @@
    "kaynak": "Fortune TR",
    "kategori": "makro",
    "dil": "tr",
-   "yon": "negatif",
-   "etiket": "🔴 Negatif",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
    "sembol": "",
    "link": "https://www.fortuneturkey.com/abd-borc-sinirina-beklenenden-daha-yakin",
    "yayin_tarihi": "2026-11-10T11:20:31+00:00",
@@ -3344,8 +3547,8 @@
    "kaynak": "Google News · TR Borsa",
    "kategori": "bist",
    "dil": "tr",
-   "yon": "pozitif",
-   "etiket": "🟢 Pozitif",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
    "sembol": "",
    "link": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxNZDVoeVBvOWExUzlFSlpkcnZPMnJsOGQ0Y2I5clBNdVVYVklMSThISW1wRFVVU2JHaHdNUTJEQUtaSzl4Zk5TN2tkQUlkNlhhNGh3VGViUEd0b2VseUZScWxoN2gwQm50TEpENGdpUEFWTWpnWnE3UV8tUEdtSjhVNW9GM1pTZl9OUHNZTVlUSXNKN1JJQ0JNNERHa2JhMXlqNVVVSkNnaWxhMFlGekptOXhxNDVGMDliYzg4VWFROEkxdw?oc=5",
    "yayin_tarihi": "2026-11-10T09:15:00+00:00",
@@ -3356,8 +3559,8 @@
    "kaynak": "Fortune TR",
    "kategori": "makro",
    "dil": "tr",
-   "yon": "pozitif",
-   "etiket": "🟢 Pozitif",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
    "sembol": "",
    "link": "https://www.fortuneturkey.com/kardemir-celik-2026nin-9-ayinda-cirosunu-218-milyar-tlye-ulastirdi",
    "yayin_tarihi": "2026-11-10T08:44:18+00:00",
@@ -3404,8 +3607,8 @@
    "kaynak": "Google News · TR Borsa",
    "kategori": "bist",
    "dil": "tr",
-   "yon": "pozitif",
-   "etiket": "🟢 Pozitif",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
    "sembol": "",
    "link": "https://news.google.com/rss/articles/CBMiogFBVV95cUxQOWw1WTdhcVRpd0ZGMW5QUFZNd3YyVUtqVHE0b09Ma0lXQlFybW10LWdKamVzRGtqZnJydElYMFZjSFhHaEJsQmR6NUhoV2tvaUJJMVB5TmREU3JTM0dDVnZsMF94YWlhNFVnVWc2eHdITHpvT0pTYlJqZmV6dzJZMGNpUHkya1dsRVF1N21nV1JBTEJ4dWdqTjlBeGZoWnltMUHSAZwBQVVfeXFMTU9XcmsyRGhDY0xlZ0RhMDY4ZXIzZ1RBZG4xdGR5RE5EeEtUMEltOXhWTUd6VDJyU0ZjNllMMDFJSGZxX3cyM19VT2g3VHdPUlduaFB6dU1wZjFSRFF2R1B5d1I5OVBqSXhUbDhZM25fRW9JaC1jOHVFUzh0SWRaaF9zRUNjd3JxSDN5Z3N6RnRxR1lVVEJYX2RFeUZM?oc=5",
    "yayin_tarihi": "2026-11-10T07:13:26+00:00",
@@ -3484,18 +3687,6 @@
    "tarih": "2026-11-09"
   },
   {
-   "baslik": "Stocks, Bonds Fall as CPI Data Fuel Fed-Hike Bets: Markets Wrap - Bloomberg.com",
-   "kaynak": "Google News · Global",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://news.google.com/rss/articles/CBMilAFBVV95cUxPNXVKNll2bkFUUU5EVDg4eTF6a3YwZ0pIS0d4bGFTdkItMkl3SkFCbGRiZFdzSmlidHZZN3I1YzF1VkVXYlM0dDJrRlRPeDRGYXp6cVBuRGVjbl9vNWxrdlRYLTl4NTRxMnRFcGtuOUROekFvUUsxdTE1R3IwWmRKRVlUVFpFTlY0WXNlWTZTa1hIdmV1?oc=5",
-   "yayin_tarihi": "2026-11-09T22:16:53+00:00",
-   "tarih": "2026-11-09"
-  },
-  {
    "baslik": "Children’s Place files for bankruptcy protection, seeks buyer",
    "kaynak": "CNBC Ekonomi",
    "kategori": "makro",
@@ -3512,8 +3703,8 @@
    "kaynak": "CNBC Ekonomi",
    "kategori": "makro",
    "dil": "en",
-   "yon": "pozitif",
-   "etiket": "🟢 Pozitif",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
    "sembol": "",
    "link": "https://www.cnbc.com/2026/11/09/boeing-layoffs-commercial-airplane.html",
    "yayin_tarihi": "2026-11-09T19:35:58+00:00",
@@ -3730,81 +3921,95 @@
  },
  "sektorler": [
   {
-   "sektor": "Basic Materials",
-   "hisse_sayisi": 5,
-   "ort_skor": -0.2,
-   "al": 0,
-   "sat": 2
-  },
-  {
    "sektor": "Industrials",
-   "hisse_sayisi": 5,
-   "ort_skor": -1.4,
+   "hisse_sayisi": 22,
+   "ort_skor": -1.32,
    "al": 0,
-   "sat": 4
+   "sat": 9
   },
   {
-   "sektor": "Utilities",
-   "hisse_sayisi": 4,
-   "ort_skor": -0.5,
+   "sektor": "Basic Materials",
+   "hisse_sayisi": 17,
+   "ort_skor": -1.47,
+   "al": 0,
+   "sat": 10
+  },
+  {
+   "sektor": "Financial Services",
+   "hisse_sayisi": 14,
+   "ort_skor": -0.43,
    "al": 0,
    "sat": 2
   },
   {
    "sektor": "Consumer Cyclical",
-   "hisse_sayisi": 2,
-   "ort_skor": 2.0,
-   "al": 1,
-   "sat": 0
+   "hisse_sayisi": 11,
+   "ort_skor": -0.64,
+   "al": 2,
+   "sat": 4
   },
   {
    "sektor": "Consumer Defensive",
-   "hisse_sayisi": 2,
-   "ort_skor": 1.5,
+   "hisse_sayisi": 10,
+   "ort_skor": -1.1,
    "al": 1,
-   "sat": 0
+   "sat": 4
   },
   {
-   "sektor": "Financial Services",
-   "hisse_sayisi": 1,
-   "ort_skor": 1.0,
+   "sektor": "Utilities",
+   "hisse_sayisi": 9,
+   "ort_skor": -0.78,
+   "al": 2,
+   "sat": 5
+  },
+  {
+   "sektor": "Technology",
+   "hisse_sayisi": 5,
+   "ort_skor": -1.2,
    "al": 0,
-   "sat": 0
+   "sat": 2
   },
   {
    "sektor": "Real Estate",
-   "hisse_sayisi": 1,
-   "ort_skor": 1.0,
+   "hisse_sayisi": 4,
+   "ort_skor": 0.0,
    "al": 0,
    "sat": 0
   },
   {
    "sektor": "Communication Services",
-   "hisse_sayisi": 1,
-   "ort_skor": -2.0,
+   "hisse_sayisi": 4,
+   "ort_skor": -0.25,
    "al": 0,
    "sat": 1
   },
   {
    "sektor": "Healthcare",
-   "hisse_sayisi": 1,
-   "ort_skor": -2.0,
+   "hisse_sayisi": 3,
+   "ort_skor": -1.67,
    "al": 0,
-   "sat": 1
+   "sat": 2
+  },
+  {
+   "sektor": "Energy",
+   "hisse_sayisi": 1,
+   "ort_skor": -1.0,
+   "al": 0,
+   "sat": 0
   }
  ],
  "temel_analiz": [
   {
    "sembol": "ANSGR",
    "fk": 2.8,
-   "pddd": 1.0,
+   "pddd": 1.01,
    "temettu": 6.2,
    "skor": 4
   },
   {
    "sembol": "BRYAT",
    "fk": 7.5,
-   "pddd": 0.99,
+   "pddd": 1.0,
    "temettu": 12.9,
    "skor": 4
   },
@@ -3817,7 +4022,7 @@
   },
   {
    "sembol": "AKSA",
-   "fk": 7.0,
+   "fk": 7.1,
    "pddd": 1.06,
    "temettu": 5.6,
    "skor": 3
@@ -3831,14 +4036,14 @@
   },
   {
    "sembol": "CWENE",
-   "fk": 5.1,
-   "pddd": 0.94,
+   "fk": 5.7,
+   "pddd": 0.95,
    "temettu": null,
    "skor": 3
   },
   {
    "sembol": "CIMSA",
-   "fk": 8.6,
+   "fk": 8.5,
    "pddd": 0.98,
    "temettu": 1.8,
    "skor": 3
@@ -3852,8 +4057,8 @@
   },
   {
    "sembol": "DOAS",
-   "fk": 10.8,
-   "pddd": 0.41,
+   "fk": 10.9,
+   "pddd": 0.42,
    "temettu": 23.1,
    "skor": 3
   },
@@ -3873,7 +4078,7 @@
   },
   {
    "sembol": "AEFES",
-   "fk": 10.1,
+   "fk": 10.4,
    "pddd": 0.9,
    "temettu": 2.0,
    "skor": 2
@@ -3888,7 +4093,7 @@
   {
    "sembol": "BTCIM",
    "fk": null,
-   "pddd": 0.46,
+   "pddd": 0.47,
    "temettu": null,
    "skor": 2
   },
@@ -3907,8 +4112,35 @@
     "sembol": "AKSA",
     "sinyal": "DİKKAT_AL",
     "skor": 3,
-    "giris": 10.55,
-    "guncel": 10.55,
+    "giris": 10.57,
+    "guncel": 10.57,
+    "getiri": 0.0
+   },
+   {
+    "tarih": "2026-11-11",
+    "sembol": "ENJSA",
+    "sinyal": "DİKKAT_AL",
+    "skor": 3,
+    "giris": 119.3,
+    "guncel": 119.3,
+    "getiri": 0.0
+   },
+   {
+    "tarih": "2026-11-11",
+    "sembol": "ENERY",
+    "sinyal": "DİKKAT_AL",
+    "skor": 3,
+    "giris": 13.9,
+    "guncel": 13.9,
+    "getiri": 0.0
+   },
+   {
+    "tarih": "2026-11-11",
+    "sembol": "OTKAR",
+    "sinyal": "DİKKAT_AL",
+    "skor": 2,
+    "giris": 313.75,
+    "guncel": 313.75,
     "getiri": 0.0
    },
    {
@@ -3916,369 +4148,337 @@
     "sembol": "TUKAS",
     "sinyal": "DİKKAT_AL",
     "skor": 2,
-    "giris": 2.17,
-    "guncel": 2.17,
+    "giris": 2.26,
+    "guncel": 2.26,
     "getiri": 0.0
    },
    {
-    "tarih": "2026-11-10",
-    "sembol": "TCELL",
+    "tarih": "2026-10-09",
+    "sembol": "ALARK",
     "sinyal": "DİKKAT_AL",
     "skor": 3,
-    "giris": 97.75,
-    "guncel": null,
-    "getiri": null
+    "giris": 109.0,
+    "guncel": 104.2,
+    "getiri": -4.4
    },
    {
-    "tarih": "2026-11-10",
-    "sembol": "VAKBN",
-    "sinyal": "DİKKAT_AL",
-    "skor": 3,
-    "giris": 33.48,
-    "guncel": null,
-    "getiri": null
-   },
-   {
-    "tarih": "2026-11-10",
-    "sembol": "ENERY",
+    "tarih": "2026-10-09",
+    "sembol": "MPARK",
     "sinyal": "DİKKAT_AL",
     "skor": 2,
-    "giris": 14.15,
-    "guncel": 13.88,
-    "getiri": -1.9
+    "giris": 437.25,
+    "guncel": 440.5,
+    "getiri": 0.7
    },
    {
-    "tarih": "2026-11-10",
-    "sembol": "FROTO",
+    "tarih": "2026-10-08",
+    "sembol": "ALARK",
     "sinyal": "DİKKAT_AL",
     "skor": 2,
-    "giris": 75.9,
-    "guncel": 74.0,
-    "getiri": -2.5
+    "giris": 108.3,
+    "guncel": 104.2,
+    "getiri": -3.8
    },
    {
-    "tarih": "2026-11-10",
+    "tarih": "2026-10-08",
     "sembol": "TAVHL",
     "sinyal": "DİKKAT_AL",
     "skor": 2,
-    "giris": 302.0,
-    "guncel": 300.75,
-    "getiri": -0.4
+    "giris": 275.75,
+    "guncel": 302.5,
+    "getiri": 9.7
    },
    {
-    "tarih": "2026-11-10",
-    "sembol": "TUKAS",
+    "tarih": "2026-10-07",
+    "sembol": "ENJSA",
     "sinyal": "DİKKAT_AL",
-    "skor": 2,
-    "giris": 2.14,
-    "guncel": 2.17,
-    "getiri": 1.4
+    "skor": 3,
+    "giris": 114.1,
+    "guncel": 119.3,
+    "getiri": 4.6
    },
    {
-    "tarih": "2026-11-10",
-    "sembol": "YKBNK",
-    "sinyal": "DİKKAT_AL",
-    "skor": 2,
-    "giris": 38.48,
-    "guncel": null,
-    "getiri": null
-   },
-   {
-    "tarih": "2026-11-09",
+    "tarih": "2026-10-07",
     "sembol": "ENERY",
     "sinyal": "DİKKAT_AL",
     "skor": 3,
-    "giris": 14.25,
-    "guncel": 13.88,
-    "getiri": -2.6
+    "giris": 14.0,
+    "guncel": 13.9,
+    "getiri": -0.7
    },
    {
-    "tarih": "2026-11-09",
-    "sembol": "KCHOL",
+    "tarih": "2026-10-07",
+    "sembol": "YKBNK",
     "sinyal": "DİKKAT_AL",
     "skor": 3,
-    "giris": 212.4,
-    "guncel": null,
-    "getiri": null
+    "giris": 36.6,
+    "guncel": 38.52,
+    "getiri": 5.2
    },
    {
-    "tarih": "2026-11-09",
-    "sembol": "TUKAS",
-    "sinyal": "DİKKAT_AL",
-    "skor": 3,
-    "giris": 2.05,
-    "guncel": 2.17,
-    "getiri": 5.9
-   },
-   {
-    "tarih": "2026-11-09",
-    "sembol": "VAKBN",
-    "sinyal": "DİKKAT_AL",
-    "skor": 3,
-    "giris": 33.62,
-    "guncel": null,
-    "getiri": null
-   },
-   {
-    "tarih": "2026-11-09",
-    "sembol": "AKBNK",
+    "tarih": "2026-10-07",
+    "sembol": "EKGYO",
     "sinyal": "DİKKAT_AL",
     "skor": 2,
-    "giris": 70.95,
-    "guncel": 70.7,
-    "getiri": -0.4
+    "giris": 19.6,
+    "guncel": 18.56,
+    "getiri": -5.3
    },
    {
-    "tarih": "2026-11-09",
+    "tarih": "2026-10-07",
+    "sembol": "TAVHL",
+    "sinyal": "DİKKAT_AL",
+    "skor": 2,
+    "giris": 275.25,
+    "guncel": 302.5,
+    "getiri": 9.9
+   },
+   {
+    "tarih": "2026-10-06",
     "sembol": "BRSAN",
     "sinyal": "DİKKAT_AL",
-    "skor": 2,
-    "giris": 685.0,
-    "guncel": 641.5,
-    "getiri": -6.4
+    "skor": 3,
+    "giris": 679.0,
+    "guncel": 643.0,
+    "getiri": -5.3
    },
    {
-    "tarih": "2026-11-09",
-    "sembol": "CVKMD",
+    "tarih": "2026-10-06",
+    "sembol": "EKGYO",
+    "sinyal": "DİKKAT_AL",
+    "skor": 3,
+    "giris": 19.75,
+    "guncel": 18.56,
+    "getiri": -6.0
+   },
+   {
+    "tarih": "2026-10-06",
+    "sembol": "ENJSA",
+    "sinyal": "DİKKAT_AL",
+    "skor": 3,
+    "giris": 111.6,
+    "guncel": 119.3,
+    "getiri": 6.9
+   },
+   {
+    "tarih": "2026-10-06",
+    "sembol": "ENERY",
+    "sinyal": "DİKKAT_AL",
+    "skor": 3,
+    "giris": 13.82,
+    "guncel": 13.9,
+    "getiri": 0.6
+   },
+   {
+    "tarih": "2026-10-06",
+    "sembol": "MIATK",
+    "sinyal": "DİKKAT_AL",
+    "skor": 3,
+    "giris": 30.24,
+    "guncel": 24.0,
+    "getiri": -20.6
+   },
+   {
+    "tarih": "2026-10-06",
+    "sembol": "MPARK",
+    "sinyal": "DİKKAT_AL",
+    "skor": 3,
+    "giris": 429.0,
+    "guncel": 440.5,
+    "getiri": 2.7
+   },
+   {
+    "tarih": "2026-10-06",
+    "sembol": "TAVHL",
+    "sinyal": "DİKKAT_AL",
+    "skor": 3,
+    "giris": 275.5,
+    "guncel": 302.5,
+    "getiri": 9.8
+   },
+   {
+    "tarih": "2026-10-06",
+    "sembol": "OTKAR",
     "sinyal": "DİKKAT_AL",
     "skor": 2,
-    "giris": 14.69,
-    "guncel": 13.5,
+    "giris": 341.25,
+    "guncel": 313.75,
     "getiri": -8.1
    },
    {
-    "tarih": "2026-11-09",
-    "sembol": "ENJSA",
+    "tarih": "2026-10-06",
+    "sembol": "PASEU",
     "sinyal": "DİKKAT_AL",
     "skor": 2,
-    "giris": 120.6,
-    "guncel": 119.2,
-    "getiri": -1.2
+    "giris": 41.4,
+    "guncel": 32.96,
+    "getiri": -20.4
    },
    {
-    "tarih": "2026-11-09",
-    "sembol": "FROTO",
-    "sinyal": "DİKKAT_AL",
-    "skor": 2,
-    "giris": 74.45,
-    "guncel": 74.0,
-    "getiri": -0.6
-   },
-   {
-    "tarih": "2026-11-09",
-    "sembol": "GRSEL",
-    "sinyal": "DİKKAT_AL",
-    "skor": 2,
-    "giris": 276.75,
-    "guncel": null,
-    "getiri": null
-   },
-   {
-    "tarih": "2026-11-09",
-    "sembol": "TAVHL",
-    "sinyal": "DİKKAT_AL",
-    "skor": 2,
-    "giris": 303.75,
-    "guncel": 300.75,
-    "getiri": -1.0
-   },
-   {
-    "tarih": "2026-11-09",
-    "sembol": "ISCTR",
-    "sinyal": "DİKKAT_AL",
-    "skor": 2,
-    "giris": 13.7,
-    "guncel": null,
-    "getiri": null
-   },
-   {
-    "tarih": "2026-11-09",
-    "sembol": "TSKB",
-    "sinyal": "DİKKAT_AL",
-    "skor": 2,
-    "giris": 10.45,
-    "guncel": null,
-    "getiri": null
-   },
-   {
-    "tarih": "2026-11-09",
-    "sembol": "YKBNK",
-    "sinyal": "DİKKAT_AL",
-    "skor": 2,
-    "giris": 38.74,
-    "guncel": null,
-    "getiri": null
-   },
-   {
-    "tarih": "2026-11-06",
-    "sembol": "ISCTR",
+    "tarih": "2026-10-05",
+    "sembol": "BRSAN",
     "sinyal": "DİKKAT_AL",
     "skor": 3,
-    "giris": 13.29,
-    "guncel": null,
-    "getiri": null
+    "giris": 692.0,
+    "guncel": 643.0,
+    "getiri": -7.1
    },
    {
-    "tarih": "2026-11-06",
-    "sembol": "CVKMD",
-    "sinyal": "DİKKAT_AL",
-    "skor": 2,
-    "giris": 14.54,
-    "guncel": 13.5,
-    "getiri": -7.2
-   },
-   {
-    "tarih": "2026-11-06",
+    "tarih": "2026-10-05",
     "sembol": "ENJSA",
     "sinyal": "DİKKAT_AL",
-    "skor": 2,
-    "giris": 122.0,
-    "guncel": 119.2,
-    "getiri": -2.3
+    "skor": 3,
+    "giris": 112.5,
+    "guncel": 119.3,
+    "getiri": 6.0
    },
    {
-    "tarih": "2026-11-06",
+    "tarih": "2026-10-05",
     "sembol": "ENERY",
     "sinyal": "DİKKAT_AL",
-    "skor": 2,
-    "giris": 14.05,
-    "guncel": 13.88,
-    "getiri": -1.2
+    "skor": 3,
+    "giris": 13.79,
+    "guncel": 13.9,
+    "getiri": 0.8
    },
    {
-    "tarih": "2026-11-06",
-    "sembol": "GRSEL",
-    "sinyal": "DİKKAT_AL",
-    "skor": 2,
-    "giris": 278.75,
-    "guncel": null,
-    "getiri": null
-   },
-   {
-    "tarih": "2026-11-06",
+    "tarih": "2026-10-05",
     "sembol": "MPARK",
     "sinyal": "DİKKAT_AL",
-    "skor": 2,
-    "giris": 427.0,
-    "guncel": null,
-    "getiri": null
+    "skor": 3,
+    "giris": 434.0,
+    "guncel": 440.5,
+    "getiri": 1.5
    },
    {
-    "tarih": "2026-11-06",
-    "sembol": "ODINE",
+    "tarih": "2026-10-05",
+    "sembol": "MAVI",
     "sinyal": "DİKKAT_AL",
     "skor": 2,
-    "giris": 60.1,
-    "guncel": null,
-    "getiri": null
+    "giris": 38.2,
+    "guncel": 35.22,
+    "getiri": -7.8
    },
    {
-    "tarih": "2026-11-06",
-    "sembol": "PGSUS",
+    "tarih": "2026-10-05",
+    "sembol": "OTKAR",
     "sinyal": "DİKKAT_AL",
     "skor": 2,
-    "giris": 141.6,
-    "guncel": null,
-    "getiri": null
+    "giris": 340.5,
+    "guncel": 313.75,
+    "getiri": -7.9
    },
    {
-    "tarih": "2026-11-06",
-    "sembol": "TAVHL",
+    "tarih": "2026-10-05",
+    "sembol": "PASEU",
     "sinyal": "DİKKAT_AL",
     "skor": 2,
-    "giris": 294.5,
-    "guncel": 300.75,
-    "getiri": 2.1
+    "giris": 37.64,
+    "guncel": 32.96,
+    "getiri": -12.4
    },
    {
-    "tarih": "2026-11-06",
-    "sembol": "GARAN",
-    "sinyal": "DİKKAT_AL",
-    "skor": 2,
-    "giris": 144.3,
-    "guncel": null,
-    "getiri": null
-   },
-   {
-    "tarih": "2026-11-06",
-    "sembol": "TSKB",
-    "sinyal": "DİKKAT_AL",
-    "skor": 2,
-    "giris": 10.31,
-    "guncel": null,
-    "getiri": null
-   },
-   {
-    "tarih": "2026-11-06",
-    "sembol": "YKBNK",
-    "sinyal": "DİKKAT_AL",
-    "skor": 2,
-    "giris": 37.24,
-    "guncel": null,
-    "getiri": null
-   },
-   {
-    "tarih": "2026-11-05",
-    "sembol": "ISCTR",
+    "tarih": "2026-10-02",
+    "sembol": "BERA",
     "sinyal": "DİKKAT_AL",
     "skor": 3,
-    "giris": 13.05,
-    "guncel": null,
-    "getiri": null
+    "giris": 13.02,
+    "guncel": 10.39,
+    "getiri": -20.2
    },
    {
-    "tarih": "2026-11-05",
-    "sembol": "YKBNK",
+    "tarih": "2026-10-02",
+    "sembol": "ENERY",
     "sinyal": "DİKKAT_AL",
     "skor": 3,
-    "giris": 36.52,
-    "guncel": null,
-    "getiri": null
-   },
-   {
-    "tarih": "2026-11-05",
-    "sembol": "CIMSA",
-    "sinyal": "DİKKAT_AL",
-    "skor": 2,
-    "giris": 42.5,
-    "guncel": 42.46,
-    "getiri": -0.1
-   },
-   {
-    "tarih": "2026-11-05",
-    "sembol": "ENJSA",
-    "sinyal": "DİKKAT_AL",
-    "skor": 2,
-    "giris": 119.3,
-    "guncel": 119.2,
-    "getiri": -0.1
-   },
-   {
-    "tarih": "2026-11-05",
-    "sembol": "MPARK",
-    "sinyal": "DİKKAT_AL",
-    "skor": 2,
-    "giris": 429.25,
-    "guncel": null,
-    "getiri": null
+    "giris": 13.64,
+    "guncel": 13.9,
+    "getiri": 1.9
    }
   ],
-  "basari_orani": 25,
-  "toplam": 24,
-  "pozitif": 6
+  "basari_orani": 41,
+  "toplam": 32,
+  "pozitif": 13
  },
  "gece_analizi": {
-  "tarih": "11.11.2026 13:27",
+  "tarih": "11.11.2026 20:43",
   "guclu_al": [
    {
     "sembol": "AKSA",
     "skor": 3,
-    "fiyat": 10.55
+    "fiyat": 10.57
+   },
+   {
+    "sembol": "ENJSA",
+    "skor": 3,
+    "fiyat": 119.3
+   },
+   {
+    "sembol": "ENERY",
+    "skor": 3,
+    "fiyat": 13.9
    }
   ],
-  "zayif_sat": [],
+  "zayif_sat": [
+   {
+    "sembol": "ANSGR",
+    "skor": -3,
+    "fiyat": 22.04
+   },
+   {
+    "sembol": "ARCLK",
+    "skor": -3,
+    "fiyat": 69.9
+   },
+   {
+    "sembol": "BRYAT",
+    "skor": -3,
+    "fiyat": 1244.0
+   },
+   {
+    "sembol": "CANTE",
+    "skor": -3,
+    "fiyat": 0.99
+   },
+   {
+    "sembol": "DOAS",
+    "skor": -3,
+    "fiyat": 127.2
+   }
+  ],
   "squeeze": [],
-  "asiri_satim": [],
+  "asiri_satim": [
+   {
+    "sembol": "TURSG",
+    "fiyat": 3.28,
+    "rsi": 27.5
+   },
+   {
+    "sembol": "DSTKF",
+    "fiyat": 72.2,
+    "rsi": 11.8
+   },
+   {
+    "sembol": "IEYHO",
+    "fiyat": 8.05,
+    "rsi": 11.5
+   },
+   {
+    "sembol": "ODINE",
+    "fiyat": 68.05,
+    "rsi": 22.5
+   },
+   {
+    "sembol": "RALYH",
+    "fiyat": 4.52,
+    "rsi": 6.1
+   },
+   {
+    "sembol": "SOKM",
+    "fiyat": 46.44,
+    "rsi": 25.9
+   }
+  ],
   "yarin_yuksek_onem": [
    {
     "tarih": "12.11",
@@ -4293,37 +4493,37 @@
   "mss_yukari": [
    {
     "sembol": "AKBNK",
-    "fiyat": 70.7,
+    "fiyat": 70.8,
     "seviye": 69.85,
     "aciklama": "2 bar önce kapanış (70.95) son swing yükseğini (69.85) kırdı → yapı yukarı döndü (MSS/BOS)"
    },
    {
     "sembol": "CVKMD",
-    "fiyat": 13.5,
+    "fiyat": 13.59,
     "seviye": 12.99,
     "aciklama": "4 bar önce kapanış (13.51) son swing yükseğini (12.99) kırdı → yapı yukarı döndü (MSS/BOS)"
    },
    {
     "sembol": "ENJSA",
-    "fiyat": 119.2,
+    "fiyat": 119.3,
     "seviye": 117.5,
     "aciklama": "5 bar önce kapanış (118.60) son swing yükseğini (117.50) kırdı → yapı yukarı döndü (MSS/BOS)"
    },
    {
     "sembol": "EUPWR",
-    "fiyat": 36.14,
+    "fiyat": 36.32,
     "seviye": 43.52,
     "aciklama": "2 bar önce kapanış (44.60) son swing yükseğini (43.52) kırdı → yapı yukarı döndü (MSS/BOS)"
    },
    {
     "sembol": "FROTO",
-    "fiyat": 74.0,
+    "fiyat": 74.35,
     "seviye": 71.0,
     "aciklama": "3 bar önce kapanış (73.15) son swing yükseğini (71.00) kırdı → yapı yukarı döndü (MSS/BOS)"
    },
    {
     "sembol": "GESAN",
-    "fiyat": 32.12,
+    "fiyat": 32.4,
     "seviye": 35.3,
     "aciklama": "5 bar önce kapanış (35.56) son swing yükseğini (35.30) kırdı → yapı yukarı döndü (MSS/BOS)"
    },
@@ -4335,49 +4535,49 @@
    },
    {
     "sembol": "MPARK",
-    "fiyat": 438.75,
+    "fiyat": 440.5,
     "seviye": 440.0,
     "aciklama": "2 bar önce kapanış (442.00) son swing yükseğini (440.00) kırdı → yapı yukarı döndü (MSS/BOS)"
    },
    {
     "sembol": "PGSUS",
-    "fiyat": 156.0,
+    "fiyat": 157.1,
     "seviye": 153.6,
     "aciklama": "1 bar önce kapanış (154.40) son swing yükseğini (153.60) kırdı → yapı yukarı döndü (MSS/BOS)"
    },
    {
     "sembol": "TAVHL",
-    "fiyat": 300.75,
+    "fiyat": 302.5,
     "seviye": 289.0,
     "aciklama": "4 bar önce kapanış (291.00) son swing yükseğini (289.00) kırdı → yapı yukarı döndü (MSS/BOS)"
    },
    {
     "sembol": "TOASO",
-    "fiyat": 235.2,
+    "fiyat": 236.8,
     "seviye": 232.0,
     "aciklama": "3 bar önce kapanış (243.00) son swing yükseğini (232.00) kırdı → yapı yukarı döndü (MSS/BOS)"
    },
    {
     "sembol": "TUKAS",
-    "fiyat": 2.17,
+    "fiyat": 2.26,
     "seviye": 2.03,
     "aciklama": "2 bar önce kapanış (2.05) son swing yükseğini (2.03) kırdı → yapı yukarı döndü (MSS/BOS)"
    },
    {
     "sembol": "THYAO",
-    "fiyat": 316.25,
+    "fiyat": 317.5,
     "seviye": 295.25,
     "aciklama": "4 bar önce kapanış (297.00) son swing yükseğini (295.25) kırdı → yapı yukarı döndü (MSS/BOS)"
    },
    {
     "sembol": "GARAN",
-    "fiyat": 154.2,
+    "fiyat": 154.3,
     "seviye": 134.8,
     "aciklama": "5 bar önce kapanış (137.50) son swing yükseğini (134.80) kırdı → yapı yukarı döndü (MSS/BOS)"
    },
    {
     "sembol": "ISCTR",
-    "fiyat": 13.64,
+    "fiyat": 13.68,
     "seviye": 13.3,
     "aciklama": "2 bar önce kapanış (13.70) son swing yükseğini (13.30) kırdı → yapı yukarı döndü (MSS/BOS)"
    },
@@ -4389,7 +4589,7 @@
    },
    {
     "sembol": "YKBNK",
-    "fiyat": 38.5,
+    "fiyat": 38.52,
     "seviye": 36.76,
     "aciklama": "3 bar önce kapanış (37.24) son swing yükseğini (36.76) kırdı → yapı yukarı döndü (MSS/BOS)"
    }
@@ -4397,13 +4597,13 @@
   "mss_asagi": [
    {
     "sembol": "CCOLA",
-    "fiyat": 75.35,
+    "fiyat": 75.5,
     "seviye": 71.0,
     "aciklama": "4 bar önce kapanış (70.25) son swing dibini (71.00) kırdı → yapı aşağı döndü (MSS/BOS)"
    },
    {
     "sembol": "DSTKF",
-    "fiyat": 71.35,
+    "fiyat": 72.2,
     "seviye": 1773.0,
     "aciklama": "5 bar önce kapanış (68.85) son swing dibini (1773.00) kırdı → yapı aşağı döndü (MSS/BOS)"
    },
@@ -4421,13 +4621,13 @@
    },
    {
     "sembol": "SOKM",
-    "fiyat": 46.36,
+    "fiyat": 46.44,
     "seviye": 53.5,
     "aciklama": "3 bar önce kapanış (48.44) son swing dibini (53.50) kırdı → yapı aşağı döndü (MSS/BOS)"
    },
    {
     "sembol": "TUPRS",
-    "fiyat": 350.5,
+    "fiyat": 351.5,
     "seviye": 366.5,
     "aciklama": "5 bar önce kapanış (343.25) son swing dibini (366.50) kırdı → yapı aşağı döndü (MSS/BOS)"
    }
@@ -4439,7 +4639,7 @@
     "alt": 68.85,
     "ust": 70.0,
     "konum": "ÜSTÜNDE",
-    "fiyat": 70.7
+    "fiyat": 70.8
    },
    {
     "sembol": "AKSA",
@@ -4447,7 +4647,7 @@
     "alt": 10.01,
     "ust": 10.24,
     "konum": "ÜSTÜNDE",
-    "fiyat": 10.55
+    "fiyat": 10.57
    },
    {
     "sembol": "AKSEN",
@@ -4455,7 +4655,7 @@
     "alt": 64.4,
     "ust": 66.55,
     "konum": "ÜSTÜNDE",
-    "fiyat": 70.95
+    "fiyat": 71.6
    },
    {
     "sembol": "ALARK",
@@ -4463,7 +4663,7 @@
     "alt": 102.8,
     "ust": 103.2,
     "konum": "ÜSTÜNDE",
-    "fiyat": 103.4
+    "fiyat": 104.2
    },
    {
     "sembol": "ANSGR",
@@ -4471,7 +4671,7 @@
     "alt": 22.44,
     "ust": 22.7,
     "konum": "ALTINDA",
-    "fiyat": 21.92
+    "fiyat": 22.04
    },
    {
     "sembol": "ARCLK",
@@ -4479,7 +4679,7 @@
     "alt": 67.7,
     "ust": 69.1,
     "konum": "ÜSTÜNDE",
-    "fiyat": 69.75
+    "fiyat": 69.9
    },
    {
     "sembol": "ASTOR",
@@ -4487,7 +4687,7 @@
     "alt": 161.0,
     "ust": 176.2,
     "konum": "İÇİNDE",
-    "fiyat": 162.0
+    "fiyat": 163.1
    },
    {
     "sembol": "BALSU",
@@ -4495,7 +4695,7 @@
     "alt": 7.6,
     "ust": 7.64,
     "konum": "ALTINDA",
-    "fiyat": 7.17
+    "fiyat": 7.19
    },
    {
     "sembol": "BTCIM",
@@ -4503,7 +4703,7 @@
     "alt": 1.73,
     "ust": 1.83,
     "konum": "ÜSTÜNDE",
-    "fiyat": 2.01
+    "fiyat": 2.05
    },
    {
     "sembol": "BSOKE",
@@ -4511,15 +4711,15 @@
     "alt": 4.86,
     "ust": 5.23,
     "konum": "ÜSTÜNDE",
-    "fiyat": 5.96
+    "fiyat": 6.01
    },
    {
     "sembol": "BERA",
     "yon": "BULLISH",
-    "alt": 9.95,
-    "ust": 10.26,
+    "alt": 10.26,
+    "ust": 10.29,
     "konum": "ÜSTÜNDE",
-    "fiyat": 10.34
+    "fiyat": 10.39
    },
    {
     "sembol": "BIMAS",
@@ -4527,7 +4727,7 @@
     "alt": 371.75,
     "ust": 378.0,
     "konum": "ÜSTÜNDE",
-    "fiyat": 380.25
+    "fiyat": 380.75
    },
    {
     "sembol": "BRSAN",
@@ -4535,7 +4735,7 @@
     "alt": 658.0,
     "ust": 665.0,
     "konum": "ALTINDA",
-    "fiyat": 641.5
+    "fiyat": 643.0
    },
    {
     "sembol": "BRYAT",
@@ -4543,7 +4743,7 @@
     "alt": 1273.0,
     "ust": 1280.0,
     "konum": "ALTINDA",
-    "fiyat": 1241.0
+    "fiyat": 1244.0
    },
    {
     "sembol": "CCOLA",
@@ -4551,7 +4751,7 @@
     "alt": 73.25,
     "ust": 74.1,
     "konum": "ÜSTÜNDE",
-    "fiyat": 75.35
+    "fiyat": 75.5
    },
    {
     "sembol": "CVKMD",
@@ -4559,7 +4759,7 @@
     "alt": 14.05,
     "ust": 14.5,
     "konum": "ALTINDA",
-    "fiyat": 13.5
+    "fiyat": 13.59
    },
    {
     "sembol": "CWENE",
@@ -4567,7 +4767,7 @@
     "alt": 16.09,
     "ust": 17.76,
     "konum": "ALTINDA",
-    "fiyat": 15.52
+    "fiyat": 15.67
    },
    {
     "sembol": "CANTE",
@@ -4575,7 +4775,7 @@
     "alt": 0.92,
     "ust": 0.97,
     "konum": "ÜSTÜNDE",
-    "fiyat": 0.98
+    "fiyat": 0.99
    },
    {
     "sembol": "CIMSA",
@@ -4583,7 +4783,7 @@
     "alt": 40.68,
     "ust": 42.02,
     "konum": "ÜSTÜNDE",
-    "fiyat": 42.46
+    "fiyat": 42.32
    },
    {
     "sembol": "DAPGM",
@@ -4591,7 +4791,7 @@
     "alt": 2.35,
     "ust": 2.41,
     "konum": "ÜSTÜNDE",
-    "fiyat": 2.54
+    "fiyat": 2.53
    }
   ],
   "ob_ici": [
@@ -4600,35 +4800,42 @@
     "yon": "BULLISH",
     "alt": 10.19,
     "ust": 10.91,
-    "fiyat": 10.55
+    "fiyat": 10.57
    },
    {
     "sembol": "ASELS",
     "yon": "BEARISH",
     "alt": 344.75,
     "ust": 357.0,
-    "fiyat": 344.75
+    "fiyat": 346.0
    },
    {
     "sembol": "BRYAT",
     "yon": "BEARISH",
     "alt": 1230.0,
     "ust": 1335.0,
-    "fiyat": 1241.0
+    "fiyat": 1244.0
+   },
+   {
+    "sembol": "DOAS",
+    "yon": "BULLISH",
+    "alt": 126.8,
+    "ust": 130.6,
+    "fiyat": 127.2
    },
    {
     "sembol": "ENERY",
     "yon": "BEARISH",
     "alt": 13.32,
     "ust": 14.11,
-    "fiyat": 13.88
+    "fiyat": 13.9
    },
    {
     "sembol": "KCHOL",
     "yon": "BULLISH",
     "alt": 200.5,
     "ust": 219.6,
-    "fiyat": 204.9
+    "fiyat": 205.6
    }
   ],
   "sweep": [
@@ -4673,12 +4880,6 @@
     "yon": "BEARISH",
     "seviye": 306.25,
     "aciklama": "1 bar önce direnç 306.25 süpürüldü, kapanış altına döndü (302.00) → yukarı tuzak"
-   },
-   {
-    "sembol": "TUKAS",
-    "yon": "BEARISH",
-    "seviye": 2.25,
-    "aciklama": "0 bar önce direnç 2.25 süpürüldü, kapanış altına döndü (2.17) → yukarı tuzak"
    },
    {
     "sembol": "TUPRS",
@@ -4809,8 +5010,29 @@
   ],
   "al": [
    {
+    "sembol": "PGSUS",
+    "fiyat": 157.1,
+    "skor": 3,
+    "sinyal": "AL",
+    "nedenler": [
+     "MSS↑ 1 bar önce kapanış (154.40) son swing yükseğini (153.60) kırdı → yapı yukarı döndü (MSS/BOS)",
+     "Fiyat değer alanı üstünde (VAH 156.97) → kabul/güç"
+    ]
+   },
+   {
+    "sembol": "TUKAS",
+    "fiyat": 2.26,
+    "skor": 3,
+    "sinyal": "AL",
+    "nedenler": [
+     "MSS↑ 2 bar önce kapanış (2.05) son swing yükseğini (2.03) kırdı → yapı yukarı döndü (MSS/BOS)",
+     "Fiyat değer alanı üstünde (VAH 2.22) → kabul/güç",
+     "eşit yüksekler ≈ 2.04 (fiyata %-9.73) → üstte likidite havuzu, süpürme hedefi"
+    ]
+   },
+   {
     "sembol": "THYAO",
-    "fiyat": 316.25,
+    "fiyat": 317.5,
     "skor": 3,
     "sinyal": "AL",
     "nedenler": [
@@ -4820,14 +5042,14 @@
    },
    {
     "sembol": "GARAN",
-    "fiyat": 154.2,
+    "fiyat": 154.3,
     "skor": 3,
     "sinyal": "AL",
     "nedenler": [
      "MSS↑ 5 bar önce kapanış (137.50) son swing yükseğini (134.80) kırdı → yapı yukarı döndü (MSS/BOS)",
      "Fiyat değer alanı üstünde (VAH 135.58) → kabul/güç",
-     "eşit yüksekler ≈ 135.35 (fiyata %-12.22) → üstte likidite havuzu, süpürme hedefi",
-     "eşit düşükler ≈ 121.65 (fiyata %21.11) → altta likidite havuzu, süpürme hedefi"
+     "eşit yüksekler ≈ 135.35 (fiyata %-12.28) → üstte likidite havuzu, süpürme hedefi",
+     "eşit düşükler ≈ 121.65 (fiyata %21.16) → altta likidite havuzu, süpürme hedefi"
     ]
    }
   ],
@@ -4845,19 +5067,19 @@
    },
    {
     "sembol": "SOKM",
-    "fiyat": 46.36,
+    "fiyat": 46.44,
     "skor": -3,
     "sinyal": "SAT",
     "nedenler": [
      "MSS↓ 3 bar önce kapanış (48.44) son swing dibini (53.50) kırdı → yapı aşağı döndü (MSS/BOS)",
-     "Fiyat değer alanı altında (VAL 54.04) → red/zayıflık",
-     "eşit yüksekler ≈ 59.98 (fiyata %29.38) → üstte likidite havuzu, süpürme hedefi",
-     "eşit düşükler ≈ 54.1 (fiyata %-16.7) → altta likidite havuzu, süpürme hedefi"
+     "Fiyat değer alanı altında (VAL 54.06) → red/zayıflık",
+     "eşit yüksekler ≈ 59.98 (fiyata %29.16) → üstte likidite havuzu, süpürme hedefi",
+     "eşit düşükler ≈ 54.1 (fiyata %-16.49) → altta likidite havuzu, süpürme hedefi"
     ]
    },
    {
     "sembol": "TUPRS",
-    "fiyat": 350.5,
+    "fiyat": 351.5,
     "skor": -3,
     "sinyal": "SAT",
     "nedenler": [
@@ -4869,9 +5091,9 @@
    }
   ],
   "islenen": 100,
-  "al_sayisi": 2,
+  "al_sayisi": 4,
   "sat_sayisi": 3,
-  "hesap_tarihi": "11.11.2026 13:27",
+  "hesap_tarihi": "11.11.2026 20:43",
   "kural": "MSS ±2, displacement ±1, fiyat FVG/OB bölgesi içinde ±1, likidite süpürmesi ±1, değer alanı dışı ±1. Skor ≥3 AL, ≤-3 SAT."
  }
 }

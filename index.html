@@ -259,7 +259,9 @@ tr.detail td { background:var(--bg3); padding:11px; white-space:normal; }
    Gösterim her zaman Europe/Istanbul. */
 function utcTarih(s) {
   if (!s) return new Date(NaN);
-  return new Date(/[zZ]|[+-]\d\d:?\d\d$/.test(s) ? s : s + 'Z');
+  // RFC-2822 ('Wed, 11 Nov 2026 04:23:18 GMT') tarihleri aynen geçerli — 'Z' eklenirse bozulur.
+  if (/[a-zA-Z]{3},/.test(s) || /GMT|UTC|[+-]\d\d:?\d\d$|[zZ]$/.test(s)) return new Date(s);
+  return new Date(s + 'Z');
 }
 const SEC = document.querySelectorAll('.tab');
 SEC.forEach(t => t.addEventListener('click', () => {
@@ -886,7 +888,7 @@ let haberFiltre = { kategori: '', dil: '', yon: '' };
 
 function zamanGecmis(iso) {
   if (!iso) return '';
-  const t = new Date(iso).getTime();
+  const t = utcTarih(iso).getTime();
   if (isNaN(t)) return '';
   const dk = Math.floor((Date.now() - t) / 60000);
   if (dk < 1) return 'az önce';
