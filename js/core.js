@@ -79,5 +79,10 @@ const pfOk = v => (v >= 0 ? '▲ +' : '▼ ') + Number(v).toFixed(2) + '%';
 const pfRenk = v => v >= 0 ? 'var(--up)' : 'var(--down)';
 
 
-export { utcTarih, fmt, yuzde, ok, tazelik, BAYAT, haftaIciIsGunu, bayatBantMetni,
+/* ── PAYLAŞILAN DURUM — piyasa/tablo/filtre döngüsel importunu kırmak için core'da ── */
+const durum = { detay: new Map(), hesapTarihi: '', bolunme: [] };
+let PIYASA_VERI = null;            // son yüklenen piyasa.json (canlı bağ — setPIYASA_VERI ile yazılır)
+export function setPIYASAVeri(d) { PIYASA_VERI = d; }
+
+export { durum, PIYASA_VERI, utcTarih, fmt, yuzde, ok, tazelik, BAYAT, haftaIciIsGunu, bayatBantMetni,
          bayatBantGuncelle, alEsc, pfOk, pfRenk };

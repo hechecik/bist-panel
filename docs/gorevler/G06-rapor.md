@@ -1,4 +1,32 @@
-# G06 — Rapor (parça 3/4 tamamlandı)
+# G06 — Rapor (parça 4/4 tamamlandı — görev kapandı)
+
+## Nerede kaldım (parça 4 — tamam)
+- `main.js` içinde kalanlar taşındı: `js/bolum/kripto.js` (5.218 B — `renderKripto`, `kriptoYukle`, `krFiyat`, `krBuyuk`, `KRIPTO_VERI`), `js/bolum/ict.js` (8.121 B — `renderIct`, `ictYukle`, `ictListe`, `ictYon`), `js/bolum/altin.js` (13.858 B — `renderAltin`, `altinYukle`, `ALTIN_VERI`) + `js/bolum/altin-makro.js` (7.038 B — `altinMakroHtml`, altin.js'ten import).
+- 15 KB sınırı için `piyasa.js` de alt modüllere ayrıldı: `piyasa-yardimci.js` (12.103 B), `piyasa-tablo.js` (4.799 B), `piyasa-filtre.js` (2.724 B), `piyasa-reel.js` (6.9 KB), `portfoy.js` (6.360 B), `karne-risk.js` (5.4 KB).
+- `js/main.js` **546 satır / 37.272 B → 102 satır / 5.725 B** — sadece import + `init()` + `yukle()` + ziyaretçi göstergesi. Render fonksiyonu yok.
+- `sw.js`: CACHE `bist-panel-v4` → **`bist-panel-v5`**, CORE'a 6 yeni alt modül eklendi (`karne-risk, piyasa-filtre, piyasa-reel, piyasa-tablo, piyasa-yardimci, portfoy`). Eksik olsalardı offline modda 404 alınırdı.
+- **Bulunan gerçek hata (uygulama kodunda düzeltildi):** detay satırı hiç üretilmiyordu. `piyasa-tablo.js` `durum.detay.get(r.sembol)` ile karşılaştırıyordu ama `durum.detay` hiç doldurulmuyordu (`git log -S` ile tüm geçmişte doldurma kodu yok — UI v2'de toggle listener'ı eklenmiş, veri bağı eklenmemiş). `main.js` `yukle()` içinde `durum.detay` sinyal gruplarından (al/tut/sat/izle/riskli) dolduruluyor; `hisseSatir` artık kayıt yoksa satır verisini kullanıyor → detay satırı 24 hissede açılıyor.
+
+### Headless E2E (Playwright, gerçek DOM) — 8/8 PASS
+| Kontrol | Sonuç |
+|---|---|
+| 9 sekme | **PASS** — piyasa=72.903 · grafik=3.576 · altın=25.250 · kripto=25.311 · senaryo=15.299 · haber=49.858 · takvim=13.924 · fon=15.553 · ict=20.558 |
+| Modal aç/kapa | **PASS** — `#pfSym` sembolü ENERY, `display flex → none` |
+| Filtre (arama + sinyal) | **PASS** — tümü=24 → AK=3 → geri=24 → TUT=10 |
+| CSV | **PASS** — `bist-panel-2026-11-11.csv`, 25 satır, 3.237 B |
+| Portföy ekle/sil | **PASS** — ekle=['THYAO'], P&L=+0 TL, sil → [] |
+| Risk hesabı | **PASS** — giriş 14,10 / stop 12,96 → 2.631 lot (beklenen 2631), 37.097 TL pozisyon |
+| Satır detayı aç/kapa | **PASS** — ENERY `table-row → none → table-row`, içerik «📋 Tüm Nedenler RSI 57 → güçlü ama aşırı değil…» |
+| Konsol temiz | **PASS** — pageerror=[], konsol=[] (TradingView 403 hariç) |
+
+### Test seçici düzeltmeleri
+- `#pfSembol` → gerçek id **`#pfSym`** (portföy giriş alanı); portföy listesi kapsayıcısı tablo değil `.pf-row` div'leri, ayrı liste id'si yok.
+- Satır detayı tıklaması: `element.click()` yerine Playwright fare tıklaması (`position 5,5`) + `display` ölçümü.
+- Filtre: `fill()` sonrası `dispatch_event("input")` şart (`oninput` özniteliği programatik fill ile tetiklenmiyor); sayım `style.display !== 'none'` ile.
+
+### pytest
+- `.venv/bin/python -m pytest tests -q` → **284 passed in 2.71s**
+- `node --check` → `js/*.js`, `js/bolum/*.js` (19 dosya) + `sw.js` temiz; `py_compile scripts/*.py` OK.
 
 ## Nerede kaldım (parça 3 — tamam, commit 87d7f00)
 - `js/main.js` 814 satır / 52.954 B → **546 satır / 37.272 B**.
@@ -76,6 +104,9 @@ parçalarken bu çağrıları main.js'te `import` üzerinden toplamak en temizi.
 
 ## Kabul kriterleri
 - [x] `index.html` < 10 KB → **3,1 KB**
-- [ ] Her `js/bolum/*.js` < 15 KB → dosyalar **henüz yok** (parça 2/3)
+- [x] Her `js/bolum/*.js` < 15 KB → en büyük `altin.js` 13.858 B (19 dosya)
+- [x] `js/main.js` sadece import + init → **102 satır / 5.725 B**
+- [x] Servis worker CORE listesi tüm modülleri kapsıyor (`bist-panel-v5`)
+- [x] Headless E2E: 9 sekme / modal / filtre / CSV / portföy / risk / satır detayı / konsol → **8/8 PASS**
 - [x] Yerel testte konsol hatası yok (her sekme tıklandı, headless Chromium)
 - [x] `AGENTS.md` dosya haritası güncellendi
