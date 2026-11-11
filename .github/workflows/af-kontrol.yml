@@ -16,3 +16,14 @@ jobs:
     steps:
       - name: Deneme
         run: echo "RUNNER_OK $(date -u +%H:%M)"
+
+      - name: Tetik testi (4 is akisi)
+        env:
+          PAT: ${{ secrets.AF_PAT }}
+        run: |
+          echo "PAT var mi: $([ -n "$PAT" ] && echo VAR || echo YOK)"
+          for wf in veri-cek altin-cek kripto-cek ek-veri-cek; do
+            code=$(curl -s -o /dev/null -w "%{http_code}" -X POST -H "Authorization: token $PAT" -H "Accept: application/vnd.github+json"               "https://api.github.com/repos/hechecik/bist-panel/actions/workflows/$wf.yml/dispatches" -d '{"ref":"main"}')
+            echo "TETIK $wf: $code"
+          done
+          echo "TEST_URL_BASI: https://api.github.com/repos/hechecik/bist-panel/dispatches"
