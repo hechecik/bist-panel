@@ -255,6 +255,12 @@ tr.detail td { background:var(--bg3); padding:11px; white-space:normal; }
 </div>
 
 <script>
+/* Zaman damgası: eski veri saat dilimi içermeyen UTC yazıyordu → 'Z' ekleyerek UTC olarak yorumla.
+   Gösterim her zaman Europe/Istanbul. */
+function utcTarih(s) {
+  if (!s) return new Date(NaN);
+  return new Date(/[zZ]|[+-]\d\d:?\d\d$/.test(s) ? s : s + 'Z');
+}
 const SEC = document.querySelectorAll('.tab');
 SEC.forEach(t => t.addEventListener('click', () => {
   SEC.forEach(x => x.classList.remove('active'));
@@ -379,16 +385,16 @@ async function yukle() {
     getiriYukle(); takvimYukle();
     alarmKontrol(); // 3+6 — fiyat eşik alarmları
     const gun = new Date().getDay();
-    const ure = new Date(d.uretildi);
+    const ure = utcTarih(d.uretildi);
     const fark = Math.floor((Date.now() - ure.getTime()) / 60000);
     const lt = document.getElementById('liveText');
     if (gun === 0 || gun === 6) {
-      lt.textContent = 'Borsa kapalı · ' + (d.endeks ? d.endeks.tarih + ' kapanış' : '') + ' · ' + ure.toLocaleTimeString('tr-TR', {hour:'2-digit',minute:'2-digit'});
+      lt.textContent = 'Borsa kapalı · ' + (d.endeks ? d.endeks.tarih + ' kapanış' : '') + ' · ' + ure.toLocaleTimeString('tr-TR', {hour:'2-digit',minute:'2-digit',timeZone:'Europe/Istanbul'});
       document.querySelector('header').classList.add('stale');
     } else if (fark <= 20) {
-      lt.textContent = (fark <= 1 ? 'CANLI' : fark + ' dk önce') + ' · ' + ure.toLocaleTimeString('tr-TR', {hour:'2-digit',minute:'2-digit'});
+      lt.textContent = (fark <= 1 ? 'CANLI' : fark + ' dk önce') + ' · ' + ure.toLocaleTimeString('tr-TR', {hour:'2-digit',minute:'2-digit',timeZone:'Europe/Istanbul'});
     } else {
-      lt.textContent = '⏳ ' + fark + ' dk önce · ' + ure.toLocaleTimeString('tr-TR', {hour:'2-digit',minute:'2-digit'});
+      lt.textContent = '⏳ ' + fark + ' dk önce · ' + ure.toLocaleTimeString('tr-TR', {hour:'2-digit',minute:'2-digit',timeZone:'Europe/Istanbul'});
       document.querySelector('header').classList.add('stale');
     }
   } catch(e) {
@@ -1419,7 +1425,7 @@ function renderAltin(d) {
     h += `<h2>📰 Altın Haberleri <span class="cnt">${d.haberler.length}</span></h2>`;
     d.haberler.slice(0, 10).forEach(n => {
       h += `<div class="ev"><div class="nm"><a href="${alEsc(n.link)}" target="_blank" rel="noopener" style="color:var(--tx);text-decoration:none">${alEsc(n.baslik)}</a>` +
-           `<div style="font-size:9.5px;color:var(--tx2);margin-top:2px">${alEsc(n.kaynak)}${n.tarih ? ' · ' + alEsc(n.tarih) : ''}</div></div></div>`;
+           `<div style="font-size:9.5px;color:var(--tx2);margin-top:2px">${alEsc(n.kaynak)}${n.yayin_tarihi ? ' · ' + alEsc(utcTarih(n.yayin_tarihi).toLocaleString('tr-TR',{timeZone:'Europe/Istanbul',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})) : ''}</div></div></div>`;
     });
   }
 

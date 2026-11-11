@@ -9,6 +9,11 @@ on:
 permissions:
   contents: write
 
+# Aynı görevin üst üste binen çalışmaları sıraya girer (gecikmeli cron yığılması)
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
 jobs:
   kripto:
     runs-on: ubuntu-latest

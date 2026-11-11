@@ -290,6 +290,7 @@ def senaryo(df, v, perf, sev):
 # ──────────────────────────────────────────────────────────────
 SURUCU = [
     (('fomc', 'fed faiz', 'federal fon'), 'Fed faiz kararı/kararları — altının 1. sürücüsü (düşük faiz = altına destek)'),
+    (('üretici fiyat', 'üfe', 'ppi'), 'ABD üretici enflasyonu — TÜFE öncü göstergesi, Fed beklentisi'),
     (('çekirdek enflasyon', 'tüfe', 'enflasyon oranı', 'cpi'), 'ABD enflasyonu — Fed faiz patikasını belirler, altını doğrudan iter'),
     (('tarım dışı', 'tarim disi', 'nonfarm', 'nfp', 'i̇stihdam'), 'ABD istihdam — dolar ve Fed beklentisi üzerinden altın'),
     (('pce', 'kişisel tüketim'), "Fed'in tercih ettiği enflasyon ölçüsü — faiz beklentisi"),
@@ -331,7 +332,7 @@ def kritik_gunler(gun=21):
 
     aylar = {'ocak': 1, 'şubat': 2, 'mart': 3, 'nisan': 4, 'mayıs': 5, 'haziran': 6,
              'temmuz': 7, 'ağustos': 8, 'eylül': 9, 'ekim': 10, 'kasım': 11, 'aralık': 12}
-    gunler = ['Paz', 'Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt']
+    gunler = ['Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt', 'Paz']  # weekday(): Pazartesi=0
     bugun = dt.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
     son = bugun + dt.timedelta(days=gun)
     kayit = []
@@ -373,7 +374,7 @@ def kritik_gunler(gun=21):
     # de-dupe (tarih+saat+olay)
     gor, temiz = set(), []
     for k in kayit:
-        key = (k['iso'], k['saat'], k['olay'])
+        key = (k['iso'], re.sub(r'\s*\(.*?\)', '', k['olay']).strip().lower())  # saat hariç: ADP 15:15/16:15 tekrarı
         if key in gor:
             continue
         gor.add(key)
@@ -441,7 +442,7 @@ def main():
     gram = round(v['son'] / ONS_GRAM * fx, 2) if fx else None
 
     veri = {
-        'uretildi': dt.datetime.now().isoformat(timespec='seconds'),
+        'uretildi': dt.datetime.now(dt.timezone.utc).isoformat(timespec='seconds'),
         'kaynak': 'GC=F (COMEX ons) · yfinance + gold-api.com spot + doviz.com takvim',
         'fiyat': {
             'ons': v['son'],

@@ -197,6 +197,9 @@ def tum_indikatorler(df: pd.DataFrame) -> pd.DataFrame:
     out['ATR14'] = atr(out['HGDG_MAX'], out['HGDG_MIN'], out['HGDG_KAPANIS'])
     out['BBW'] = bbw(out['HGDG_KAPANIS'])
     out['SQUEEZE'] = squeeze_tespit(out['HGDG_KAPANIS'])
+    # OBV eğimi: son 10 barın OBV değişimi / ortalama hacim (normalize) — önceden hiç hesaplanmıyordu
+    ort_hacim = out['HGDG_HACIM'].rolling(20).mean().replace(0, np.nan)
+    out['OBV_EGIM'] = (out['OBV'] - out['OBV'].shift(10)) / ort_hacim
     return out
 
 def sinyal_hesapla(son: pd.Series) -> dict:
@@ -204,7 +207,16 @@ def sinyal_hesapla(son: pd.Series) -> dict:
     s = {}
     fiyat = son['HGDG_KAPANIS']
     # 1. Trend: Fiyat vs SMA50/SMA200
-    s['trend'] = 'YUKARI' if (fiyat > son['SMA50'] and son['SMA50'] > son['SMA200']) else ('ASAĞI' if fiyat < son['SMA50'] else 'YATAY')
+    # SMA200 NaN ise (yetersiz bar) karşılaştırma hep False döner → YUKARI hiç çıkmaz.
+    # Bu durumda SMA20/SMA50 ile kısa vadeli trend kullanılır ve kaynak etiketlenir.
+    sma200 = son.get('SMA200')
+    if sma200 is not None and sma200 == sma200:
+        uzun = son['SMA50'] > sma200
+        s['trend_kaynak'] = 'SMA50/200'
+    else:
+        uzun = son['SMA20'] > son['SMA50']
+        s['trend_kaynak'] = 'SMA20/50 (kısa — SMA200 için bar yetersiz)'
+    s['trend'] = 'YUKARI' if (fiyat > son['SMA50'] and uzun) else ('ASAĞI' if fiyat < son['SMA50'] else 'YATAY')
     # 2. RSI
     r = son['RSI14']
     s['rsi'] = 'ASIRI_ALIM' if r > 70 else ('ASIRI_SATIM' if r < 30 else 'NÖTR')

@@ -16,6 +16,11 @@ import json, os, sys, re
 import datetime as dt
 from pathlib import Path
 
+
+def utc_now_iso() -> str:
+    """Tüm zaman damgaları timezone-aware UTC (UI TR saatine çevirir)."""
+    return dt.datetime.now(dt.timezone.utc).isoformat(timespec='seconds')
+
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 DATA_DIR.mkdir(exist_ok=True)
 
@@ -101,7 +106,7 @@ def cek_borsapy(bist_list: list) -> dict:
         p = get_tradingview_provider()
         for sym in bist_list:
             try:
-                df = p.get_history(sym, interval='1d', period='6mo')
+                df = p.get_history(sym, interval='1d', period='1y')  # SMA200 için ≥200 bar şart
                 if df is None or len(df) < 60:
                     continue
                 rows = []
@@ -174,7 +179,7 @@ def cek_yfinance(bist_list: list) -> dict:
     tickers = [f"{s}.IS" for s in bist_list]
     veri = {}
     try:
-        df = yf.download(tickers, period="6mo", interval="1d",
+        df = yf.download(tickers, period="1y", interval="1d",
                          group_by="ticker", auto_adjust=False, progress=False,
                          threads=True)
         for s, t in zip(bist_list, tickers):
@@ -210,7 +215,7 @@ def endeks_verisi() -> dict | None:
     try:
         import yfinance as yf
         import pandas as pd
-        df = yf.download("XU100.IS", period="6mo", interval="1d", progress=False)
+        df = yf.download("XU100.IS", period="1y", interval="1d", progress=False)
         if df.empty:
             return None
         if isinstance(df.columns, pd.MultiIndex):
@@ -483,6 +488,7 @@ def sinyalleri_hesapla(hisse_veri: dict) -> dict:
                        if r.get('macd_hist', 0) > 0 and r['skor'] >= 2][:15],
     }
     return {
+        '_tum': sonuclar,   # kırpılmamış tam kesit — sektör/gece/karne/log bunu kullanır, JSON'a yazılmaz
         'al': [r for r in sonuclar if r['sinyal'] in ('AL', 'DİKKAT_AL')][:15],
         'tut': [r for r in sonuclar if r['sinyal'] == 'TUT'][:10],
         'sat': [r for r in sonuclar if r['sinyal'] in ('SAT', 'DİKKAT_SAT')][:10],
@@ -735,19 +741,43 @@ def _dil_tespit(baslik: str, varsayilan: str = 'en') -> str:
     return 'tr' if tr_karakter else varsayilan
 
 
+_EKLER = ('', 'ı', 'i', 'u', 'ü', 'ın', 'in', 'un', 'ün', 'ını', 'ini', 'unu', 'ünü', 'a', 'e',
+         'da', 'de', 'ta', 'te', 'dan', 'den', 'tan', 'ten', 'lar', 'ler', 'ları', 'leri', 'nda', 'nde')
+
+
+def _tr_lower(m: str) -> str:
+    return m.replace('İ', 'i').replace('I', 'ı').lower()
+
+
+def _kelime_var(tokenler, kok: str) -> bool:
+    """Kısa köklerde (≤4 harf) sadece kök+izinli ek eşleşir: 'kar' → 'karı' evet, 'karar' HAYIR.
+    Uzun köklerde önek eşleşmesi yeterli: 'yükseldi' → 'yükseldiğini'."""
+    if len(kok) <= 4:
+        return any(t == kok + e for t in tokenler for e in _EKLER)
+    return any(t.startswith(kok) for t in tokenler)
+
+
 def _yon_etiket(baslik: str) -> tuple:
-    """Anahtar kelime kurallarıyla yön + etiket (LLM'siz, uydurma yok)."""
-    pozitif_kw = ['kar', 'kâr', 'temettü', 'sözleşme', 'sozlesme', 'ihale', 'yatırım', 'yatirim',
-                  'büyüme', 'buyume', 'rekor', 'anlaşma', 'anlasma', 'artış', 'artis', 'profit',
-                  'dividend', 'contract', 'award', 'growth', 'record', 'agreement', 'increase',
-                  'yükseldi', 'yukseldi', 'rekor', 'kazanç', 'kazanc', 'yeni anlaşma']
-    negatif_kw = ['zarar', 'dava', 'ceza', 'soruşturma', 'sorusturma', 'istifa', 'iflas', 'borç', 'borc',
-                  'düşüş', 'dusus', 'kayıp', 'kayip', 'loss', 'lawsuit', 'fine', 'investigation',
-                  'resign', 'bankruptcy', 'debt', 'decline', 'probe', 'düştü', 'dustu', 'kriz',
-                  'enflasyon', 'faiz artışı', 'faiz artisi', 'yaptırım', 'yaptirim', 'savaş', 'savas']
-    alt = baslik.lower()
-    poz = sum(1 for k in pozitif_kw if k in alt)
-    neg = sum(1 for k in negatif_kw if k in alt)
+    """Anahtar kelime kurallarıyla yön + etiket (LLM'siz, uydurma yok).
+    Önce çok kelimeli ifadeler (bağlam), sonra tek kelimeler kelime sınırıyla."""
+    pozitif_kw = ['kâr', 'kar', 'temettü', 'temettu', 'sözleşme', 'sozlesme', 'ihale', 'yatırım',
+                  'büyüme', 'buyume', 'rekor', 'anlaşma', 'anlasma', 'kazanç', 'kazanc', 'yükseldi',
+                  'yukseldi', 'profit', 'dividend', 'contract', 'award', 'growth', 'record',
+                  'agreement', 'upgrade', 'beat']
+    negatif_kw = ['zarar', 'dava', 'ceza', 'soruşturma', 'sorusturma', 'istifa', 'iflas', 'konkordato',
+                  'düşüş', 'dusus', 'düştü', 'dustu', 'kayıp', 'kayip', 'kriz', 'yaptırım', 'yaptirim',
+                  'savaş', 'savas', 'loss', 'lawsuit', 'investigation', 'resign', 'bankruptcy',
+                  'decline', 'probe', 'downgrade', 'miss']
+    ifade_neg = ['faiz artış', 'faiz artir', 'faiz artır', 'zarar açıkla', 'not indir', 'kredi notunu düşür']
+    ifade_poz = ['faiz indir', 'not artır', 'kredi notunu yükselt', 'kâr açıkla', 'kar açıkla']
+    alt = _tr_lower(baslik)
+    poz = sum(1 for k in ifade_poz if k in alt)
+    neg = sum(1 for k in ifade_neg if k in alt)
+    for k in ifade_poz + ifade_neg:
+        alt = alt.replace(k, ' ')
+    tokenler = re.findall(r"[0-9a-zçğıöşüâîû]+", alt)
+    poz += sum(1 for k in pozitif_kw if _kelime_var(tokenler, k))
+    neg += sum(1 for k in negatif_kw if _kelime_var(tokenler, k))
     if poz > neg:
         return 'pozitif', '🟢 Pozitif'
     if neg > poz:
@@ -1022,6 +1052,33 @@ def sinyal_gecmisi_ozet(gecmis: dict, guncel_fiyatlar: dict) -> dict:
     }
 
 
+def tam_kesit_log(tum: list, endeks: dict | None, kaynak: str) -> None:
+    """data/log/YYYY-MM.jsonl — her işlem günü için BİR satır (gün içi çalışmalar aynı günü
+    üzerine yazar → günün son satırı = kapanış durumu). 100 hisse × ~12 alan ≈ 12 KB/gün.
+
+    Bu dosya sinyal denetiminin (scripts/sinyal_denetim.py --log data/log) temelidir:
+    kırpılmış AL/SAT listeleri yerine TÜM evren kaydedilir → seçim yanlılığı olmadan
+    ileri getiri, IC ve skor kovası analizi yapılabilir.
+    """
+    if not tum:
+        return
+    gun = max(r['tarih'] for r in tum)
+    alanlar = ('sembol', 'tarih', 'fiyat', 'skor', 'sinyal', 'trend', 'rsi', 'mfi', 'macd_hist',
+               'squeeze', 'ay_oncesi', 'stop', 'hedef')
+    satir = {'t': utc_now_iso(), 'gun': gun, 'kaynak': kaynak, 'endeks': endeks,
+             'rows': [{k: r.get(k) for k in alanlar} for r in tum if r.get('tarih') == gun]}
+    log_dir = DATA_DIR / 'log'
+    log_dir.mkdir(exist_ok=True)
+    f = log_dir / f"{gun[:7]}.jsonl"
+    eski = []
+    if f.exists():
+        eski = [l for l in f.read_text(encoding='utf-8').splitlines()
+                if l.strip() and json.loads(l).get('gun') != gun]
+    eski.append(json.dumps(satir, ensure_ascii=False, separators=(',', ':')))
+    f.write_text('\n'.join(eski) + '\n', encoding='utf-8')
+    log(f"tam kesit log: {f.name} · {gun} · {len(satir['rows'])} hisse")
+
+
 def gece_analizi(sinyaller: dict, takvim: list) -> dict:
     """5 — Kapanış sonrası özet: yarının kritik seviyeleri + güçlü/zayıf adaylar.
 
@@ -1031,7 +1088,7 @@ def gece_analizi(sinyaller: dict, takvim: list) -> dict:
     - Aşırı satımlar (RSI < 30)
     - Yarının yüksek önemli makro olayları
     """
-    hepsi = sinyaller.get('al', []) + sinyaller.get('tut', []) + sinyaller.get('sat', [])
+    hepsi = sinyaller.get('_tum') or (sinyaller.get('al', []) + sinyaller.get('tut', []) + sinyaller.get('sat', []))
     guclu = sorted([r for r in hepsi if r.get('skor', 0) >= 3], key=lambda x: -x.get('skor', 0))[:5]
     zayif = sorted([r for r in hepsi if r.get('skor', 0) <= -3], key=lambda x: x.get('skor', 0))[:5]
     squeeze = [r for r in hepsi if 'SIKIŞMA' in str(r.get('squeeze', '')).upper()]
@@ -1101,7 +1158,8 @@ def main():
     sektor_cache = sektor_dagilimi(liste)
     sektor_map = sektor_cache.get('map', {})
     sektor_ozet = {}
-    for r in sinyaller.get('al', []) + sinyaller.get('tut', []) + sinyaller.get('sat', []):
+    tum = sinyaller.get('_tum') or (sinyaller.get('al', []) + sinyaller.get('tut', []) + sinyaller.get('sat', []))
+    for r in tum:
         sek = sektor_map.get(r['sembol'], 'Bilinmeyen')
         o = sektor_ozet.setdefault(sek, {'hisse_sayisi': 0, 'skor_toplam': 0, 'al': 0, 'sat': 0})
         o['hisse_sayisi'] += 1
@@ -1122,8 +1180,7 @@ def main():
 
     # 5f. Sinyal doğruluk geçmişi (madde 4)
     gecmis = sinyal_gecmisi_guncelle(sinyaller)
-    guncel_fiyatlar = {r['sembol']: r['fiyat'] for r in
-                       sinyaller.get('al', []) + sinyaller.get('tut', []) + sinyaller.get('sat', [])}
+    guncel_fiyatlar = {r['sembol']: r['fiyat'] for r in tum}   # tam kesit → survivorship yok
     sinyal_gecmisi = sinyal_gecmisi_ozet(gecmis, guncel_fiyatlar)
 
     # 5g. Gece analizi (madde 5)
@@ -1140,9 +1197,16 @@ def main():
         f"Sektör: {len(sektor_list)} | Temel analiz: {len(temel)} | "
         f"Doğruluk: {sinyal_gecmisi.get('toplam')} sinyal")
 
+    # 5i. Tam kesit günlük log (sinyal denetimi için)
+    try:
+        tam_kesit_log(tum, endeks, kaynak)
+    except Exception as e:
+        log(f"tam kesit log hata: {str(e)[:60]}")
+    sinyaller.pop('_tum', None)
+
     # 6. JSON yaz
     paket = {
-        'uretildi': dt.datetime.now().strftime('%Y-%m-%dT%H:%M:%S'),
+        'uretildi': utc_now_iso(),
         'kaynak': kaynak,
         'saglik': saglik,
         'endeks': endeks,
