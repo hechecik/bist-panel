@@ -42,6 +42,16 @@ IPO_GUN = 60                    # son 60 iş günü içinde işlem görmeye baş
 KESIN_SAAT_TR = 18.5            # 18:30 TR — borsa 18:10 kapanır ama ücretsiz kaynaklar ~15 dk gecikmeli
 KESIN_DK_TR = 18 * 60 + 30      # 18:30 TR (dakika)
 
+# ══════════════════════════════════════════════════════════════════════════
+# G08 — Backtest parametreleri (dosya başında, tek yerden ayarlanır)
+# ══════════════════════════════════════════════════════════════════════════
+MALIYET = 0.002                 # gidiş-dönüş işlem maliyeti (0,002 = %0,2) — net getiriden düşülür
+BT_VADE_GUN = (5, 10, 20)       # işlem günü vadeleri — ilk dolan vade çıkış olur
+BT_ATR_STOP = 2.0               # stop = giriş − 2×ATR (giriş gününden önceki barın ATR14'ü)
+BT_ATR_HEDEF = 3.0              # hedef = giriş + 3×ATR
+BT_SERMAYE = 100_000.0          # sermaye simülasyonu başlangıç (TL)
+BT_MAX_POZISYON = 10            # aynı anda açık pozisyon üst sınırı
+
 
 def log(msg):
     print(f"[{dt.datetime.now().strftime('%H:%M:%S')}] {msg}", flush=True)
@@ -522,6 +532,191 @@ def ilk_kilitsiz(indeksler, kilitler: dict) -> int | None:
         if j not in kilitler:
             return j
     return None
+
+
+def uygun_evren(rows: list, bugun=None) -> tuple:
+    """(uygun, neden, ilk_bar_tarihi) — backtest/istatistik evreni filtresi.
+
+    Yeni halka arz (ilk bar son 60 iş günü içinde) istatistik dışıdır (G05 md.4).
+    Etiketi RISKLI olan hisse ayrıca `riskli_tespit` ile dışlanır (çağıran taraf).
+    Ağa çıkmayan saf fonksiyon.
+    """
+    if not rows:
+        return False, 'veri yok', None
+    ilk = str(rows[0].get('tarih'))[:10]
+    bugun = bugun or dt.date.today()
+    esik = bugun
+    sayac = 0
+    while sayac < IPO_GUN:
+        esik -= dt.timedelta(days=1)
+        if esik.weekday() < 5:
+            sayac += 1
+    try:
+        ilk_d = dt.date.fromisoformat(ilk)
+    except ValueError:
+        return True, None, ilk
+    if ilk_d >= esik:
+        return False, f'yeni halka arz (ilk bar {ilk})', ilk
+    return True, None, ilk
+
+
+def _hafta_gunu(tarih_str):
+    """ISO tarih → hafta günü (0=pazartesi); ayrıştırılamazsa None."""
+    try:
+        return dt.date.fromisoformat(str(tarih_str)[:10]).weekday()
+    except (TypeError, ValueError):
+        return None
+
+
+def _bar_fiyat(bar, alan: str):
+    """Bar alanını float'a çevir; geçersizse None."""
+    try:
+        v = float(bar[alan])
+    except (KeyError, TypeError, ValueError):
+        return None
+    return v if v > 0 else None
+
+
+def _islem_hesapla(sembol: str, i: int, s: dict, ind, kilitler: dict) -> dict | None:
+    import pandas as pd  # noqa: F401 — yerel import (modül düzeyinde pandas yok)
+    """Tek sinyal → tek işlem (G08 kuralları).
+
+    Giriş: sinyalin ERTESİ günü açılış; kilitli günde ilk kilitsiz güne kayar (G05).
+    Çıkış: 5/10/20 iş günü vade VEYA 2×ATR stop / 3×ATR hedef — hangisi önce.
+      • Stop ve hedef GÜN İÇİ min/max ile kontrol edilir.
+      • Aynı gün ikisi de tetiklenirse STOP sayılır (muhafazakâr).
+      • Taban kilitli günde çıkış ilk kilitsiz güne kayar.
+    Maliyet (MALIYET, gidiş-dönüş) net getiriden düşülür.
+    Dönüş: işlem sözlüğü; `_cikis_i` geçici alan çağıran tarafından silinir.
+    """
+    n = len(ind)
+    si = i                                  # sinyal barı
+    gi = ilk_kilitsiz(range(si + 1, n), kilitler)
+    if gi is None:
+        return None
+    giris_fiyat = _bar_fiyat(ind.iloc[gi], 'HGDG_ACILIS') or _bar_fiyat(ind.iloc[gi], 'HGDG_KAPANIS')
+    if not giris_fiyat:
+        return None
+
+    # ATR: sinyal barındaki ATR14 (giriş günü kararından önce bilinen değer)
+    try:
+        atr14 = float(ind.iloc[si]['ATR14'])
+    except (KeyError, TypeError, ValueError):
+        atr14 = 0.0
+    if not atr14 or atr14 <= 0:
+        atr14 = giris_fiyat * 0.02          # ATR yoksa %2 varsayılan (nadir)
+    stop_fiyat = giris_fiyat - BT_ATR_STOP * atr14
+    hedef_fiyat = giris_fiyat + BT_ATR_HEDEF * atr14
+
+    # En uzun vade: işlem günü sayısı (kilitli günler de işlem günüdür, sadece işlem yapılamaz)
+    vade_son = {}
+    sayac = 0
+    for j in range(gi, n):
+        sayac += 1
+        if sayac in BT_VADE_GUN:
+            vade_son[sayac] = j
+    if not vade_son:
+        return None
+    son_j = max(vade_son.values())
+
+    cikis_i, cikis_fiyat, cikis_neden = None, None, None
+    for j in range(gi, son_j + 1):
+        kilit = kilitler.get(j)
+        # Taban kilitli günde hiçbir çıkış yapılamaz (G05 md.6) — ilk kilitsiz güne kayar
+        if kilit == 'TABAN':
+            continue
+        dusuk = _bar_fiyat(ind.iloc[j], 'HGDG_MIN')
+        yuksek = _bar_fiyat(ind.iloc[j], 'HGDG_MAX')
+        stop_vurdu = dusuk is not None and dusuk <= stop_fiyat
+        hedef_vurdu = yuksek is not None and yuksek >= hedef_fiyat
+        if stop_vurdu:                      # aynı gün ikisi de → STOP (muhafazakâr)
+            cikis_i, cikis_fiyat, cikis_neden = j, stop_fiyat, 'stop'
+            break
+        if hedef_vurdu:
+            cikis_i, cikis_fiyat, cikis_neden = j, hedef_fiyat, 'hedef'
+            break
+        if j in vade_son.values():
+            cikis_i, cikis_fiyat, cikis_neden = j, (_bar_fiyat(ind.iloc[j], 'HGDG_KAPANIS') or giris_fiyat), 'vade'
+            break
+    if cikis_i is None:                     # vade sonu da kilitliydi → sonraki ilk kilitsiz gün
+        cikis_i = ilk_kilitsiz(range(son_j + 1, n), kilitler)
+        if cikis_i is None:
+            return None
+        cikis_fiyat = _bar_fiyat(ind.iloc[cikis_i], 'HGDG_KAPANIS') or giris_fiyat
+        cikis_neden = 'vade'
+
+    brut = (cikis_fiyat / giris_fiyat - 1) * 100
+    net = (cikis_fiyat * (1 - MALIYET / 2) / giris_fiyat - 1) * 100   # gidiş-dönüş maliyet
+    return {
+        'sembol': sembol,
+        'tarih': str(pd.Timestamp(ind.iloc[si]['HGDG_TARIH']).date()),      # geriye uyum
+        'sinyal_tarih': str(pd.Timestamp(ind.iloc[si]['HGDG_TARIH']).date()),
+        'giris_tarih': str(pd.Timestamp(ind.iloc[gi]['HGDG_TARIH']).date()),
+        'cikis_tarih': str(pd.Timestamp(ind.iloc[cikis_i]['HGDG_TARIH']).date()),
+        'giris': round(giris_fiyat, 2),
+        'cikis': round(cikis_fiyat, 2),
+        'bugun': round(cikis_fiyat, 2),                                      # geriye uyum
+        'getiri_yuzde': round(net, 1),                                       # net (maliyet düşülmüş)
+        'brut_getiri_yuzde': round(brut, 1),
+        'maliyet_yuzde': round(MALIYET * 100, 2),
+        'stop_getiri_yuzde': round(-BT_ATR_STOP * atr14 / giris_fiyat * 100 - MALIYET * 100, 1),
+        'stop_calismis': cikis_neden == 'stop',
+        'kaydirildi': gi != si + 1,
+        'kilit': kilitler.get(gi),
+        'skor': int(s['skor']),
+        'cikis_neden': cikis_neden,
+        'vade_gun': sum(1 for j in range(gi, cikis_i + 1)),
+        'atr': round(atr14, 3), 'stop_fiyat': round(stop_fiyat, 2), 'hedef_fiyat': round(hedef_fiyat, 2),
+        '_cikis_i': cikis_i,
+    }
+
+
+def sermaye_simule(islemler: list, baslangic=None, max_pozisyon=None) -> dict:
+    """KRONOLOJİK sermaye simülasyonu (G08).
+
+    100.000 TL, en fazla `max_pozisyon` eşzamanlı pozisyon, slot başına
+    baslangic/max_pozisyon TL. Nakit/slot yoksa sinyal ATLANIR.
+    Getiriler işlem bazında yüzde; giriş/çıkış tarihleri kronolojik sıralanır.
+    """
+    baslangic = float(BT_SERMAYE if baslangic is None else baslangic)
+    max_pozisyon = int(BT_MAX_POZISYON if max_pozisyon is None else max_pozisyon)
+    tahsis = baslangic / max_pozisyon if max_pozisyon else baslangic
+
+    sira = sorted(islemler, key=lambda x: (x.get('giris_tarih') or '', x.get('sembol') or ''))
+    sermaye = baslangic
+    acik = []                                # [(cikis_tarih, getiri_yuzde, tahsis_tl)]
+    atlanan = 0
+    islenen = 0
+    zirve, max_dd = baslangic, 0.0
+
+    for x in sira:
+        giris_t = x.get('giris_tarih') or ''
+        # O güne kadar çıkanları kapat, parayı geri ekle
+        kalan = []
+        for cikis_t, g, tutar in acik:
+            if cikis_t <= giris_t:
+                sermaye += tutar * (1 + g / 100.0)
+            else:
+                kalan.append((cikis_t, g, tutar))
+        acik = kalan
+        if len(acik) >= max_pozisyon or sermaye < tahsis:
+            atlanan += 1
+            continue
+        sermaye -= tahsis
+        acik.append((x.get('cikis_tarih') or giris_t, x.get('getiri_yuzde', 0.0), tahsis))
+        islenen += 1
+        # Eşit ağırlıklı anlık portföy değeri (açık pozisyonlar maliyetten sayılır)
+        deger = sermaye + len(acik) * tahsis
+        zirve = max(zirve, deger)
+        if zirve > 0:
+            max_dd = max(max_dd, (zirve - deger) / zirve * 100)
+
+    for _cikis_t, g, tutar in acik:
+        sermaye += tutar * (1 + g / 100.0)
+    return {'baslangic': baslangic, 'sonuc': round(sermaye, 0),
+            'kar_zarar': round(sermaye - baslangic, 0), 'islem': islenen,
+            'atlanan': atlanan, 'tahsis': round(tahsis, 0),
+            'max_drawdown_yuzde': round(max_dd, 1)}
 
 
 
@@ -1041,26 +1236,49 @@ def ict_tara(hisse_veri: dict) -> dict:
     }
 
 
-def test_senaryolari(hisse_veri: dict) -> dict:
+def test_senaryolari(hisse_veri: dict, endeks_serisi=None) -> dict:
     """TEST SENARYOLARI — 'geçmişte sinyal olsaydı şu an ne olurdu?' hesabı.
 
-    Gerçek veri + gerçek sinyal geçmişi (uydurma yok):
-    - S1 PAZARTESİ AÇILIŞ: cuma kapanışında AL sinyali olan hisse, pazartesi AÇILIŞ fiyatından
-      alınıp bugüne kadar tutulursa kar/zarar (tüm pazartesiler, son 6 ay)
-    - S2 ERTESI GÜN AÇILIŞ: her AL sinyali gününde, ertesi gün açılışta alınıp tutulursa
-    - S3 STOP-LOSS'LU: S2 + girişten sonra -%5 düşerse çık (gerçekçi senaryo)
-    - S4 EŞİT AĞIRLIK: tüm sinyaller eşit ağırlıkta portföy (ortalama getiri)
+    G08 — gerçek veri + gerçek sinyal geçmişi (uydurma yok):
+    - Giriş: kesin sinyalin ERTESİ günü açılış (kilitli günde ilk kilitsiz güne kayar, G05)
+    - Çıkış: 5/10/20 iş günü vade VEYA 2×ATR stop / 3×ATR hedef — hangisi önce
+      (gün içi max/min ile; aynı gün stop+hedef → stop; taban kilidinde ilk kilitsiz güne kayar)
+    - Maliyet: MALIYET (gidiş-dönüş %0,2) net getiriden düşülür
+    - Alfa: işlem getirisi − XU100 getirisi (aynı giriş/çıkış tarihleri)
+    - Sermaye: kronolojik 100.000 TL / max 10 pozisyon, nakit yoksa sinyal atlanır
+    Eski alanlar (pazartesi_acilis, ertesi_gun_acilis, stop_losslu, ...) bir sürüm boyunca korunur.
     """
     import sys
     sys.path.insert(0, str(Path(__file__).resolve().parent))
     from indikatorler import tum_indikatorler, sinyal_hesapla
     import pandas as pd
 
-    pazartesi_islemleri = []   # S1
-    gunluk_islemler = []       # S2 + S3
+    # G08 — giriş sadece kesin sinyalin ertesi günü açılışta; son bar için ertesi gün yok.
+    # Skor istatistiğinden hariç evren: yeni halka arz + RISKLI (G05 md.4/md.6).
+    veri_yok = {'durum': 'veri yok', 'aciklama': 'Hisse verisi alınamadı.'}
+    if not hisse_veri:
+        return veri_yok
 
+    # 1. Aşama — her hisse için bar tablosu + sinyal serisi (ağ YOK)
+    tablolar = {}          # sembol → ind (DataFrame, tüm indikatörler)
+    sinyal_serisi = {}     # sembol → [(i, sinyal_dict, kilitler_dict)]
+    haric = {}             # sembol → hariç tutulma nedeni (G08: RİSKLİ / İZLE)
     for sembol, rows in hisse_veri.items():
         if len(rows) < 60:
+            continue
+        uygun, neden, _ = uygun_evren(rows)
+        if not uygun:                       # yeni halka arz → istatistik dışı
+            haric[sembol] = neden
+            continue
+        # G08 md.7 — RİSKLİ ve İZLE etiketli hisseler backtest'e girmez.
+        # Etiket `riskli_tespit` + likidite eşiği ile yeniden üretilir (saf, ağsız).
+        risk = riskli_tespit(rows)
+        if risk:
+            haric[sembol] = f'RİSKLİ ({risk})'
+            continue
+        lik = likidite_tl(rows)
+        if lik is not None and lik < LIKIDITE_ESIK_TL:
+            haric[sembol] = 'İZLE (likidite eşiği altı)'
             continue
         df = pd.DataFrame(rows)
         df['HGDG_TARIH'] = pd.to_datetime(df['tarih'])
@@ -1071,8 +1289,6 @@ def test_senaryolari(hisse_veri: dict) -> dict:
             ind = tum_indikatorler(df)
         except Exception:
             continue
-        # Tüm barlarda sinyal üret (son bar hariç — giriş ertesi gün)
-        son_fiyat = float(ind['HGDG_KAPANIS'].iloc[-1])
         # G05 — kilitli günler (tavan/taban): o gün ne giriş ne çıkış yapılabilir
         kilitler = {}
         for k in range(1, len(ind)):
@@ -1080,46 +1296,38 @@ def test_senaryolari(hisse_veri: dict) -> dict:
                                'min': ind.iloc[k]['HGDG_MIN']}, ind.iloc[k - 1]['HGDG_KAPANIS'])
             if kk:
                 kilitler[k] = kk
+        seri = []
         for i in range(60, len(ind) - 1):
-            son = ind.iloc[i]
-            s = sinyal_hesapla(son)
-            if s['sinyal'] not in ('AL', 'DİKKAT_AL'):
-                continue
-            giris_gunu = pd.Timestamp(son['HGDG_TARIH']).date()
-            # G05 — kilitli günde giriş yapılmaz, ilk kilitsiz güne kaydırılır
-            gi = ilk_kilitsiz(range(i + 1, len(ind)), kilitler)
-            if gi is None:
-                continue
-            sonraki = ind.iloc[gi]
-            giris_fiyat = float(sonraki['HGDG_ACILIS']) if pd.notna(sonraki.get('HGDG_ACILIS')) else float(sonraki['HGDG_KAPANIS'])
-            if not giris_fiyat or giris_fiyat <= 0:
-                continue
-            getiri = (son_fiyat / giris_fiyat - 1) * 100
-            # S3: stop-loss kontrolü — girişten sonraki barlarda -%5'e düştü mü?
-            # G05 md.6 — taban kilitli günde çıkış yapılamaz (stop-loss dahil), ilk kilitsiz güne kaydırılır
-            stop_calismadi = True
-            stop_getiri = getiri
-            for j in range(gi, len(ind) + 1):
-                if j >= len(ind):
-                    break
-                if kilitler.get(j) == 'TABAN':
+            s = sinyal_hesapla(ind.iloc[i])
+            if s['sinyal'] in ('AL', 'DİKKAT_AL'):
+                # RISKLI hisse (son 10 barda ≥3 taban) backtest'e girmez — o bar tarihinde
+                son_rows = rows[:i + 1]
+                if riskli_tespit(son_rows):
                     continue
-                d_ip = (float(ind.iloc[j]['HGDG_MIN']) / giris_fiyat - 1) * 100
-                if d_ip <= -5:
-                    stop_calismadi = False
-                    stop_getiri = -5.0  # %5 stop ile çıkıldı
-                    break
-            islem = {'sembol': sembol, 'tarih': str(giris_gunu), 'giris_tarih': str(pd.Timestamp(sonraki['HGDG_TARIH']).date()),
-                     'giris': round(giris_fiyat, 2),
-                     'bugun': round(son_fiyat, 2), 'getiri_yuzde': round(getiri, 1),
-                     'stop_getiri_yuzde': round(stop_getiri, 1), 'stop_calismis': not stop_calismadi,
-                     'sinyal_tarih': str(son['HGDG_TARIH'].date()),
-                     'kaydirildi': gi != i + 1, 'kilit': kilitler.get(gi),
-                     'skor': int(s['skor'])}
-            gunluk_islemler.append(islem)
-            # S1: cuma sinyali → pazartesi girişi
-            if giris_gunu.weekday() == 0:  # pazartesi
-                pazartesi_islemleri.append(islem)
+                seri.append((i, s))
+        if seri:
+            tablolar[sembol] = ind
+            sinyal_serisi[sembol] = (seri, kilitler, rows)
+
+    # 2. Aşama — pozisyon çakışmasını sembol bazında çöz (tarih sırasıyla)
+    #    Aynı hissede açık pozisyon varken yeni giriş yok.
+    tum_islemler = []
+    serbest = {}           # sembol → son çıkış bar tarihi (yeni sinyal bu tarihten SONRA olmalı)
+    adaylar = []
+    for sembol, (seri, kilitler, rows) in sinyal_serisi.items():
+        for i, s in seri:
+            adaylar.append((pd.Timestamp(tablolar[sembol].iloc[i]['HGDG_TARIH']), sembol, i, s, kilitler, rows))
+    adaylar.sort(key=lambda x: (x[0], x[1]))
+    for _t, sembol, i, s, kilitler, rows in adaylar:
+        if sembol in serbest and i <= serbest[sembol]:
+            continue                                   # pozisyon açıkken gelen sinyal → atlanır
+        islem = _islem_hesapla(sembol, i, s, tablolar[sembol], kilitler)
+        if not islem:
+            continue
+        tum_islemler.append(islem)
+        serbest[sembol] = islem['_cikis_i']
+    for x in tum_islemler:
+        x.pop('_cikis_i', None)
 
     def ozetle(islemler, ad, stop_mu=False):
         if not islemler:
@@ -1135,7 +1343,7 @@ def test_senaryolari(hisse_veri: dict) -> dict:
 
     # 2.3 — Hisse bazlı backtest özeti (hangi hisse kaç kez sinyal verdi, toplam getiri)
     hisse_grup = {}
-    for islem in gunluk_islemler:
+    for islem in tum_islemler:
         hisse_grup.setdefault(islem['sembol'], []).append(islem)
     hisse_ozet = []
     for s, islemler in hisse_grup.items():
@@ -1152,39 +1360,109 @@ def test_senaryolari(hisse_veri: dict) -> dict:
         })
     hisse_ozet.sort(key=lambda x: x['toplam_getiri'], reverse=True)
 
-    # 2.4 — 100K TL sermaye simülasyonu (eski sürüm özelliği):
-    # SKOR≥3 strateji: güçlü AL sinyalleri, 10.000 TL/pozisyon, max 10 pozisyon
-    # (100K/10K) → toplam tahsis asla başlangıcı aşmaz (tutarlı). Pozisyonlar
-    # bugüne kadar tutulur; stop varyantı -%5'te kapatır. Gerçek getirilerden.
-    def sermaye(islemler, stop_mu=False, baslangic=100000.0, tahsis=10000.0):
-        guclu = [x for x in islemler if x.get('skor', 0) >= 3]
-        if not guclu:  # skor≥3 yoksa en güçlü sinyaller (DİKKAT_AL dahil) — boş kalmaz
-            guclu = sorted(islemler, key=lambda x: -x.get('skor', 0))[:10]
-        guclu = guclu[:int(baslangic / tahsis)]  # max 10 pozisyon
-        if not guclu:
-            return {'baslangic': baslangic, 'sonuc': baslangic, 'kar_zarar': 0.0,
-                    'islem': 0, 'tahsis': tahsis, 'strateji': 'skor≥3'}
-        toplam = baslangic
-        for x in guclu:
-            g = x['stop_getiri_yuzde'] if stop_mu else x['getiri_yuzde']
-            toplam += tahsis * g / 100.0
-        return {'baslangic': baslangic, 'sonuc': round(toplam, 0),
-                'kar_zarar': round(toplam - baslangic, 0),
-                'islem': len(guclu), 'tahsis': tahsis, 'strateji': 'skor≥3'}
+    # 2.4 — Sermaye simülasyonu — G08: KRONOLOJİK (100K TL, max 10 pozisyon, nakit yoksa atla).
+    # Eski sürüm ilk 10 işlemi sembol sırasıyla seçiyordu (seçim yanlılığı) — o davranış kaldırıldı,
+    # dönen alan adları (sonuc/kar_zarar/islem/tahsis/strateji) geriye uyumluluk için korundu.
+    def sermaye(islemler, stop_mu=False, baslangic=None, tahsis=None):
+        baslangic = BT_SERMAYE if baslangic is None else baslangic
+        tahsis = (baslangic / BT_MAX_POZISYON) if tahsis is None else tahsis
+        sim = sermaye_simule(islemler, baslangic=baslangic, max_pozisyon=BT_MAX_POZISYON)
+        return {'baslangic': baslangic, 'sonuc': sim['sonuc'], 'kar_zarar': sim['kar_zarar'],
+                'islem': sim['islem'], 'atlanan': sim['atlanan'], 'tahsis': round(tahsis, 0),
+                'max_drawdown_yuzde': sim['max_drawdown_yuzde'], 'strateji': 'kronolojik'}
+
+    # 2.5 — G08: Benchmark (XU100) alfa + metrikler + skor seviyesi tabloları.
+    #      `endeks_serisi`: [(tarih_str, kapanis)] artan sıralı (G09 tam serisi).
+    #      Endeks yoksa alfa alanları None döner (uydurma yok).
+    endeks_serisi = sorted(endeks_serisi or [], key=lambda x: str(x[0])[:10])
+
+    def _endeks_getiri(tarih_a: str, tarih_b: str):
+        """tarih_a kapanışından tarih_b kapanışına XU100 getirisi (%)."""
+        if not endeks_serisi:
+            return None
+        a = b = None
+        for t, k in endeks_serisi:
+            try:
+                kf = float(k)
+            except (TypeError, ValueError):
+                continue
+            ts = str(t)[:10]
+            if ts <= tarih_a:
+                a = kf
+            if ts <= tarih_b:
+                b = kf
+        if not a or not b or a <= 0:
+            return None
+        return round((b / a - 1) * 100, 1)
+
+    for x in tum_islemler:
+        bm = _endeks_getiri(x['giris_tarih'], x['cikis_tarih'])
+        x['xu100_getiri_yuzde'] = bm
+        x['alfa_yuzde'] = round(x['getiri_yuzde'] - bm, 1) if bm is not None else None
+
+    def alfa_grup(islemler):
+        al = [x['alfa_yuzde'] for x in islemler if x.get('alfa_yuzde') is not None]
+        return round(sum(al) / len(al), 1) if al else None
+
+    def metrikler(islemler):
+        g = [x['getiri_yuzde'] for x in islemler]
+        if not g:
+            return {'islem': 0, 'isabet': None, 'ortalama': None, 'ortalama_alfa': None,
+                    'profit_factor': None, 'max_drawdown': None, 'devir': None}
+        kaz = sum(y for y in g if y > 0)
+        kay = -sum(y for y in g if y < 0)
+        sim = sermaye_simule(islemler)
+        ort_gun = sum(x.get('vade_gun') or 1 for x in islemler) / len(islemler)
+        return {
+            'islem': len(g),
+            'isabet': round(sum(1 for y in g if y > 0) / len(g), 3),
+            'ortalama': round(sum(g) / len(g), 2),
+            'ortalama_alfa': alfa_grup(islemler),
+            # kâr/zarar 0 ise oran tanımsız → None (sonsuz yazılmaz)
+            'profit_factor': round(kaz / kay, 2) if kay > 0 else None,
+            'max_drawdown': sim['max_drawdown_yuzde'],
+            # devir: yıllık ortalama işlem sayısı (252 / ortalama vade)
+            'devir': round(252 / ort_gun, 1) if ort_gun > 0 else None,
+        }
+
+    # Skor seviyesine göre ayrı tablo: 2, 3, ≥4
+    skor_tablosu = []
+    for etiket, kosul in (('2', lambda k: k == 2), ('3', lambda k: k == 3), ('≥4', lambda k: k >= 4)):
+        grup = [x for x in tum_islemler if kosul(x['skor'])]
+        m = metrikler(grup)
+        m['skor'] = etiket
+        skor_tablosu.append(m)
+
+    # G08 — eski senaryo adları korunur (bir sürüm), kaynak artık tek işlem listesi.
+    # 'pazartesi_acilis': sinyal tarihi pazartesi olan işlemler (eski S1 tanımına en yakın kesit).
+    # 'stop_losslu': eski %5 sabit stop → yeni ATR stop sonuçlarını taşır; alan adı korunur.
+    pazartesi_islemleri = [x for x in tum_islemler if _hafta_gunu(x['sinyal_tarih']) == 0]
+    gunluk_islemler = tum_islemler
+    stop_islemleri = [x for x in tum_islemler if x['cikis_neden'] == 'stop']
 
     return {
-        'pazartesi_acilis': ozetle(pazartesi_islemleri, 'Pazartesi açılışında al'),
+        'pazartesi_acilis': ozetle(pazartesi_islemleri, 'Pazartesi sinyalleri (yeni kurallar)'),
         'ertesi_gun_acilis': ozetle(gunluk_islemler, 'Sinyal ertesi gün açılışında al'),
-        'stop_losslu': ozetle(gunluk_islemler, 'Ertesi gün açılış + %5 stop-loss', stop_mu=True),
+        'stop_losslu': ozetle(stop_islemleri, "ATR stop ile kapanan işlemler", stop_mu=True),
         'hisse_bazli': hisse_ozet[:20],
         'sermaye': {
             'pazartesi': sermaye(pazartesi_islemleri),
             'ertesi': sermaye(gunluk_islemler),
-            'stop': sermaye(gunluk_islemler, stop_mu=True),
+            'stop': sermaye(stop_islemleri),
         },
+        # G08 — yeni (XU100'e göre) alanlar; eski alanlar bir sürüm boyunca korunur
+        'metrik': metrikler(tum_islemler),
+        'skor_tablosu': skor_tablosu,
+        'benchmark': 'XU100',
+        'parametre': {'maliyet': MALIYET, 'vade_gun': list(BT_VADE_GUN),
+                      'atr_stop': BT_ATR_STOP, 'atr_hedef': BT_ATR_HEDEF,
+                      'sermaye': BT_SERMAYE, 'max_pozisyon': BT_MAX_POZISYON,
+                      'benchmark': 'XU100'},
+        # G08 md.7 — backtest evreninden çıkarılan hisseler (RİSKLİ / İZLE / yeni halka arz)
+        'haric': {'adet': len(haric), 'hisseler': dict(sorted(haric.items()))},
         'aciklama': ('Senaryolar GERÇEK veriyle hesaplanır: sinyal günü kapanışında AL/DİKKAT_AL üreten '
-                     'hisse, ertesi gün açılıştan alınır ve bugünkü kapanışla kar/zarar ölçülür. '
-                     'Stop-loss senaryosu giriş sonrası -%5 düşüşte çıkış varsayar.'),
+                     'hisse, ertesi gün açılıştan alınır. Çıkış 5/10/20 iş günü vade veya 2×ATR stop / '
+                     '3×ATR hedef — hangisi önce. Alfa = işlem getirisi − XU100 getirisi (aynı tarihler).'),
     }
 
 
@@ -1635,15 +1913,15 @@ def gece_analizi(sinyaller: dict, takvim: list) -> dict:
     }
 
 
-def main():
-    log("=== BIST PANEL veri çekme başladı ===")
-    liste = bist100_listesi()
-    log(f"BIST 100 listesi: {len(liste)} hisse")
+def hisse_verisi_cek(liste: list) -> tuple:
+    """Hisse OHLCV — 3 kademeli failover (patron önerisi):
+    1) İş Yatırım (TR IP — en hızlı, gerçek zamanlı)
+    2) borsapy TradingView provider (İş Yatırım'dan bağımsız, global)
+    3) yfinance (garanti fallback)
 
-    # 1. Hisse verisi — 3 kademeli failover (patron önerisi):
-    #    1) İş Yatırım (TR IP — en hızlı, gerçek zamanlı)
-    #    2) borsapy TradingView provider (İş Yatırım'dan bağımsız, global)
-    #    3) yfinance (garanti fallback)
+    G08: `main()` ve `backtest_gercek_veri()` aynı zinciri kullanır.
+    Returns: (hisse_veri, kaynak_adı)
+    """
     hisse_veri = cek_isyatirim(liste)
     kaynak = "isyatirim"
     if not hisse_veri:
@@ -1657,6 +1935,51 @@ def main():
     if not hisse_veri:
         log("KRİTİK: TÜM KAYNAKLAR BAŞARISIZ")
         hisse_veri = {}
+    return hisse_veri, kaynak
+
+
+def backtest_gercek_veri(liste: list | None = None, endeks: dict | None = None) -> dict:
+    """G08 — Backtest'i GERÇEK geçmiş veriyle yeniden çalıştırır.
+
+    `main()` ile aynı veri zinciri (hisse_verisi_cek failover + bölünme düzeltmesi +
+    XU100 tam serisi). Dönen sözlük `test_senaryolari` çıktısıdır; ek olarak
+    'veri' bölümünde kaynak/bar/tarih aralığı bilgisi bulunur. Ağ erişimi gerekir;
+    testler bu fonksiyonu çağırmaz (saf fonksiyonlar test edilir).
+    """
+    if liste is None:
+        liste = bist100_listesi()
+    log(f"G08 backtest: {len(liste)} hisse çekiliyor")
+    hisse_veri, kaynak = hisse_verisi_cek(liste)
+    if not hisse_veri:
+        return {'durum': 'veri yok', 'aciklama': 'Hisse verisi alınamadı.'}
+    try:
+        bolunme_uygula(hisse_veri)          # analizden ÖNCE (RALYH −%98 vakası)
+    except Exception as e:
+        log(f"bölünme düzeltmesi hata: {str(e)[:60]}")
+    if endeks is None:
+        endeks = endeks_verisi() or {}
+    senaryolar = test_senaryolari(hisse_veri, endeks.get('seri') or [])
+    araliklar = [(str(rows[0].get('tarih'))[:10], str(rows[-1].get('tarih'))[:10])
+                 for rows in hisse_veri.values() if rows]
+    senaryolar['veri'] = {
+        'kaynak': kaynak,
+        'hisse': len(hisse_veri),
+        'bar': sum(len(r) for r in hisse_veri.values()),
+        'baslangic': min((a for a, _ in araliklar), default=None),
+        'bitis': max((b for _, b in araliklar), default=None),
+        'endeks_bar': len((endeks or {}).get('seri') or []),
+        'endeks_tarih': (endeks or {}).get('tarih'),
+    }
+    return senaryolar
+
+
+def main():
+    log("=== BIST PANEL veri çekme başladı ===")
+    liste = bist100_listesi()
+    log(f"BIST 100 listesi: {len(liste)} hisse")
+
+    # 1. Hisse verisi — 3 kademeli failover
+    hisse_veri, kaynak = hisse_verisi_cek(liste)
 
     # 1b. Bölünme (split) düzeltmesi — veri çekildikten HEMEN sonra, hiçbir analizden önce.
     #     Düzeltilmemiş bölünme MA/RSI/ATR, backtest ve ICT sonuçlarını bozar (ör. RALYH −%98).
@@ -1700,8 +2023,9 @@ def main():
         log(f"G05: yeni halka arz = {len(ipo)} ({', '.join(sorted(ipo))})")
     sinyaller = sinyalleri_hesapla(hisse_veri, ipo, endeks) if hisse_veri else {'al': [], 'tut': [], 'sat': [], 'izle': [], 'riskli': [], 'toplam': 0, 'hesap_tarihi': ''}
 
-    # 5. Test senaryoları
-    senaryolar = test_senaryolari(hisse_veri) if hisse_veri else {}
+    # 5. Test senaryoları — G08: XU100 tam serisi (G09) alfa hesabı için verilir
+    endeks_serisi = (endeks or {}).get('seri') or []
+    senaryolar = test_senaryolari(hisse_veri, endeks_serisi) if hisse_veri else {}
 
     # 5b. Haberler
     haberler = haberler_cek()

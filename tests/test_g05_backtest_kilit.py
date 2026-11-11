@@ -82,11 +82,13 @@ def test_backtest_kaydirma_ilk_kilitsiz_gune():
 
 
 def test_backtest_stop_kilitli_gunde_calismaz():
-    """Stop-loss taban kilidinde tetiklenmez; çıkış ilk kilitsiz güne kayar."""
+    """Stop taban kilidinde tetiklenmez; çıkış ilk kilitsiz güne kayar (G08: ATR stop)."""
     hv = {"TEST": _seri(kilit=KILIT_GUNLERI)}
     kilitli = set(v.kilitli_gunler(hv["TEST"]))
     for isl in _islemler(hv):
         assert isl["giris_tarih"] not in kilitli
-        # stop -%5'te sabitlenir; kilitli günde tetiklenmiş olsa giriş günü değişirdi
+        # G08 — stop artık 2×ATR; getiri ATR'ye bağlı, sabit -%5 değil.
+        # Değişmez kural: stop kilitli günde tetiklenemez → çıkış tarihi kilitli olamaz.
+        assert isl["cikis_tarih"] not in kilitli, f"kilitli günde çıkış: {isl}"
         if isl["stop_calismis"]:
-            assert isl["stop_getiri_yuzde"] == -5.0
+            assert isl["stop_getiri_yuzde"] <= 0, f"stop pozitif getiri üretti: {isl}"
