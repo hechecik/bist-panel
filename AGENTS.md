@@ -1,5 +1,7 @@
 # bist-panel — Ajan Kuralları
 
+**Dil kuralı:** Kullanıcıya yazılan tüm mesajlar, ara durum bildirimleri ve raporlar Türkçe olacak. Kod, değişken adları ve commit mesajları mevcut düzende kalabilir.
+
 BIST, altın ve kripto piyasa paneli. GitHub Pages üzerinde statik site. Veri GitHub Actions ile çekiliyor.
 Canlı adres: https://hechecik.github.io/bist-panel/
 
