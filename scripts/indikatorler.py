@@ -181,6 +181,121 @@ def atr(high, low, close, n: int = 14) -> pd.Series:
     tr = pd.concat([high - low, (high - close.shift()).abs(), (low - close.shift()).abs()], axis=1).max(axis=1)
     return tr.ewm(alpha=1/n, adjust=False).mean()
 
+
+# ──────────────────────────────────────────────────────────────
+# G09 — gölge mod teknik eklemeler (saf fonksiyonlar, ağa çıkmaz)
+# Bu göstergeler SADECE hesaplanır/kaydedilir/gösterilir.
+# skor ve sinyal hesabına DAHİL EDİLMEZ.
+# ──────────────────────────────────────────────────────────────
+
+def rs_serisi(close: pd.Series, endeks: pd.Series) -> pd.Series:
+    """Hisse / endeks oranı (göreli güç serisi). Hizalama tarih bazlıdır."""
+    oran = close / endeks.replace(0, np.nan)
+    return oran.replace([np.inf, -np.inf], np.nan)
+
+
+def rs_degisim(close: pd.Series, endeks: pd.Series, n: int) -> float | None:
+    """RS-n: (oran_t / oran_t-n − 1) × 100. Yeterli bar yoksa None."""
+    oran = rs_serisi(close, endeks).dropna()
+    if len(oran) <= n:
+        return None
+    eski = float(oran.iloc[-1 - n])
+    if not eski or eski != eski:
+        return None
+    return round((float(oran.iloc[-1]) / eski - 1) * 100, 2)
+
+
+def hacim_orani(volume: pd.Series, n: int = 20) -> float | None:
+    """Bugünkü hacim / son n günün medyanı."""
+    hac = volume.dropna()
+    if len(hac) < n + 1:
+        return None
+    med = float(hac.iloc[-1 - n:-1].median())
+    if not med or med != med:
+        return None
+    return round(float(hac.iloc[-1]) / med, 2)
+
+
+def vol20(close: pd.Series, n: int = 20) -> float | None:
+    """Son n günlük günlük getirinin standart sapması (%)."""
+    getiri = close.pct_change().dropna()
+    if len(getiri) < n:
+        return None
+    sd = float(getiri.iloc[-n:].std())
+    if sd != sd:
+        return None
+    return round(sd * 100, 2)
+
+
+def zirve_uzak(close: pd.Series, n: int = 252) -> float | None:
+    """kapanış / son n günün en yüksek kapanışı − 1 (%)."""
+    seri = close.dropna()
+    if not len(seri):
+        return None
+    zirve = float(seri.iloc[-n:].max())
+    if not zirve:
+        return None
+    return round((float(seri.iloc[-1]) / zirve - 1) * 100, 2)
+
+
+def trend_atr(close: pd.Series, sma50: pd.Series, atr14: pd.Series) -> float | None:
+    """(kapanış − SMA50) / ATR14 — ATR biriminde SMA50'ye uzaklık."""
+    if not len(close):
+        return None
+    a = atr14.iloc[-1]
+    s50 = sma50.iloc[-1]
+    if a != a or s50 != s50 or not a:
+        return None
+    return round((float(close.iloc[-1]) - float(s50)) / float(a), 2)
+
+
+def genislik_hesapla(seriler: dict) -> dict:
+    """Piyasa genişliği — 100 hissenin TAMAMINDAN (ağa çıkmaz).
+
+    seriler: {sembol: DataFrame(HGDG_TARIH, HGDG_KAPANIS)} veya OHLCV kolonlu df.
+    Döner: ma50_ustu_yuzde, yukselen, dusen, yeni_zirve_52h, yeni_dip_52h, hisse.
+    252 bardan az geçmişi olan hissede 52h zirve/dip hesaplanmaz (uydurma yok).
+    """
+    toplam = ma50_ustu = yukselen = dusen = zirve = dip = 0
+    for rows in (seriler or {}).values():
+        if rows is None:
+            continue
+        try:
+            c = rows['HGDG_KAPANIS'] if hasattr(rows, 'columns') else None
+            if c is None:
+                continue
+            c = pd.Series(c).dropna()
+            if len(c) < 2:
+                continue
+            toplam += 1
+            if len(c) >= 50 and c.iloc[-50:].mean() and c.iloc[-1] > c.iloc[-50:].mean():
+                ma50_ustu += 1
+            fark = float(c.iloc[-1]) - float(c.iloc[-2])
+            if fark > 0:
+                yukselen += 1
+            elif fark < 0:
+                dusen += 1
+            if len(c) >= 252:
+                son252 = c.iloc[-252:]
+                if c.iloc[-1] >= son252.max():
+                    zirve += 1
+                if c.iloc[-1] <= son252.min():
+                    dip += 1
+        except Exception:
+            continue
+    if not toplam:
+        return {'durum': 'veri yok'}
+    return {
+        'hisse': toplam,
+        'ma50_ustu': ma50_ustu,
+        'ma50_ustu_yuzde': round(ma50_ustu / toplam * 100, 1),
+        'yukselen': yukselen,
+        'dusen': dusen,
+        'yeni_zirve_52h': zirve,
+        'yeni_dip_52h': dip,
+    }
+
+
 def tum_indikatorler(df: pd.DataFrame) -> pd.DataFrame:
     """Hisse bazlı tüm indikatörleri hesaplar. df: HGDG_TARIH, HGDG_KAPANIS, HGDG_MAX, HGDG_MIN, HGDG_HACIM"""
     out = df.copy()
