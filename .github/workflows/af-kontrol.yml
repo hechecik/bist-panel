@@ -12,18 +12,13 @@ permissions:
 jobs:
   kontrol:
     runs-on: ubuntu-latest
-    timeout-minutes: 3
+    timeout-minutes: 10
     steps:
-      - name: Secret adlari (ad listesi API)
-        env:
-          GHT: ${{ secrets.CRONJOB_TOKEN }}
+      - uses: actions/checkout@v4
+      - name: Kripto veri cek + zaman damgasi
         run: |
-          names=$(curl -s -H "Authorization: token $GHT" -H "Accept: application/vnd.github+json" "https://api.github.com/repos/hechecik/bist-panel/actions/secrets" 2>/dev/null | grep -o '"name": *"[^"]*"' | tr -d '"' | awk '{print $2}' | tr '\n' ' ')
-          echo "SECRET_ADLARI: ${names:-liste alinamadi}"
-          echo "scheduler_token: $([ -n "$GHT" ] && echo VAR || echo YOK)"
-          # tetik testi: 4 is akisi da 204 donmeli
-          for wf in veri-cek altin-cek kripto-cek ek-veri-cek; do
-            code=$(curl -s -o /dev/null -w "%{http_code}" -X POST -H "Authorization: token $GHT" -H "Accept: application/vnd.github+json" \
-              "https://api.github.com/repos/hechecik/bist-panel/actions/workflows/$wf.yml/dispatches" -d '{"ref":"main"}')
-            echo "TETIK $wf: $code"
-          done
+          start=$(date -u +%s)
+          python scripts/kripto_cek.py
+          echo "SURE_SN $(( $(date -u +%s) - start ))"
+          echo "URETILDI $(python3 -c "import json;print(json.load(open('data/kripto.json'))['uretildi'])")"
+          git diff --stat data/kripto.json
