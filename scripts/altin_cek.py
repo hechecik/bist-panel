@@ -402,8 +402,9 @@ def fomc_tarihleri(gun=45):
             d = dt.datetime.strptime(s, '%Y-%m-%d')
         except ValueError:
             continue
-        if d < bugun or d > son:
-            continue
+        if d < bugun:
+            continue          # geçmiş toplantılar atılır
+        # Pencere sınırı (son) FOMC'ye UYGULANMAZ — görev: "sınır uygulamadan her zaman ekle"
         out.append({
             'tarih': d.strftime('%d.%m'), 'gun': gunler_ad[d.weekday()], 'saat': '21:00',
             'ulke': 'ABD', 'onem': 'high', 'olay': 'FOMC faiz kararı',
@@ -536,6 +537,22 @@ def haberler():
 # ──────────────────────────────────────────────────────────────
 # ANA
 # ──────────────────────────────────────────────────────────────
+def manset(spot, fx, vadeli_ons):
+    """Manşet ons/gram hesabı (saf fonksiyon, ağa çıkmaz).
+
+    spot varsa SPOT bazlı, yoksa GC=F (vadeli) bazlı manşet döner.
+    gram = ons / 31.1034768 * usdtry
+    """
+    if spot and fx:
+        ons = round(spot, 2)
+        tip = 'spot'
+    else:
+        ons = round(vadeli_ons, 2) if vadeli_ons else None
+        tip = 'vadeli'
+    gram = round(ons / ONS_GRAM * fx, 2) if (ons and fx) else None
+    return {'ons': ons, 'kaynak_tipi': tip, 'gram_tl': gram}
+
+
 def main():
     df = ons_seri()
     if df is None or len(df) < 30:
@@ -550,12 +567,8 @@ def main():
     fx = usdtry()
 
     # Manşet fiyat SPOT'tan; GC=F (vadeli) yalnızca tarihsel seri için
-    if spot and fx:
-        ons_manşet, kaynak_tipi = round(spot, 2), 'spot'
-        gram = round(ons_manşet / ONS_GRAM * fx, 2)
-    else:
-        ons_manşet, kaynak_tipi = v['son'], 'vadeli'
-        gram = round(ons_manşet / ONS_GRAM * fx, 2) if fx else None
+    mh = manset(spot, fx, v['son'])
+    ons_manşet, kaynak_tipi, gram = mh['ons'], mh['kaynak_tipi'], mh['gram_tl']
 
     veri = {
         'uretildi': dt.datetime.now(dt.timezone.utc).isoformat(timespec='seconds'),
