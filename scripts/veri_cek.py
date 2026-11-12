@@ -12,7 +12,7 @@ Tüm veriler GERÇEK kaynaklardan çekilir — anti-hallüsinasyon:
 Çıktı: data/*.json — site bu dosyaları okur.
 Hiçbir API key, kişisel bilgi, IP adresi bu script'te yok. OPSEC temiz.
 """
-import json, os, sys, re
+import json, os, sys, re, time
 import datetime as dt
 import urllib.request
 from pathlib import Path
@@ -114,12 +114,15 @@ def cek_isyatirim(bist_list: list) -> list | None:
         return None
 
 
-def cek_borsapy(bist_list: list) -> dict:
+def cek_borsapy(bist_list: list, nedenler: dict | None = None) -> dict:
     """2. KADEME — borsapy TradingView provider (İş Yatırım'dan BAĞIMSIZ).
 
     borsapy Ticker.history() kendi calendar.py çakışması yüzünden bug'li —
     provider doğrudan kullanılır. TradingView global olduğu için Actions
     ABD IP'sinde de çalışır. Tek istek/hisse (~1 sn) — 100 hisse ~2 dk.
+
+    `nedenler` verilirse düşen her hisse için sebep yazılır (LOG_NEDEN_*):
+    zaman aşımı, boş yanıt, az bar, sembol hatası. Her sembol 2 kez denenir.
     """
     try:
         from borsapy._providers.tradingview import get_tradingview_provider
@@ -129,10 +132,17 @@ def cek_borsapy(bist_list: list) -> dict:
     veri = {}
     try:
         p = get_tradingview_provider()
-        for sym in bist_list:
+    except Exception as e:
+        log(f"borsapy (TradingView) provider hata: {str(e)[:60]}")
+        return veri
+    for sym in bist_list:
+        son_hata = None
+        for _deneme in range(2):          # ilk tur düşen hisse ikinci kez denenir
             try:
                 df = p.get_history(sym, interval='1d', period='1y')  # SMA200 için ≥200 bar şart
                 if df is None or len(df) < 60:
+                    son_hata = (LOG_NEDEN_BOS_YANIT if df is None
+                                else f"{LOG_NEDEN_AZ_BAR} ({len(df)} bar)")
                     continue
                 rows = []
                 for idx, row in df.iterrows():
@@ -149,13 +159,97 @@ def cek_borsapy(bist_list: list) -> dict:
                     })
                 if rows:
                     veri[sym] = rows
-            except Exception:
-                continue
-    except Exception as e:
-        log(f"borsapy (TradingView) hata: {str(e)[:60]}")
-    log(f"borsapy (TradingView) OK: {len(veri)} hisse")
+                    son_hata = None
+                    break
+                son_hata = f"{LOG_NEDEN_BOS_YANIT} (boş bar)"
+            except Exception as e:
+                son_hata = f"{LOG_NEDEN_SEMBOL}: {type(e).__name__}: {str(e)[:70]}"
+                if _deneme == 0:
+                    time.sleep(1)
+        if sym not in veri and son_hata and nedenler is not None:
+            nedenler[sym] = son_hata
+            log(f"borsapy DÜŞTÜ {sym}: {son_hata}")
+    log(f"borsapy (TradingView) OK: {len(veri)}/{len(bist_list)} hisse")
     return veri
 
+
+def cek_yfinance_tek(sembol: str) -> list:
+    """TEK hisse yfinance (.IS) — hisse bazlı tamamlama. Hatada (None, sebep) döner."""
+    try:
+        import yfinance as yf
+        import pandas as pd
+    except Exception as e:
+        return None, f"{LOG_NEDEN_SEMBOL}: yfinance import: {str(e)[:60]}"
+    t = f"{sembol}.IS"
+    try:
+        df = yf.download(t, period="1y", interval="1d", progress=False,
+                         auto_adjust=True, threads=False)
+    except Exception as e:
+        return None, f"{LOG_NEDEN_SEMBOL}: yfinance {type(e).__name__}: {str(e)[:70]}"
+    if df is None or df.empty:
+        return None, LOG_NEDEN_BOS_YANIT
+    try:
+        if isinstance(df.columns, pd.MultiIndex):
+            df = df.xs(t, axis=1, level="Ticker")
+        sub = df.dropna(subset=['Close'])
+        rows = []
+        for idx, row in sub.iterrows():
+            k = float(row['Close'])
+            if k != k or k <= 0:
+                continue
+            rows.append({
+                'tarih': str(pd.Timestamp(idx).date()),
+                'kapanis': round(k, 4),
+                'acilis': round(float(row['Open']), 4) if row['Open'] == row['Open'] else None,
+                'min': round(float(row['Low']), 4) if row['Low'] == row['Low'] else None,
+                'max': round(float(row['High']), 4) if row['High'] == row['High'] else None,
+                'hacim': int(row['Volume']) if row['Volume'] == row['Volume'] else None,
+            })
+    except Exception as e:
+        return None, f"{LOG_NEDEN_BOS_YANIT}: parse: {str(e)[:60]}"
+    if len(rows) < 60:
+        return None, f"{LOG_NEDEN_AZ_BAR} ({len(rows)} bar)"
+    return rows, None
+
+
+def tamamla_yfinance(hisse_veri: dict, kalan: list, nedenler: dict | None = None) -> tuple:
+    """borsapy'den gelmeyen hisseleri SADECE onları yfinance (.IS) ile tekrar çeker.
+
+    Her tamamlanan hissenin satırlarına `kaynak='yfinance'` alanı yazılır
+    (kaynak izlenebilirliği). `nedenler` sözlüğü tamamlanamayanların
+    gerekçesiyle güncellenir.
+    Returns: (eklenen_liste, hala_eksik_liste)
+    """
+    kalan = [s for s in kalan if s not in hisse_veri]
+    if not kalan:
+        return [], []
+    log(f"Tamamlama: {len(kalan)} hisse yfinance (.IS) ile tek tek çekiliyor: "
+        f"{', '.join(kalan)}")
+    eklenen, hala_yok = [], []
+    for sym in kalan:
+        rows, neden = cek_yfinance_tek(sym)
+        if rows:
+            for r in rows:
+                r['kaynak'] = 'yfinance'
+            hisse_veri[sym] = rows
+            eklenen.append(sym)
+            log(f"  tamamlandı {sym}: yfinance {len(rows)} bar")
+        else:
+            hala_yok.append(sym)
+            if nedenler is not None:
+                nedenler[sym] = neden or "bilinmeyen"
+            log(f"  TAMAMLANAMADI {sym}: {neden or 'bilinmeyen'}")
+    log(f"Tamamlama sonucu: {len(eklenen)} eklendi "
+        f"({', '.join(eklenen) if eklenen else 'yok'}) | kalan eksik: {len(hala_yok)}")
+    return eklenen, hala_yok
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# Eksik hisse teşhisi — düşme nedenleri (log'da görünür olmalı, anti-hallüsinasyon)
+# ══════════════════════════════════════════════════════════════════════════
+LOG_NEDEN_BOS_YANIT = "boş yanıt"        # kaynak hisse için hiç bar döndürmedi
+LOG_NEDEN_AZ_BAR = "az bar"              # dönen bar sayısı indikatör için yetersiz
+LOG_NEDEN_SEMBOL = "sembol/istisna"      # sembol hatası veya kaynak istisnası (timeout dahil)
 
 BOLUNME_ESIK = -0.30   # bundan düşük günlük kapanış değişimi fiziksel olarak imkânsız (BIST marjı ±%10)
 
@@ -258,13 +352,17 @@ def bolunme_uygula(hisse_veri: dict) -> dict:
     return duzeltmeler
 
 
-def veri_saglik_kontrolu(hisse_veri: dict, endeks: dict | None, kaynak: str) -> dict:
+def veri_saglik_kontrolu(hisse_veri: dict, endeks: dict | None, kaynak: str,
+                         eksik_hisseler: list | None = None,
+                         eksik_nedenler: dict | None = None) -> dict:
     """Veri sağlık kontrolü — çapraz doğrulama (anti-hallüsinasyon).
 
     - Hisse sayısı yeterli mi (beklenen 100'e ne kadar yakın)
     - Yeterli barı olan hisse sayısı (>= 60 bar = indikatör hesabı mümkün)
     - Fiyat pozitifliği (0/negatif fiyat varsa bozuk veri)
     - Endeks mantıklı aralıkta mı (XU100 ~10K-100K bandı)
+    - Kaynak dağılımı (borsapy / yfinance / isyatirim) — şeffaflık
+    - eksik_hisseler: hiç verisi gelemeyen semboller + nedeni
     """
     beklenen = 100
     toplam = len(hisse_veri)
@@ -272,14 +370,23 @@ def veri_saglik_kontrolu(hisse_veri: dict, endeks: dict | None, kaynak: str) -> 
     bozuk_fiyat = sum(1 for rows in hisse_veri.values()
                       if rows and (rows[-1]['kapanis'] is None or rows[-1]['kapanis'] <= 0))
     endeks_ok = bool(endeks and 1000 <= endeks.get('deger', 0) <= 100000)
+    eksik_hisseler = list(eksik_hisseler or [])
+    eksik_nedenler = dict(eksik_nedenler or {})
+    # Kaynak dağılımı: son barın 'kaynak' alanına göre (hisse bazlı tamamlama izlenebilirliği)
+    kaynak_dagilim = {}
+    for rows in hisse_veri.values():
+        k = (rows[-1].get('kaynak') if rows else None) or 'bilinmiyor'
+        kaynak_dagilim[k] = kaynak_dagilim.get(k, 0) + 1
     durum = 'OK'
     sorunlar = []
     if toplam < 50:
         durum = 'KRİTİK'
         sorunlar.append(f"sadece {toplam}/{beklenen} hisse")
-    elif toplam < 80:
+    elif toplam < 100 or eksik_hisseler:
+        # Patron kuralı: 100'ün altındaysa UYARI + isim listesi görünür olmalı
         durum = 'UYARI'
-        sorunlar.append(f"{toplam}/{beklenen} hisse")
+        if toplam < 100:
+            sorunlar.append(f"{toplam}/{beklenen} hisse")
     if yeterli_bar < 50:
         durum = 'UYARI' if durum == 'OK' else durum
         sorunlar.append(f"{yeterli_bar} hissede yeterli bar")
@@ -287,13 +394,21 @@ def veri_saglik_kontrolu(hisse_veri: dict, endeks: dict | None, kaynak: str) -> 
         sorunlar.append(f"{bozuk_fiyat} bozuk fiyat")
     if not endeks_ok:
         sorunlar.append("endeks aralık dışı")
+    if eksik_hisseler:
+        detay = ", ".join(f"{s}({eksik_nedenler.get(s, 'bilinmiyor')})"
+                          for s in eksik_hisseler[:10])
+        sorunlar.append(f"{len(eksik_hisseler)} hisse çekilemedi: {detay}")
     return {
         'durum': durum,
         'kaynak': kaynak,
         'hisse': toplam,
+        'beklenen': beklenen,
         'yeterli_bar': yeterli_bar,
         'bozuk_fiyat': bozuk_fiyat,
         'endeks_ok': endeks_ok,
+        'kaynak_dagilim': kaynak_dagilim,
+        'eksik_hisseler': eksik_hisseler,
+        'eksik_nedenler': eksik_nedenler,
         'sorunlar': sorunlar,
     }
 
@@ -2407,22 +2522,43 @@ def hisse_verisi_cek(liste: list) -> tuple:
     3) yfinance (garanti fallback)
 
     G08: `main()` ve `backtest_gercek_veri()` aynı zinciri kullanır.
-    Returns: (hisse_veri, kaynak_adı)
+    Eksik-hisse düzeltmesi: kademe 2 sonrası tek tek düşen hisseler için
+    hisse bazlı yfinance (.IS) tamamlaması (`tamamla_yfinance`) yapılır;
+    hiç gelemeyenler `eksik` listesinde nedeniyle birlikte döner.
+    Returns: (hisse_veri, kaynak_adı, eksik_hisseler, eksik_nedenler)
     """
+    nedenler = {}
     hisse_veri = cek_isyatirim(liste)
     kaynak = "isyatirim"
     if not hisse_veri:
         log("İş Yatırım başarısız → borsapy (TradingView) deneniyor")
-        hisse_veri = cek_borsapy(liste)
+        hisse_veri = cek_borsapy(liste, nedenler=nedenler)
         kaynak = "borsapy-tv"
     if not hisse_veri:
         log("borsapy başarısız → yfinance deneniyor")
         hisse_veri = cek_yfinance(liste)
         kaynak = "yfinance"
+        nedenler = {}
     if not hisse_veri:
         log("KRİTİK: TÜM KAYNAKLAR BAŞARISIZ")
-        hisse_veri = {}
-    return hisse_veri, kaynak
+        return {}, kaynak, list(liste), {s: 'tüm kaynaklar başarısız' for s in liste}
+
+    eksik = [s for s in liste if s not in hisse_veri]
+    if eksik and kaynak != "yfinance":
+        # Kısmi eksik → hisse bazlı yfinance (.IS) tamamlaması
+        log(f"{len(eksik)} hisse eksik → hisse bazlı yfinance tamamlaması: {', '.join(eksik)}")
+        eklenen, hala_yok = tamamla_yfinance(hisse_veri, eksik, nedenler=nedenler)
+        if eklenen:
+            log(f"yfinance tamamladı: {', '.join(eklenen)} ({len(eklenen)} hisse)")
+        eksik = hala_yok
+        if eklenen:
+            kaynak = f"{kaynak}+yfinance"
+
+    eksik_nedenler = {s: nedenler.get(s, 'bilinmiyor') for s in eksik}
+    if eksik:
+        log(f"EKSİK {len(eksik)} hisse: " +
+            "; ".join(f"{s}={eksik_nedenler[s]}" for s in eksik))
+    return hisse_veri, kaynak, eksik, eksik_nedenler
 
 
 def backtest_gercek_veri(liste: list | None = None, endeks: dict | None = None) -> dict:
@@ -2436,7 +2572,7 @@ def backtest_gercek_veri(liste: list | None = None, endeks: dict | None = None) 
     if liste is None:
         liste = bist100_listesi()
     log(f"G08 backtest: {len(liste)} hisse çekiliyor")
-    hisse_veri, kaynak = hisse_verisi_cek(liste)
+    hisse_veri, kaynak, eksik, eksik_nedenler = hisse_verisi_cek(liste)
     if not hisse_veri:
         return {'durum': 'veri yok', 'aciklama': 'Hisse verisi alınamadı.'}
     try:
@@ -2451,6 +2587,8 @@ def backtest_gercek_veri(liste: list | None = None, endeks: dict | None = None) 
     senaryolar['veri'] = {
         'kaynak': kaynak,
         'hisse': len(hisse_veri),
+        'eksik_hisseler': eksik,
+        'eksik_nedenler': eksik_nedenler,
         'bar': sum(len(r) for r in hisse_veri.values()),
         'baslangic': min((a for a, _ in araliklar), default=None),
         'bitis': max((b for _, b in araliklar), default=None),
@@ -2466,7 +2604,10 @@ def main():
     log(f"BIST 100 listesi: {len(liste)} hisse")
 
     # 1. Hisse verisi — 3 kademeli failover
-    hisse_veri, kaynak = hisse_verisi_cek(liste)
+    hisse_veri, kaynak, eksik_hisseler, eksik_nedenler = hisse_verisi_cek(liste)
+    if eksik_hisseler:
+        log(f"UYARI: {len(eksik_hisseler)} hisse alınamadı → "
+            + ", ".join(f"{s}={eksik_nedenler.get(s, '?')}" for s in eksik_hisseler))
 
     # 1b. Bölünme (split) düzeltmesi — veri çekildikten HEMEN sonra, hiçbir analizden önce.
     #     Düzeltilmemiş bölünme MA/RSI/ATR, backtest ve ICT sonuçlarını bozar (ör. RALYH −%98).
@@ -2483,7 +2624,9 @@ def main():
     endeks = endeks_verisi()
 
     # 2b. Veri sağlık kontrolü (çapraz doğrulama)
-    saglik = veri_saglik_kontrolu(hisse_veri or {}, endeks, kaynak)
+    saglik = veri_saglik_kontrolu(hisse_veri or {}, endeks, kaynak,
+                                  eksik_hisseler=eksik_hisseler,
+                                  eksik_nedenler=eksik_nedenler)
     saglik['bolunme_duzeltme'] = [{'sembol': s, **t}
                                   for s in sorted(bolunme_duzeltmeleri)
                                   for t in bolunme_duzeltmeleri[s]]

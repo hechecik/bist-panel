@@ -136,6 +136,11 @@ tr.detail td { background:var(--bg3); padding:11px; white-space:normal; }
 .tcmb { background:var(--bg2); border:1px solid var(--bd); border-radius:14px; padding:12px 14px; font-size:12.5px; line-height:1.6; }
 .tcmb b { color:var(--tx); }
 .note { font-size:10px; color:var(--tx2); line-height:1.5; margin:12px 0 6px; }
+/* Bölüm alt notu — AL ADAYLARI backtest uyarısı vb. (küçük gri metin) */
+.altnot { font-size:10px; color:var(--tx2); line-height:1.5; margin:-4px 0 8px; }
+/* Eksik hisse banner'ı — UYARI durumu görünür olsun */
+.notbanner { margin:10px 0; padding:8px 10px; border-left:3px solid var(--warn); background:rgba(240,185,11,.08);
+             font-size:11px; line-height:1.55; border-radius:0 4px 4px 0; }
 .empty { color:var(--tx2); font-size:12px; padding:16px 0; text-align:center; }
 /* ── KRİPTO ── */
 .kr-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(156px,1fr)); gap:10px; margin-top:10px; }

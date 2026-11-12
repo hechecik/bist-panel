@@ -111,7 +111,18 @@ export function renderPiyasa(d) {
     <button class="btn" onclick="csvIndir()">⬇ CSV</button>
   </div>`;
 
-  html += tabloBolum('AL ADAYLARI', '🟢', s.al || []);
+  // 1c — eksik hisse banner'ı: 100'ün altında hisse geldiyse neden görünür olmalı
+  const sg = d.saglik || {};
+  const eksikler = sg.eksik_hisseler || [];
+  if (eksikler.length) {
+    const nedenler = sg.eksik_nedenler || {};
+    const detay = eksikler.slice(0, 12).map(s => nedenler[s] ? `${s} (${nedenler[s]})` : s).join(', ');
+    const fazla = eksikler.length > 12 ? ` +${eksikler.length - 12}` : '';
+    html += `<div class="notbanner">⚠️ <b>${eksikler.length} hisse çekilemedi:</b> ${detay}${fazla}` +
+      `<div class="altnot" style="margin-top:4px">Kaynak dağılımı: ${Object.entries(sg.kaynak_dagilim || {}).map(([k, v]) => `${k} ${v}`).join(' · ') || '—'}</div></div>`;
+  }
+
+  html += tabloBolum('AL ADAYLARI', '🟢', s.al || [], alNotu(d));
   html += tabloBolum('İZLEME / TUT', '🟡', s.tut || []);
   html += tabloBolum('SAT / DİKKAT', '🔴', s.sat || []);
   // G05 — filtreye takılanlar ayrı bölümde (md.2 likidite, md.5 tedbir, md.6 sorunlu hisse)
@@ -130,6 +141,24 @@ export function renderPiyasa(d) {
       if (det) det.style.display = det.style.display === 'none' ? '' : 'none';
     });
   });
+}
+
+/* ── AL listesi alt notu (2. düzeltme) — değerler test_senaryolari.metrik'ten OKUNUR,
+      elle yazılmaz. Backtest endeksi geçmiyorsa izleme listesi uyarısı basılır. */
+function alNotu(d) {
+  const t = d.test_senaryolari || {};
+  const m = t.metrik || {};
+  const bench = t.benchmark || 'XU100';
+  const n = (v, s = 1) => (v == null || isNaN(v) ? '—' : Number(v).toFixed(s).replace('.', ','));
+  if (m.islem == null && m.ortalama_alfa == null) return '';
+  const alfa = m.ortalama_alfa, isabet = m.isabet == null ? null : m.isabet * 100;
+  const pf = m.profit_factor;
+  // "Skor endeksi geçmiyor" eşiği: alfa <= 0 veya PF < 1
+  const gecmiyor = (alfa != null && alfa <= 0) || (pf != null && pf < 1);
+  const uyari = gecmiyor
+    ? ' — skor henüz endeksi geçmiyor; izleme listesi olarak kullanın.'
+    : ' — skor endeksin üzerinde.';
+  return `Backtest (${bench}'e göre): ort. alfa ${n(alfa)}%, isabet ${n(isabet)}%, PF ${n(pf, 2)}${uyari}`;
 }
 
 /* ── window bağları (inline onclick/oninput/onchange için) ── */
