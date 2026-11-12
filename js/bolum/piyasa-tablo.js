@@ -60,8 +60,9 @@ export function hisseSatir(r, durum) {
   return html;
 }
 
-export function tabloBolum(baslik, ikon, liste) {
+export function tabloBolum(baslik, ikon, liste, altNot) {
   let html = `<h2>${ikon} ${baslik} <span class="cnt">${liste.length}</span></h2>`;
+  if (altNot) html += `<div class="altnot">${altNot}</div>`;
   if (!liste.length) return html + '<div class="empty">Sonuç yok</div>';
   html += `<div class="twrap"><table><tr>` + KOLONLAR.map(k => `<th class="${k==='Hisse'?'sym':''}">${k}</th>`).join('') + '</tr><tbody>';
   liste.forEach(r => html += hisseSatir(r, durum));
