@@ -1,5 +1,5 @@
 {
- "uretildi": "2026-11-11T21:22:26+00:00",
+ "uretildi": "2026-11-12T06:32:53+00:00",
  "kaynak": "borsapy-tv",
  "saglik": {
   "durum": "OK",
@@ -12,14 +12,10 @@
   "bolunme_duzeltme": []
  },
  "endeks": {
-  "deger": 11661.9,
-  "degisim_yuzde": -0.43,
-  "tarih": "2026-11-10",
+  "deger": 11666.4,
+  "degisim_yuzde": 0.04,
+  "tarih": "2026-11-11",
   "seri": [
-   [
-    "2025-11-11",
-    10576.5
-   ],
    [
     "2025-11-12",
     10640.9
@@ -1015,10 +1011,13 @@
    [
     "2026-11-10",
     11661.9
+   ],
+   [
+    "2026-11-11",
+    11666.4
    ]
   ],
   "seri_son": [
-   13974.1,
    14138.9,
    14077.7,
    13943.9,
@@ -1097,7 +1096,8 @@
    11333.3,
    11482.6,
    11712.7,
-   11661.9
+   11661.9,
+   11666.4
   ]
  },
  "makro": {
@@ -1105,13 +1105,13 @@
    "gram-altin": {
     "ad": "GRAM ALTIN",
     "birim": "TL/gram",
-    "fiyat": 6438.08,
+    "fiyat": 6426.93,
     "capraz": 6439.675,
-    "fark_yuzde": 0.02,
+    "fark_yuzde": 0.2,
     "uyari": false,
     "kaynak": "ons/31,1034768 × USD/TL",
     "ons_kaynak": "spot",
-    "degisim": -0.98
+    "degisim": -0.43
    },
    "USD": {
     "ad": "DOLAR/TL",
@@ -1140,37 +1140,37 @@
    "ons-altin": {
     "ad": "ONS ALTIN",
     "birim": "USD/ons",
-    "fiyat": 3985.8,
-    "degisim": -0.97,
+    "fiyat": 3978.9,
+    "degisim": -0.42,
     "kaynak": "spot",
-    "vadeli_fiyat": 3991.0
+    "vadeli_fiyat": 3983.8
    },
    "^VIX": {
     "ad": "VIX KORKU",
     "birim": "seviye",
-    "fiyat": 17.51,
-    "degisim": -10.02,
+    "fiyat": 17.49,
+    "degisim": -10.12,
     "ters": true
    },
    "NG=F": {
     "ad": "DOĞALGAZ",
     "birim": "USD",
     "fiyat": 3.25,
-    "degisim": -1.49,
+    "degisim": 1.21,
     "ters": false
    },
    "HG=F": {
     "ad": "BAKIR",
     "birim": "USD/lb",
-    "fiyat": 6.26,
-    "degisim": 0.71,
+    "fiyat": 6.23,
+    "degisim": -0.64,
     "ters": false
    },
    "ZW=F": {
     "ad": "BUĞDAY",
     "birim": "USc/buşel",
     "fiyat": 600.75,
-    "degisim": 1.35,
+    "degisim": 0.21,
     "ters": false
    }
   },
@@ -1193,10 +1193,6 @@
    "gram_altin": "ons(GC=F) / 31,1034768 × USDTRY"
   },
   "tl": [
-   [
-    "2025-11-11",
-    10576.5
-   ],
    [
     "2025-11-12",
     10640.9
@@ -2192,13 +2188,13 @@
    [
     "2026-11-10",
     11661.9
+   ],
+   [
+    "2026-11-11",
+    11666.4
    ]
   ],
   "usd": [
-   [
-    "2025-11-11",
-    250.4256
-   ],
    [
     "2025-11-12",
     251.9278
@@ -3194,13 +3190,13 @@
    [
     "2026-11-10",
     232.2361
+   ],
+   [
+    "2026-11-11",
+    232.3537
    ]
   ],
   "altin": [
-   [
-    "2025-11-11",
-    1.8923
-   ],
    [
     "2025-11-12",
     1.8597
@@ -4196,10 +4192,14 @@
    [
     "2026-11-10",
     1.7923
+   ],
+   [
+    "2026-11-11",
+    1.8065
    ]
   ],
-  "bas": "2025-11-11",
-  "son": "2026-11-10",
+  "bas": "2025-11-12",
+  "son": "2026-11-11",
   "hizalama": {
    "eslesen_gun": 250,
    "yontem": "tarihe göre en yakın önceki gün",
@@ -4207,53 +4207,53 @@
   },
   "getiriler": {
    "durum": "ok",
-   "son_tarih": "2026-11-10",
+   "son_tarih": "2026-11-11",
    "donemler": {
     "1h": {
      "bar": 5,
-     "hedef_tarih": "2026-11-03",
+     "hedef_tarih": "2026-11-04",
      "not": "1y için 252 bar ≈ takvim yılı",
-     "tl": 5.79,
-     "tl_bas_tarih": "2026-11-03",
-     "usd": 5.309,
-     "usd_bas_tarih": "2026-11-03",
-     "altin": 2.964,
-     "altin_bas_tarih": "2026-11-03",
-     "bas_tarih": "2026-11-03"
+     "tl": 1.641,
+     "tl_bas_tarih": "2026-11-04",
+     "usd": 1.237,
+     "usd_bas_tarih": "2026-11-04",
+     "altin": 3.07,
+     "altin_bas_tarih": "2026-11-04",
+     "bas_tarih": "2026-11-04"
     },
     "1a": {
      "bar": 21,
-     "hedef_tarih": "2026-10-11",
+     "hedef_tarih": "2026-10-12",
      "not": "1y için 252 bar ≈ takvim yılı",
-     "tl": -4.925,
-     "tl_bas_tarih": "2026-10-09",
-     "usd": -6.624,
-     "usd_bas_tarih": "2026-10-09",
-     "altin": -2.311,
-     "altin_bas_tarih": "2026-10-09",
-     "bas_tarih": "2026-10-09"
+     "tl": -3.986,
+     "tl_bas_tarih": "2026-10-12",
+     "usd": -5.658,
+     "usd_bas_tarih": "2026-10-12",
+     "altin": -1.176,
+     "altin_bas_tarih": "2026-10-12",
+     "bas_tarih": "2026-10-12"
     },
     "3a": {
      "bar": 63,
-     "hedef_tarih": "2026-08-13",
+     "hedef_tarih": "2026-08-14",
      "not": "1y için 252 bar ≈ takvim yılı",
-     "tl": -17.48,
-     "tl_bas_tarih": "2026-08-13",
-     "usd": -21.519,
-     "usd_bas_tarih": "2026-08-13",
-     "altin": -13.919,
-     "altin_bas_tarih": "2026-08-13",
-     "bas_tarih": "2026-08-13"
+     "tl": -17.682,
+     "tl_bas_tarih": "2026-08-14",
+     "usd": -21.502,
+     "usd_bas_tarih": "2026-08-14",
+     "altin": -12.931,
+     "altin_bas_tarih": "2026-08-14",
+     "bas_tarih": "2026-08-14"
     },
     "1y": {
      "bar": 252,
-     "hedef_tarih": "2025-11-22",
+     "hedef_tarih": "2025-11-23",
      "not": "1y için 252 bar ≈ takvim yılı",
-     "tl": 6.766,
+     "tl": 6.807,
      "tl_bas_tarih": "2025-11-21",
-     "usd": -9.769,
+     "usd": -9.724,
      "usd_bas_tarih": "2025-11-21",
-     "altin": -8.668,
+     "altin": -7.944,
      "altin_bas_tarih": "2025-11-21",
      "bas_tarih": "2025-11-21"
     },
@@ -4262,11 +4262,11 @@
      "hedef_tarih": "2026-01-01",
      "yilbasi": true,
      "bas_tarih": "2026-01-02",
-     "tl": 1.422,
+     "tl": 1.461,
      "tl_bas_tarih": "2026-01-02",
-     "usd": -13.164,
+     "usd": -13.12,
      "usd_bas_tarih": "2026-01-02",
-     "altin": -6.714,
+     "altin": -5.975,
      "altin_bas_tarih": "2026-01-02",
      "yilbasi_str": "2026-01-02"
     }
@@ -4274,41 +4274,41 @@
    "tutarlilik": [
     {
      "donem": "1h",
-     "beklenen_usd_pct": 5.309,
-     "usd_pct": 5.309,
-     "fark_pct": -0.0002,
-     "esik_pct": 0.1,
-     "ok": true
-    },
-    {
-     "donem": "1a",
-     "beklenen_usd_pct": -6.624,
-     "usd_pct": -6.624,
-     "fark_pct": 0.0001,
-     "esik_pct": 0.1,
-     "ok": true
-    },
-    {
-     "donem": "3a",
-     "beklenen_usd_pct": -21.519,
-     "usd_pct": -21.519,
+     "beklenen_usd_pct": 1.237,
+     "usd_pct": 1.237,
      "fark_pct": 0.0002,
      "esik_pct": 0.1,
      "ok": true
     },
     {
-     "donem": "1y",
-     "beklenen_usd_pct": -9.769,
-     "usd_pct": -9.769,
+     "donem": "1a",
+     "beklenen_usd_pct": -5.658,
+     "usd_pct": -5.658,
      "fark_pct": -0.0,
      "esik_pct": 0.1,
      "ok": true
     },
     {
-     "donem": "ybb",
-     "beklenen_usd_pct": -13.164,
-     "usd_pct": -13.164,
+     "donem": "3a",
+     "beklenen_usd_pct": -21.502,
+     "usd_pct": -21.502,
      "fark_pct": 0.0001,
+     "esik_pct": 0.1,
+     "ok": true
+    },
+    {
+     "donem": "1y",
+     "beklenen_usd_pct": -9.724,
+     "usd_pct": -9.724,
+     "fark_pct": 0.0005,
+     "esik_pct": 0.1,
+     "ok": true
+    },
+    {
+     "donem": "ybb",
+     "beklenen_usd_pct": -13.12,
+     "usd_pct": -13.12,
+     "fark_pct": -0.0,
      "esik_pct": 0.1,
      "ok": true
     }
@@ -4316,7 +4316,7 @@
   }
  },
  "tr_risk": {
-  "uretildi": "2026-11-11T21:21:05+00:00",
+  "uretildi": "2026-11-12T06:31:23+00:00",
   "tahvil": {
    "2Y": 39.42,
    "10Y": 35.99,
@@ -4373,7 +4373,7 @@
    ],
    "sonraki": {
     "tarih": "2026-12-10",
-    "kalan_gun": 29
+    "kalan_gun": 28
    },
    "gelecek": [
     "2026-12-10",
@@ -4622,8 +4622,8 @@
     "likidite_tl": 610596815.0,
     "ipo_yeni": false,
     "tedbir": null,
-    "RS20": 0.98,
-    "RS60": 95.3,
+    "RS20": 2.39,
+    "RS60": 98.55,
     "HACIM_ORAN": 1.14,
     "VOL20": 3.73,
     "ZIRVE_UZAK": -3.42,
@@ -4692,8 +4692,8 @@
     "likidite_tl": 405705723.0,
     "ipo_yeni": false,
     "tedbir": null,
-    "RS20": 10.51,
-    "RS60": 33.77,
+    "RS20": 9.23,
+    "RS60": 30.42,
     "HACIM_ORAN": 0.83,
     "VOL20": 2.74,
     "ZIRVE_UZAK": -6.3,
@@ -4761,8 +4761,8 @@
     "likidite_tl": 106214118.0,
     "ipo_yeni": false,
     "tedbir": null,
-    "RS20": -4.63,
-    "RS60": 17.74,
+    "RS20": -0.25,
+    "RS60": 19.87,
     "HACIM_ORAN": 1.55,
     "VOL20": 2.88,
     "ZIRVE_UZAK": -40.05,
@@ -4831,8 +4831,8 @@
     "likidite_tl": 173601116.0,
     "ipo_yeni": false,
     "tedbir": null,
-    "RS20": 12.61,
-    "RS60": 30.32,
+    "RS20": 15.14,
+    "RS60": 32.78,
     "HACIM_ORAN": 6.51,
     "VOL20": 3.7,
     "ZIRVE_UZAK": -27.03,
@@ -4902,8 +4902,8 @@
     "likidite_tl": 8999939860.0,
     "ipo_yeni": false,
     "tedbir": null,
-    "RS20": 7.77,
-    "RS60": 25.99,
+    "RS20": 8.14,
+    "RS60": 26.74,
     "HACIM_ORAN": 0.63,
     "VOL20": 2.66,
     "ZIRVE_UZAK": -23.83,
@@ -4971,8 +4971,8 @@
     "likidite_tl": 163850657.0,
     "ipo_yeni": false,
     "tedbir": null,
-    "RS20": 3.39,
-    "RS60": 8.87,
+    "RS20": 6.53,
+    "RS60": 10.83,
     "HACIM_ORAN": 0.96,
     "VOL20": 2.7,
     "ZIRVE_UZAK": -19.46,
@@ -5040,8 +5040,8 @@
     "likidite_tl": 213682558.0,
     "ipo_yeni": false,
     "tedbir": null,
-    "RS20": 9.42,
-    "RS60": 12.15,
+    "RS20": 10.1,
+    "RS60": 12.21,
     "HACIM_ORAN": 0.88,
     "VOL20": 2.45,
     "ZIRVE_UZAK": -28.95,
@@ -5109,8 +5109,8 @@
     "likidite_tl": 130088144.0,
     "ipo_yeni": false,
     "tedbir": null,
-    "RS20": -29.5,
-    "RS60": -59.95,
+    "RS20": -13.32,
+    "RS60": -54.25,
     "HACIM_ORAN": 0.95,
     "VOL20": 7.2,
     "ZIRVE_UZAK": -77.44,
@@ -5179,8 +5179,8 @@
     "likidite_tl": 347575289.0,
     "ipo_yeni": false,
     "tedbir": null,
-    "RS20": -18.04,
-    "RS60": -80.9,
+    "RS20": -2.03,
+    "RS60": -79.08,
     "HACIM_ORAN": 1.0,
     "VOL20": 6.32,
     "ZIRVE_UZAK": -88.63,
@@ -5248,8 +5248,8 @@
     "likidite_tl": 1010441316.0,
     "ipo_yeni": false,
     "tedbir": null,
-    "RS20": 18.07,
-    "RS60": 30.94,
+    "RS20": 17.14,
+    "RS60": 31.18,
     "HACIM_ORAN": 0.71,
     "VOL20": 2.91,
     "ZIRVE_UZAK": -18.4,
@@ -5317,8 +5317,8 @@
     "likidite_tl": 89051950.0,
     "ipo_yeni": false,
     "tedbir": null,
-    "RS20": -20.27,
-    "RS60": -0.14,
+    "RS20": -16.36,
+    "RS60": 1.13,
     "HACIM_ORAN": 1.46,
     "VOL20": 3.81,
     "ZIRVE_UZAK": -36.48,
@@ -5387,8 +5387,8 @@
     "likidite_tl": 2150624385.0,
     "ipo_yeni": false,
     "tedbir": null,
-    "RS20": 4.73,
-    "RS60": 15.12,
+    "RS20": 0.63,
+    "RS60": 11.51,
     "HACIM_ORAN": 0.96,
     "VOL20": 2.24,
     "ZIRVE_UZAK": -25.25,
@@ -5456,8 +5456,8 @@
     "likidite_tl": 5340446919.0,
     "ipo_yeni": false,
     "tedbir": null,
-    "RS20": 12.07,
-    "RS60": 33.5,
+    "RS20": 9.43,
+    "RS60": 33.03,
     "HACIM_ORAN": 0.67,
     "VOL20": 2.41,
     "ZIRVE_UZAK": -25.07,
@@ -5525,8 +5525,8 @@
     "likidite_tl": 673420510.0,
     "ipo_yeni": false,
     "tedbir": null,
-    "RS20": -36.27,
-    "RS60": -34.24,
+    "RS20": -37.42,
+    "RS60": -36.71,
     "HACIM_ORAN": 1.82,
     "VOL20": 5.44,
     "ZIRVE_UZAK": -56.59,
@@ -5596,8 +5596,8 @@
     "likidite_tl": 343029764.0,
     "ipo_yeni": false,
     "tedbir": null,
-    "RS20": 0.13,
-    "RS60": -1.0,
+    "RS20": 0.64,
+    "RS60": 0.2,
     "HACIM_ORAN": 1.45,
     "VOL20": 4.28,
     "ZIRVE_UZAK": -39.44,
@@ -5665,8 +5665,8 @@
     "likidite_tl": 100429328.0,
     "ipo_yeni": false,
     "tedbir": null,
-    "RS20": -8.3,
-    "RS60": -14.89,
+    "RS20": -8.49,
+    "RS60": -14.6,
     "HACIM_ORAN": 0.79,
     "VOL20": 2.94,
     "ZIRVE_UZAK": -43.63,
@@ -5735,8 +5735,8 @@
     "likidite_tl": 176380583.0,
     "ipo_yeni": false,
     "tedbir": null,
-    "RS20": -13.52,
-    "RS60": -10.66,
+    "RS20": -21.22,
+    "RS60": -17.44,
     "HACIM_ORAN": 1.16,
     "VOL20": 3.64,
     "ZIRVE_UZAK": -66.18,
@@ -5804,8 +5804,8 @@
     "likidite_tl": 50209077.0,
     "ipo_yeni": false,
     "tedbir": null,
-    "RS20": -5.64,
-    "RS60": -6.71,
+    "RS20": -6.22,
+    "RS60": -7.18,
     "HACIM_ORAN": 1.48,
     "VOL20": 2.58,
     "ZIRVE_UZAK": -52.09,
@@ -5873,8 +5873,8 @@
     "likidite_tl": 4156644915.0,
     "ipo_yeni": false,
     "tedbir": null,
-    "RS20": 0.18,
-    "RS60": 20.94,
+    "RS20": -3.61,
+    "RS60": 12.88,
     "HACIM_ORAN": 0.96,
     "VOL20": 2.61,
     "ZIRVE_UZAK": -13.17,
@@ -5943,8 +5943,8 @@
     "likidite_tl": 1145957853.0,
     "ipo_yeni": false,
     "tedbir": null,
-    "RS20": 3.64,
-    "RS60": 21.0,
+    "RS20": 1.43,
+    "RS60": 21.86,
     "HACIM_ORAN": 1.09,
     "VOL20": 3.3,
     "ZIRVE_UZAK": -17.15,
@@ -6013,8 +6013,8 @@
     "likidite_tl": 227102109.0,
     "ipo_yeni": false,
     "tedbir": null,
-    "RS20": -4.96,
-    "RS60": -9.18,
+    "RS20": -8.12,
+    "RS60": -10.56,
     "HACIM_ORAN": 2.46,
     "VOL20": 4.18,
     "ZIRVE_UZAK": -48.55,
@@ -6083,8 +6083,8 @@
     "likidite_tl": 726658254.0,
     "ipo_yeni": false,
     "tedbir": null,
-    "RS20": -14.58,
-    "RS60": -49.85,
+    "RS20": -20.94,
+    "RS60": -53.37,
     "HACIM_ORAN": 2.46,
     "VOL20": 5.91,
     "ZIRVE_UZAK": -65.78,
@@ -6153,8 +6153,8 @@
     "likidite_tl": 67150706.0,
     "ipo_yeni": false,
     "tedbir": null,
-    "RS20": -3.72,
-    "RS60": -13.27,
+    "RS20": -6.81,
+    "RS60": -18.89,
     "HACIM_ORAN": 1.05,
     "VOL20": 2.76,
     "ZIRVE_UZAK": -48.92,
@@ -6223,8 +6223,8 @@
     "likidite_tl": 297917350.0,
     "ipo_yeni": false,
     "tedbir": null,
-    "RS20": -11.95,
-    "RS60": -51.33,
+    "RS20": -14.9,
+    "RS60": -53.18,
     "HACIM_ORAN": 1.47,
     "VOL20": 5.38,
     "ZIRVE_UZAK": -66.11,
@@ -6323,7 +6323,7 @@
   },
   "toplam": 100,
   "durum": "kesin",
-  "hesap_tarihi": "11.11.2026 21:21",
+  "hesap_tarihi": "12.11.2026 06:31",
   "filtre_esikleri": {
    "kilit_pct": 9.5,
    "likidite_tl": 50000000,
@@ -7919,39 +7919,495 @@
  },
  "haberler": [
   {
-   "baslik": "CoreWeave soars more than 24% for best day since April 2025 after strong Q3 report",
+   "baslik": "Kredi piyasasında yeni dönem: Merkez Bankası büyüme sınırlarını yükseltti",
+   "kaynak": "Paratic",
+   "kategori": "makro",
+   "dil": "tr",
+   "yon": "pozitif",
+   "etiket": "🟢 Pozitif",
+   "sembol": "",
+   "link": "https://paratic.com/kredi-piyasasinda-yeni-donem-merkez-bankasi-buyume-sinirlarini-yukseltti/",
+   "yayin_tarihi": "2026-11-12T06:24:40+00:00",
+   "tarih": "2026-11-12"
+  },
+  {
+   "baslik": "Stoneweg Q3 2026 slides: DPS guidance raised on AiOnX gains",
+   "kaynak": "Investing.com",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.investing.com/news/company-news/stoneweg-q3-2026-slides-dps-guidance-raised-on-aionx-gains-93CH-5020437",
+   "yayin_tarihi": "2026-11-12T06:22:44+00:00",
+   "tarih": "2026-11-12"
+  },
+  {
+   "baslik": "Sonova raises FY27 profit outlook after H1 core EBIT beats by 10%",
+   "kaynak": "Investing.com",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "pozitif",
+   "etiket": "🟢 Pozitif",
+   "sembol": "",
+   "link": "https://www.investing.com/news/earnings/sonova-raises-fy27-profit-outlook-after-h1-core-ebit-beats-by-10-5020436",
+   "yayin_tarihi": "2026-11-12T06:21:53+00:00",
+   "tarih": "2026-11-12"
+  },
+  {
+   "baslik": "Public funds ploughing cash into AI will ’own’ megatrends shaping economy",
+   "kaynak": "Investing.com",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.investing.com/news/forex-news/public-funds-ploughing-cash-into-ai-will-own-megatrends-shaping-economy-5020427",
+   "yayin_tarihi": "2026-11-12T06:18:22+00:00",
+   "tarih": "2026-11-12"
+  },
+  {
+   "baslik": "Tidewater director Robert Robotti disposes of $925,448 of tdw stock",
+   "kaynak": "Investing.com",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.investing.com/news/insider-trading-news/tidewater-director-robert-robotti-disposes-of-925448-of-tdw-stock-93CH-5020434",
+   "yayin_tarihi": "2026-11-12T06:16:14+00:00",
+   "tarih": "2026-11-12"
+  },
+  {
+   "baslik": "Earnings call transcript: Samsung Life posts strong Q3 2026 profit growth",
+   "kaynak": "Investing.com",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "pozitif",
+   "etiket": "🟢 Pozitif",
+   "sembol": "",
+   "link": "https://www.investing.com/news/transcripts/earnings-call-transcript-samsung-life-posts-strong-q3-2026-profit-growth-93CH-5020430",
+   "yayin_tarihi": "2026-11-12T06:13:53+00:00",
+   "tarih": "2026-11-12"
+  },
+  {
+   "baslik": "DoubleU Games Q3 2026 slides: DTC push lifts margins amid FX headwinds",
+   "kaynak": "Investing.com",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.investing.com/news/company-news/doubleu-games-q3-2026-slides-dtc-push-lifts-margins-amid-fx-headwinds-93CH-5020429",
+   "yayin_tarihi": "2026-11-12T06:13:08+00:00",
+   "tarih": "2026-11-12"
+  },
+  {
+   "baslik": "Guardant Health prices $500 million convertible notes offering",
+   "kaynak": "Investing.com",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.investing.com/news/company-news/guardant-health-prices-500-million-convertible-notes-offering-93CH-5020428",
+   "yayin_tarihi": "2026-11-12T06:12:37+00:00",
+   "tarih": "2026-11-12"
+  },
+  {
+   "baslik": "Nvidia board meeting to decide CEO Jensen Huang’s fate stretches into evening",
    "kaynak": "CNBC Dünya",
    "kategori": "global",
    "dil": "en",
    "yon": "notr",
    "etiket": "⚪ Nötr",
    "sembol": "",
-   "link": "https://www.cnbc.com/2026/11/11/coreweave-crwv-outlook-earnings-ai.html",
-   "yayin_tarihi": "2026-11-11T21:11:26+00:00",
-   "tarih": "2026-11-11"
+   "link": "https://www.cnbc.com/2026/11/11/nvidia-jensen-huang-affair-employee.html",
+   "yayin_tarihi": "2026-11-12T06:11:16+00:00",
+   "tarih": "2026-11-12"
   },
   {
-   "baslik": "Types of silver rounds: Which is best for investors?",
-   "kaynak": "USA TODAY",
+   "baslik": "Franco-Nevada (TSX:FNV) Shares Just Moved, So What Is Going On?",
+   "kaynak": "Simply Wall St.",
    "kategori": "altin-maden",
    "dil": "en",
    "yon": "notr",
    "etiket": "⚪ Nötr",
    "sembol": "GC=F",
    "link": "",
-   "yayin_tarihi": "2026-11-11T21:09:40+00:00",
+   "yayin_tarihi": "2026-11-12T06:09:12+00:00",
+   "tarih": "2026-11-12"
+  },
+  {
+   "baslik": "MSCI, SAHOL ve ASTOR’u standart endeksinden çıkardı: 18 hissede Small Cap kararı",
+   "kaynak": "Paratic",
+   "kategori": "makro",
+   "dil": "tr",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://paratic.com/msci-sahol-ve-astoru-standart-endeksinden-cikardi-18-hissede-small-cap-karari/",
+   "yayin_tarihi": "2026-11-12T06:08:50+00:00",
+   "tarih": "2026-11-12"
+  },
+  {
+   "baslik": "China chip stocks rally as U.S. weighs curbs on remote AI access",
+   "kaynak": "Investing.com",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.investing.com/news/stock-market-news/china-chip-stocks-rally-as-us-weighs-curbs-on-remote-ai-access-5020425",
+   "yayin_tarihi": "2026-11-12T06:08:31+00:00",
+   "tarih": "2026-11-12"
+  },
+  {
+   "baslik": "European business sentiment picks up,  inflation worries grow, survey finds",
+   "kaynak": "Investing.com",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.investing.com/news/economic-indicators/european-business-sentiment-picks-up-inflation-worries-grow-survey-finds-5020424",
+   "yayin_tarihi": "2026-11-12T06:06:40+00:00",
+   "tarih": "2026-11-12"
+  },
+  {
+   "baslik": "Earnings call transcript: Stonepeak European Real Estate Trust lifts 2026 guidance in Q3",
+   "kaynak": "Investing.com",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.investing.com/news/transcripts/earnings-call-transcript-stonepeak-european-real-estate-trust-lifts-2026-guidance-in-q3-93CH-5020423",
+   "yayin_tarihi": "2026-11-12T06:06:39+00:00",
+   "tarih": "2026-11-12"
+  },
+  {
+   "baslik": "Altında 4 bin dolar testi",
+   "kaynak": "Bloomberg HT",
+   "kategori": "bist",
+   "dil": "tr",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.bloomberght.com/altinda-4-bin-dolar-testi-3794268",
+   "yayin_tarihi": "2026-11-12T06:03:26+00:00",
+   "tarih": "2026-11-12"
+  },
+  {
+   "baslik": "Türk Altın’dan Ankara’da 10 bin fidanlık hatıra ormanı",
+   "kaynak": "Habertürk",
+   "kategori": "makro",
+   "dil": "tr",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.haberturk.com/ekonomi/turk-altindan-ankarada-10-bin-fidanlik-hatira-ormani-3926604",
+   "yayin_tarihi": "2026-11-12T05:50:37+00:00",
+   "tarih": "2026-11-12"
+  },
+  {
+   "baslik": "Petrolde iki ayın en düşük seviyesi",
+   "kaynak": "Bloomberg HT",
+   "kategori": "bist",
+   "dil": "tr",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.bloomberght.com/petrolde-iki-ayin-en-dusuk-seviyesi-3794261",
+   "yayin_tarihi": "2026-11-12T05:49:37+00:00",
+   "tarih": "2026-11-12"
+  },
+  {
+   "baslik": "Borsa İstanbul Şirket Haberleri (12 Kasım) - Borsa Gundem",
+   "kaynak": "Google News · TR Borsa",
+   "kategori": "bist",
+   "dil": "tr",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://news.google.com/rss/articles/CBMifkFVX3lxTE14S0hPR0FHQkJ4a2JRZG9TVGttWHh2NFBHU1lkTUtBdS1vdmliYXlZb0thVXBMbkFwQkJRcGpqV1J2UnFJSEp3c0xQb3JCTWVSa2dNdTdGcTAwaXI1bXRNR0lQb3VsNU9Cb29hNFd0Zm54eXh0X2xBZktJNE1FUQ?oc=5",
+   "yayin_tarihi": "2026-11-12T05:44:00+00:00",
+   "tarih": "2026-11-12"
+  },
+  {
+   "baslik": "Mehmet Gerz’den kritik analizler: Borsa için aralık ayı kritik - Ekonomim",
+   "kaynak": "Google News · TR Borsa",
+   "kategori": "bist",
+   "dil": "tr",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://news.google.com/rss/articles/CBMivgFBVV95cUxPQ3dieUdXQnhkSHVPMlp1ME5ra05BZGVqbmZYN1B0SU9WSWJlQS1WVzdsaGhDeWo1UUIzVkdQOXVKVS05bTBFTHlLS3dpcC1YTkdnU3ZzYzJtNW1zU2hWa3NsU1JSWWYyLW5vanpEYmxiZlF5OUd6WVJNSGFuTTRlMG5WVnVzUDJSZVNfRVJ3WEdoSm5naEpoR3B5cm1TZUhQT1pVaHlEYWlsQUV6MjdQY280ekxXREIwRy1kZDVB?oc=5",
+   "yayin_tarihi": "2026-11-12T05:43:00+00:00",
+   "tarih": "2026-11-12"
+  },
+  {
+   "baslik": "Küresel piyasalarda yapay zeka hisselerine güçlü dönüş",
+   "kaynak": "Bloomberg HT",
+   "kategori": "bist",
+   "dil": "tr",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.bloomberght.com/kuresel-piyasalarda-yapay-zeka-hisselerine-guclu-donus-3794260",
+   "yayin_tarihi": "2026-11-12T05:36:59+00:00",
+   "tarih": "2026-11-12"
+  },
+  {
+   "baslik": "Nvidia yönetimi Huang'ın geleceğini görüşüyor",
+   "kaynak": "Bloomberg HT",
+   "kategori": "bist",
+   "dil": "tr",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.bloomberght.com/nvidia-yonetimi-huangin-gelecegini-gorusuyor-3794259",
+   "yayin_tarihi": "2026-11-12T05:31:20+00:00",
+   "tarih": "2026-11-12"
+  },
+  {
+   "baslik": "Vestel tahvillerinde kritik viraj alındı",
+   "kaynak": "Bloomberg HT",
+   "kategori": "bist",
+   "dil": "tr",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.bloomberght.com/vestel-tahvillerinde-kritik-viraj-alindi-3794258",
+   "yayin_tarihi": "2026-11-12T05:11:06+00:00",
+   "tarih": "2026-11-12"
+  },
+  {
+   "baslik": "MSCI, Sabancı ve Astor'u standart endeksinden çıkardı",
+   "kaynak": "Bloomberg HT",
+   "kategori": "bist",
+   "dil": "tr",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.bloomberght.com/msci-sabanci-ve-astor-u-standart-endeksinden-cikardi-3794257",
+   "yayin_tarihi": "2026-11-12T05:01:49+00:00",
+   "tarih": "2026-11-12"
+  },
+  {
+   "baslik": "Benzine indirim geldi",
+   "kaynak": "Habertürk",
+   "kategori": "makro",
+   "dil": "tr",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.haberturk.com/ekonomi/son-dakika-arac-sahipleri-dikkat-benzine-dev-indirim-geldi-iste-12-kasim-2026-guncel-benzin-motorin-lpg-fiyatlari-3926696",
+   "yayin_tarihi": "2026-11-12T04:22:55+00:00",
+   "tarih": "2026-11-12"
+  },
+  {
+   "baslik": "Gizli işte çalışan işçiye kötü haber",
+   "kaynak": "Habertürk",
+   "kategori": "makro",
+   "dil": "tr",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.haberturk.com/ekonomi/gizli-iste-calisan-isciye-kotu-haber-3926564",
+   "yayin_tarihi": "2026-11-12T04:06:17+00:00",
+   "tarih": "2026-11-12"
+  },
+  {
+   "baslik": "The world's super-rich are piling into alternative investments. Here's why",
+   "kaynak": "CNBC Dünya",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.cnbc.com/2026/11/12/rich-wealth-alternative-assets-.html",
+   "yayin_tarihi": "2026-11-12T03:36:44+00:00",
+   "tarih": "2026-11-12"
+  },
+  {
+   "baslik": "Elon Musk says it would be an 'honor' to hire Nvidia's Jensen Huang",
+   "kaynak": "CNBC Dünya",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.cnbc.com/2026/11/12/elon-musk-jensen-huang-nvidia-tesla.html",
+   "yayin_tarihi": "2026-11-12T03:25:05+00:00",
+   "tarih": "2026-11-12"
+  },
+  {
+   "baslik": "Top 3 Australian Undervalued Stocks To Watch In November 2026",
+   "kaynak": "Simply Wall St.",
+   "kategori": "altin-maden",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "GC=F",
+   "link": "",
+   "yayin_tarihi": "2026-11-12T03:16:49+00:00",
+   "tarih": "2026-11-12"
+  },
+  {
+   "baslik": "What we know so far about Nvidia partner Megaspeed’s Asia footprint",
+   "kaynak": "CNBC Dünya",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.cnbc.com/2026/11/12/nvidia-megaspeed-alice-huang-jensen-.html",
+   "yayin_tarihi": "2026-11-12T03:02:03+00:00",
+   "tarih": "2026-11-12"
+  },
+  {
+   "baslik": "Gold slips below $4,000 as hawkish Fed bets keep bullion under pressure",
+   "kaynak": "Investing.com",
+   "kategori": "altin-maden",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "GC=F",
+   "link": "",
+   "yayin_tarihi": "2026-11-12T01:41:14+00:00",
+   "tarih": "2026-11-12"
+  },
+  {
+   "baslik": "Cramer's stance on Nvidia's stock amid reports that CEO Jensen Huang may be ousted",
+   "kaynak": "CNBC Dünya",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.cnbc.com/investingclub/2026/11/11/jim-cramer-jensen-huang-nvidia-stock-advice.html",
+   "yayin_tarihi": "2026-11-12T01:14:21+00:00",
+   "tarih": "2026-11-12"
+  },
+  {
+   "baslik": "Did Higher Metal Prices Just Shift Nexa Resources (NEXA) Investment Narrative?",
+   "kaynak": "Simply Wall St.",
+   "kategori": "altin-maden",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "GC=F",
+   "link": "",
+   "yayin_tarihi": "2026-11-12T01:12:56+00:00",
+   "tarih": "2026-11-12"
+  },
+  {
+   "baslik": "Scott Colom wins Mississippi Senate election over incumbent Republican Hyde-Smith",
+   "kaynak": "CNBC Dünya",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.cnbc.com/2026/11/11/democrat-scott-colom-projected-to-win-mississippi-senate-election-over-incumbent-hyde-smith.html",
+   "yayin_tarihi": "2026-11-11T23:31:37+00:00",
    "tarih": "2026-11-11"
   },
   {
-   "baslik": "Andean Precious Metals Corp (ANPMF) (Q3 2026) Earnings Call Highlights: Record Revenue and ...",
-   "kaynak": "GuruFocus.com",
-   "kategori": "altin-maden",
+   "baslik": "Feds arrest top official of healthcare company, alleging illegal drug importation",
+   "kaynak": "CNBC Ekonomi",
+   "kategori": "makro",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.cnbc.com/2026/11/11/canarx-official-arrested-drug-importation.html",
+   "yayin_tarihi": "2026-11-11T22:58:11+00:00",
+   "tarih": "2026-11-11"
+  },
+  {
+   "baslik": "Jensen Huang affair in D.C.: Resignation calls and moves to tighten Nvidia China exports",
+   "kaynak": "CNBC Dünya",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "negatif",
+   "etiket": "🔴 Negatif",
+   "sembol": "",
+   "link": "https://www.cnbc.com/2026/11/11/nvidia-jensen-huang-congress-resign-ai-chips.html",
+   "yayin_tarihi": "2026-11-11T22:46:29+00:00",
+   "tarih": "2026-11-11"
+  },
+  {
+   "baslik": "Canada’s ambassador warns Trump tariffs are driving up costs, threatening U.S. investment",
+   "kaynak": "CNBC Dünya",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.cnbc.com/2026/11/11/canada-ambassador-trump-tariffs-investments.html",
+   "yayin_tarihi": "2026-11-11T22:30:57+00:00",
+   "tarih": "2026-11-11"
+  },
+  {
+   "baslik": "American Airlines brings fresh food back to NY-Chicago first class for first time since 2019",
+   "kaynak": "CNBC Ekonomi",
+   "kategori": "makro",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.cnbc.com/2026/11/11/american-airlines-first-class-chicago-new-york.html",
+   "yayin_tarihi": "2026-11-11T22:20:58+00:00",
+   "tarih": "2026-11-11"
+  },
+  {
+   "baslik": "JetBlue unveils new first-class seats to bring back profits",
+   "kaynak": "CNBC Ekonomi",
+   "kategori": "makro",
    "dil": "en",
    "yon": "pozitif",
    "etiket": "🟢 Pozitif",
-   "sembol": "GC=F",
+   "sembol": "",
+   "link": "https://www.cnbc.com/2026/11/11/jetblue-ceo-premium.html",
+   "yayin_tarihi": "2026-11-11T22:10:50+00:00",
+   "tarih": "2026-11-11"
+  },
+  {
+   "baslik": "Basic Materials Roundup: Market Talk",
+   "kaynak": "The Wall Street Journal",
+   "kategori": "altin-maden",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "SI=F",
    "link": "",
-   "yayin_tarihi": "2026-11-11T21:05:27+00:00",
+   "yayin_tarihi": "2026-11-11T21:54:00+00:00",
+   "tarih": "2026-11-11"
+  },
+  {
+   "baslik": "Is the iShares Silver Trust a Buy After Falling Nearly 60% From Its High?",
+   "kaynak": "Motley Fool",
+   "kategori": "altin-maden",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "SI=F",
+   "link": "",
+   "yayin_tarihi": "2026-11-11T21:42:00+00:00",
+   "tarih": "2026-11-11"
+  },
+  {
+   "baslik": "Zelenskiy: Üçlü zirve için görüşmeler sürüyor",
+   "kaynak": "Bloomberg HT",
+   "kategori": "bist",
+   "dil": "tr",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.bloomberght.com/zelenskiy-uclu-zirve-icin-gorusmeler-suruyor-3794256",
+   "yayin_tarihi": "2026-11-11T21:12:48+00:00",
    "tarih": "2026-11-11"
   },
   {
@@ -7967,162 +8423,6 @@
    "tarih": "2026-11-11"
   },
   {
-   "baslik": "DeFi Development launches tokenized preferred stock on Solana",
-   "kaynak": "Investing.com",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.investing.com/news/company-news/defi-development-launches-tokenized-preferred-stock-on-solana-93CH-5019835",
-   "yayin_tarihi": "2026-11-11T21:04:37+00:00",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "Nvidia shares rebound as Jensen Huang faces scrutiny ahead of earnings",
-   "kaynak": "CNBC Dünya",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.cnbc.com/2026/11/11/nvidia-stock-jensen-huang-affair-china.html",
-   "yayin_tarihi": "2026-11-11T21:04:36+00:00",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "Russia and Ukraine say some progress made at talks, US cites a lack of trust",
-   "kaynak": "Investing.com",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.investing.com/news/commodities-news/us-russia-and-ukraine-start-second-day-of-abu-dhabi-peace-talks-5018210",
-   "yayin_tarihi": "2026-11-11T21:01:22+00:00",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "Claritev at canaccord medtech forum: growth broadens beyond payers",
-   "kaynak": "Investing.com",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "pozitif",
-   "etiket": "🟢 Pozitif",
-   "sembol": "",
-   "link": "https://www.investing.com/news/transcripts/claritev-at-canaccord-medtech-forum-growth-broadens-beyond-payers-93CH-5019828",
-   "yayin_tarihi": "2026-11-11T21:01:10+00:00",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "Travere at Stifel 2026 Healthcare Conference: growth meets competition",
-   "kaynak": "Investing.com",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "pozitif",
-   "etiket": "🟢 Pozitif",
-   "sembol": "",
-   "link": "https://www.investing.com/news/transcripts/travere-at-stifel-2026-healthcare-conference-growth-meets-competition-93CH-5019826",
-   "yayin_tarihi": "2026-11-11T21:00:55+00:00",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "BillionToOne at Stifel 2026 Healthcare Conference: growth broadens",
-   "kaynak": "Investing.com",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "pozitif",
-   "etiket": "🟢 Pozitif",
-   "sembol": "",
-   "link": "https://www.investing.com/news/transcripts/billiontoone-at-stifel-2026-healthcare-conference-growth-broadens-93CH-5019825",
-   "yayin_tarihi": "2026-11-11T21:00:53+00:00",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "How Nvidia CEO Jensen Huang got entangled in a China chip and spy scandal",
-   "kaynak": "Investing.com",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.investing.com/news/stock-market-news/how-nvidia-ceo-jensen-huang-got-entangled-in-a-china-chip-and-spy-scandal-5019824",
-   "yayin_tarihi": "2026-11-11T21:00:49+00:00",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "Ukraine’s Zelenskiy says progress in peace talks hinges on US approach to Russia",
-   "kaynak": "Investing.com",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.investing.com/news/commodities-news/ukraines-zelenskiy-says-progress-in-peace-talks-hinges-on-us-approach-to-russia-5019823",
-   "yayin_tarihi": "2026-11-11T21:00:36+00:00",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "BioMarin at Stifel 2026 Healthcare Conference: growth, deals and pipeline rebuild",
-   "kaynak": "Investing.com",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "pozitif",
-   "etiket": "🟢 Pozitif",
-   "sembol": "",
-   "link": "https://www.investing.com/news/transcripts/biomarin-at-stifel-2026-healthcare-conference-growth-deals-and-pipeline-rebuild-93CH-5019820",
-   "yayin_tarihi": "2026-11-11T21:00:02+00:00",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "Analysis: Is Nvidia too big to fail? Its AI financing web raises the stakes",
-   "kaynak": "CNBC Dünya",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.cnbc.com/2026/11/11/nvidia-jensen-huang-ai-financial-system-risk.html",
-   "yayin_tarihi": "2026-11-11T20:59:14+00:00",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "Ovid Therapeutics at guggenheim healthcare conference: pipeline nears key tests",
-   "kaynak": "Investing.com",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.investing.com/news/transcripts/ovid-therapeutics-at-guggenheim-healthcare-conference-pipeline-nears-key-tests-93CH-5019819",
-   "yayin_tarihi": "2026-11-11T20:58:09+00:00",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "Bank of England’s Greene calls for proactive policy tightening",
-   "kaynak": "Investing.com",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.investing.com/news/economy-news/bank-of-englands-greene-calls-for-proactive-policy-tightening-93CH-5019817",
-   "yayin_tarihi": "2026-11-11T20:56:27+00:00",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "Why Did Agnico Eagle Stock Fall?",
-   "kaynak": "Trefis",
-   "kategori": "altin-maden",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "GC=F",
-   "link": "",
-   "yayin_tarihi": "2026-11-11T20:43:29+00:00",
-   "tarih": "2026-11-11"
-  },
-  {
    "baslik": "İngiliz girişimi Fractile, yapay zeka çipleri yarışında öne geçiyor",
    "kaynak": "Bloomberg HT",
    "kategori": "bist",
@@ -8132,18 +8432,6 @@
    "sembol": "",
    "link": "https://www.bloomberght.com/ingiliz-girisimi-fractile-yapay-zeka-cipleri-yarisinda-one-geciyor-3794254",
    "yayin_tarihi": "2026-11-11T20:40:52+00:00",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "JetBlue unveils new first-class seats to bring back profits",
-   "kaynak": "CNBC Ekonomi",
-   "kategori": "makro",
-   "dil": "en",
-   "yon": "pozitif",
-   "etiket": "🟢 Pozitif",
-   "sembol": "",
-   "link": "https://www.cnbc.com/2026/11/11/jetblue-ceo-premium.html",
-   "yayin_tarihi": "2026-11-11T20:35:45+00:00",
    "tarih": "2026-11-11"
   },
   {
@@ -8159,30 +8447,6 @@
    "tarih": "2026-11-11"
   },
   {
-   "baslik": "Canada’s ambassador warns Trump tariffs are driving up costs, threatening U.S. investment",
-   "kaynak": "CNBC Dünya",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.cnbc.com/2026/11/11/canada-ambassador-trump-tariffs-investments.html",
-   "yayin_tarihi": "2026-11-11T20:30:23+00:00",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "Merkez Bankası kredi sınırlarını yükseltti",
-   "kaynak": "Habertürk",
-   "kategori": "makro",
-   "dil": "tr",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.haberturk.com/ekonomi/son-dakika-merkez-bankasi-kredi-sinirlarini-yukseltti-3926658",
-   "yayin_tarihi": "2026-11-11T20:10:43+00:00",
-   "tarih": "2026-11-11"
-  },
-  {
    "baslik": "Siri'nin kurucu ortağı, kimlik doğrulama teknolojisi Helix'e danışman oldu",
    "kaynak": "Bloomberg HT",
    "kategori": "bist",
@@ -8192,18 +8456,6 @@
    "sembol": "",
    "link": "https://www.bloomberght.com/siri-nin-kurucu-ortagi-kimlik-dogrulama-teknolojisi-helix-e-danisman-oldu-3794252",
    "yayin_tarihi": "2026-11-11T20:10:08+00:00",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "Newmont (NEM) Stock Looks Reasonable Following Its 252% Three Year Run",
-   "kaynak": "Simply Wall St.",
-   "kategori": "altin-maden",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "GC=F",
-   "link": "",
-   "yayin_tarihi": "2026-11-11T20:07:30+00:00",
    "tarih": "2026-11-11"
   },
   {
@@ -8228,30 +8480,6 @@
    "sembol": "",
    "link": "https://www.cnbc.com/2026/11/10/mississippi-senate-scott-colom-hyde-smith.html",
    "yayin_tarihi": "2026-11-11T19:55:39+00:00",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "Social Security could pay full benefits until 2059 if taxable payroll kept pace with GDP: AARP report",
-   "kaynak": "CNBC Dünya",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.cnbc.com/2026/11/11/social-security-benefits-taxable-payroll-gdp.html",
-   "yayin_tarihi": "2026-11-11T19:54:27+00:00",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "Gold Futures Slip Back Under $4,000 Level",
-   "kaynak": "The Wall Street Journal",
-   "kategori": "altin-maden",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "SI=F",
-   "link": "",
-   "yayin_tarihi": "2026-11-11T19:47:00+00:00",
    "tarih": "2026-11-11"
   },
   {
@@ -8303,18 +8531,6 @@
    "tarih": "2026-11-11"
   },
   {
-   "baslik": "ABD'de milyar dolarlık orman yangınlarının sayısı beş katına çıktı",
-   "kaynak": "Bloomberg HT",
-   "kategori": "bist",
-   "dil": "tr",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.bloomberght.com/abd-de-milyar-dolarlik-orman-yanginlarinin-sayisi-bes-katina-cikti-3794246",
-   "yayin_tarihi": "2026-11-11T19:02:47+00:00",
-   "tarih": "2026-11-11"
-  },
-  {
    "baslik": "Peker GYO’nun 3 bağlı ortaklığına geçici iflas yöneticisi atandı",
    "kaynak": "Paratic",
    "kategori": "makro",
@@ -8339,42 +8555,6 @@
    "tarih": "2026-11-11"
   },
   {
-   "baslik": "Bouncing Wynn Shares might be primed for the 'wheel strategy'",
-   "kaynak": "CNBC Dünya",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.cnbc.com/2026/11/11/bouncing-wynn-shares-might-be-primed-for-the-wheel-strategy.html",
-   "yayin_tarihi": "2026-11-11T18:24:53+00:00",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "BrightView Q4 Earnings Call Highlights",
-   "kaynak": "MarketBeat",
-   "kategori": "altin-maden",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "SI=F",
-   "link": "",
-   "yayin_tarihi": "2026-11-11T18:15:15+00:00",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "Pezeşkiyan: Yakıt tesislerine saldırılar 1,5 milyon ton karbondioksit salımına yol açtı",
-   "kaynak": "Bloomberg HT",
-   "kategori": "bist",
-   "dil": "tr",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.bloomberght.com/yakit-tesislerine-saldirilar-1-5-milyon-ton-karbondioksit-salimina-yol-acti-3794244",
-   "yayin_tarihi": "2026-11-11T18:07:57+00:00",
-   "tarih": "2026-11-11"
-  },
-  {
    "baslik": "İran’dan ABD’ye mesaj: Top artık Washington’da",
    "kaynak": "Paratic",
    "kategori": "makro",
@@ -8384,30 +8564,6 @@
    "sembol": "",
    "link": "https://paratic.com/irandan-abdye-mesaj-top-artik-washingtonda/",
    "yayin_tarihi": "2026-11-11T18:01:41+00:00",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "Almanya'da büyüme tahmini yükseldi, kamu borcu uyarısı geldi",
-   "kaynak": "Bloomberg HT",
-   "kategori": "bist",
-   "dil": "tr",
-   "yon": "pozitif",
-   "etiket": "🟢 Pozitif",
-   "sembol": "",
-   "link": "https://www.bloomberght.com/almanya-da-buyume-tahmini-yukseldi-kamu-borcu-uyarisi-geldi-3794243",
-   "yayin_tarihi": "2026-11-11T17:53:03+00:00",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "American Airlines brings fresh food back to NY-Chicago first class for first time since 2019",
-   "kaynak": "CNBC Ekonomi",
-   "kategori": "makro",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.cnbc.com/2026/11/11/american-airlines-first-class-chicago-new-york.html",
-   "yayin_tarihi": "2026-11-11T17:34:18+00:00",
    "tarih": "2026-11-11"
   },
   {
@@ -8423,42 +8579,6 @@
    "tarih": "2026-11-11"
   },
   {
-   "baslik": "ABD Temsilciler Meclisi, Hegseth'e yönelik azil girişimini engelledi",
-   "kaynak": "Bloomberg HT",
-   "kategori": "bist",
-   "dil": "tr",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.bloomberght.com/abd-temsilciler-meclisi-hegseth-e-yonelik-azil-girisimini-engelledi-3794242",
-   "yayin_tarihi": "2026-11-11T17:32:25+00:00",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "İran: ABD şu ana kadar mesajımıza yanıt vermedi",
-   "kaynak": "Bloomberg HT",
-   "kategori": "bist",
-   "dil": "tr",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.bloomberght.com/iran-abd-su-ana-kadar-mesajimiza-yanit-vermedi-3794241",
-   "yayin_tarihi": "2026-11-11T17:14:14+00:00",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "Hissedarlar onayladı: Apollo, easyJet'i 5,7 milyar sterline satın alıyor",
-   "kaynak": "Bloomberg HT",
-   "kategori": "bist",
-   "dil": "tr",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.bloomberght.com/hissedarlar-onayladi-apollo-easyjet-i-5-7-milyar-sterline-satin-aliyor-3794240",
-   "yayin_tarihi": "2026-11-11T17:09:37+00:00",
-   "tarih": "2026-11-11"
-  },
-  {
    "baslik": "Eğilmez’den “fon vurgunu” için çağrı: Herkes hesap vermeli",
    "kaynak": "Paratic",
    "kategori": "makro",
@@ -8468,30 +8588,6 @@
    "sembol": "",
    "link": "https://paratic.com/egilmezden-fon-vurgunu-icin-cagri-herkes-hesap-vermeli/",
    "yayin_tarihi": "2026-11-11T17:00:52+00:00",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "Bessent moved to military base amid 'growing threats' from Iran",
-   "kaynak": "CNBC Dünya",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.cnbc.com/2026/11/11/us-iran-war-trump-hormuz-bessent-threats.html",
-   "yayin_tarihi": "2026-11-11T16:59:18+00:00",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "Von der Leyen, COP31'de temiz enerjiye geçişin hızlandırılması çağrısında bulundu",
-   "kaynak": "Bloomberg HT",
-   "kategori": "bist",
-   "dil": "tr",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.bloomberght.com/von-der-leyen-cop31-de-temiz-enerjiye-gecisin-hizlandirilmasi-cagrisinda-bulundu-3794239",
-   "yayin_tarihi": "2026-11-11T16:54:20+00:00",
    "tarih": "2026-11-11"
   },
   {
@@ -8519,54 +8615,6 @@
    "tarih": "2026-11-11"
   },
   {
-   "baslik": "TCMB enflasyon raporu ne zaman, saat kaçta? 2026 sonu tahmini yüzde 30’a yaklaşabilir",
-   "kaynak": "Paratic",
-   "kategori": "makro",
-   "dil": "tr",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://paratic.com/tcmb-enflasyon-raporu-ne-zaman-saat-kacta-2026-sonu-tahmini-yuzde-30a-yaklasabilir/",
-   "yayin_tarihi": "2026-11-11T15:59:04+00:00",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "Borsa günü yatay seyirle tamamladı - Habertürk",
-   "kaynak": "Google News · TR Borsa",
-   "kategori": "bist",
-   "dil": "tr",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://news.google.com/rss/articles/CBMiggFBVV95cUxQU21ZLWtmTzZKcm5COXJBR1JtR2xCSjZfMUwtSmdfczNkMWp3UEtvVldhVVhGVnNLOXZrY3k2blJNUEh6R294bWN4UTdCaFhXekxJRFAzQnc1eWRDaU12Z0prQ0hMVEZ5V3BKTFBwRGdkeFFNRHV1akUxUmtDYU1PQXpn?oc=5",
-   "yayin_tarihi": "2026-11-11T15:55:57+00:00",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "ORGE Enerji’den 276 milyon TL’lik yeni iş anlaşması",
-   "kaynak": "Paratic",
-   "kategori": "makro",
-   "dil": "tr",
-   "yon": "pozitif",
-   "etiket": "🟢 Pozitif",
-   "sembol": "",
-   "link": "https://paratic.com/orge-enerjiden-276-milyon-tllik-yeni-is-anlasmasi/",
-   "yayin_tarihi": "2026-11-11T15:53:31+00:00",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "Will Higher Unit Costs Weigh on Newmont's Margins in Q4?",
-   "kaynak": "Zacks",
-   "kategori": "altin-maden",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "SI=F",
-   "link": "",
-   "yayin_tarihi": "2026-11-11T15:39:00+00:00",
-   "tarih": "2026-11-11"
-  },
-  {
    "baslik": "Borsa İstanbul günü yatay kapattı: Altın ve petrolde son durum - Manşet Haber",
    "kaynak": "Google News · TR Borsa",
    "kategori": "bist",
@@ -8579,15 +8627,15 @@
    "tarih": "2026-11-11"
   },
   {
-   "baslik": "EBRD, Türkiye'de temiz enerjiye 6 milyar dolar yatırım planlıyor",
-   "kaynak": "Habertürk",
-   "kategori": "makro",
+   "baslik": "KAP *** ARSAN HOLDİNG A.Ş. *** ARSAN *** Payların Geri Alınmasına İlişkin Bildirim - GZT",
+   "kaynak": "Google News · KAP",
+   "kategori": "bist",
    "dil": "tr",
-   "yon": "pozitif",
-   "etiket": "🟢 Pozitif",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
    "sembol": "",
-   "link": "https://www.haberturk.com/ekonomi/ebrd-turkiye-de-temiz-enerjiye-6-milyar-dolar-yatirim-planliyor-3926611",
-   "yayin_tarihi": "2026-11-11T15:26:41+00:00",
+   "link": "https://news.google.com/rss/articles/CBMiugFBVV95cUxPMEpRQlR1eVlsWVlWX2dzMG4xMlhHSC1GbTBlbkxvY0VPV09jZEdXU1o3eldyVGs4Y1FNc1hFaGZZMklRdnE3NWw1VDNiUHYyamdGTDZsUGVWalBtRDBXVzZzb0ZoSGtBUXJ1ZzNsRVZyX21hSmZ0MmVsN2R6MERVTlphd0FCRkh6V3l2VVl1TW5BN3Y1NWZ2X21FSmYwQlRnbXpxeE5vZFZxcHJJa1UwVGlVTkd6M1lsRXc?oc=5",
+   "yayin_tarihi": "2026-11-11T15:27:00+00:00",
    "tarih": "2026-11-11"
   },
   {
@@ -8615,30 +8663,6 @@
    "tarih": "2026-11-11"
   },
   {
-   "baslik": "Türk Altın’dan Ankara’da 10 bin fidanlık hatıra ormanı",
-   "kaynak": "Habertürk",
-   "kategori": "makro",
-   "dil": "tr",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.haberturk.com/ekonomi/turk-altindan-ankarada-10-bin-fidanlik-hatira-ormani-3926604",
-   "yayin_tarihi": "2026-11-11T14:46:26+00:00",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "KAP *** BORSA İSTANBUL A.Ş. *** İşlem İptali - GZT",
-   "kaynak": "Google News · TR Borsa",
-   "kategori": "bist",
-   "dil": "tr",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://news.google.com/rss/articles/CBMijAFBVV95cUxQRXRPenN2MWlhcjFUOHI5STdkSGNNVm1vMDVZTUVuYmFpelBaZ3p4cmFQZWkxeFd0YjduR2UxdUIzcEh2Vko1VkF1NVNOejJzMEFiaWo3SEFoUGlraElOVDFMS3RCLU82UWUtc3VYWUM4VWpNUFJYb2NxTmZmSW5OcHZxbWdqQkxyMTFUMg?oc=5",
-   "yayin_tarihi": "2026-11-11T14:37:00+00:00",
-   "tarih": "2026-11-11"
-  },
-  {
    "baslik": "Hayat Kimya enerji yönetimini yapay zekayla optimize ediyor",
    "kaynak": "Habertürk",
    "kategori": "makro",
@@ -8648,18 +8672,6 @@
    "sembol": "",
    "link": "https://www.haberturk.com/ekonomi/gelecegi-kendi-enerji-kararlarini-veren-fabrikalar-sekillendirecek-3926597",
    "yayin_tarihi": "2026-11-11T14:03:49+00:00",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "Nvidia's Huang tries to project 'business as usual' in return to office after affair revelation",
-   "kaynak": "CNBC Dünya",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.cnbc.com/2026/11/10/nvidia-jensen-huang-affair-office.html",
-   "yayin_tarihi": "2026-11-11T13:46:59+00:00",
    "tarih": "2026-11-11"
   },
   {
@@ -8732,6 +8744,18 @@
    "sembol": "",
    "link": "https://www.haberturk.com/ekonomi/edward-burtynsky-donusen-yeryuzu-cop31-ozel-seckisi-akra-antalyada-3926563",
    "yayin_tarihi": "2026-11-11T11:56:21+00:00",
+   "tarih": "2026-11-11"
+  },
+  {
+   "baslik": "US inflation tops forecasts; China trade weakens; Anthropic eyes $1.4tn IPO valuation - www.equiti.com",
+   "kaynak": "Google News · Global",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://news.google.com/rss/articles/CBMixwFBVV95cUxPa3JhZkdZU0ExUER3YXRpR3dKTTBISGROOXhLQUV4TnpLSks4OXo5eUVjOWpvVEdRcmFRNHFhZmNDVDB5VGpuQ2hvQ1h1ajdPUjJwcld1TnBVT2wyS1FaWDBFamtXTThuY2tIa1d1bnBWUTdDWHViNUZzQ1VqbGNXZ1lKaDd6UEFFajRCZmpUeG5rNDhOU2p2aVl0c3lUa19NYnV2UFNGV0ppSzJ0eHNBVF9rcEs3Z0hWSFJGMEp0emFwQVZYVERv?oc=5",
+   "yayin_tarihi": "2026-11-11T11:33:56+00:00",
    "tarih": "2026-11-11"
   },
   {
@@ -8819,30 +8843,6 @@
    "tarih": "2026-11-11"
   },
   {
-   "baslik": "Inflation jitters throw wrench into US Treasury auction amid jumbo hike fears - South China Morning Post",
-   "kaynak": "Google News · Global",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://news.google.com/rss/articles/CBMi2AFBVV95cUxPYlJ2cXpmdkEtM0g5WXRmVFZVWTloWFRaNHQ0NG1pX05Oa0dUSkRSM2h1eVhfcjF3OXppNGEydVNoSFE1WDdSazFvS3dXV0pVbzVtb2FNYklkb3JQU2tndV9nOUhaNnJHR3BhcThmLVJsZzlYQjluSHFvTjFwZEJuUTZLcTFTN0UzTE9pR1BPU1BXSkthV3haVGdad0pWdzQyMzlHRDRkME5sSFJaSXliaEx3RUR0MDZyLVZNanBjdV9CdXRnNDNPcDZkcUVkTWhadXBrWUtQMXc?oc=5",
-   "yayin_tarihi": "2026-11-11T07:13:56+00:00",
-   "tarih": "2026-11-11"
-  },
-  {
-   "baslik": "Borsa güne yükselişle başladı - TRT Haber",
-   "kaynak": "Google News · TR Borsa",
-   "kategori": "bist",
-   "dil": "tr",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://news.google.com/rss/articles/CBMihwFBVV95cUxNRFhJT0dndEN2bnVhcE9EZ1pGc0ZnaWtEX3loTTZyYUJIQi1rTXZNa0M4SUNmTGUyYmpUUU13R0ZpdTd5ODJ4RzlSQVVVOGoyWlgySnBrSkVCQzBIcXlIc3JzVDNlZUtHdFNlUmEzS2RCRlN0clE0ZGp3TnJpcUltZzhPX0VFbWs?oc=5",
-   "yayin_tarihi": "2026-11-11T07:02:00+00:00",
-   "tarih": "2026-11-11"
-  },
-  {
    "baslik": "Borsa İstanbul Şirket Haberleri (11 Kasım) - Borsa Gundem",
    "kaynak": "Google News · TR Borsa",
    "kategori": "bist",
@@ -8853,6 +8853,18 @@
    "link": "https://news.google.com/rss/articles/CBMifkFVX3lxTE9GX2ZDVGtaZGxYeWVsY25oSkZlYjE3cElpbExQV0R2dDBFeVkyaWRmS0Q3dFhSNHdhQ1d2XzE5bC1ybmM5dnJmc3BSWWZVUGUySEtReDZsc01YTFFLM1FQN3ZnSWxYZXRTOUtRT3lhendDX055SHhaOF9HelM4Zw?oc=5",
    "yayin_tarihi": "2026-11-11T06:09:00+00:00",
    "tarih": "2026-11-11"
+  },
+  {
+   "baslik": "US yields climb, stocks fall as inflation data boosts chances for larger Fed rate hike - Reuters",
+   "kaynak": "Google News · Global",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://news.google.com/rss/articles/CBMie0FVX3lxTE9CVDNSVXJpWURQMkF1dUt1amw1WkxILXhVSjZyZkQxdGlBdWZvT0tqclhabXRKZC1xNlRIRmJSdkhINDVsYXlRdk9paVRCa085WWVKRTJFcm9CZWo2VzNaYU5lQ2RXbDdqb3QxdkY4SDFRb2JMVE8yemVJMA?oc=5",
+   "yayin_tarihi": "2026-11-10T23:19:59+00:00",
+   "tarih": "2026-11-10"
   },
   {
    "baslik": "Fossil CEO says turnaround is ahead of plan as sales return to growth",
@@ -9023,18 +9035,6 @@
    "tarih": "2026-11-10"
   },
   {
-   "baslik": "US yields climb, stocks fall as inflation data boosts chances for larger Fed rate hike - Reuters",
-   "kaynak": "Google News · Global",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://news.google.com/rss/articles/CBMie0FVX3lxTE9CVDNSVXJpWURQMkF1dUt1amw1WkxILXhVSjZyZkQxdGlBdWZvT0tqclhabXRKZC1xNlRIRmJSdkhINDVsYXlRdk9paVRCa085WWVKRTJFcm9CZWo2VzNaYU5lQ2RXbDdqb3QxdkY4SDFRb2JMVE8yemVJMA?oc=5",
-   "yayin_tarihi": "2026-11-10T02:23:00+00:00",
-   "tarih": "2026-11-10"
-  },
-  {
    "baslik": "PepsiCo to cut about 1,000 jobs as North American business struggles",
    "kaynak": "CNBC Ekonomi",
    "kategori": "makro",
@@ -9095,18 +9095,6 @@
    "tarih": "2026-11-09"
   },
   {
-   "baslik": "Goldman CEO Solomon says AI financing remains strong despite market jitters",
-   "kaynak": "CNBC Ekonomi",
-   "kategori": "makro",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.cnbc.com/2026/11/09/goldman-ceo-ai-financing-market.html",
-   "yayin_tarihi": "2026-11-09T18:14:47+00:00",
-   "tarih": "2026-11-09"
-  },
-  {
    "baslik": "Gold climbs more than 1% as inflation fears ease on lower crude prices - Reuters",
    "kaynak": "Google News · Global",
    "kategori": "global",
@@ -9116,6 +9104,18 @@
    "sembol": "",
    "link": "https://news.google.com/rss/articles/CBMisAFBVV95cUxNbEdIVXlJc2RaUEw2RmFrR2FZcXYzYlBKUG9Cdl9WUVFfalVxT0hGcGFCdW1DS3JMT2daanhDYktBeXVGNGt5TGlsOGZJVWVSMFpnT3ZVa2RBUjZYakRlVlQ3SXd1ZkpTQVNXVkpoNUZoemdycWY0MG02dVk0cWRuWG4taG5VMm9kbEluSHctTVZVMXJwWXNWSWdVcmxQeWtRSW1EWDQ2dTJ6QVV2TzhoeQ?oc=5",
    "yayin_tarihi": "2026-11-09T14:58:55+00:00",
+   "tarih": "2026-11-09"
+  },
+  {
+   "baslik": "Borsa İstanbul'da 4 şirket temettü dağıtacak! Hisse başına ödenecek tutarlar belli oldu - Haber 7",
+   "kaynak": "Google News · TR Borsa",
+   "kategori": "bist",
+   "dil": "tr",
+   "yon": "pozitif",
+   "etiket": "🟢 Pozitif",
+   "sembol": "",
+   "link": "https://news.google.com/rss/articles/CBMizwFBVV95cUxPX0UzNUFXS2d6aS1aNWQyM1hLLWtpZjROamFfcXJNOThhMVMxWkgzbjROU1lWb2dSQVpLbDJJYjJWOW00NnlsTFI2VVBvMzRacVZYZFBXSGtkNHJhS3ZnMHg2VkdCbGwwX3lJbHlseWJBQUZFOWFfeExyMFowVGpDYWxWNFZDVEpUcXNuR3M1b2hIUFhCSzFRRE43cGItSDZweFNZQnNFdHlVVnh4RkpYTlVKekFHQTBZcXpkakcxWnVDWllLYjdORlBsN25FYjjSAdIBQVVfeXFMTUVudk5mTGRjaUJhMGJhVV91bzZSTU4zWHNiMEFlMm8ybTlKSHlFSjduUEJ1U0kxWWhwM0R3TU9Va2xQaUExSmVPSlFUREtYWXMzUW9uaXhhMEpOeVBRaG9uQTlWcTRrVmxDcDNDc05KRlpCUFNmdnlhYThEdWQybVJmQWwxdVJZcFB3X2MxS1ZPVjVTUzkxbkgzdmROWEVyUFBjOXBIOW9WTm9NMHUtTWRIVWVMQVNkQ2tiQjVUTjFTTmtwbUtJa0hwem53b2U3Sk5B?oc=5",
+   "yayin_tarihi": "2026-11-09T09:32:00+00:00",
    "tarih": "2026-11-09"
   }
  ],
@@ -9140,10 +9140,10 @@
      }
     ],
     "getiri": {
-     "1A": -12.0142,
-     "3A": -41.287,
-     "6A": -37.9355,
-     "1Y": -1.028
+     "1A": -13.3341,
+     "3A": -42.592,
+     "6A": -38.726,
+     "1Y": 0.4748
     }
    },
    {
@@ -9181,10 +9181,10 @@
      }
     ],
     "getiri": {
-     "1A": 1.4825,
-     "3A": 2.316,
-     "6A": 14.4722,
-     "1Y": 41.3829
+     "1A": 0.5096,
+     "3A": 1.1391,
+     "6A": 13.4008,
+     "1Y": 40.6988
     }
    },
    {
@@ -9226,15 +9226,15 @@
      }
     ],
     "getiri": {
-     "1A": -0.3905,
-     "3A": -1.5229,
-     "6A": -4.6102,
-     "1Y": 7.0443
+     "1A": -0.9758,
+     "3A": -2.6177,
+     "6A": -4.7265,
+     "1Y": 5.2084
     }
    },
    {
     "kod": "TTP",
-    "tarih": "2026-11-11",
+    "tarih": "2026-11-12",
     "hisse_agirlik": 0.0,
     "varliklar": [
      {
@@ -9247,51 +9247,51 @@
      }
     ],
     "getiri": {
-     "1A": 2.341,
-     "3A": 6.1573,
-     "6A": 12.6747,
-     "1Y": 23.9098
+     "1A": 2.4198,
+     "3A": 6.1685,
+     "6A": 12.5364,
+     "1Y": 23.8917
     }
    },
    {
     "kod": "AVT",
-    "tarih": "2026-11-11",
+    "tarih": "2026-11-12",
     "hisse_agirlik": 0.0,
     "varliklar": [
      {
       "sinif": "Government Bonds",
-      "agirlik": 30.25
+      "agirlik": 29.82
      },
      {
       "sinif": "Commercial Paper",
-      "agirlik": 25.95
+      "agirlik": 25.82
      },
      {
       "sinif": "Corporate Bonds",
-      "agirlik": 21.19
+      "agirlik": 21.1
      },
      {
       "sinif": "Reverse Repo",
-      "agirlik": 16.26
+      "agirlik": 17.1
      },
      {
       "sinif": "Government Sukuk (TRY)",
-      "agirlik": 4.3
+      "agirlik": 4.29
      },
      {
       "sinif": "TL Deposits",
-      "agirlik": 1.49
+      "agirlik": 1.32
      },
      {
       "sinif": "Corporate Sukuk",
-      "agirlik": 0.56
+      "agirlik": 0.55
      }
     ],
     "getiri": {
-     "1A": 2.9279,
-     "3A": 9.4794,
-     "6A": 20.4278,
-     "1Y": 44.6173
+     "1A": 3.0267,
+     "3A": 9.4661,
+     "6A": 20.4353,
+     "1Y": 44.5992
     }
    }
   ],
@@ -9300,7 +9300,7 @@
    "ort_hisse_agirlik": 34.8,
    "max_hisse_agirlik": 93.6
   },
-  "tarih": "2026-11-11",
+  "tarih": "2026-11-12",
   "not": "TEFAS varlık sınıfı bazlı dağılım verir (hisse senedi, ters-repo, eurobond…). Hisse BAZLI dağılım (hangi hisse ne kadar) TEFAS API anahtarı gerektirir."
  },
  "sektorler": [
@@ -9385,14 +9385,21 @@
  "temel_analiz": [
   {
    "sembol": "ANSGR",
-   "fk": 2.8,
+   "fk": 2.7,
    "pddd": 0.99,
-   "temettu": 6.2,
+   "temettu": 6.4,
    "skor": 5
   },
   {
+   "sembol": "ALARK",
+   "fk": 6.6,
+   "pddd": 0.47,
+   "temettu": 3.1,
+   "skor": 4
+  },
+  {
    "sembol": "BRYAT",
-   "fk": 7.4,
+   "fk": 7.1,
    "pddd": 0.98,
    "temettu": 12.9,
    "skor": 4
@@ -9408,19 +9415,12 @@
    "sembol": "AKSA",
    "fk": 7.0,
    "pddd": 1.05,
-   "temettu": 5.6,
-   "skor": 3
-  },
-  {
-   "sembol": "ALARK",
-   "fk": 6.7,
-   "pddd": 0.47,
-   "temettu": 3.0,
+   "temettu": 5.5,
    "skor": 3
   },
   {
    "sembol": "CWENE",
-   "fk": 5.6,
+   "fk": 5.3,
    "pddd": 0.93,
    "temettu": null,
    "skor": 3
@@ -9434,23 +9434,23 @@
   },
   {
    "sembol": "DOHOL",
-   "fk": 5.4,
+   "fk": 5.3,
    "pddd": 0.52,
    "temettu": null,
    "skor": 3
   },
   {
    "sembol": "DOAS",
-   "fk": 10.7,
+   "fk": 186.0,
    "pddd": 0.41,
-   "temettu": 23.1,
+   "temettu": 24.1,
    "skor": 3
   },
   {
    "sembol": "ECILC",
    "fk": null,
    "pddd": 0.46,
-   "temettu": 3.5,
+   "temettu": 3.6,
    "skor": 3
   },
   {
@@ -9462,9 +9462,9 @@
   },
   {
    "sembol": "AEFES",
-   "fk": 10.1,
+   "fk": 10.2,
    "pddd": 0.89,
-   "temettu": 2.0,
+   "temettu": 2.1,
    "skor": 2
   },
   {
@@ -9491,6 +9491,42 @@
  ],
  "sinyal_gecmisi": {
   "kayitlar": [
+   {
+    "tarih": "2026-11-12",
+    "sembol": "ENERY",
+    "sinyal": "AL",
+    "skor": 5,
+    "giris": 14.1,
+    "guncel": 14.1,
+    "getiri": 0.0
+   },
+   {
+    "tarih": "2026-11-12",
+    "sembol": "ENJSA",
+    "sinyal": "DİKKAT_AL",
+    "skor": 3,
+    "giris": 119.0,
+    "guncel": 119.0,
+    "getiri": 0.0
+   },
+   {
+    "tarih": "2026-11-12",
+    "sembol": "OTKAR",
+    "sinyal": "DİKKAT_AL",
+    "skor": 2,
+    "giris": 317.75,
+    "guncel": 317.75,
+    "getiri": 0.0
+   },
+   {
+    "tarih": "2026-11-12",
+    "sembol": "TUKAS",
+    "sinyal": "DİKKAT_AL",
+    "skor": 2,
+    "giris": 2.16,
+    "guncel": 2.16,
+    "getiri": 0.0
+   },
    {
     "tarih": "2026-11-11",
     "sembol": "ENERY",
@@ -9751,32 +9787,14 @@
     "giris": 37.64,
     "guncel": 32.96,
     "getiri": -12.4
-   },
-   {
-    "tarih": "2026-10-02",
-    "sembol": "BERA",
-    "sinyal": "DİKKAT_AL",
-    "skor": 3,
-    "giris": 13.02,
-    "guncel": 10.11,
-    "getiri": -22.4
-   },
-   {
-    "tarih": "2026-10-02",
-    "sembol": "ENERY",
-    "sinyal": "DİKKAT_AL",
-    "skor": 3,
-    "giris": 13.64,
-    "guncel": 14.1,
-    "getiri": 3.4
    }
   ],
-  "basari_orani": 42,
-  "toplam": 31,
-  "pozitif": 13
+  "basari_orani": 36,
+  "toplam": 33,
+  "pozitif": 12
  },
  "gece_analizi": {
-  "tarih": "11.11.2026 21:22",
+  "tarih": "12.11.2026 06:32",
   "guclu_al": [
    {
     "sembol": "ENERY",
@@ -9849,15 +9867,7 @@
     "rsi": 25.0
    }
   ],
-  "yarin_yuksek_onem": [
-   {
-    "tarih": "12.11",
-    "saat": "18:00",
-    "ulke": "ABD",
-    "onem": "high",
-    "olay": "Mevcut Konut Satışları (-)"
-   }
-  ]
+  "yarin_yuksek_onem": []
  },
  "ict_tarama": {
   "mss_yukari": [
@@ -10469,7 +10479,7 @@
   "islenen": 100,
   "al_sayisi": 3,
   "sat_sayisi": 4,
-  "hesap_tarihi": "11.11.2026 21:22",
+  "hesap_tarihi": "12.11.2026 06:32",
   "kural": "MSS ±2, displacement ±1, fiyat FVG/OB bölgesi içinde ±1, likidite süpürmesi ±1, değer alanı dışı ±1. Skor ≥3 AL, ≤-3 SAT."
  },
  "genislik": {
@@ -10480,6 +10490,6 @@
   "dusen": 62,
   "yeni_zirve_52h": 0,
   "yeni_dip_52h": 3,
-  "tarih": "2026-11-10"
+  "tarih": "2026-11-11"
  }
 }
