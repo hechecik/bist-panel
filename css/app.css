@@ -206,3 +206,7 @@ tr.detail td { background:var(--bg3); padding:11px; white-space:normal; }
 .ziyaretci { text-align:center; font-size:10.5px; color:var(--tx2); padding:16px 16px 2px; letter-spacing:.3px; }
 .ziyaretci b { color:var(--tx); font-weight:700; font-variant-numeric:tabular-nums; }
 .ziyaretci .zi-dot { color:var(--up); }
+
+/* Fon bölümü — kategori başlığı (G15) */
+h3.fkat { font-size:13px; margin:14px 0 6px; padding-left:8px; border-left:3px solid var(--accent); display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+h3.fkat .cnt { font-size:10.5px; font-weight:400; background:var(--bg3); border:1px solid var(--bd); padding:1px 8px; border-radius:20px; color:var(--tx2); }

@@ -1,7 +1,7 @@
 /* js/bolum/fon.js — FON bölümü (G06 parça 3)
    renderFon: TEFAS fon risk iştahı, fon getirileri, sektör dağılımı,
    BIST 30 temel analiz. */
-import { fmt, ok } from '../core.js';
+import { fmt, ok, alEsc } from '../core.js';
 
 /* ══════════ FON ══════════ */
 const SEKTOR_TR = {'Industrials':'Sanayi','Financial Services':'Finans','Basic Materials':'Hammadde',
@@ -13,6 +13,30 @@ const sekTr = s => SEKTOR_TR[s] || s || '—';
 export function renderFon(d) {
   const f = d.fonlar;
   let html = '<h2>🏦 Fonlar & Kurumsal</h2>';
+
+  /* ── Kategori bazlı top-10 performans (TEFAS, 1 aylık getiriye göre sıralı) ── */
+  if (f && f.kategoriler && f.kategoriler.length) {
+    const g = x => x == null ? '—' : `<span class="${ok(x)}">${x >= 0 ? '+' : '−'}%${Math.abs(x).toFixed(2).replace('.', ',')}</span>`;
+    html += `<h2>🏆 Kategori Bazlı Fon Performansı <span class="cnt">${f.tarih || ''}` +
+      `${f.bayat ? ' <span class="warn">bayat</span>' : ''}</span></h2>` +
+      `<div class="altnot">${f.taranan || 0} fon tarandı · ${f.kategoriler.length} kategori · ` +
+      `sıralama: 1 aylık getiri</div>`;
+    f.kategoriler.forEach(k => {
+      html += `<h3 class="fkat">${k.ad} <span class="cnt">${k.fon_sayisi} fon · top ${k.top.length}</span></h3>` +
+        '<div class="twrap"><table><tr><th>#</th><th>Kod</th><th>Fon Adı</th><th>Büyüklük</th>' +
+        '<th>1 Ay</th><th>3 Ay</th><th>6 Ay</th><th>YBB</th><th>1 Yıl</th></tr><tbody>';
+      k.top.forEach((x, i) => {
+        const gg = x.getiri || {};
+        html += `<tr><td>${i + 1}</td><td class="sym">${x.kod}</td>` +
+          `<td class="ned">${alEsc(x.ad || '')}</td>` +
+          `<td>${x.boyut_m >= 1000 ? (x.boyut_m / 1000).toFixed(1) + ' mlr' : Math.round(x.boyut_m) + ' mn'}</td>` +
+          `<td>${g(gg['1A'])}</td><td>${g(gg['3A'])}</td><td>${g(gg['6A'])}</td>` +
+          `<td>${g(gg['YTD'])}</td><td>${g(gg['1Y'])}</td></tr>`;
+      });
+      html += '</tbody></table></div>';
+    });
+    html += `<div class="note">${alEsc(f.siralama_notu || '')}</div>`;
+  }
 
   if (f && f.fonlar && f.fonlar.length) {
     if (f.ozet && f.ozet.fon_sayisi) {
