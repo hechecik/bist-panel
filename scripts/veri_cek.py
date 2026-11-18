@@ -2286,18 +2286,103 @@ def haberler_cek(oncelikli_hisseler=None) -> list:
     return haberler[:100]
 
 
-def fonlar_cek() -> dict:
-    """TEFAS fon portföy dağılımları — borsapy Fund.allocation (TEFAS resmi endpoint).
+# TEFAS şemsiye fon tipleri → kısa Türkçe kategori adı (UI'da başlık olarak kullanılır).
+# TEFAS'ın kendi `fund_type` alanı gelir; burada sadece okunur hale getiriliyor. Sıra UI'daki sıradır.
+FON_KATEGORILERI = [
+    ('Kıymetli Madenler Şemsiye Fonu', '🥇 Altın & Kıymetli Maden'),
+    ('Hisse Senedi Şemsiye Fonu', '📈 Hisse Senedi'),
+    ('Para Piyasası Şemsiye Fonu', '💵 Para Piyasası'),
+    ('Borçlanma Araçları Şemsiye Fonu', '📜 Borçlanma Araçları'),
+    ('Fon Sepeti Şemsiye Fonu', '🧺 Fon Sepeti'),
+    ('Değişken Şemsiye Fonu', '🔀 Değişken'),
+    ('Serbest Şemsiye Fonu', '🎯 Serbest'),
+    ('Katılım Şemsiye Fonu', '☪️ Katılım'),
+    ('Karma Şemsiye Fonu', '⚖️ Karma'),
+]
+FON_TIP_ADI = dict(FON_KATEGORILERI)
+# Top-10 sıralaması için asgari fon büyüklüğü (TL). Çok küçük fonların 1 aylık
+# getirisi tek işlemle sıçrayabiliyor; tabloya girmesi yanıltıcı olur.
+FON_MIN_BUYUKLUK = 50_000_000
+FON_TOP_N = 10
 
-    DİKKAT: TEFAS 'dagilimSiraliGetirT' VARLIK SINIFI bazlı dağılım verir (hisse senedi,
-    ters-repo, eurobond...) — hisse BAZLI değil. Hisse bazlı detay TEFAS API key ister.
-    Bu yüzden: her fonun varlık sınıfı dağılımı + fonların ortalama hisse senedi ağırlığı gösterilir.
+
+def fonlar_cek(onceki: dict = None) -> dict:
+    """TEFAS fonları — kategori bazında top-N performans tabloları (borsapy, TEFAS resmi).
+
+    İki katman döner:
+      * `kategoriler` : şemsiye fon tipine göre 1A/3A/6A/YTD/1Y getirilerine göre sıralı top-10.
+      * `fonlar`      : eski blok (varlık sınıfı dağılımı + hisse ağırlığı) — geriye dönük uyumluluk
+                        için KORUNUR, UI'daki "Fon Dağılımları" bölümü bunu kullanmaya devam eder.
+
+    Sıralama ölçütü 1 aylık getiridir (Fintables benzeri tabloların varsayılanı); 1A verisi
+    olmayan fon sıralamaya girmez. `onceki` verilirse ve TEFAS o an yanıt vermezse önceki
+    blok aynen korunur (veri kaybı olmasın).
     """
     import borsapy as bp
     import pandas as pd
-    # Hisse senedi ağırlıklı fonlar (bilinen A tipi kodlar)
+    sonuc = {'fonlar': [], 'kategoriler': [], 'ozet': {}, 'tarih': '',
+             'kaynak': 'TEFAS (borsapy)', 'taranan': 0}
+    try:
+        katalog = json.loads((Path(__file__).resolve().parent.parent / 'fonlar-katalog.json')
+                             .read_text(encoding='utf-8'))
+        kodlar = [x['kod'] for x in katalog if x.get('kod')]
+    except Exception as e:
+        log(f"Fon kataloğu okunamadı ({type(e).__name__}) — fon bölümü atlanıyor")
+        kodlar = []
+    if not kodlar:
+        return sonuc
+
+    # ── 1. Katman: tüm katalog taranır, kategori bazlı top-N ──
+    # 8 paralel iş parçacığı: 946 fon ~16 saniyede bitiyor (tek tek ~2,6 sn/fon olurdu).
+    import concurrent.futures as cf
+
+    def _cek(kod):
+        try:
+            f = bp.Fund(kod)
+            i = f.info or {}
+            p = f.performance or {}
+            return {'kod': kod, 'ad': i.get('name', ''), 'tip': i.get('fund_type', ''),
+                    'boyut': i.get('fund_size'), 'fiyat': i.get('price'),
+                    'getiri': {'1A': p.get('return_1m'), '3A': p.get('return_3m'),
+                               '6A': p.get('return_6m'), 'YTD': p.get('return_ytd'),
+                               '1Y': p.get('return_1y'), '3Y': p.get('return_3y')}}
+        except Exception:
+            return None
+
+    tarama = []
+    try:
+        with cf.ThreadPoolExecutor(max_workers=8) as ex:
+            for r in ex.map(_cek, kodlar):
+                if r:
+                    tarama.append(r)
+        sonuc['taranan'] = len(tarama)
+        log(f"Fon taraması: {len(tarama)}/{len(kodlar)} fon verisi alındı")
+    except Exception as e:
+        log(f"Fon taraması kesildi: {type(e).__name__}: {e}")
+
+    # Toplam büyüklük TEFAS'ın tamamı için değil, taranan fonlar için verilir — bu yüzden
+    # UI'da "taranan fon büyüklüğü" diye etiketlenir, "TEFAS toplamı" denmez (uydurma olurdu).
+    for tip, ad in FON_KATEGORILERI:
+        grup = [x for x in tarama if x['tip'] == tip and x['getiri'].get('1A') is not None]
+        if not grup:
+            continue
+        grup.sort(key=lambda x: -(x['getiri']['1A'] or 0))
+        ust = [x for x in grup if (x['boyut'] or 0) >= FON_MIN_BUYUKLUK]
+        # Büyüklük eşiğini geçen yeterli fon yoksa (küçük kategoriler) tüm grup kullanılır.
+        liste = (ust if len(ust) >= FON_TOP_N else grup)[:FON_TOP_N]
+        sonuc['kategoriler'].append({
+            'tip': tip, 'ad': ad, 'fon_sayisi': len(grup),
+            'top': [{'kod': x['kod'], 'ad': x['ad'],
+                     'boyut_m': round((x['boyut'] or 0) / 1e6, 0),
+                     'getiri': {k: (round(v, 2) if isinstance(v, (int, float)) else None)
+                                for k, v in x['getiri'].items()}}
+                    for x in liste],
+        })
+    if tarama:
+        sonuc['tarih'] = dt.datetime.now(dt.timezone.utc).strftime('%Y-%m-%d')
+
+    # ── 2. Katman: eski blok (varlık sınıfı dağılımı) — UI'daki "Fon Dağılımları" bölümü için ──
     aday_kodlar = ['TTE', 'TMS', 'TAH', 'TTA', 'TTP', 'AVT', 'TAI']
-    sonuc = {'fonlar': [], 'ozet': {}, 'tarih': ''}
     hisse_agirliklari = []
     for kod in aday_kodlar:
         try:
@@ -2317,7 +2402,6 @@ def fonlar_cek() -> dict:
             if not satirlar:
                 continue
             tarih = str(df.iloc[0].get('Date', ''))[:10]
-            # 3.5 — Fon getirileri (TEFAS resmi: 1A/3A/1Y)
             try:
                 p = f.performance or {}
                 getiri = {'1A': p.get('return_1m'), '3A': p.get('return_3m'),
@@ -2326,7 +2410,6 @@ def fonlar_cek() -> dict:
                 getiri = {}
             sonuc['fonlar'].append({'kod': kod, 'tarih': tarih, 'hisse_agirlik': round(hs_agirlik, 1),
                                     'varliklar': satirlar[:8], 'getiri': getiri})
-            sonuc['tarih'] = tarih
             hisse_agirliklari.append(hs_agirlik)
         except Exception:
             continue
@@ -2338,6 +2421,16 @@ def fonlar_cek() -> dict:
         }
     sonuc['not'] = ('TEFAS varlık sınıfı bazlı dağılım verir (hisse senedi, ters-repo, eurobond…). '
                     'Hisse BAZLI dağılım (hangi hisse ne kadar) TEFAS API anahtarı gerektirir.')
+    sonuc['siralama_notu'] = (f'Kategori tabloları 1 aylık getiriye göre sıralıdır; '
+                               f'{FON_MIN_BUYUKLUK // 1_000_000} mn TL altı fonlar listeye alınmaz '
+                               f'(getirisi tek işlemle sıçrar). Yatırım tavsiyesi değildir.')
+    # TEFAS o an yanıt vermediyse önceki kategori bloğunu koru.
+    if not sonuc['kategoriler'] and onceki and onceki.get('kategoriler'):
+        sonuc['kategoriler'] = onceki['kategoriler']
+        sonuc['tarih'] = onceki.get('tarih', '')
+        sonuc['siralama_notu'] = onceki.get('siralama_notu', sonuc['siralama_notu'])
+        sonuc['bayat'] = True
+        log("Fon kategorileri alınamadı — önceki veri korundu (bayat)")
     return sonuc
 
 
@@ -2675,8 +2768,14 @@ def main():
     # 5b. Haberler
     haberler = haberler_cek()
 
-    # 5c. Fonlar
-    fonlar = fonlar_cek()
+    # 5c. Fonlar — kategori bazlı top-10 + (uyumluluk) varlık dağılımı bloğu.
+    # Önceki piyasa.json varsa TEFAS düştüğünde kategori tabloları korunur.
+    _onceki_fon = {}
+    try:
+        _onceki_fon = json.loads((DATA_DIR / 'piyasa.json').read_text(encoding='utf-8')).get('fonlar', {})
+    except Exception:
+        pass
+    fonlar = fonlar_cek(_onceki_fon)
 
     # 5d. Sektör dağılımı (sektorler.json cache + sinyal skorları)
     sektor_cache = sektor_dagilimi(liste)
