@@ -132,6 +132,7 @@ export function renderSenaryo(d) {
           (enIyi.anahtar && enIyi.anahtar !== 'referans'
             ? `En iyi varyant <b>${enIyi.ad}</b> — referansa göre alfa farkı <b>${fark(enIyi.ortalama_alfa, ref.ortalama_alfa)}</b>.`
             : 'En iyi varyant referans kuralın kendisi — mevcut ayarlar zaten en iyisi.') +
+          (ks.en_az_islem ? ` Sıralamaya girmek için en az ${ks.en_az_islem} işlem şartı aranır.` : '') +
           ' Ölçüt: işlem başına XU100 fazlası.</div>';
       }
       html += '<div class="twrap"><table><tr><th>Kural</th><th>İşlem</th><th>İsabet</th>' +

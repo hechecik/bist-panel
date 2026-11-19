@@ -1,5 +1,5 @@
 {
- "uretildi": "2026-11-19T00:07:48+00:00",
+ "uretildi": "2026-11-19T00:27:10+00:00",
  "kaynak": "borsapy-tv",
  "saglik": {
   "durum": "OK",
@@ -1111,13 +1111,13 @@
    "gram-altin": {
     "ad": "GRAM ALTIN",
     "birim": "TL/gram",
-    "fiyat": 6064.89,
+    "fiyat": 6065.83,
     "capraz": 6050.703,
-    "fark_yuzde": -0.23,
+    "fark_yuzde": -0.25,
     "uyari": false,
     "kaynak": "ons/31,1034768 × USD/TL",
     "ons_kaynak": "spot",
-    "degisim": -3.15
+    "degisim": -3.22
    },
    "USD": {
     "ad": "DOLAR/TL",
@@ -1146,10 +1146,10 @@
    "ons-altin": {
     "ad": "ONS ALTIN",
     "birim": "USD/ons",
-    "fiyat": 3739.87,
-    "degisim": -3.19,
+    "fiyat": 3740.45,
+    "degisim": -3.26,
     "kaynak": "spot",
-    "vadeli_fiyat": 3741.0
+    "vadeli_fiyat": 3738.3
    },
    "^VIX": {
     "ad": "VIX KORKU",
@@ -1169,7 +1169,7 @@
     "ad": "BAKIR",
     "birim": "USD/lb",
     "fiyat": 5.68,
-    "degisim": -4.89,
+    "degisim": -4.93,
     "ters": false
    },
    "ZW=F": {
@@ -4310,7 +4310,7 @@
   }
  },
  "tr_risk": {
-  "uretildi": "2026-11-19T00:04:44+00:00",
+  "uretildi": "2026-11-19T00:23:00+00:00",
   "tahvil": {
    "2Y": 39.49,
    "10Y": 36.74,
@@ -6159,7 +6159,7 @@
   },
   "toplam": 100,
   "durum": "kesin",
-  "hesap_tarihi": "19.11.2026 08:04",
+  "hesap_tarihi": "19.11.2026 08:23",
   "filtre_esikleri": {
    "kilit_pct": 9.5,
    "likidite_tl": 50000000,
@@ -7861,6 +7861,92 @@
     "profit_factor": 1.05,
     "max_drawdown": 36.9,
     "devir": 53.4
+   },
+   {
+    "anahtar": "skor_3",
+    "ad": "Skor ≥3 (zayıf skorlu AL sinyalleri atlanır)",
+    "kural": {
+     "min_skor": 3
+    },
+    "islem": 1635,
+    "isabet": 0.491,
+    "ortalama": 0.16,
+    "ortalama_alfa": -0.1,
+    "profit_factor": 1.06,
+    "max_drawdown": 21.1,
+    "devir": 54.8
+   },
+   {
+    "anahtar": "skor_4",
+    "ad": "Skor ≥4 (en güçlü sinyaller)",
+    "kural": {
+     "min_skor": 4
+    },
+    "islem": 727,
+    "isabet": 0.501,
+    "ortalama": 0.09,
+    "ortalama_alfa": -0.5,
+    "profit_factor": 1.03,
+    "max_drawdown": 11.6,
+    "devir": 53.8
+   },
+   {
+    "anahtar": "rejim",
+    "ad": "Endeks rejimi: XU100 MA50 üstündeyken al",
+    "kural": {
+     "endeks_rejim": 50
+    },
+    "islem": 924,
+    "isabet": 0.458,
+    "ortalama": -0.4,
+    "ortalama_alfa": 0.0,
+    "profit_factor": 0.87,
+    "max_drawdown": 19.9,
+    "devir": 55.4
+   },
+   {
+    "anahtar": "rejim_200",
+    "ad": "Endeks rejimi: XU100 MA200 üstündeyken al",
+    "kural": {
+     "endeks_rejim": 200
+    },
+    "islem": 59,
+    "isabet": 0.305,
+    "ortalama": -2.93,
+    "ortalama_alfa": 0.7,
+    "profit_factor": 0.32,
+    "max_drawdown": 5.9,
+    "devir": 58.8
+   },
+   {
+    "anahtar": "skor_3_rejim",
+    "ad": "Skor ≥3 + XU100 MA50 üstü",
+    "kural": {
+     "min_skor": 3,
+     "endeks_rejim": 50
+    },
+    "islem": 722,
+    "isabet": 0.465,
+    "ortalama": -0.33,
+    "ortalama_alfa": -0.0,
+    "profit_factor": 0.89,
+    "max_drawdown": 26.8,
+    "devir": 55.6
+   },
+   {
+    "anahtar": "skor_4_rejim",
+    "ad": "Skor ≥4 + XU100 MA50 üstü",
+    "kural": {
+     "min_skor": 4,
+     "endeks_rejim": 50
+    },
+    "islem": 319,
+    "isabet": 0.448,
+    "ortalama": -0.62,
+    "ortalama_alfa": -0.3,
+    "profit_factor": 0.79,
+    "max_drawdown": 14.5,
+    "devir": 54.9
    }
   ],
   "en_iyi": {
@@ -7889,6 +7975,7 @@
    "max_drawdown": 32.8,
    "devir": 54.6
   },
+  "en_az_islem": 100,
   "parametre": {
    "benchmark": "XU100",
    "maliyet": 0.002,
@@ -7897,100 +7984,148 @@
  },
  "haberler": [
   {
-   "baslik": "Flotek Industries director Agadi sells $844,942 in shares",
+   "baslik": "AACo HY27 slides: record profit on premium beef strategy",
+   "kaynak": "Investing.com",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "pozitif",
+   "etiket": "🟢 Pozitif",
+   "sembol": "",
+   "link": "https://www.investing.com/news/company-news/aaco-hy27-slides-record-profit-on-premium-beef-strategy-93CH-5037424",
+   "yayin_tarihi": "2026-11-19T00:22:08+00:00",
+   "tarih": "2026-11-19"
+  },
+  {
+   "baslik": "Trump weighs fresh military strikes on Iran, NYT reports",
    "kaynak": "Investing.com",
    "kategori": "global",
    "dil": "en",
    "yon": "notr",
    "etiket": "⚪ Nötr",
    "sembol": "",
-   "link": "https://www.investing.com/news/insider-trading-news/flotek-industries-director-agadi-sells-844942-in-shares-93CH-5037393",
-   "yayin_tarihi": "2026-11-19T00:01:28+00:00",
+   "link": "https://www.investing.com/news/economy-news/trump-weighs-fresh-military-strikes-on-iran-nyt-reports-5037423",
+   "yayin_tarihi": "2026-11-19T00:21:52+00:00",
    "tarih": "2026-11-19"
   },
   {
-   "baslik": "Inside India newsletter: Foreign flows helped the market recover. Now it faces the inflation test",
+   "baslik": "Cintas CEO met with Trump to advance $5 bln UniFirst deal, Semafor reports",
+   "kaynak": "Investing.com",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.investing.com/news/stock-market-news/cintas-ceo-met-with-trump-to-advance-5-bln-unifirst-deal-semafor-reports-93CH-5037422",
+   "yayin_tarihi": "2026-11-19T00:20:54+00:00",
+   "tarih": "2026-11-19"
+  },
+  {
+   "baslik": "Nlight director Moore sells $173,895 in stock",
+   "kaynak": "Investing.com",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.investing.com/news/insider-trading-news/nlight-director-moore-sells-173895-in-stock-93CH-5037421",
+   "yayin_tarihi": "2026-11-19T00:20:05+00:00",
+   "tarih": "2026-11-19"
+  },
+  {
+   "baslik": "Grindr director George Zage III sells $7.07M in common stock",
+   "kaynak": "Investing.com",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.investing.com/news/insider-trading-news/grindr-director-george-zage-iii-sells-707m-in-common-stock-93CH-5037420",
+   "yayin_tarihi": "2026-11-19T00:19:39+00:00",
+   "tarih": "2026-11-19"
+  },
+  {
+   "baslik": "WEX COO Carlos Carriedo sells $400,016 in company stock",
+   "kaynak": "Investing.com",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.investing.com/news/insider-trading-news/wex-coo-carlos-carriedo-sells-400016-in-company-stock-93CH-5037419",
+   "yayin_tarihi": "2026-11-19T00:19:23+00:00",
+   "tarih": "2026-11-19"
+  },
+  {
+   "baslik": "Exclusive-UniCredit and Germany reach broad agreement on Commerzbank takeover",
+   "kaynak": "Investing.com",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "pozitif",
+   "etiket": "🟢 Pozitif",
+   "sembol": "",
+   "link": "https://www.investing.com/news/stock-market-news/exclusiveunicredit-and-germany-reach-broad-agreement-on-commerzbank-takeover-5037328",
+   "yayin_tarihi": "2026-11-19T00:18:21+00:00",
+   "tarih": "2026-11-19"
+  },
+  {
+   "baslik": "Apple director Arthur Levinson sells over $31.7 million in stock",
+   "kaynak": "Investing.com",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.investing.com/news/insider-trading-news/apple-director-arthur-levinson-sells-over-317-million-in-stock-93CH-5037412",
+   "yayin_tarihi": "2026-11-19T00:15:58+00:00",
+   "tarih": "2026-11-19"
+  },
+  {
+   "baslik": "Saba Capital Management buys $204,142 of BNY Mellon Strategic municipals",
+   "kaynak": "Investing.com",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.investing.com/news/insider-trading-news/saba-capital-management-buys-204142-of-bny-mellon-strategic-municipals-93CH-5037411",
+   "yayin_tarihi": "2026-11-19T00:15:52+00:00",
+   "tarih": "2026-11-19"
+  },
+  {
+   "baslik": "Innovex International president sells $150 in company stock",
+   "kaynak": "Investing.com",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.investing.com/news/insider-trading-news/innovex-international-president-sells-150-in-company-stock-93CH-5037410",
+   "yayin_tarihi": "2026-11-19T00:15:51+00:00",
+   "tarih": "2026-11-19"
+  },
+  {
+   "baslik": "Kash Patel skips House hearing after Mar-a-Lago gala with $50,000 access",
    "kaynak": "CNBC Dünya",
    "kategori": "global",
    "dil": "en",
    "yon": "notr",
    "etiket": "⚪ Nötr",
    "sembol": "",
-   "link": "https://www.cnbc.com/2026/11/19/india-inflation-foreign-investor-nifty50.html",
-   "yayin_tarihi": "2026-11-19T00:01:23+00:00",
+   "link": "https://www.cnbc.com/2026/11/18/kash-patel-hearing-mar-a-lago-gala.html",
+   "yayin_tarihi": "2026-11-19T00:08:14+00:00",
    "tarih": "2026-11-19"
   },
   {
-   "baslik": "Halozyme Therapeutics director Matthew Posard sells $482,146 in stock",
-   "kaynak": "Investing.com",
+   "baslik": "Palo Alto inks $4.5 billion deal for AI startup Applied Compute, shares pop 7% on earnings",
+   "kaynak": "CNBC Dünya",
    "kategori": "global",
    "dil": "en",
    "yon": "notr",
    "etiket": "⚪ Nötr",
    "sembol": "",
-   "link": "https://www.investing.com/news/insider-trading-news/halozyme-therapeutics-director-matthew-posard-sells-482146-in-stock-93CH-5037392",
-   "yayin_tarihi": "2026-11-19T00:01:20+00:00",
+   "link": "https://www.cnbc.com/2026/11/18/palo-alto-networks-panw-q1-2027-earnings-.html",
+   "yayin_tarihi": "2026-11-19T00:07:06+00:00",
    "tarih": "2026-11-19"
-  },
-  {
-   "baslik": "Biglari Holdings chairman and ceo Sardar Biglari buys $2,152,640 in shares",
-   "kaynak": "Investing.com",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.investing.com/news/insider-trading-news/biglari-holdings-chairman-and-ceo-sardar-biglari-buys-2152640-in-shares-93CH-5037389",
-   "yayin_tarihi": "2026-11-19T00:01:03+00:00",
-   "tarih": "2026-11-19"
-  },
-  {
-   "baslik": "Cytokinetics chief legal officer sells $794,877 in shares",
-   "kaynak": "Investing.com",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.investing.com/news/insider-trading-news/cytokinetics-chief-legal-officer-sells-794877-in-shares-93CH-5037388",
-   "yayin_tarihi": "2026-11-19T00:01:00+00:00",
-   "tarih": "2026-11-19"
-  },
-  {
-   "baslik": "China’s Jetour to start Brazil car production in 2027, plans $69 million investment",
-   "kaynak": "Investing.com",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.investing.com/news/stock-market-news/chinas-jetour-to-start-brazil-car-production-in-2027-plans-69-million-investment-5037384",
-   "yayin_tarihi": "2026-11-18T23:54:47+00:00",
-   "tarih": "2026-11-18"
-  },
-  {
-   "baslik": "Richard Schwartz, Rush Street Interactive CEO, sells $1.79M in stock",
-   "kaynak": "Investing.com",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.investing.com/news/insider-trading-news/richard-schwartz-rush-street-interactive-ceo-sells-179m-in-stock-93CH-5037380",
-   "yayin_tarihi": "2026-11-18T23:45:56+00:00",
-   "tarih": "2026-11-18"
-  },
-  {
-   "baslik": "VeriSign exec. chairman D. James Bidzos sells $1,006,275 stock",
-   "kaynak": "Investing.com",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.investing.com/news/insider-trading-news/verisign-exec-chairman-d-james-bidzos-sells-1006275-stock-93CH-5037379",
-   "yayin_tarihi": "2026-11-18T23:45:51+00:00",
-   "tarih": "2026-11-18"
   },
   {
    "baslik": "Nvidia interim CEO Kress tells employees ‘let’s move forward’ at first all-hands meeting since Jensen Huang exit",
@@ -8017,18 +8152,6 @@
    "tarih": "2026-11-18"
   },
   {
-   "baslik": "Exclusive-UniCredit and Germany reach broad agreement on Commerzbank takeover",
-   "kaynak": "Investing.com",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "pozitif",
-   "etiket": "🟢 Pozitif",
-   "sembol": "",
-   "link": "https://www.investing.com/news/stock-market-news/exclusiveunicredit-and-germany-reach-broad-agreement-on-commerzbank-takeover-5037328",
-   "yayin_tarihi": "2026-11-18T23:42:22+00:00",
-   "tarih": "2026-11-18"
-  },
-  {
    "baslik": "Big bets against AI debt, from CoreWeave to Oracle and the Mag 7, could soon hit the ETF market",
    "kaynak": "CNBC Dünya",
    "kategori": "global",
@@ -8038,30 +8161,6 @@
    "sembol": "",
    "link": "https://www.cnbc.com/2026/11/18/ai-credit-default-swaps-coreweave-debt.html",
    "yayin_tarihi": "2026-11-18T23:38:55+00:00",
-   "tarih": "2026-11-18"
-  },
-  {
-   "baslik": "Beta Technologies CFO Herman Cueto sells $822,669 in shares",
-   "kaynak": "Investing.com",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.investing.com/news/insider-trading-news/beta-technologies-cfo-herman-cueto-sells-822669-in-shares-93CH-5037362",
-   "yayin_tarihi": "2026-11-18T23:34:44+00:00",
-   "tarih": "2026-11-18"
-  },
-  {
-   "baslik": "Energy Evolution Master Fund buys $85,169 in Empire Petroleum stock",
-   "kaynak": "Investing.com",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.investing.com/news/insider-trading-news/energy-evolution-master-fund-buys-85169-in-empire-petroleum-stock-93CH-5037359",
-   "yayin_tarihi": "2026-11-18T23:34:30+00:00",
    "tarih": "2026-11-18"
   },
   {
@@ -8098,18 +8197,6 @@
    "sembol": "",
    "link": "https://www.cnbc.com/2026/11/18/anthropic-ipo-retail-investors.html",
    "yayin_tarihi": "2026-11-18T22:37:00+00:00",
-   "tarih": "2026-11-18"
-  },
-  {
-   "baslik": "Palo Alto inks $4.5 billion deal for AI startup Applied Compute, shares pop 7% on earnings",
-   "kaynak": "CNBC Dünya",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.cnbc.com/2026/11/18/palo-alto-networks-panw-q1-2027-earnings-.html",
-   "yayin_tarihi": "2026-11-18T22:25:32+00:00",
    "tarih": "2026-11-18"
   },
   {
@@ -8617,18 +8704,6 @@
    "tarih": "2026-11-18"
   },
   {
-   "baslik": "KAP *** BORSA İSTANBUL A.Ş. *** İşlem İptali - GZT",
-   "kaynak": "Google News · TR Borsa",
-   "kategori": "bist",
-   "dil": "tr",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://news.google.com/rss/articles/CBMijAFBVV95cUxPNks0X0VVbXpDQThiaUJSOEsySWpxbzhuVW1QV0Z3bzhvWHJzX3VWNFpaTzBPaGtObU9oSG5SeWMxT2xDX09yQlFqeGtqamVBTHFTMVlmQVJyMjhQckNpajYyT2ZOR2xrMFBEd0Q2Q08xV1JhcTJuRDZnM2tKM3Nhb2NtWUl2U2dMb3JoUA?oc=5",
-   "yayin_tarihi": "2026-11-18T14:37:00+00:00",
-   "tarih": "2026-11-18"
-  },
-  {
    "baslik": "Milli uydu görüntüleri ücretsiz erişime açıldı",
    "kaynak": "Habertürk",
    "kategori": "makro",
@@ -8686,18 +8761,6 @@
    "sembol": "",
    "link": "https://news.google.com/rss/articles/CBMilAFBVV95cUxNT1lVOGlLMU9mYUFyOWo5VE53N2tKV1BGUnNWMGlMeEFwOW1ZbWpETDVQbkV3QktBWmw0cDNvWGJBd2xoQnhSTFlPSkI2eVYxQXRPcWV3S3F6RWJ4QV80c2dJc0pUbjUxeTJYTjdpMHFtYWhpNzYzUEtlbHZqVE9EVzctVEt6WnFsVkp0bWVRRHpfWjNj?oc=5",
    "yayin_tarihi": "2026-11-18T13:31:37+00:00",
-   "tarih": "2026-11-18"
-  },
-  {
-   "baslik": "Sessizliğini koruyor: Erişah Arıcan hakkındaki iddialar neler? - DW.com",
-   "kaynak": "Google News · TR Borsa",
-   "kategori": "bist",
-   "dil": "tr",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://news.google.com/rss/articles/CBMiswFBVV95cUxOSENaVFNob2piRVJQSHhEM0ZwM0QyZ2E5WTJLbktlN2ZuOGMtWGVPOU1Yc1Nfc2tTNlVjQ2lrWjhFdTBRUVdlMzN6WDlqMnFZRFpmUHE1WFhLZERERzBrX3lOTDVFcTRSd3dGYVBGQXZDcXVFU2J1NU04TklYRlNjTzZCRWFhLW11cUlzTV92UXJVbUh4bWFlem5KVkViUVY3SzhjdnVlTUc3WW5HSDJpNWc2UdIBswFBVV95cUxOOG9TRDhsUTU5azR2d1RiMWdjZlNtLTBsRHl1Mmh4bGpkWTA4RDlHUEF4d1Q3LU9ybG1RTGRyMkxpNkx2aDJqaEVoLXIyUVIwQnNleW5uWWNHeWxGZnFyeEM1VDBYTFdqVVhOX1gySEE1YnNSMlRXb1FnTFFvZThfUEVaYWFqM29zOERDZVpGVU1icHdkWXFleVV3Z0ViRmx4eERkZF9USjFzS3FBeFlUT3gyVQ?oc=5",
-   "yayin_tarihi": "2026-11-18T13:23:12+00:00",
    "tarih": "2026-11-18"
   },
   {
@@ -8821,15 +8884,15 @@
    "tarih": "2026-11-18"
   },
   {
-   "baslik": "Borsa İstanbul günün ilk yarısında yükseldi - Borsa Gundem",
+   "baslik": "BIST 100 endeksi günün ilk yarısında yüzde 0,22 yükseldi - Yeni Şafak",
    "kaynak": "Google News · TR Borsa",
    "kategori": "bist",
    "dil": "tr",
    "yon": "pozitif",
    "etiket": "🟢 Pozitif",
    "sembol": "",
-   "link": "https://news.google.com/rss/articles/CBMiggFBVV95cUxPMmFJamphQjNDTTFNdWJOOTRSUW5sV3VpWlRuVFlScE5aUWIxeXRzYVJlT3ZDQlo2M0lGLXNWN0pHNjhZZTJoXy0ya3hJc2hCazAtTVNfTy1HM1NtRWxHeU1rVDdRY0hXUmROaERCeXRrUEpVekpjbV9ZY3l5WXFPT21R?oc=5",
-   "yayin_tarihi": "2026-11-18T10:12:00+00:00",
+   "link": "https://news.google.com/rss/articles/CBMingFBVV95cUxObDdsX21fOXVyT19JclJNY2NEeV93X3hWTHR1MnFNMlozSlNWZUhjLXFqdUlUREpsMG40VnhEbDM3bjNsOExLUmRLZFVYcFhmZHJkaUJqNXlmbWNUZDhENE5hR3FrVW5ZdnlDXzVtVWVURGRsaEl3dE9Ra0thT1JaNWRORG5wSWhjVmVMQWxQTWw3WURfT2pYUU96QzhKUQ?oc=5",
+   "yayin_tarihi": "2026-11-18T10:16:54+00:00",
    "tarih": "2026-11-18"
   },
   {
@@ -8893,6 +8956,18 @@
    "tarih": "2026-11-18"
   },
   {
+   "baslik": "Borsada sert düşüşün ardından yeni gün: 18 Kasım 2026 BIST 100 - Manşet Haber",
+   "kaynak": "Google News · TR Borsa",
+   "kategori": "bist",
+   "dil": "tr",
+   "yon": "negatif",
+   "etiket": "🔴 Negatif",
+   "sembol": "",
+   "link": "https://news.google.com/rss/articles/CBMimAFBVV95cUxOOC1MbUlOZGVvVzZWYzhSQ0xsZDNqZUpudGhTQTR6X3pUaGtnMmhjQk56LVBudzhycGlLNl9LT253blVIektmWTVrNXU3WmdrTE1JME1OcW1Gam1ILVNZdEwwblg1c29WMlkwWGhaQ3ByRUdLOWVkVkw5VFUwb0NOc1lhTzJ2MEFaTlQ1MDdRZzlKWnV4YU1vcQ?oc=5",
+   "yayin_tarihi": "2026-11-18T07:07:00+00:00",
+   "tarih": "2026-11-18"
+  },
+  {
    "baslik": "Borsa güne yatay başladı - Anadolu Ajansı",
    "kaynak": "Google News · TR Borsa",
    "kategori": "bist",
@@ -8905,15 +8980,15 @@
    "tarih": "2026-11-18"
   },
   {
-   "baslik": "Borsa İstanbul günün ilk yarısında yükseldi - Bigpara",
+   "baslik": "Borsa İstanbul güne sınırlı düşüşle başladı - Borsa Gundem",
    "kaynak": "Google News · TR Borsa",
    "kategori": "bist",
    "dil": "tr",
-   "yon": "pozitif",
-   "etiket": "🟢 Pozitif",
+   "yon": "negatif",
+   "etiket": "🔴 Negatif",
    "sembol": "",
-   "link": "https://news.google.com/rss/articles/CBMipgFBVV95cUxPSGFZTlRfeEdMaFdIemFnbWZJT2k5UE1scG90QTVNTElaN3JKMk4zdjhkUXk1MDBLc19fZWVwSl9JcnFHQ2h0ZWZFRGEyV1oyd0RuUThBZkFiMlRmRzNiTEVaM25Ed2pjQklacWV4eTFPYnlhT1lpUFBqR05iREVld1BzNWVaTlhxVWI0WnFaaGFzSzFkaDlaTDlEUGRkU05vQmUzdmFB?oc=5",
-   "yayin_tarihi": "2026-11-18T07:04:00+00:00",
+   "link": "https://news.google.com/rss/articles/CBMiggFBVV95cUxOVS1NTFZrVnNYbU9EeXpEOHgxUWxubVlLZVg5SkVsQXFEdFpBcGtHS1REVUFhY2hKWVN5Y0lWckFuYzNTaUVCQ2VNOUVUTHdsUWQwRXhuZk04Y2E2dFV2SXhCVzM5SFd3VWJxOE9SY0pzc0NHNjBoSWUwY2poYkxMc1Vn?oc=5",
+   "yayin_tarihi": "2026-11-18T06:55:00+00:00",
    "tarih": "2026-11-18"
   },
   {
@@ -8926,18 +9001,6 @@
    "sembol": "",
    "link": "https://www.fortuneturkey.com/orta-asyayla-korfez-arasindaki-ticari-baglar-buyuyor",
    "yayin_tarihi": "2026-11-18T06:44:13+00:00",
-   "tarih": "2026-11-18"
-  },
-  {
-   "baslik": "Borsa İstanbul Şirket Haberleri (18 Kasım) - Borsa Gundem",
-   "kaynak": "Google News · TR Borsa",
-   "kategori": "bist",
-   "dil": "tr",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://news.google.com/rss/articles/CBMifkFVX3lxTE0tSFBXdm9lNmpBVmdkQTJjeXdJVG94cHA5WjRYSG5PalFlWE11eGZDTDlmR09tVEJBclZNZGRRU05WbzREZUJHc2MtN2IwNWxYZEY2eC1uUENCVmpTeENOM3JsTkNGbUZFT0xfNEtELWduMkxxTTN6aHJXdzBVQQ?oc=5",
-   "yayin_tarihi": "2026-11-18T05:58:00+00:00",
    "tarih": "2026-11-18"
   },
   {
@@ -9001,18 +9064,6 @@
    "tarih": "2026-11-17"
   },
   {
-   "baslik": "Borsa İstanbul’dan 1 hisseye tedbir kararı - Borsa Gundem",
-   "kaynak": "Google News · TR Borsa",
-   "kategori": "bist",
-   "dil": "tr",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://news.google.com/rss/articles/CBMigAFBVV95cUxNZ2NIWGRJNm81QkVVaUJxT0RqdlBjX0ItQjFBenVTT2Z2ejd0RUZXRXVUbVF4U2F4S0EyNF9lX1owM2VPd1lnckVfUHM4aE90VnlrMVJXTXZycGFEZHNaaTdGZVdrVU9iQWZleFBLWGNGQm14aDFFVzc1N21qdXdrTA?oc=5",
-   "yayin_tarihi": "2026-11-17T16:31:00+00:00",
-   "tarih": "2026-11-17"
-  },
-  {
    "baslik": "Republicans outspent Democrats for first time in over a decade in record 2026 midterm election political ad blitz",
    "kaynak": "CNBC Ekonomi",
    "kategori": "makro",
@@ -9034,30 +9085,6 @@
    "sembol": "",
    "link": "https://www.fortuneturkey.com/shell-turcas-madeni-yaglar-genel-mudurlugune-can-ayvalioglu-atandi",
    "yayin_tarihi": "2026-11-17T12:12:36+00:00",
-   "tarih": "2026-11-17"
-  },
-  {
-   "baslik": "Borsa İstanbul için JPMorgan'dan güçlü mesaj! Türkiye'nin notu nötre göre yükseltildi - Haber 7",
-   "kaynak": "Google News · TR Borsa",
-   "kategori": "bist",
-   "dil": "tr",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://news.google.com/rss/articles/CBMiywFBVV95cUxPQjlNX3lYWFBBaG5aREN6SW9UYUpITnJiV1hlc29DOGNpZ1dfQXJpRXFtUC0xckpyV0dmUkVOTmxYUV9kZS1jbTY2U1EydW43eDA0Mm1xSmZvQXFLQk96aGZ4UXBNOGVVaVd1Y29oQWlJcE92VUdOd1RtZndUaWd6eDItVkpaQUZGdzUtcE5kX2VYWjVxb1ExYVJUYkVoSWRUbW1xVUEtM1dJelV5OHBMUlJQUjVOXzJCTm00bUthRlJnUjRldDhyQTA1d9IBzgFBVV95cUxOMEtmYmdheHUyVEU4dWQxenVVQ0dyWmtiblZEWEpQbnkyb2V2bmZfUVI3WFZycnBlQWNqakpOV0EzZ0c4emREMHVfSUNmNlJWeEZLNElXNHJ3Y0hPbjhJQXZvUDBQLS1ybUpHQjRUUWlyUUJuS0tmSmFTUVBEX2Y2S0VHUWN2bkEyYzdFT3F3aDV0dnBXWmtFdUw0REg5NzJ3Rnlab1VxdEtDOG9CeTRDQkhqX3BLTnJYR0loZEVROGhaelVLdTNuTVBIT1RWZw?oc=5",
-   "yayin_tarihi": "2026-11-17T10:11:00+00:00",
-   "tarih": "2026-11-17"
-  },
-  {
-   "baslik": "JPMorgan'dan Borsa İstanbul hisselerine \"olumlu\" not! - Haber 7",
-   "kaynak": "Google News · TR Borsa",
-   "kategori": "bist",
-   "dil": "tr",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://news.google.com/rss/articles/CBMinwFBVV95cUxPNVluVzEyYUtWTmtsV2p2TzY1VjFka0FwTlpmWVBzM090WmstNTBRWkRIV0JmemdKT20xQS03ODBOdTNMdUQ2R3JfQmVTMHNRbmVLN00xMnBHYjVIbDlxb1FvRk16LTZmTVNxS25FS0RsVUVNX0phVndZaEdhRFI2N21hd2k5OThfVnVtSU9BYVZ1ZDV1SjN1Wk1YU2Y5NlnSAaIBQVVfeXFMTVpKRkxqZzNZbVpYSlhYV1BQcnNRRkRIdVFiMHJBbEgzVzI1SWJTbFVUWnNfN3lwOGhJQVYxVC1GUjUyX2RFZ1Rvd2llNFQxR1JCeUhFRFdVeFRGMUk3WFVLSXQ1NVZBb2hlaHhIcndXQXpNbnBhNFJHRTAtMlI2Q3Awd2tGbG5fWkV5OXBTREt4MXkxZFVsN1NxNlVLc0p6YWN3?oc=5",
-   "yayin_tarihi": "2026-11-17T09:44:00+00:00",
    "tarih": "2026-11-17"
   },
   {
@@ -9085,6 +9112,18 @@
    "tarih": "2026-11-17"
   },
   {
+   "baslik": "Borsa güne düşüşle başladı - Anadolu Ajansı",
+   "kaynak": "Google News · TR Borsa",
+   "kategori": "bist",
+   "dil": "tr",
+   "yon": "negatif",
+   "etiket": "🔴 Negatif",
+   "sembol": "",
+   "link": "https://news.google.com/rss/articles/CBMidkFVX3lxTFBXdHJVRkVLdTdJbDFFcjl0dXlldUFIRnNCdk1YUGw0YTZ2Rjg4Qm50c1Nmc18zbFF3UkluNXN4LTdJbE5UTGxNeUducXhWWFYxMnNEZnk3X1NYdTI1Z0w4TnFsZ0xBa3p4SHp6bW9lbC1KakY4M2c?oc=5",
+   "yayin_tarihi": "2026-11-17T07:04:07+00:00",
+   "tarih": "2026-11-17"
+  },
+  {
    "baslik": "Hyperiser Q3 2026 Raporu’na Göre Markalı İçerik Hacmi Yüzde 22 Büyüdü",
    "kaynak": "Fortune TR",
    "kategori": "makro",
@@ -9095,6 +9134,54 @@
    "link": "https://www.fortuneturkey.com/hyperiser-q3-2026-raporuna-gore-markali-icerik-hacmi-yuzde-22-buyudu",
    "yayin_tarihi": "2026-11-16T14:07:10+00:00",
    "tarih": "2026-11-16"
+  },
+  {
+   "baslik": "Borsa İstanbul Şirket Haberleri (16 Kasım) - Borsa Gundem",
+   "kaynak": "Google News · TR Borsa",
+   "kategori": "bist",
+   "dil": "tr",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://news.google.com/rss/articles/CBMie0FVX3lxTFBHb0l0UEF4QU1vaGlPVFBsOG5DYzRDejJ5Mi1fdnExQTNuSUVGVGVmWUI0QXUtbDNucXFCX0tzZWhHS00wb0dHWXdqVVJzQ1p2Y0ZjeHpQaE5SU19NMm51MXhuNmJhZ2JWRHYxZkNSYjBDTHJZRS05dGZycw?oc=5",
+   "yayin_tarihi": "2026-11-16T06:05:00+00:00",
+   "tarih": "2026-11-16"
+  },
+  {
+   "baslik": "Weekly market commentary - BlackRock",
+   "kaynak": "Google News · Global",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://news.google.com/rss/articles/CBMiogFBVV95cUxORkJPa3I0ekJyVEI0RFJhY210TmplVHJZQ0xJNy1qenNkc0lMMHk0TmZwdDV1TEVZNmJoV3dfVlNTT3UyZHE5Q01SdmQ4eDd4WjAzZVhFMFB3VUd5QjlYXzZ5MWFRYzdIQVRVM1JMZXNyQ05aTExrejM4cHdBSktKSlJOOWxkY0V4YkNRRDZZTzlDZUYzZHlUWXdhTFUxNXJSNXc?oc=5",
+   "yayin_tarihi": "2026-11-15T08:00:00+00:00",
+   "tarih": "2026-11-15"
+  },
+  {
+   "baslik": "Ali Koç on the Business of Climate Change",
+   "kaynak": "Bloomberg",
+   "kategori": "bist",
+   "dil": "tr",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "KCHOL",
+   "link": "",
+   "yayin_tarihi": "2026-11-12T10:28:36+00:00",
+   "tarih": "2026-11-12"
+  },
+  {
+   "baslik": "Turkiye Is Bankasi AS (IST:ISBTR) (Q3 2026) Earnings Call Highlights: Strong NIM Expansion and ...",
+   "kaynak": "GuruFocus.com",
+   "kategori": "bist",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "ISCTR",
+   "link": "",
+   "yayin_tarihi": "2026-11-10T11:04:44+00:00",
+   "tarih": "2026-11-10"
   }
  ],
  "fonlar": {
@@ -10930,7 +11017,7 @@
   "pozitif": 14
  },
  "gece_analizi": {
-  "tarih": "19.11.2026 08:07",
+  "tarih": "19.11.2026 08:27",
   "guclu_al": [
    {
     "sembol": "ENERY",
@@ -11678,7 +11765,7 @@
   "islenen": 100,
   "al_sayisi": 2,
   "sat_sayisi": 6,
-  "hesap_tarihi": "19.11.2026 08:07",
+  "hesap_tarihi": "19.11.2026 08:27",
   "kural": "MSS ±2, displacement ±1, fiyat FVG/OB bölgesi içinde ±1, likidite süpürmesi ±1, değer alanı dışı ±1. Skor ≥3 AL, ≤-3 SAT."
  },
  "genislik": {

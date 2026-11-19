@@ -1927,10 +1927,52 @@ def test_senaryolari(hisse_veri: dict, endeks_serisi=None, kural: dict | None = 
     tum_islemler = []
     serbest = {}           # sembol → son çıkış bar tarihi (yeni sinyal bu tarihten SONRA olmalı)
     adaylar = []
+
+    # G17 — FİLTRE: endeks rejim serisi (XU100 kapanış > kendi MA_n) bir kez hesaplanır.
+    #   Kural 'endeks_rejim': n → sinyal gününde XU100 kapanışı MA_n üstünde değilse sinyal atlanır.
+    #   Rejim serisi yoksa (endeks verisi gelmedi) filtre UYGULANMAZ ve bu senaryo 'veri yok' sayılır.
+    rejim_seri = {}
+    rejim_eksik = False
+    rejim_n = (kural or {}).get('endeks_rejim')
+    if rejim_n:
+        try:
+            n_rej = int(rejim_n)
+        except (TypeError, ValueError):
+            n_rej = 0
+        kapanislar = []
+        for t, k in endeks_serisi:
+            try:
+                kf = float(k)
+            except (TypeError, ValueError):
+                kf = None
+            kapanislar.append((str(t)[:10], kf))
+        gecerli = [(t, k) for t, k in kapanislar if k is not None]
+        if n_rej and len(gecerli) >= n_rej:
+            for idx_r in range(len(gecerli)):
+                t_r, k_r = gecerli[idx_r]
+                if idx_r + 1 < n_rej:
+                    continue                      # MA için yeterli geçmiş yok
+                pencere = [x[1] for x in gecerli[idx_r + 1 - n_rej: idx_r + 1]]
+                ma = sum(pencere) / n_rej
+                rejim_seri[t_r] = k_r > ma        # True = endeks kendi MA'sının üstünde
+        else:
+            rejim_eksik = True
+
+    min_skor = (kural or {}).get('min_skor')
+
     for sembol, (seri, kilitler, rows) in sinyal_serisi.items():
         for i, s in seri:
+            if min_skor is not None and int(s.get('skor') or 0) < int(min_skor):
+                continue                          # G17 — zayıf skor atlanır
             adaylar.append((pd.Timestamp(tablolar[sembol].iloc[i]['HGDG_TARIH']), sembol, i, s, kilitler, rows))
     adaylar.sort(key=lambda x: (x[0], x[1]))
+
+    if rejim_n:
+        if rejim_eksik:
+            return {'durum': 'veri yok', 'aciklama': f'XU100 {rejim_n} günlük MA için yeterli endeks serisi yok.'}
+        # Sinyal günü kapanışında bilinen rejim (lookahead yok: aynı günün kapanışı kullanılır)
+        adaylar = [a for a in adaylar if rejim_seri.get(str(a[0].date()), False)]
+
     for _t, sembol, i, s, kilitler, rows in adaylar:
         if sembol in serbest and i <= serbest[sembol]:
             continue                                   # pozisyon açıkken gelen sinyal → atlanır
@@ -2107,6 +2149,14 @@ def senaryo_uret(hisse_veri: dict, endeks_serisi=None) -> dict:
         ('vade_10', 'Orta vade: 10 iş günü', {'vade_gun': 10}),
         ('vade_20', 'Uzun vade: 20 iş günü', {'vade_gun': 20}),
         ('kapanis_giris', 'Sinyal günü kapanıştan giriş (ertesi gün beklenmez)', {'giris': 'kapanis'}),
+        # G17 — FİLTRE senaryoları: giriş koşulunu değiştiren (çıkış kuralı aynı) varyantlar.
+        # Amaç: kural değiştirmek alfa üretmediğine göre, sinyalin KENDİSİNİ süz.
+        ('skor_3', 'Skor ≥3 (zayıf skorlu AL sinyalleri atlanır)', {'min_skor': 3}),
+        ('skor_4', 'Skor ≥4 (en güçlü sinyaller)', {'min_skor': 4}),
+        ('rejim', 'Endeks rejimi: XU100 MA50 üstündeyken al', {'endeks_rejim': 50}),
+        ('rejim_200', 'Endeks rejimi: XU100 MA200 üstündeyken al', {'endeks_rejim': 200}),
+        ('skor_3_rejim', 'Skor ≥3 + XU100 MA50 üstü', {'min_skor': 3, 'endeks_rejim': 50}),
+        ('skor_4_rejim', 'Skor ≥4 + XU100 MA50 üstü', {'min_skor': 4, 'endeks_rejim': 50}),
     ]
 
     senaryolar = []
@@ -2118,7 +2168,9 @@ def senaryo_uret(hisse_veri: dict, endeks_serisi=None) -> dict:
             continue
         m = r.get('metrik') or {}
         if not m.get('islem'):
-            senaryolar.append({'anahtar': anahtar, 'ad': ad, 'durum': 'işlem yok'})
+            # 'veri yok' (ör. endeks serisi yetersiz) ile 'işlem yok' ayrı gösterilir
+            durum = r.get('durum') or 'işlem yok'
+            senaryolar.append({'anahtar': anahtar, 'ad': ad, 'kural': kural, 'durum': durum})
             continue
         senaryolar.append({
             'anahtar': anahtar, 'ad': ad, 'kural': kural,
@@ -2129,14 +2181,20 @@ def senaryo_uret(hisse_veri: dict, endeks_serisi=None) -> dict:
         })
 
     # Sıralama: ortalama alfa (yoksa ortalama getiri). Alfa = endeksi geçme ölçütü.
+    # G17 — 'en iyi' için en az EN_AZ_ISLEM işlem şartı: 30 işlemlik bir varyantın
+    # şans eseri alfa üretmesi normaldir; bu yüzden küçük örneklem sıralamaya girmez.
+    EN_AZ_ISLEM = 100
+
     def _sirala(x):
         a = x.get('ortalama_alfa')
         return (-(a if a is not None else -999), -(x.get('ortalama') or 0))
 
     gecerli = [x for x in senaryolar if x.get('islem')]
-    en_iyi = sorted(gecerli, key=_sirala)[0] if gecerli else None
+    yeterli = [x for x in gecerli if (x.get('islem') or 0) >= EN_AZ_ISLEM]
+    en_iyi = sorted(yeterli or gecerli, key=_sirala)[0] if (yeterli or gecerli) else None
     referans = next((x for x in senaryolar if x['anahtar'] == 'referans'), None)
     return {'senaryolar': senaryolar, 'en_iyi': en_iyi, 'referans': referans,
+            'en_az_islem': EN_AZ_ISLEM,
             'parametre': {'benchmark': 'XU100', 'maliyet': MALIYET,
                           'olcut': 'ortalama_alfa (XU100 getirisi düşülmüş)'}}
 
