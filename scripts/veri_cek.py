@@ -2449,11 +2449,13 @@ FON_SENARYOLARI = [
      'not': 'Günlük fiyat oynamaz, T+0/T+1 çıkış. Aylık brüt ~%3. 1 ay sonra harcanacak para '
             'borsa fonunda durmaz, burada durur.'},
     {'anahtar': 'altin', 'ikon': '🥇', 'ad': 'Kıymetli maden', 'vade': '3-12 ay',
-     'sirala': '6A', 'esik_mn': 300,
-     'kodlar': ['AFO', 'GTA', 'DBA', 'FIB', 'HBF', 'GOL', 'TTA', 'HTS'],
-     'kapsam': 'Fiziki altın / altına endeksli kira sertifikası',
-     'not': 'Altın fonu stopajı %0 ve gram altındaki alım-satım makası yok. FIB altına endeksli '
-            'kira sertifikası ağırlıklı, GOL katılım (faizsiz), HTS serbest döviz fonu.'},
+     'sirala': 'YBB', 'esik_mn': 500,
+     'kodlar': ['PAL', 'KZL', 'OJK', 'TTA', 'HTS', 'GGK', 'GTA', 'GOL'],
+     'kapsam': 'Fiziki altın / altına endeksli kira sertifikası (+ gümüş: GUM, GTZ, IOG)',
+     'not': 'Altın fonu stopajı %0, gram altındaki alım-satım makası yok. PAL sembolik birim '
+            'taşır (14,7 mlr TL) — mutlak büyüklüğe göre değil getiriye göre seç. TTA en likit '
+            '(225 bin yatırımcı), GOL katılım (faizsiz), HTS serbest döviz fonu. Gümüş fonları '
+            'altından çok daha oynak.'},
     {'anahtar': 'bist30', 'ikon': '📈', 'ad': 'BIST 30', 'vade': '3-12 ay',
      'sirala': '1A', 'esik_mn': 100,
      'kodlar': ['AKU', 'MMH', 'GAE', 'YEF', 'TIE', 'HBU'],
