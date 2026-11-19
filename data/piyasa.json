@@ -1,5 +1,5 @@
 {
- "uretildi": "2026-11-18T23:39:53+00:00",
+ "uretildi": "2026-11-19T00:07:48+00:00",
  "kaynak": "borsapy-tv",
  "saglik": {
   "durum": "OK",
@@ -1111,13 +1111,13 @@
    "gram-altin": {
     "ad": "GRAM ALTIN",
     "birim": "TL/gram",
-    "fiyat": 6069.26,
+    "fiyat": 6064.89,
     "capraz": 6050.703,
-    "fark_yuzde": -0.31,
+    "fark_yuzde": -0.23,
     "uyari": false,
     "kaynak": "ons/31,1034768 × USD/TL",
     "ons_kaynak": "spot",
-    "degisim": -3.1
+    "degisim": -3.15
    },
    "USD": {
     "ad": "DOLAR/TL",
@@ -1146,10 +1146,10 @@
    "ons-altin": {
     "ad": "ONS ALTIN",
     "birim": "USD/ons",
-    "fiyat": 3742.57,
-    "degisim": -3.14,
+    "fiyat": 3739.87,
+    "degisim": -3.19,
     "kaynak": "spot",
-    "vadeli_fiyat": 3742.9
+    "vadeli_fiyat": 3741.0
    },
    "^VIX": {
     "ad": "VIX KORKU",
@@ -1162,14 +1162,14 @@
     "ad": "DOĞALGAZ",
     "birim": "USD",
     "fiyat": 3.39,
-    "degisim": 5.64,
+    "degisim": 5.61,
     "ters": false
    },
    "HG=F": {
     "ad": "BAKIR",
     "birim": "USD/lb",
     "fiyat": 5.68,
-    "degisim": -4.93,
+    "degisim": -4.89,
     "ters": false
    },
    "ZW=F": {
@@ -1199,10 +1199,6 @@
    "gram_altin": "ons(GC=F) / 31,1034768 × USDTRY"
   },
   "tl": [
-   [
-    "2025-11-18",
-    10728.6
-   ],
    [
     "2025-11-19",
     10903.9
@@ -2202,10 +2198,6 @@
   ],
   "usd": [
    [
-    "2025-11-18",
-    253.5197
-   ],
-   [
     "2025-11-19",
     257.6116
    ],
@@ -3204,10 +3196,6 @@
   ],
   "altin": [
    [
-    "2025-11-18",
-    1.9391
-   ],
-   [
     "2025-11-19",
     1.9625
    ],
@@ -4204,10 +4192,10 @@
     1.8616
    ]
   ],
-  "bas": "2025-11-18",
+  "bas": "2025-11-19",
   "son": "2026-11-17",
   "hizalama": {
-   "eslesen_gun": 250,
+   "eslesen_gun": 249,
    "yontem": "tarihe göre en yakın önceki gün",
    "tolerans_gun": 7
   },
@@ -4322,10 +4310,10 @@
   }
  },
  "tr_risk": {
-  "uretildi": "2026-11-18T23:38:23+00:00",
+  "uretildi": "2026-11-19T00:04:44+00:00",
   "tahvil": {
-   "2Y": 39.43,
-   "10Y": 36.03,
+   "2Y": 39.49,
+   "10Y": 36.74,
    "durum": "ok — doviz.com/tahvil",
    "kaynak": "borsapy · doviz.com/tahvil + Ziraat Yatırım eurobond"
   },
@@ -6171,7 +6159,7 @@
   },
   "toplam": 100,
   "durum": "kesin",
-  "hesap_tarihi": "19.11.2026 07:38",
+  "hesap_tarihi": "19.11.2026 08:04",
   "filtre_esikleri": {
    "kilit_pct": 9.5,
    "likidite_tl": 50000000,
@@ -7761,7 +7749,261 @@
   },
   "aciklama": "Senaryolar GERÇEK veriyle hesaplanır: sinyal günü kapanışında AL/DİKKAT_AL üreten hisse, ertesi gün açılıştan alınır. Çıkış 5/10/20 iş günü vade veya 2×ATR stop / 3×ATR hedef — hangisi önce. Alfa = işlem getirisi − XU100 getirisi (aynı tarihler)."
  },
+ "kural_senaryolari": {
+  "senaryolar": [
+   {
+    "anahtar": "referans",
+    "ad": "Varsayılan: ertesi gün açılış + 2×ATR stop + 3×ATR hedef + 5/10/20 vade",
+    "kural": {},
+    "islem": 2048,
+    "isabet": 0.49,
+    "ortalama": 0.18,
+    "ortalama_alfa": -0.1,
+    "profit_factor": 1.07,
+    "max_drawdown": 32.8,
+    "devir": 54.6
+   },
+   {
+    "anahtar": "stop_yok",
+    "ad": "Stopsuz: sadece 3×ATR hedef / vade",
+    "kural": {
+     "stop": false
+    },
+    "islem": 2014,
+    "isabet": 0.501,
+    "ortalama": -0.01,
+    "ortalama_alfa": -0.3,
+    "profit_factor": 0.99,
+    "max_drawdown": 40.8,
+    "devir": 51.1
+   },
+   {
+    "anahtar": "hedef_yok",
+    "ad": "Hedefsiz: sadece 2×ATR stop / vade",
+    "kural": {
+     "hedef": false
+    },
+    "islem": 2000,
+    "isabet": 0.485,
+    "ortalama": 0.26,
+    "ortalama_alfa": -0.1,
+    "profit_factor": 1.1,
+    "max_drawdown": 24.9,
+    "devir": 52.9
+   },
+   {
+    "anahtar": "cikis_yok",
+    "ad": "Kırılmasız: tek başına vade (stop ve hedef kapalı)",
+    "kural": {
+     "stop": false,
+     "hedef": false
+    },
+    "islem": 1973,
+    "isabet": 0.492,
+    "ortalama": 0.03,
+    "ortalama_alfa": -0.3,
+    "profit_factor": 1.01,
+    "max_drawdown": 41.4,
+    "devir": 49.6
+   },
+   {
+    "anahtar": "vade_5",
+    "ad": "Kısa vade: 5 iş günü",
+    "kural": {
+     "vade_gun": 5
+    },
+    "islem": 2048,
+    "isabet": 0.49,
+    "ortalama": 0.04,
+    "ortalama_alfa": -0.3,
+    "profit_factor": 1.01,
+    "max_drawdown": 42.4,
+    "devir": 54.6
+   },
+   {
+    "anahtar": "vade_10",
+    "ad": "Orta vade: 10 iş günü",
+    "kural": {
+     "vade_gun": 10
+    },
+    "islem": 1516,
+    "isabet": 0.467,
+    "ortalama": -0.06,
+    "ortalama_alfa": -0.3,
+    "profit_factor": 0.98,
+    "max_drawdown": 38.2,
+    "devir": 34.2
+   },
+   {
+    "anahtar": "vade_20",
+    "ad": "Uzun vade: 20 iş günü",
+    "kural": {
+     "vade_gun": 20
+    },
+    "islem": 1221,
+    "isabet": 0.455,
+    "ortalama": 0.3,
+    "ortalama_alfa": -0.0,
+    "profit_factor": 1.07,
+    "max_drawdown": 16.3,
+    "devir": 25.4
+   },
+   {
+    "anahtar": "kapanis_giris",
+    "ad": "Sinyal günü kapanıştan giriş (ertesi gün beklenmez)",
+    "kural": {
+     "giris": "kapanis"
+    },
+    "islem": 2355,
+    "isabet": 0.49,
+    "ortalama": 0.11,
+    "ortalama_alfa": -0.2,
+    "profit_factor": 1.05,
+    "max_drawdown": 36.9,
+    "devir": 53.4
+   }
+  ],
+  "en_iyi": {
+   "anahtar": "vade_20",
+   "ad": "Uzun vade: 20 iş günü",
+   "kural": {
+    "vade_gun": 20
+   },
+   "islem": 1221,
+   "isabet": 0.455,
+   "ortalama": 0.3,
+   "ortalama_alfa": -0.0,
+   "profit_factor": 1.07,
+   "max_drawdown": 16.3,
+   "devir": 25.4
+  },
+  "referans": {
+   "anahtar": "referans",
+   "ad": "Varsayılan: ertesi gün açılış + 2×ATR stop + 3×ATR hedef + 5/10/20 vade",
+   "kural": {},
+   "islem": 2048,
+   "isabet": 0.49,
+   "ortalama": 0.18,
+   "ortalama_alfa": -0.1,
+   "profit_factor": 1.07,
+   "max_drawdown": 32.8,
+   "devir": 54.6
+  },
+  "parametre": {
+   "benchmark": "XU100",
+   "maliyet": 0.002,
+   "olcut": "ortalama_alfa (XU100 getirisi düşülmüş)"
+  }
+ },
  "haberler": [
+  {
+   "baslik": "Flotek Industries director Agadi sells $844,942 in shares",
+   "kaynak": "Investing.com",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.investing.com/news/insider-trading-news/flotek-industries-director-agadi-sells-844942-in-shares-93CH-5037393",
+   "yayin_tarihi": "2026-11-19T00:01:28+00:00",
+   "tarih": "2026-11-19"
+  },
+  {
+   "baslik": "Inside India newsletter: Foreign flows helped the market recover. Now it faces the inflation test",
+   "kaynak": "CNBC Dünya",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.cnbc.com/2026/11/19/india-inflation-foreign-investor-nifty50.html",
+   "yayin_tarihi": "2026-11-19T00:01:23+00:00",
+   "tarih": "2026-11-19"
+  },
+  {
+   "baslik": "Halozyme Therapeutics director Matthew Posard sells $482,146 in stock",
+   "kaynak": "Investing.com",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.investing.com/news/insider-trading-news/halozyme-therapeutics-director-matthew-posard-sells-482146-in-stock-93CH-5037392",
+   "yayin_tarihi": "2026-11-19T00:01:20+00:00",
+   "tarih": "2026-11-19"
+  },
+  {
+   "baslik": "Biglari Holdings chairman and ceo Sardar Biglari buys $2,152,640 in shares",
+   "kaynak": "Investing.com",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.investing.com/news/insider-trading-news/biglari-holdings-chairman-and-ceo-sardar-biglari-buys-2152640-in-shares-93CH-5037389",
+   "yayin_tarihi": "2026-11-19T00:01:03+00:00",
+   "tarih": "2026-11-19"
+  },
+  {
+   "baslik": "Cytokinetics chief legal officer sells $794,877 in shares",
+   "kaynak": "Investing.com",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.investing.com/news/insider-trading-news/cytokinetics-chief-legal-officer-sells-794877-in-shares-93CH-5037388",
+   "yayin_tarihi": "2026-11-19T00:01:00+00:00",
+   "tarih": "2026-11-19"
+  },
+  {
+   "baslik": "China’s Jetour to start Brazil car production in 2027, plans $69 million investment",
+   "kaynak": "Investing.com",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.investing.com/news/stock-market-news/chinas-jetour-to-start-brazil-car-production-in-2027-plans-69-million-investment-5037384",
+   "yayin_tarihi": "2026-11-18T23:54:47+00:00",
+   "tarih": "2026-11-18"
+  },
+  {
+   "baslik": "Richard Schwartz, Rush Street Interactive CEO, sells $1.79M in stock",
+   "kaynak": "Investing.com",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.investing.com/news/insider-trading-news/richard-schwartz-rush-street-interactive-ceo-sells-179m-in-stock-93CH-5037380",
+   "yayin_tarihi": "2026-11-18T23:45:56+00:00",
+   "tarih": "2026-11-18"
+  },
+  {
+   "baslik": "VeriSign exec. chairman D. James Bidzos sells $1,006,275 stock",
+   "kaynak": "Investing.com",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.investing.com/news/insider-trading-news/verisign-exec-chairman-d-james-bidzos-sells-1006275-stock-93CH-5037379",
+   "yayin_tarihi": "2026-11-18T23:45:51+00:00",
+   "tarih": "2026-11-18"
+  },
+  {
+   "baslik": "Nvidia interim CEO Kress tells employees ‘let’s move forward’ at first all-hands meeting since Jensen Huang exit",
+   "kaynak": "CNBC Dünya",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.cnbc.com/2026/11/18/nvidia-interim-ceo-kress-addresses-staff-after-jensen-huang-exit-.html",
+   "yayin_tarihi": "2026-11-18T23:45:50+00:00",
+   "tarih": "2026-11-18"
+  },
   {
    "baslik": "Anthropic IPO raises over $81 billion in largest offering on record, topping SpaceX",
    "kaynak": "CNBC Dünya",
@@ -7771,91 +8013,7 @@
    "etiket": "🟢 Pozitif",
    "sembol": "",
    "link": "https://www.cnbc.com/2026/11/18/anthropic-ipo-ai-offering-price.html",
-   "yayin_tarihi": "2026-11-18T23:35:03+00:00",
-   "tarih": "2026-11-18"
-  },
-  {
-   "baslik": "Commvault president & CEO Sanjay Mirchandani sells $3.6M in stock",
-   "kaynak": "Investing.com",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.investing.com/news/insider-trading-news/commvault-president--ceo-sanjay-mirchandani-sells-36m-in-stock-93CH-5037356",
-   "yayin_tarihi": "2026-11-18T23:30:57+00:00",
-   "tarih": "2026-11-18"
-  },
-  {
-   "baslik": "Reddit COO Jennifer Wong sells $5.6M in stock",
-   "kaynak": "Investing.com",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.investing.com/news/insider-trading-news/reddit-coo-jennifer-wong-sells-56m-in-stock-93CH-5037355",
-   "yayin_tarihi": "2026-11-18T23:30:54+00:00",
-   "tarih": "2026-11-18"
-  },
-  {
-   "baslik": "Eagle Point Credit CEO Thomas Majewski buys $118,000 in common shares",
-   "kaynak": "Investing.com",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.investing.com/news/insider-trading-news/eagle-point-credit-ceo-thomas-majewski-buys-118000-in-common-shares-93CH-5037354",
-   "yayin_tarihi": "2026-11-18T23:30:53+00:00",
-   "tarih": "2026-11-18"
-  },
-  {
-   "baslik": "Saba Capital Management buys $1.28M in Highland Opportunities & Income Fund",
-   "kaynak": "Investing.com",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.investing.com/news/insider-trading-news/saba-capital-management-buys-128m-in-highland-opportunities--income-fund-93CH-5037353",
-   "yayin_tarihi": "2026-11-18T23:30:47+00:00",
-   "tarih": "2026-11-18"
-  },
-  {
-   "baslik": "Haverty Furniture at Southwest IDEAS: growth, margins and tariffs",
-   "kaynak": "Investing.com",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "pozitif",
-   "etiket": "🟢 Pozitif",
-   "sembol": "",
-   "link": "https://www.investing.com/news/transcripts/haverty-furniture-at-southwest-ideas-growth-margins-and-tariffs-93CH-5037352",
-   "yayin_tarihi": "2026-11-18T23:27:01+00:00",
-   "tarih": "2026-11-18"
-  },
-  {
-   "baslik": "Everpure Q3 FY27 slides: 51% revenue growth, record margins",
-   "kaynak": "Investing.com",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "pozitif",
-   "etiket": "🟢 Pozitif",
-   "sembol": "",
-   "link": "https://www.investing.com/news/company-news/everpure-q3-fy27-slides-51-revenue-growth-record-margins-93CH-5037351",
-   "yayin_tarihi": "2026-11-18T23:25:40+00:00",
-   "tarih": "2026-11-18"
-  },
-  {
-   "baslik": "Exclusive-Anthropic clinches biggest-ever IPO with $81 billion offering",
-   "kaynak": "Investing.com",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.investing.com/news/stock-market-news/exclusiveanthropic-clinches-biggestever-ipo-with-81-billion-offering-5037350",
-   "yayin_tarihi": "2026-11-18T23:25:30+00:00",
+   "yayin_tarihi": "2026-11-18T23:44:11+00:00",
    "tarih": "2026-11-18"
   },
   {
@@ -7867,31 +8025,43 @@
    "etiket": "🟢 Pozitif",
    "sembol": "",
    "link": "https://www.investing.com/news/stock-market-news/exclusiveunicredit-and-germany-reach-broad-agreement-on-commerzbank-takeover-5037328",
-   "yayin_tarihi": "2026-11-18T23:24:44+00:00",
+   "yayin_tarihi": "2026-11-18T23:42:22+00:00",
    "tarih": "2026-11-18"
   },
   {
-   "baslik": "Oceania Healthcare 1H27 slides: cash flow turns positive on care strength",
+   "baslik": "Big bets against AI debt, from CoreWeave to Oracle and the Mag 7, could soon hit the ETF market",
+   "kaynak": "CNBC Dünya",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.cnbc.com/2026/11/18/ai-credit-default-swaps-coreweave-debt.html",
+   "yayin_tarihi": "2026-11-18T23:38:55+00:00",
+   "tarih": "2026-11-18"
+  },
+  {
+   "baslik": "Beta Technologies CFO Herman Cueto sells $822,669 in shares",
    "kaynak": "Investing.com",
    "kategori": "global",
    "dil": "en",
    "yon": "notr",
    "etiket": "⚪ Nötr",
    "sembol": "",
-   "link": "https://www.investing.com/news/company-news/oceania-healthcare-1h27-slides-cash-flow-turns-positive-on-care-strength-93CH-5037349",
-   "yayin_tarihi": "2026-11-18T23:24:32+00:00",
+   "link": "https://www.investing.com/news/insider-trading-news/beta-technologies-cfo-herman-cueto-sells-822669-in-shares-93CH-5037362",
+   "yayin_tarihi": "2026-11-18T23:34:44+00:00",
    "tarih": "2026-11-18"
   },
   {
-   "baslik": "Democrats probe whether Lutnick helped Cantor Fitzgerald avoid Nvidia-linked losses",
+   "baslik": "Energy Evolution Master Fund buys $85,169 in Empire Petroleum stock",
    "kaynak": "Investing.com",
    "kategori": "global",
    "dil": "en",
-   "yon": "negatif",
-   "etiket": "🔴 Negatif",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
    "sembol": "",
-   "link": "https://www.investing.com/news/stock-market-news/democrats-probe-whether-howardlutnick-helped-cantor-avoid-nvidia-losses-ft-reports-5035313",
-   "yayin_tarihi": "2026-11-18T23:24:29+00:00",
+   "link": "https://www.investing.com/news/insider-trading-news/energy-evolution-master-fund-buys-85169-in-empire-petroleum-stock-93CH-5037359",
+   "yayin_tarihi": "2026-11-18T23:34:30+00:00",
    "tarih": "2026-11-18"
   },
   {
@@ -7988,18 +8158,6 @@
    "sembol": "SI=F",
    "link": "",
    "yayin_tarihi": "2026-11-18T21:50:30+00:00",
-   "tarih": "2026-11-18"
-  },
-  {
-   "baslik": "Nvidia interim CEO Kress tells employees ‘let’s move forward’ at first all-hands meeting since Jensen Huang exit",
-   "kaynak": "CNBC Dünya",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.cnbc.com/2026/11/18/nvidia-interim-ceo-kress-addresses-staff-after-jensen-huang-exit-.html",
-   "yayin_tarihi": "2026-11-18T21:40:21+00:00",
    "tarih": "2026-11-18"
   },
   {
@@ -8207,18 +8365,6 @@
    "tarih": "2026-11-18"
   },
   {
-   "baslik": "Big bets against AI debt, from CoreWeave to Oracle and the Mag 7, could soon hit the ETF market",
-   "kaynak": "CNBC Dünya",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.cnbc.com/2026/11/18/ai-credit-default-swaps-coreweave-debt.html",
-   "yayin_tarihi": "2026-11-18T18:37:39+00:00",
-   "tarih": "2026-11-18"
-  },
-  {
    "baslik": "AB'den Rusya'ya yeni yaptırım uyarısı",
    "kaynak": "Bloomberg HT",
    "kategori": "bist",
@@ -8312,18 +8458,6 @@
    "sembol": "",
    "link": "https://www.bloomberght.com/abd-istihbaratindan-art-arda-yasanan-kesintilere-dair-aciklama-3795035",
    "yayin_tarihi": "2026-11-18T17:47:44+00:00",
-   "tarih": "2026-11-18"
-  },
-  {
-   "baslik": "KAP *** KALYON GÜNEŞ TEKNOLOJİLERİ ÜRETİM A.Ş. *** KLYPV *** Payların Geri Alınmasına İlişkin Bildirim - Yeni Şafak",
-   "kaynak": "Google News · KAP",
-   "kategori": "bist",
-   "dil": "tr",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://news.google.com/rss/articles/CBMi3AFBVV95cUxOQm9LZEg4aUR2QUhiYkR3ekVXbTFKbk1TcDV6NGJheHlDWWRyeW5jbzdPSHRXUDF2bkhyWnJLWnZJb3F5Y2dhRVUxekx4ZGlPVzBtNDhOSmxySFpMME5sdlBSWVhjaS01T0RpQVVJRGZ6VHlua1N2amJfczZzX3R6M0pjU0YwMXdVQ254bl84bnl1RTBYYzBnX0lxYU9ia2VDX25yR0gtd2Z5Um13eTJmTGdOUjk5V0x4dENwZTVnYzJTTm9GV0pseGJDb3RNMHZZYURwTXY4TWMyMnJN?oc=5",
-   "yayin_tarihi": "2026-11-18T17:42:00+00:00",
    "tarih": "2026-11-18"
   },
   {
@@ -8480,18 +8614,6 @@
    "sembol": "",
    "link": "https://paratic.com/abdde-bekleyen-konut-satislari-ekimde-rekor-dusuk-seviyeye-geriledi/",
    "yayin_tarihi": "2026-11-18T15:33:45+00:00",
-   "tarih": "2026-11-18"
-  },
-  {
-   "baslik": "Fed’s Waller says central bank may need to ‘shock people’ with half-point rate hike",
-   "kaynak": "CNBC Dünya",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.cnbc.com/2026/11/18/federal-reserve-governor-christopher-waller.html",
-   "yayin_tarihi": "2026-11-18T15:13:39+00:00",
    "tarih": "2026-11-18"
   },
   {
@@ -8961,6 +9083,18 @@
    "link": "",
    "yayin_tarihi": "2026-11-17T08:09:37+00:00",
    "tarih": "2026-11-17"
+  },
+  {
+   "baslik": "Hyperiser Q3 2026 Raporu’na Göre Markalı İçerik Hacmi Yüzde 22 Büyüdü",
+   "kaynak": "Fortune TR",
+   "kategori": "makro",
+   "dil": "tr",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.fortuneturkey.com/hyperiser-q3-2026-raporuna-gore-markali-icerik-hacmi-yuzde-22-buyudu",
+   "yayin_tarihi": "2026-11-16T14:07:10+00:00",
+   "tarih": "2026-11-16"
   }
  ],
  "fonlar": {
@@ -10353,7 +10487,7 @@
    "ort_hisse_agirlik": 35.0,
    "max_hisse_agirlik": 93.5
   },
-  "tarih": "2026-11-18",
+  "tarih": "2026-11-19",
   "kaynak": "TEFAS (borsapy)",
   "taranan": 946,
   "not": "TEFAS varlık sınıfı bazlı dağılım verir (hisse senedi, ters-repo, eurobond…). Hisse BAZLI dağılım (hangi hisse ne kadar) TEFAS API anahtarı gerektirir.",
@@ -10796,7 +10930,7 @@
   "pozitif": 14
  },
  "gece_analizi": {
-  "tarih": "19.11.2026 07:39",
+  "tarih": "19.11.2026 08:07",
   "guclu_al": [
    {
     "sembol": "ENERY",
@@ -11544,7 +11678,7 @@
   "islenen": 100,
   "al_sayisi": 2,
   "sat_sayisi": 6,
-  "hesap_tarihi": "19.11.2026 07:39",
+  "hesap_tarihi": "19.11.2026 08:07",
   "kural": "MSS ±2, displacement ±1, fiyat FVG/OB bölgesi içinde ±1, likidite süpürmesi ±1, değer alanı dışı ±1. Skor ≥3 AL, ≤-3 SAT."
  },
  "genislik": {

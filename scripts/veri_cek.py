@@ -692,7 +692,8 @@ def _bar_fiyat(bar, alan: str):
     return v if v > 0 else None
 
 
-def _islem_hesapla(sembol: str, i: int, s: dict, ind, kilitler: dict) -> dict | None:
+def _islem_hesapla(sembol: str, i: int, s: dict, ind, kilitler: dict,
+                   kural: dict | None = None) -> dict | None:
     import pandas as pd  # noqa: F401 — yerel import (modül düzeyinde pandas yok)
     """Tek sinyal → tek işlem (G08 kuralları).
 
@@ -723,12 +724,27 @@ def _islem_hesapla(sembol: str, i: int, s: dict, ind, kilitler: dict) -> dict | 
     stop_fiyat = giris_fiyat - BT_ATR_STOP * atr14
     hedef_fiyat = giris_fiyat + BT_ATR_HEDEF * atr14
 
+    # G16 — senaryo kuralı (opsiyonel): varsayılan davranış hiç değişmez.
+    #   giris == 'kapanis' → giriş sinyal günü kapanışından (ertesi gün beklenmez)
+    #   stop / hedef      → None verilirse o bacak devre dışı
+    #   vade_gun          → çıkış vadesi (varsayılan BT_VADE_GUN uzun olanı)
+    kural = kural or {}
+    if kural.get('giris') == 'kapanis':
+        gi = si
+        giris_fiyat = _bar_fiyat(ind.iloc[gi], 'HGDG_KAPANIS') or giris_fiyat
+        stop_fiyat = giris_fiyat - BT_ATR_STOP * atr14
+        hedef_fiyat = giris_fiyat + BT_ATR_HEDEF * atr14
+    vade_gun = kural.get('vade_gun')
+
     # En uzun vade: işlem günü sayısı (kilitli günler de işlem günüdür, sadece işlem yapılamaz)
     vade_son = {}
     sayac = 0
     for j in range(gi, n):
         sayac += 1
-        if sayac in BT_VADE_GUN:
+        if vade_gun:
+            if sayac == int(vade_gun):
+                vade_son[sayac] = j
+        elif sayac in BT_VADE_GUN:
             vade_son[sayac] = j
     if not vade_son:
         return None
@@ -744,10 +760,10 @@ def _islem_hesapla(sembol: str, i: int, s: dict, ind, kilitler: dict) -> dict | 
         yuksek = _bar_fiyat(ind.iloc[j], 'HGDG_MAX')
         stop_vurdu = dusuk is not None and dusuk <= stop_fiyat
         hedef_vurdu = yuksek is not None and yuksek >= hedef_fiyat
-        if stop_vurdu:                      # aynı gün ikisi de → STOP (muhafazakâr)
+        if stop_vurdu and kural.get('stop') is not False:   # aynı gün ikisi de → STOP (muhafazakâr)
             cikis_i, cikis_fiyat, cikis_neden = j, stop_fiyat, 'stop'
             break
-        if hedef_vurdu:
+        if hedef_vurdu and kural.get('hedef') is not False:
             cikis_i, cikis_fiyat, cikis_neden = j, hedef_fiyat, 'hedef'
             break
         if j in vade_son.values():
@@ -1833,7 +1849,7 @@ def ict_tara(hisse_veri: dict) -> dict:
     }
 
 
-def test_senaryolari(hisse_veri: dict, endeks_serisi=None) -> dict:
+def test_senaryolari(hisse_veri: dict, endeks_serisi=None, kural: dict | None = None) -> dict:
     """TEST SENARYOLARI — 'geçmişte sinyal olsaydı şu an ne olurdu?' hesabı.
 
     G08 — gerçek veri + gerçek sinyal geçmişi (uydurma yok):
@@ -1918,7 +1934,7 @@ def test_senaryolari(hisse_veri: dict, endeks_serisi=None) -> dict:
     for _t, sembol, i, s, kilitler, rows in adaylar:
         if sembol in serbest and i <= serbest[sembol]:
             continue                                   # pozisyon açıkken gelen sinyal → atlanır
-        islem = _islem_hesapla(sembol, i, s, tablolar[sembol], kilitler)
+        islem = _islem_hesapla(sembol, i, s, tablolar[sembol], kilitler, kural)
         if not islem:
             continue
         tum_islemler.append(islem)
@@ -2066,6 +2082,63 @@ def test_senaryolari(hisse_veri: dict, endeks_serisi=None) -> dict:
                      'hisse, ertesi gün açılıştan alınır. Çıkış 5/10/20 iş günü vade veya 2×ATR stop / '
                      '3×ATR hedef — hangisi önce. Alfa = işlem getirisi − XU100 getirisi (aynı tarihler).'),
     }
+
+
+def senaryo_uret(hisse_veri: dict, endeks_serisi=None) -> dict:
+    """G16 — KURAL SENARYOLARI: aynı sinyal geçmişi, farklı çıkış kuralları.
+
+    Amaç: 'hangi kural daha iyi?' sorusunu ölçmek. Her senaryo GERÇEK veriyle,
+    `_islem_hesapla` üzerinden yeniden hesaplanır; hiçbir sayı elle yazılmaz.
+    Mevcut varsayılan kural (ertesi gün açılış + 2×ATR stop + 3×ATR hedef +
+    5/10/20 vade) referans senaryodur; diğerleri tek değişkenli varyantlardır.
+
+    Dönen: {'senaryolar': [...], 'en_iyi': {...}, 'referans': {...}, 'parametre': {...}}
+    """
+    if not hisse_veri:
+        return {'durum': 'veri yok', 'senaryolar': []}
+
+    # Referans = mevcut varsayılan. Diğerleri TEK değişkenli (karşılaştırma adil olsun).
+    tanimlar = [
+        ('referans', 'Varsayılan: ertesi gün açılış + 2×ATR stop + 3×ATR hedef + 5/10/20 vade', {}),
+        ('stop_yok', 'Stopsuz: sadece 3×ATR hedef / vade', {'stop': False}),
+        ('hedef_yok', 'Hedefsiz: sadece 2×ATR stop / vade', {'hedef': False}),
+        ('cikis_yok', 'Kırılmasız: tek başına vade (stop ve hedef kapalı)', {'stop': False, 'hedef': False}),
+        ('vade_5', 'Kısa vade: 5 iş günü', {'vade_gun': 5}),
+        ('vade_10', 'Orta vade: 10 iş günü', {'vade_gun': 10}),
+        ('vade_20', 'Uzun vade: 20 iş günü', {'vade_gun': 20}),
+        ('kapanis_giris', 'Sinyal günü kapanıştan giriş (ertesi gün beklenmez)', {'giris': 'kapanis'}),
+    ]
+
+    senaryolar = []
+    for anahtar, ad, kural in tanimlar:
+        try:
+            r = test_senaryolari(hisse_veri, endeks_serisi, kural)
+        except Exception as e:                      # bir senaryo düşerse diğerleri yazılır
+            senaryolar.append({'anahtar': anahtar, 'ad': ad, 'durum': f'hata: {e}'})
+            continue
+        m = r.get('metrik') or {}
+        if not m.get('islem'):
+            senaryolar.append({'anahtar': anahtar, 'ad': ad, 'durum': 'işlem yok'})
+            continue
+        senaryolar.append({
+            'anahtar': anahtar, 'ad': ad, 'kural': kural,
+            'islem': m.get('islem'), 'isabet': m.get('isabet'),
+            'ortalama': m.get('ortalama'), 'ortalama_alfa': m.get('ortalama_alfa'),
+            'profit_factor': m.get('profit_factor'), 'max_drawdown': m.get('max_drawdown'),
+            'devir': m.get('devir'),
+        })
+
+    # Sıralama: ortalama alfa (yoksa ortalama getiri). Alfa = endeksi geçme ölçütü.
+    def _sirala(x):
+        a = x.get('ortalama_alfa')
+        return (-(a if a is not None else -999), -(x.get('ortalama') or 0))
+
+    gecerli = [x for x in senaryolar if x.get('islem')]
+    en_iyi = sorted(gecerli, key=_sirala)[0] if gecerli else None
+    referans = next((x for x in senaryolar if x['anahtar'] == 'referans'), None)
+    return {'senaryolar': senaryolar, 'en_iyi': en_iyi, 'referans': referans,
+            'parametre': {'benchmark': 'XU100', 'maliyet': MALIYET,
+                          'olcut': 'ortalama_alfa (XU100 getirisi düşülmüş)'}}
 
 
 def haber_tarihi_iso(deger) -> str | None:
@@ -2765,6 +2838,14 @@ def main():
     endeks_serisi = (endeks or {}).get('seri') or []
     senaryolar = test_senaryolari(hisse_veri, endeks_serisi) if hisse_veri else {}
 
+    # 5a-2. G16 — Kural senaryoları (aynı sinyal geçmişi, farklı çıkış kuralları).
+    # Ayrı bir blok; varsayılan `test_senaryolari` çıktısı hiç değişmez.
+    try:
+        kural_senaryolari = senaryo_uret(hisse_veri, endeks_serisi) if hisse_veri else {}
+    except Exception as e:
+        log(f'Kural senaryoları hatası: {e}')
+        kural_senaryolari = {'durum': 'veri yok'}
+
     # 5b. Haberler
     haberler = haberler_cek()
 
@@ -2862,6 +2943,7 @@ def main():
         'takvim': takvim,
         'sinyaller': sinyaller,
         'test_senaryolari': senaryolar,
+        'kural_senaryolari': kural_senaryolari,
         'haberler': haberler,
         'fonlar': fonlar,
         'sektorler': sektor_list,

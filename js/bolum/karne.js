@@ -117,6 +117,45 @@ export function renderSenaryo(d) {
       html += '</tbody></table></div>';
     }
 
+    // G16 — Kural senaryoları: aynı sinyal geçmişi, farklı çıkış kuralları.
+    // Sayılar tamamen `kural_senaryolari`'ndan okunur; elle yazılmış değer yok.
+    const ks = d.kural_senaryolari;
+    if (ks && ks.senaryolar && ks.senaryolar.length) {
+      const enIyi = ks.en_iyi || {};
+      const ref = ks.referans || null;
+      // Biçim: negatifte eksi önde (−%0,1), pozitifte artı önde (+%0,2)
+      const af16 = v => v == null ? '—' : (v >= 0 ? '+' : '−') + '%' + Math.abs(v).toFixed(1).replace('.', ',');
+      const fark = (a, b) => (a == null || b == null) ? '' : (a - b >= 0 ? '+' : '−') + '%' + Math.abs(a - b).toFixed(1).replace('.', ',');
+      html += '<h2>🧭 Kural Senaryoları <span class="cnt">aynı sinyaller, farklı çıkış kuralları</span></h2>';
+      if (ref) {
+        html += `<div class="note">Referans kural: ortalama alfa ${af16(ref.ortalama_alfa)} · ${ref.islem} işlem. ` +
+          (enIyi.anahtar && enIyi.anahtar !== 'referans'
+            ? `En iyi varyant <b>${enIyi.ad}</b> — referansa göre alfa farkı <b>${fark(enIyi.ortalama_alfa, ref.ortalama_alfa)}</b>.`
+            : 'En iyi varyant referans kuralın kendisi — mevcut ayarlar zaten en iyisi.') +
+          ' Ölçüt: işlem başına XU100 fazlası.</div>';
+      }
+      html += '<div class="twrap"><table><tr><th>Kural</th><th>İşlem</th><th>İsabet</th>' +
+        '<th>Ort. Getiri</th><th title="XU100 getirisi düşülmüş">Ort. Alfa</th>' +
+        '<th>Profit Factor</th><th>Max DD</th><th>Devir</th></tr><tbody>';
+      ks.senaryolar.forEach(s => {
+        if (s.durum) {
+          html += `<tr><td>${s.ad}</td><td colspan="7" style="color:var(--muted)">${s.durum}</td></tr>`;
+          return;
+        }
+        const vurgu = s.anahtar === (enIyi.anahtar || '') ? ' style="background:rgba(240,185,11,.08)"' : '';
+        html += `<tr${vurgu}><td>${s.anahtar === 'referans' ? '<b>' + s.ad + '</b>' : s.ad}</td>` +
+          `<td>${s.islem}</td><td>${s.isabet == null ? '—' : '%' + (s.isabet * 100).toFixed(1)}</td>` +
+          `<td class="${ok(s.ortalama)}">${af16(s.ortalama)}</td>` +
+          `<td class="${s.ortalama_alfa == null ? '' : (s.ortalama_alfa >= 0 ? 'up' : 'down')}">${af16(s.ortalama_alfa)}</td>` +
+          `<td>${s.profit_factor == null ? '—' : s.profit_factor.toFixed(2)}</td>` +
+          `<td class="down">${s.max_drawdown == null ? '—' : '%' + s.max_drawdown.toFixed(1)}</td>` +
+          `<td>${s.devir == null ? '—' : s.devir.toFixed(0)}</td></tr>`;
+      });
+      html += '</tbody></table></div>';
+      html += '<div class="note">Her satır gerçek fiyat verisiyle yeniden hesaplandı (lookahead yok). ' +
+        'Tek değişkenli varyantlar: adil karşılaştırma için aynı anda tek kural değiştirilir.</div>';
+    }
+
     const ilk = (t.ertesi_gun_acilis && t.ertesi_gun_acilis.islemler) || [];
     if (ilk.length) {
       // G08 — işlemler artık vade/stop/hedef ile kapanıyor: çıkış tarihi + neden gösterilir.
