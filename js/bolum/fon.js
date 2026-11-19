@@ -14,6 +14,42 @@ export function renderFon(d) {
   const f = d.fonlar;
   let html = '<h2>🏦 Fonlar & Kurumsal</h2>';
 
+  /* ── SENARYO → FON EŞLEŞTİRME (hangi fon neyi kapsar, hangi vadeye uygun) ── */
+  if (f && f.senaryolar && f.senaryolar.length) {
+    const gx = x => x == null ? '<span class="muted">—</span>'
+      : `<span class="${ok(x)}">${x >= 0 ? '+' : '−'}%${Math.abs(x).toFixed(1).replace('.', ',')}</span>`;
+    html += `<h2>🎯 Senaryoya Göre Fon Seçimi <span class="cnt">${f.tarih || ''}` +
+      `${f.bayat ? ' <span class="warn">bayat</span>' : ''}</span></h2>` +
+      '<div class="altnot">"1 ay içinde lazım", "altın", "BIST 30", "yabancı teknoloji" gibi ' +
+      'senaryoya aday fonlar. Her senaryo kendi vadesindeki getiriye göre sıralı; ' +
+      'listenin altındaki eşiğin altında kalan fonlar sıralamaya alınmaz.</div>';
+    f.senaryolar.forEach(s => {
+      const siralamaAd = { '1A': '1 ay', '3A': '3 ay', '6A': '6 ay', 'YBB': 'yıl başı', '1Y': '1 yıl' }[s.sirala] || s.sirala;
+      html += `<div class="ev" style="display:block">` +
+        `<div class="nm" style="display:flex;gap:8px;align-items:baseline;flex-wrap:wrap">` +
+        `<b>${s.ikon || ''} ${alEsc(s.ad)}</b>` +
+        `<span class="cnt">${alEsc(s.vade)} · sıra: ${siralamaAd}</span></div>` +
+        `<div style="color:var(--tx2);font-size:12px;margin:2px 0 6px">` +
+        `Kapsam: ${alEsc(s.kapsam)}</div>` +
+        '<div class="twrap"><table><tr><th>Kod</th><th>Fon</th><th>Büyüklük</th>' +
+        '<th>1 Ay</th><th>3 Ay</th><th>6 Ay</th><th>YBB</th><th>1 Yıl</th></tr><tbody>';
+      s.fonlar.forEach((x, i) => {
+        const g = x.getiri || {};
+        const b = x.boyut_m >= 1000 ? (x.boyut_m / 1000).toFixed(1) + ' mlr' : Math.round(x.boyut_m) + ' mn';
+        html += `<tr><td class="sym">${i === 0 ? '★ ' : ''}${x.kod}</td>` +
+          `<td class="ned">${alEsc(x.ad || '')}</td><td>${b}</td>` +
+          `<td>${gx(g['1A'])}</td><td>${gx(g['3A'])}</td><td>${gx(g['6A'])}</td>` +
+          `<td>${gx(g['YTD'])}</td><td>${gx(g['1Y'])}</td></tr>`;
+      });
+      html += '</tbody></table></div>' +
+        `<div class="note">${alEsc(s.not || '')}` +
+        (s.buyukluk_disi && s.buyukluk_disi.length
+          ? ` <b>${s.esik_mn} mn TL altı olduğu için listeye alınmadı:</b> ${s.buyukluk_disi.join(', ')}.`
+          : '') +
+        '</div></div>';
+    });
+  }
+
   /* ── Kategori bazlı top-10 performans (TEFAS, 1 aylık getiriye göre sıralı) ── */
   if (f && f.kategoriler && f.kategoriler.length) {
     const g = x => x == null ? '—' : `<span class="${ok(x)}">${x >= 0 ? '+' : '−'}%${Math.abs(x).toFixed(2).replace('.', ',')}</span>`;

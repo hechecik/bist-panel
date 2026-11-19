@@ -2436,6 +2436,55 @@ FON_TIP_ADI = dict(FON_KATEGORILERI)
 FON_MIN_BUYUKLUK = 50_000_000
 FON_TOP_N = 10
 
+# ══════════ SENARYO → FON EŞLEŞTİRME ══════════
+# Panelin eksik parçası: "hangi fon neyi kapsar, hangi vadeye uygun" sorusunu kategori tablosu
+# cevaplamıyordu (kategori şemsiye tipi, yatırım fikri değil). Burada yatırım senaryosu → aday
+# fonlar, o senaryoya uygun vadede sıralanır. `sirala` = hangi getiri kolonu baz alınacak.
+# Liste dışı fon aday gösterilmez (kanıtsız öneri olmaz).
+FON_SENARYOLARI = [
+    {'anahtar': 'nakit', 'ikon': '💵', 'ad': 'Nakit park', 'vade': '1 ay içinde lazım olan para',
+     'sirala': '1A', 'esik_mn': 300,
+     'kodlar': ['PPI', 'HVT', 'IRY', 'PRD', 'RBP', 'IOO', 'ZBJ', 'BGP'],
+     'kapsam': 'Ters repo + TL mevduat + kısa bono',
+     'not': 'Günlük fiyat oynamaz, T+0/T+1 çıkış. Aylık brüt ~%3. 1 ay sonra harcanacak para '
+            'borsa fonunda durmaz, burada durur.'},
+    {'anahtar': 'altin', 'ikon': '🥇', 'ad': 'Kıymetli maden', 'vade': '3-12 ay',
+     'sirala': '6A', 'esik_mn': 300,
+     'kodlar': ['AFO', 'GTA', 'DBA', 'FIB', 'HBF', 'GOL', 'TTA', 'HTS'],
+     'kapsam': 'Fiziki altın / altına endeksli kira sertifikası',
+     'not': 'Altın fonu stopajı %0 ve gram altındaki alım-satım makası yok. FIB altına endeksli '
+            'kira sertifikası ağırlıklı, GOL katılım (faizsiz), HTS serbest döviz fonu.'},
+    {'anahtar': 'bist30', 'ikon': '📈', 'ad': 'BIST 30', 'vade': '3-12 ay',
+     'sirala': '1A', 'esik_mn': 100,
+     'kodlar': ['AKU', 'MMH', 'GAE', 'YEF', 'TIE', 'HBU'],
+     'kapsam': 'BIST 30 hisseleri (pasif endeks)',
+     'not': 'Pasif endeks fonu 30 hisseyi ağırlığıyla tutar, hisse seçmez. GAE %33 VIOP teminatı '
+            'taşır (vadeliden takip). MMH küçük fon, 1Y lideri.'},
+    {'anahtar': 'borclanma', 'ikon': '🛡', 'ad': 'TL tahvil/bono', 'vade': '3-12 ay',
+     'sirala': 'YBB', 'esik_mn': 300,
+     'kodlar': ['BRR', 'OSL', 'IKV', 'DBK', 'OKP', 'IFV'],
+     'kapsam': 'Devlet tahvili + finansman bonosu (kısa vade)',
+     'not': 'Faiz inerse para piyasasının üstünde ek getiri, faiz sabitse başabaş. Uzun vadeli '
+            'borçlanma fonları faiz riski taşır.'},
+    {'anahtar': 'yabanci', 'ikon': '🌍', 'ad': 'Yabancı teknoloji', 'vade': '6-12 ay',
+     'sirala': '6A', 'esik_mn': 300,
+     'kodlar': ['TFF', 'YAY', 'GUH', 'AFT'],
+     'kapsam': 'Yabancı hisse / Amerikan teknoloji BYF',
+     'not': 'TL getiri = dolar getirisi + kur. TFF %99 BYF sepeti (dağınık), YAY %96 yabancı '
+            'hisse, AFT teknolojiye tam gömülü (düşüş/toparlanma en sert).'},
+    {'anahtar': 'yapay_zeka', 'ikon': '🤖', 'ad': 'Yapay zeka teması', 'vade': '6-12 ay',
+     'sirala': '1A', 'esik_mn': 0,
+     'kodlar': ['YZT', 'ZTS'],
+     'kapsam': '~%62-66 yabancı hisse + ~%25-29 BIST hissesi',
+     'not': 'Yeni fonlar: 3A/6A geçmişi yok. ZTS 50 mn TL ile sığ, YZT 648 mn TL ile alınabilir.'},
+    {'anahtar': 'tr_teknoloji', 'ikon': '🇹🇷', 'ad': 'Türkiye teknoloji/savunma', 'vade': '3-12 ay',
+     'sirala': '6A', 'esik_mn': 100,
+     'kodlar': ['GZG', 'IJB', 'IRO', 'RPM', 'DHT', 'SSS', 'GZZ'],
+     'kapsam': 'Sağlık-genetik, dijital oyun, robotik, savunma',
+     'not': 'Tema fonları küçük (IRO 5 mn TL = sığ fiyatlama). GZG sağlık-genetik, IJB oyun, '
+            'DHT/SSS havacılık-savunma.'},
+]
+
 
 def fonlar_cek(onceki: dict = None) -> dict:
     """TEFAS fonları — kategori bazında top-N performans tabloları (borsapy, TEFAS resmi).
@@ -2512,6 +2561,39 @@ def fonlar_cek(onceki: dict = None) -> dict:
     if tarama:
         sonuc['tarih'] = dt.datetime.now(dt.timezone.utc).strftime('%Y-%m-%d')
 
+    # ── 1b. Katman: senaryo → fon eşleştirme ──
+    # Tarama sözlüğünden (kod → kayıt) beslenir; TEFAS o an bir fonu vermezse o fon atlanır,
+    # sahte veri yazılmaz. Senaryo başına en çok 6 aday gösterilir.
+    tarama_idx = {x['kod']: x for x in tarama}
+    senaryolar = []
+    for s in FON_SENARYOLARI:
+        adaylar, disi = [], []
+        for kod in s['kodlar']:
+            x = tarama_idx.get(kod)
+            if not x:
+                continue
+            if (x['boyut'] or 0) < s['esik_mn'] * 1_000_000:
+                disi.append(kod)
+                continue
+            adaylar.append(x)
+        if not adaylar:
+            continue
+        adaylar.sort(key=lambda x: -(x['getiri'].get(s['sirala']) or -999))
+        secili = adaylar[:6]
+        senaryolar.append({
+            'anahtar': s['anahtar'], 'ikon': s['ikon'], 'ad': s['ad'], 'vade': s['vade'],
+            'sirala': s['sirala'], 'kapsam': s['kapsam'], 'not': s['not'],
+            'adet': len(adaylar), 'esik_mn': s['esik_mn'], 'buyukluk_disi': disi,
+            'fonlar': [{'kod': x['kod'], 'ad': x['ad'], 'tip': x['tip'],
+                        'boyut_m': round((x['boyut'] or 0) / 1e6, 0),
+                        'getiri': {k: (round(v, 2) if isinstance(v, (int, float)) else None)
+                                   for k, v in x['getiri'].items()}}
+                       for x in secili],
+        })
+    sonuc['senaryolar'] = senaryolar
+    log(f"Senaryo eşleştirme: {len(senaryolar)} senaryo, "
+        f"{sum(len(s['fonlar']) for s in senaryolar)} fon adayı")
+
     # ── 2. Katman: eski blok (varlık sınıfı dağılımı) — UI'daki "Fon Dağılımları" bölümü için ──
     aday_kodlar = ['TTE', 'TMS', 'TAH', 'TTA', 'TTP', 'AVT', 'TAI']
     hisse_agirliklari = []
@@ -2562,6 +2644,11 @@ def fonlar_cek(onceki: dict = None) -> dict:
         sonuc['siralama_notu'] = onceki.get('siralama_notu', sonuc['siralama_notu'])
         sonuc['bayat'] = True
         log("Fon kategorileri alınamadı — önceki veri korundu (bayat)")
+    # Senaryolar kategorilerden bağımsız: güncel veri yoksa önceki senaryo bloğu da korunur.
+    if not sonuc.get('senaryolar') and onceki and onceki.get('senaryolar'):
+        sonuc['senaryolar'] = onceki['senaryolar']
+        sonuc['bayat'] = True
+        log("Senaryo eşleştirme alınamadı — önceki blok korundu (bayat)")
     return sonuc
 
 
