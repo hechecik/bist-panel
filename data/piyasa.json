@@ -1,5 +1,5 @@
 {
- "uretildi": "2026-11-19T22:52:54+00:00",
+ "uretildi": "2026-11-20T06:38:11+00:00",
  "kaynak": "borsapy-tv",
  "saglik": {
   "durum": "OK",
@@ -18,14 +18,10 @@
   "bolunme_duzeltme": []
  },
  "endeks": {
-  "deger": 11477.4,
-  "degisim_yuzde": -1.57,
-  "tarih": "2026-11-18",
+  "deger": 11400.1,
+  "degisim_yuzde": -0.67,
+  "tarih": "2026-11-19",
   "seri": [
-   [
-    "2025-11-19",
-    10903.9
-   ],
    [
     "2025-11-20",
     10979.7
@@ -1021,10 +1017,13 @@
    [
     "2026-11-18",
     11477.4
+   ],
+   [
+    "2026-11-19",
+    11400.1
    ]
   ],
   "seri_son": [
-   13501.6,
    13292.9,
    13458.1,
    13410.5,
@@ -1103,7 +1102,8 @@
    11842.8,
    11841.8,
    11661.0,
-   11477.4
+   11477.4,
+   11400.1
   ]
  },
  "makro": {
@@ -1111,13 +1111,13 @@
    "gram-altin": {
     "ad": "GRAM ALTIN",
     "birim": "TL/gram",
-    "fiyat": 5886.81,
+    "fiyat": 5773.01,
     "capraz": 5945.913,
-    "fark_yuzde": 1.0,
-    "uyari": false,
+    "fark_yuzde": 3.0,
+    "uyari": true,
     "kaynak": "ons/31,1034768 × USD/TL",
     "ons_kaynak": "spot",
-    "degisim": -3.0
+    "degisim": -3.32
    },
    "USD": {
     "ad": "DOLAR/TL",
@@ -1146,10 +1146,10 @@
    "ons-altin": {
     "ad": "ONS ALTIN",
     "birim": "USD/ons",
-    "fiyat": 3627.9,
-    "degisim": -3.05,
+    "fiyat": 3557.77,
+    "degisim": -3.37,
     "kaynak": "spot",
-    "vadeli_fiyat": 3627.9
+    "vadeli_fiyat": 3561.2
    },
    "^VIX": {
     "ad": "VIX KORKU",
@@ -1161,22 +1161,22 @@
    "NG=F": {
     "ad": "DOĞALGAZ",
     "birim": "USD",
-    "fiyat": 3.24,
-    "degisim": -3.8,
+    "fiyat": 3.22,
+    "degisim": -1.38,
     "ters": false
    },
    "HG=F": {
     "ad": "BAKIR",
     "birim": "USD/lb",
-    "fiyat": 5.59,
-    "degisim": -1.19,
+    "fiyat": 5.52,
+    "degisim": -1.79,
     "ters": false
    },
    "ZW=F": {
     "ad": "BUĞDAY",
     "birim": "USc/buşel",
-    "fiyat": 595.25,
-    "degisim": 4.43,
+    "fiyat": 593.0,
+    "degisim": 2.55,
     "ters": false
    }
   },
@@ -1199,10 +1199,6 @@
    "gram_altin": "ons(GC=F) / 31,1034768 × USDTRY"
   },
   "tl": [
-   [
-    "2025-11-19",
-    10903.9
-   ],
    [
     "2025-11-20",
     10979.7
@@ -2198,13 +2194,13 @@
    [
     "2026-11-18",
     11477.4
+   ],
+   [
+    "2026-11-19",
+    11400.1
    ]
   ],
   "usd": [
-   [
-    "2025-11-19",
-    257.6116
-   ],
    [
     "2025-11-20",
     259.3044
@@ -3200,13 +3196,13 @@
    [
     "2026-11-18",
     227.5533
+   ],
+   [
+    "2026-11-19",
+    225.9145
    ]
   ],
   "altin": [
-   [
-    "2025-11-19",
-    1.9625
-   ],
    [
     "2025-11-20",
     1.9865
@@ -4202,10 +4198,14 @@
    [
     "2026-11-18",
     1.8915
+   ],
+   [
+    "2026-11-19",
+    1.9066
    ]
   ],
-  "bas": "2025-11-19",
-  "son": "2026-11-18",
+  "bas": "2025-11-20",
+  "son": "2026-11-19",
   "hizalama": {
    "eslesen_gun": 250,
    "yontem": "tarihe göre en yakın önceki gün",
@@ -4213,66 +4213,66 @@
   },
   "getiriler": {
    "durum": "ok",
-   "son_tarih": "2026-11-18",
+   "son_tarih": "2026-11-19",
    "donemler": {
     "1h": {
      "bar": 5,
-     "hedef_tarih": "2026-11-11",
+     "hedef_tarih": "2026-11-12",
      "not": "1y için 252 bar ≈ takvim yılı",
-     "tl": -1.62,
-     "tl_bas_tarih": "2026-11-11",
-     "usd": -2.066,
-     "usd_bas_tarih": "2026-11-11",
-     "altin": 4.705,
-     "altin_bas_tarih": "2026-11-11",
-     "bas_tarih": "2026-11-11"
+     "tl": -3.481,
+     "tl_bas_tarih": "2026-11-12",
+     "usd": -3.879,
+     "usd_bas_tarih": "2026-11-12",
+     "altin": 1.334,
+     "altin_bas_tarih": "2026-11-12",
+     "bas_tarih": "2026-11-12"
     },
     "1a": {
      "bar": 21,
-     "hedef_tarih": "2026-10-19",
+     "hedef_tarih": "2026-10-20",
      "not": "1y için 252 bar ≈ takvim yılı",
-     "tl": 0.414,
-     "tl_bas_tarih": "2026-10-19",
-     "usd": -1.409,
-     "usd_bas_tarih": "2026-10-19",
-     "altin": 9.614,
-     "altin_bas_tarih": "2026-10-19",
-     "bas_tarih": "2026-10-19"
+     "tl": -3.37,
+     "tl_bas_tarih": "2026-10-20",
+     "usd": -5.084,
+     "usd_bas_tarih": "2026-10-20",
+     "altin": 6.687,
+     "altin_bas_tarih": "2026-10-20",
+     "bas_tarih": "2026-10-20"
     },
     "3a": {
      "bar": 63,
-     "hedef_tarih": "2026-08-21",
+     "hedef_tarih": "2026-08-22",
      "not": "1y için 252 bar ≈ takvim yılı",
-     "tl": -20.926,
+     "tl": -21.459,
      "tl_bas_tarih": "2026-08-21",
-     "usd": -24.682,
+     "usd": -25.224,
      "usd_bas_tarih": "2026-08-21",
-     "altin": -5.788,
+     "altin": -5.036,
      "altin_bas_tarih": "2026-08-21",
      "bas_tarih": "2026-08-21"
     },
     "1y": {
      "bar": 252,
-     "hedef_tarih": "2025-11-30",
+     "hedef_tarih": "2025-12-01",
      "not": "1y için 252 bar ≈ takvim yılı",
-     "tl": 5.31,
-     "tl_bas_tarih": "2025-11-28",
-     "usd": -11.296,
-     "usd_bas_tarih": "2025-11-28",
-     "altin": 0.869,
-     "altin_bas_tarih": "2025-11-28",
-     "bas_tarih": "2025-11-28"
+     "tl": 2.551,
+     "tl_bas_tarih": "2025-12-01",
+     "usd": -13.692,
+     "usd_bas_tarih": "2025-12-01",
+     "altin": 0.11,
+     "altin_bas_tarih": "2025-12-01",
+     "bas_tarih": "2025-12-01"
     },
     "ybb": {
      "bar": null,
      "hedef_tarih": "2026-01-01",
      "yilbasi": true,
      "bas_tarih": "2026-01-02",
-     "tl": -0.183,
+     "tl": -0.855,
      "tl_bas_tarih": "2026-01-02",
-     "usd": -14.915,
+     "usd": -15.528,
      "usd_bas_tarih": "2026-01-02",
-     "altin": -1.551,
+     "altin": -0.765,
      "altin_bas_tarih": "2026-01-02",
      "yilbasi_str": "2026-01-02"
     }
@@ -4280,41 +4280,41 @@
    "tutarlilik": [
     {
      "donem": "1h",
-     "beklenen_usd_pct": -2.066,
-     "usd_pct": -2.066,
-     "fark_pct": 0.0,
+     "beklenen_usd_pct": -3.879,
+     "usd_pct": -3.879,
+     "fark_pct": -0.0,
      "esik_pct": 0.1,
      "ok": true
     },
     {
      "donem": "1a",
-     "beklenen_usd_pct": -1.408,
-     "usd_pct": -1.409,
-     "fark_pct": 0.0006,
+     "beklenen_usd_pct": -5.084,
+     "usd_pct": -5.084,
+     "fark_pct": -0.0001,
      "esik_pct": 0.1,
      "ok": true
     },
     {
      "donem": "3a",
-     "beklenen_usd_pct": -24.682,
-     "usd_pct": -24.682,
-     "fark_pct": 0.0002,
+     "beklenen_usd_pct": -25.225,
+     "usd_pct": -25.224,
+     "fark_pct": -0.0007,
      "esik_pct": 0.1,
      "ok": true
     },
     {
      "donem": "1y",
-     "beklenen_usd_pct": -11.295,
-     "usd_pct": -11.296,
-     "fark_pct": 0.0006,
+     "beklenen_usd_pct": -13.692,
+     "usd_pct": -13.692,
+     "fark_pct": 0.0003,
      "esik_pct": 0.1,
      "ok": true
     },
     {
      "donem": "ybb",
-     "beklenen_usd_pct": -14.915,
-     "usd_pct": -14.915,
-     "fark_pct": -0.0002,
+     "beklenen_usd_pct": -15.528,
+     "usd_pct": -15.528,
+     "fark_pct": 0.0003,
      "esik_pct": 0.1,
      "ok": true
     }
@@ -4322,7 +4322,7 @@
   }
  },
  "tr_risk": {
-  "uretildi": "2026-11-19T22:48:36+00:00",
+  "uretildi": "2026-11-20T06:31:59+00:00",
   "tahvil": {
    "2Y": 39.46,
    "10Y": 36.62,
@@ -4379,7 +4379,7 @@
    ],
    "sonraki": {
     "tarih": "2026-12-10",
-    "kalan_gun": 21
+    "kalan_gun": 20
    },
    "gelecek": [
     "2026-12-10",
@@ -4483,88 +4483,88 @@
    "olay": "Baker Hughes Petrol Kulesi Sayısı (-)"
   },
   {
-   "tarih": "19.11",
-   "saat": "00:00",
-   "ulke": "ABD",
-   "onem": "low",
-   "olay": "Yabancı Tahvil Yatırımı (-)"
-  },
-  {
-   "tarih": "19.11",
-   "saat": "00:00",
-   "ulke": "ABD",
-   "onem": "mid",
-   "olay": "Net Uzun Vadeli TIC Akımları (-)"
-  },
-  {
-   "tarih": "19.11",
-   "saat": "00:00",
-   "ulke": "ABD",
-   "onem": "low",
-   "olay": "Genel Net Sermaye Akımları (-)"
-  },
-  {
-   "tarih": "19.11",
-   "saat": "14:30",
+   "tarih": "23.11",
+   "saat": "11:00",
    "ulke": "Türkiye",
    "onem": "mid",
-   "olay": "Döviz Rezervleri (-)"
+   "olay": "Turist Gelişleri (Yıllık) (-)"
   },
   {
-   "tarih": "19.11",
-   "saat": "16:30",
-   "ulke": "ABD",
-   "onem": "low",
-   "olay": "Devam Eden İşsizlik Başvuruları (-)"
-  },
-  {
-   "tarih": "19.11",
+   "tarih": "23.11",
    "saat": "16:30",
    "ulke": "ABD",
    "onem": "mid",
-   "olay": "İlk İşsizlik Başvuruları (-)"
+   "olay": "Chicago Fed Ulusal Aktivite Endeksi (-)"
   },
   {
-   "tarih": "19.11",
-   "saat": "16:30",
-   "ulke": "ABD",
-   "onem": "low",
-   "olay": "İşsizlik Başvuruları (4 Haftalık Ortalama) (-)"
-  },
-  {
-   "tarih": "19.11",
-   "saat": "16:30",
+   "tarih": "23.11",
+   "saat": "17:45",
    "ulke": "ABD",
    "onem": "mid",
-   "olay": "Philadelphia Fed İmalat Endeksi (-)"
+   "olay": "S&P Global Bileşik PMI (Öncü) (-)"
   },
   {
-   "tarih": "19.11",
-   "saat": "16:30",
+   "tarih": "23.11",
+   "saat": "17:45",
    "ulke": "ABD",
-   "onem": "low",
-   "olay": "Philly Fed İş Koşulları (-)"
+   "onem": "mid",
+   "olay": "S&P Global İmalat PMI (Öncü) (-)"
   },
   {
-   "tarih": "19.11",
-   "saat": "16:30",
+   "tarih": "23.11",
+   "saat": "17:45",
    "ulke": "ABD",
-   "onem": "low",
-   "olay": "Philly Fed CAPEX Endeksi (-)"
+   "onem": "mid",
+   "olay": "S&P Global Hizmetler PMI (Öncü) (-)"
   },
   {
-   "tarih": "19.11",
-   "saat": "16:30",
+   "tarih": "23.11",
+   "saat": "19:30",
    "ulke": "ABD",
    "onem": "low",
-   "olay": "Philly Fed İstihdam (-)"
+   "olay": "3 Aylık Bono İhalesi (-)"
   },
   {
-   "tarih": "19.11",
-   "saat": "16:30",
+   "tarih": "23.11",
+   "saat": "19:30",
    "ulke": "ABD",
    "onem": "low",
-   "olay": "Philly Fed Yeni Siparişler (-)"
+   "olay": "6 Aylık Bono İhalesi (-)"
+  },
+  {
+   "tarih": "23.11",
+   "saat": "21:00",
+   "ulke": "ABD",
+   "onem": "low",
+   "olay": "2 Yıllık Tahvil İhalesi (-)"
+  },
+  {
+   "tarih": "24.11",
+   "saat": "15:15",
+   "ulke": "ABD",
+   "onem": "mid",
+   "olay": "ADP Haftalık Özel Sektör İstihdam Değişimi (-)"
+  },
+  {
+   "tarih": "24.11",
+   "saat": "16:15",
+   "ulke": "ABD",
+   "onem": "mid",
+   "olay": "ADP Haftalık Özel Sektör İstihdam Değişimi (-)"
+  },
+  {
+   "tarih": "24.11",
+   "saat": "16:55",
+   "ulke": "ABD",
+   "onem": "low",
+   "olay": "Redbook (Yıllık) (-)"
+  },
+  {
+   "tarih": "24.11",
+   "saat": "17:00",
+   "ulke": "ABD",
+   "onem": "low",
+   "olay": "Konut Fiyat Endeksi (-)"
   }
  ],
  "sinyaller": {
@@ -4628,8 +4628,8 @@
     "likidite_tl": 485506247.0,
     "ipo_yeni": false,
     "tedbir": null,
-    "RS20": 7.1,
-    "RS60": 100.59,
+    "RS20": 17.67,
+    "RS60": 99.73,
     "HACIM_ORAN": 0.37,
     "VOL20": 2.15,
     "ZIRVE_UZAK": -0.27,
@@ -4700,8 +4700,8 @@
     "likidite_tl": 163265118.0,
     "ipo_yeni": false,
     "tedbir": null,
-    "RS20": 6.52,
-    "RS60": 21.06,
+    "RS20": 5.14,
+    "RS60": 21.93,
     "HACIM_ORAN": 0.43,
     "VOL20": 2.88,
     "ZIRVE_UZAK": -18.77,
@@ -4770,8 +4770,8 @@
     "likidite_tl": 243592626.0,
     "ipo_yeni": false,
     "tedbir": null,
-    "RS20": 9.08,
-    "RS60": 26.68,
+    "RS20": 11.52,
+    "RS60": 29.48,
     "HACIM_ORAN": 0.36,
     "VOL20": 2.75,
     "ZIRVE_UZAK": -10.76,
@@ -4839,8 +4839,8 @@
     "likidite_tl": 112239187.0,
     "ipo_yeni": false,
     "tedbir": null,
-    "RS20": 4.75,
-    "RS60": 21.46,
+    "RS20": 7.08,
+    "RS60": 24.24,
     "HACIM_ORAN": 1.22,
     "VOL20": 2.44,
     "ZIRVE_UZAK": -38.73,
@@ -4908,8 +4908,8 @@
     "likidite_tl": 1351666686.0,
     "ipo_yeni": false,
     "tedbir": null,
-    "RS20": 20.7,
-    "RS60": 30.22,
+    "RS20": 22.99,
+    "RS60": 30.92,
     "HACIM_ORAN": 0.89,
     "VOL20": 3.12,
     "ZIRVE_UZAK": -30.09,
@@ -4978,8 +4978,8 @@
     "likidite_tl": 1036920443.0,
     "ipo_yeni": false,
     "tedbir": null,
-    "RS20": 4.5,
-    "RS60": 28.65,
+    "RS20": 3.14,
+    "RS60": 31.43,
     "HACIM_ORAN": 0.47,
     "VOL20": 2.91,
     "ZIRVE_UZAK": -20.52,
@@ -5048,8 +5048,8 @@
     "likidite_tl": 233906366.0,
     "ipo_yeni": false,
     "tedbir": null,
-    "RS20": 11.54,
-    "RS60": 17.36,
+    "RS20": 10.54,
+    "RS60": 15.57,
     "HACIM_ORAN": 0.29,
     "VOL20": 2.55,
     "ZIRVE_UZAK": -29.88,
@@ -5117,8 +5117,8 @@
     "likidite_tl": 1012315134.0,
     "ipo_yeni": false,
     "tedbir": null,
-    "RS20": 1.49,
-    "RS60": 31.23,
+    "RS20": 4.89,
+    "RS60": 33.2,
     "HACIM_ORAN": 0.82,
     "VOL20": 2.69,
     "ZIRVE_UZAK": -20.99,
@@ -5187,8 +5187,8 @@
     "likidite_tl": 147422615.0,
     "ipo_yeni": false,
     "tedbir": null,
-    "RS20": 36.05,
-    "RS60": -75.84,
+    "RS20": 47.09,
+    "RS60": -71.56,
     "HACIM_ORAN": 1.39,
     "VOL20": 6.72,
     "ZIRVE_UZAK": -82.58,
@@ -5256,8 +5256,8 @@
     "likidite_tl": 387720348.0,
     "ipo_yeni": false,
     "tedbir": null,
-    "RS20": 7.15,
-    "RS60": 30.6,
+    "RS20": 4.86,
+    "RS60": 28.57,
     "HACIM_ORAN": 0.99,
     "VOL20": 2.49,
     "ZIRVE_UZAK": -14.24,
@@ -5326,8 +5326,8 @@
     "likidite_tl": 169423137.0,
     "ipo_yeni": false,
     "tedbir": null,
-    "RS20": -41.81,
-    "RS60": -94.02,
+    "RS20": -29.8,
+    "RS60": -93.53,
     "HACIM_ORAN": 5.18,
     "VOL20": 8.82,
     "ZIRVE_UZAK": -96.88,
@@ -5397,8 +5397,8 @@
     "likidite_tl": 68916684.0,
     "ipo_yeni": false,
     "tedbir": null,
-    "RS20": -0.54,
-    "RS60": -2.19,
+    "RS20": 1.55,
+    "RS60": 1.16,
     "HACIM_ORAN": 0.52,
     "VOL20": 2.99,
     "ZIRVE_UZAK": -29.68,
@@ -5466,8 +5466,8 @@
     "likidite_tl": 582632671.0,
     "ipo_yeni": false,
     "tedbir": null,
-    "RS20": -6.45,
-    "RS60": 7.71,
+    "RS20": -2.3,
+    "RS60": 10.13,
     "HACIM_ORAN": 0.64,
     "VOL20": 2.12,
     "ZIRVE_UZAK": -26.98,
@@ -5536,8 +5536,8 @@
     "likidite_tl": 122242395.0,
     "ipo_yeni": false,
     "tedbir": null,
-    "RS20": -3.32,
-    "RS60": -0.99,
+    "RS20": -0.54,
+    "RS60": 0.63,
     "HACIM_ORAN": 0.61,
     "VOL20": 2.65,
     "ZIRVE_UZAK": -51.53,
@@ -5605,8 +5605,8 @@
     "likidite_tl": 221769590.0,
     "ipo_yeni": false,
     "tedbir": null,
-    "RS20": -5.77,
-    "RS60": -2.93,
+    "RS20": -3.62,
+    "RS60": -3.79,
     "HACIM_ORAN": 0.91,
     "VOL20": 2.53,
     "ZIRVE_UZAK": -33.4,
@@ -5675,8 +5675,8 @@
     "likidite_tl": 871239652.0,
     "ipo_yeni": false,
     "tedbir": null,
-    "RS20": 5.56,
-    "RS60": 20.17,
+    "RS20": 6.17,
+    "RS60": 15.75,
     "HACIM_ORAN": 0.81,
     "VOL20": 1.76,
     "ZIRVE_UZAK": -28.86,
@@ -5745,8 +5745,8 @@
     "likidite_tl": 42343302.0,
     "ipo_yeni": false,
     "tedbir": null,
-    "RS20": 6.74,
-    "RS60": -21.63,
+    "RS20": 7.79,
+    "RS60": -20.27,
     "HACIM_ORAN": 0.54,
     "VOL20": 3.53,
     "ZIRVE_UZAK": -68.28,
@@ -5815,8 +5815,8 @@
     "likidite_tl": 799324798.0,
     "ipo_yeni": false,
     "tedbir": null,
-    "RS20": -15.74,
-    "RS60": -52.95,
+    "RS20": -9.99,
+    "RS60": -55.41,
     "HACIM_ORAN": 0.74,
     "VOL20": 5.96,
     "ZIRVE_UZAK": -67.22,
@@ -5885,8 +5885,8 @@
     "likidite_tl": 176075313.0,
     "ipo_yeni": false,
     "tedbir": null,
-    "RS20": -1.96,
-    "RS60": 3.65,
+    "RS20": 0.12,
+    "RS60": 4.6,
     "HACIM_ORAN": 0.76,
     "VOL20": 2.25,
     "ZIRVE_UZAK": -31.68,
@@ -5955,8 +5955,8 @@
     "likidite_tl": 43171691.0,
     "ipo_yeni": false,
     "tedbir": null,
-    "RS20": -9.6,
-    "RS60": -47.53,
+    "RS20": -7.82,
+    "RS60": -47.45,
     "HACIM_ORAN": 0.92,
     "VOL20": 3.89,
     "ZIRVE_UZAK": -74.02,
@@ -6025,8 +6025,8 @@
     "likidite_tl": 49689995.0,
     "ipo_yeni": false,
     "tedbir": null,
-    "RS20": -9.23,
-    "RS60": -25.56,
+    "RS20": -7.65,
+    "RS60": -27.7,
     "HACIM_ORAN": 0.58,
     "VOL20": 3.37,
     "ZIRVE_UZAK": -70.83,
@@ -6098,8 +6098,8 @@
     "likidite_tl": 27567514.0,
     "ipo_yeni": false,
     "tedbir": null,
-    "RS20": -73.62,
-    "RS60": -97.26,
+    "RS20": -67.17,
+    "RS60": -96.96,
     "HACIM_ORAN": 49.35,
     "VOL20": 8.57,
     "ZIRVE_UZAK": -98.36,
@@ -6183,7 +6183,7 @@
   },
   "toplam": 100,
   "durum": "kesin",
-  "hesap_tarihi": "19.11.2026 22:48",
+  "hesap_tarihi": "20.11.2026 06:32",
   "filtre_esikleri": {
    "kilit_pct": 9.5,
    "likidite_tl": 50000000,
@@ -7729,7 +7729,7 @@
     "islem": 970,
     "isabet": 0.486,
     "ortalama": 0.13,
-    "ortalama_alfa": -0.0,
+    "ortalama_alfa": -0.1,
     "profit_factor": 1.05,
     "max_drawdown": 30.9,
     "devir": 54.6,
@@ -7739,7 +7739,7 @@
     "islem": 353,
     "isabet": 0.487,
     "ortalama": 0.0,
-    "ortalama_alfa": -0.2,
+    "ortalama_alfa": -0.3,
     "profit_factor": 1.0,
     "max_drawdown": 12.2,
     "devir": 54.4,
@@ -7867,7 +7867,7 @@
     "islem": 1220,
     "isabet": 0.454,
     "ortalama": 0.29,
-    "ortalama_alfa": -0.0,
+    "ortalama_alfa": -0.1,
     "profit_factor": 1.07,
     "max_drawdown": 18.0,
     "devir": 25.4
@@ -7895,7 +7895,7 @@
     "islem": 1633,
     "isabet": 0.489,
     "ortalama": 0.13,
-    "ortalama_alfa": -0.1,
+    "ortalama_alfa": -0.2,
     "profit_factor": 1.05,
     "max_drawdown": 21.9,
     "devir": 54.7
@@ -7920,13 +7920,13 @@
     "kural": {
      "endeks_rejim": 50
     },
-    "islem": 913,
-    "isabet": 0.444,
-    "ortalama": -0.48,
-    "ortalama_alfa": 0.0,
+    "islem": 899,
+    "isabet": 0.454,
+    "ortalama": -0.47,
+    "ortalama_alfa": -0.0,
     "profit_factor": 0.85,
-    "max_drawdown": 20.0,
-    "devir": 55.6
+    "max_drawdown": 21.3,
+    "devir": 55.4
    },
    {
     "anahtar": "rejim_200",
@@ -7934,13 +7934,13 @@
     "kural": {
      "endeks_rejim": 200
     },
-    "islem": 57,
-    "isabet": 0.14,
-    "ortalama": -4.5,
-    "ortalama_alfa": 0.1,
-    "profit_factor": 0.15,
-    "max_drawdown": 5.3,
-    "devir": 57.5
+    "islem": 53,
+    "isabet": 0.094,
+    "ortalama": -7.65,
+    "ortalama_alfa": -1.5,
+    "profit_factor": 0.09,
+    "max_drawdown": 6.7,
+    "devir": 49.8
    },
    {
     "anahtar": "skor_3_rejim",
@@ -7949,13 +7949,13 @@
      "min_skor": 3,
      "endeks_rejim": 50
     },
-    "islem": 713,
-    "isabet": 0.45,
-    "ortalama": -0.43,
-    "ortalama_alfa": -0.0,
-    "profit_factor": 0.85,
-    "max_drawdown": 24.5,
-    "devir": 55.7
+    "islem": 702,
+    "isabet": 0.464,
+    "ortalama": -0.34,
+    "ortalama_alfa": -0.1,
+    "profit_factor": 0.88,
+    "max_drawdown": 26.8,
+    "devir": 55.6
    },
    {
     "anahtar": "skor_4_rejim",
@@ -7964,28 +7964,28 @@
      "min_skor": 4,
      "endeks_rejim": 50
     },
-    "islem": 314,
-    "isabet": 0.43,
-    "ortalama": -0.72,
-    "ortalama_alfa": -0.4,
+    "islem": 311,
+    "isabet": 0.434,
+    "ortalama": -0.71,
+    "ortalama_alfa": -0.5,
     "profit_factor": 0.76,
-    "max_drawdown": 16.3,
-    "devir": 54.6
+    "max_drawdown": 15.1,
+    "devir": 54.7
    }
   ],
   "en_iyi": {
-   "anahtar": "vade_20",
-   "ad": "Uzun vade: 20 iş günü",
+   "anahtar": "rejim",
+   "ad": "Endeks rejimi: XU100 MA50 üstündeyken al",
    "kural": {
-    "vade_gun": 20
+    "endeks_rejim": 50
    },
-   "islem": 1220,
+   "islem": 899,
    "isabet": 0.454,
-   "ortalama": 0.29,
+   "ortalama": -0.47,
    "ortalama_alfa": -0.0,
-   "profit_factor": 1.07,
-   "max_drawdown": 18.0,
-   "devir": 25.4
+   "profit_factor": 0.85,
+   "max_drawdown": 21.3,
+   "devir": 55.4
   },
   "referans": {
    "anahtar": "referans",
@@ -8008,135 +8008,531 @@
  },
  "haberler": [
   {
-   "baslik": "Keysight Q4 FY2026 slides: record year with 49% order growth",
-   "kaynak": "Investing.com",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "pozitif",
-   "etiket": "🟢 Pozitif",
+   "baslik": "ABD'de Nvidia soruşturması",
+   "kaynak": "Bloomberg HT",
+   "kategori": "bist",
+   "dil": "tr",
+   "yon": "negatif",
+   "etiket": "🔴 Negatif",
    "sembol": "",
-   "link": "https://www.investing.com/news/company-news/keysight-q4-fy2026-slides-record-year-with-49-order-growth-93CH-5040266",
-   "yayin_tarihi": "2026-11-19T22:43:40+00:00",
-   "tarih": "2026-11-19"
+   "link": "https://www.bloomberght.com/abd-de-nvidia-sorusturmasi-3795229",
+   "yayin_tarihi": "2026-11-20T06:22:56+00:00",
+   "tarih": "2026-11-20"
   },
   {
-   "baslik": "Turners Automotive 1H27 slides: finance growth offsets retail pressure",
-   "kaynak": "Investing.com",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "pozitif",
-   "etiket": "🟢 Pozitif",
-   "sembol": "",
-   "link": "https://www.investing.com/news/company-news/turners-automotive-1h27-slides-finance-growth-offsets-retail-pressure-93CH-5040265",
-   "yayin_tarihi": "2026-11-19T22:43:23+00:00",
-   "tarih": "2026-11-19"
-  },
-  {
-   "baslik": "GeoVax Labs announces executive changes, appoints interim CFO and CEO",
+   "baslik": "SK Hynix weighs converting Kioxia bonds to shares, report says",
    "kaynak": "Investing.com",
    "kategori": "global",
    "dil": "en",
    "yon": "notr",
    "etiket": "⚪ Nötr",
    "sembol": "",
-   "link": "https://www.investing.com/news/sec-filings/geovax-labs-announces-executive-changes-appoints-interim-cfo-and-ceo-93CH-5040264",
-   "yayin_tarihi": "2026-11-19T22:43:20+00:00",
-   "tarih": "2026-11-19"
+   "link": "https://www.investing.com/news/stock-market-news/sk-hynix-weighs-converting-kioxia-bonds-to-shares-report-says-5040745",
+   "yayin_tarihi": "2026-11-20T06:21:03+00:00",
+   "tarih": "2026-11-20"
   },
   {
-   "baslik": "Procter & Gamble targets up to $10 billion in productivity savings as costs stack up",
+   "baslik": "Wall Street futures fall as Anthropic debut fails to revive AI trade",
    "kaynak": "Investing.com",
    "kategori": "global",
    "dil": "en",
    "yon": "notr",
    "etiket": "⚪ Nötr",
    "sembol": "",
-   "link": "https://www.investing.com/news/stock-market-news/procter--gamble-targets-up-to-10-billion-in-productivity-savings-cfo-says-5039819",
-   "yayin_tarihi": "2026-11-19T22:42:26+00:00",
-   "tarih": "2026-11-19"
+   "link": "https://www.investing.com/news/stock-market-news/wall-street-futures-fall-as-anthropic-debut-fails-to-revive-ai-trade-5040450",
+   "yayin_tarihi": "2026-11-20T06:20:00+00:00",
+   "tarih": "2026-11-20"
   },
   {
-   "baslik": "Earnings call transcript: ESCO Technologies tops Q4 2026 estimates, shares rise",
+   "baslik": "FTI Consulting chief strategy officer sells $517,500 in FCN shares",
    "kaynak": "Investing.com",
    "kategori": "global",
    "dil": "en",
    "yon": "notr",
    "etiket": "⚪ Nötr",
    "sembol": "",
-   "link": "https://www.investing.com/news/transcripts/earnings-call-transcript-esco-technologies-tops-q4-2026-estimates-shares-rise-93CH-5040263",
-   "yayin_tarihi": "2026-11-19T22:42:23+00:00",
-   "tarih": "2026-11-19"
+   "link": "https://www.investing.com/news/insider-trading-news/fti-consulting-chief-strategy-officer-sells-517500-in-fcn-shares-93CH-5040742",
+   "yayin_tarihi": "2026-11-20T06:16:07+00:00",
+   "tarih": "2026-11-20"
   },
   {
-   "baslik": "Earnings call transcript: Intuit tops Q1 2027 estimates but shares fall",
+   "baslik": "Crane director James Tullis sells $319,490 in company stock",
    "kaynak": "Investing.com",
    "kategori": "global",
    "dil": "en",
    "yon": "notr",
    "etiket": "⚪ Nötr",
    "sembol": "",
-   "link": "https://www.investing.com/news/transcripts/earnings-call-transcript-intuit-tops-q1-2027-estimates-but-shares-fall-93CH-5040262",
-   "yayin_tarihi": "2026-11-19T22:41:04+00:00",
-   "tarih": "2026-11-19"
+   "link": "https://www.investing.com/news/insider-trading-news/crane-director-james-tullis-sells-319490-in-company-stock-93CH-5040741",
+   "yayin_tarihi": "2026-11-20T06:15:56+00:00",
+   "tarih": "2026-11-20"
   },
   {
-   "baslik": "Earnings call transcript: Globant Q3 2026 revenue tops guidance as AI gains",
+   "baslik": "Global bond yields plunge as AI rout triggers flight to safety",
    "kaynak": "Investing.com",
    "kategori": "global",
    "dil": "en",
    "yon": "notr",
    "etiket": "⚪ Nötr",
    "sembol": "",
-   "link": "https://www.investing.com/news/transcripts/earnings-call-transcript-globant-q3-2026-revenue-tops-guidance-as-ai-gains-93CH-5040261",
-   "yayin_tarihi": "2026-11-19T22:40:56+00:00",
-   "tarih": "2026-11-19"
+   "link": "https://www.investing.com/news/forex-news/global-bond-yields-plunge-as-ai-rout-triggers-flight-to-safety-5040733",
+   "yayin_tarihi": "2026-11-20T06:15:41+00:00",
+   "tarih": "2026-11-20"
   },
   {
-   "baslik": "Stewards, Inc. cancels 7 million common shares, issues Series D preferred stock",
+   "baslik": "Netherlands consumer confidence rises slightly in November",
    "kaynak": "Investing.com",
    "kategori": "global",
    "dil": "en",
    "yon": "notr",
    "etiket": "⚪ Nötr",
    "sembol": "",
-   "link": "https://www.investing.com/news/sec-filings/stewards-inc-cancels-7-million-common-shares-issues-series-d-preferred-stock-93CH-5040258",
-   "yayin_tarihi": "2026-11-19T22:39:04+00:00",
-   "tarih": "2026-11-19"
+   "link": "https://www.investing.com/news/economic-indicators/netherlands-consumer-confidence-rises-slightly-in-november-93CH-5040734",
+   "yayin_tarihi": "2026-11-20T06:14:52+00:00",
+   "tarih": "2026-11-20"
   },
   {
-   "baslik": "Oil prices settle higher amid fears of renewed violence between U.S. and Iran",
+   "baslik": "Singapore’s DayOne pauses U.S. IPO plans amid AI market volatility - Bloomberg",
    "kaynak": "Investing.com",
    "kategori": "global",
    "dil": "en",
    "yon": "notr",
    "etiket": "⚪ Nötr",
    "sembol": "",
-   "link": "https://www.investing.com/news/commodities-news/oil-prices-rise-as-report-says-trump-considering-more-iran-strikes-5037588",
-   "yayin_tarihi": "2026-11-19T22:38:52+00:00",
-   "tarih": "2026-11-19"
+   "link": "https://www.investing.com/news/stock-market-news/singapores-dayone-pauses-us-ipo-plans-amid-ai-market-volatility--bloomberg-5040732",
+   "yayin_tarihi": "2026-11-20T06:11:08+00:00",
+   "tarih": "2026-11-20"
   },
   {
-   "baslik": "Trump says he and China’s Xi want moderate AI rules",
+   "baslik": "Newmont (NEM) Slides With Metals Sell Off, Is It Trading At A 26% Discount?",
+   "kaynak": "Simply Wall St.",
+   "kategori": "altin-maden",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "GC=F",
+   "link": "",
+   "yayin_tarihi": "2026-11-20T06:10:18+00:00",
+   "tarih": "2026-11-20"
+  },
+  {
+   "baslik": "UK consumer confidence rises in November ahead of Black Friday",
    "kaynak": "Investing.com",
    "kategori": "global",
    "dil": "en",
    "yon": "notr",
    "etiket": "⚪ Nötr",
    "sembol": "",
-   "link": "https://www.investing.com/news/stock-market-news/trump-says-he-and-chinas-xi-want-moderate-ai-rules-5040256",
-   "yayin_tarihi": "2026-11-19T22:36:33+00:00",
-   "tarih": "2026-11-19"
+   "link": "https://www.investing.com/news/economic-indicators/uk-consumer-confidence-rises-in-november-ahead-of-black-friday-93CH-5040730",
+   "yayin_tarihi": "2026-11-20T06:04:59+00:00",
+   "tarih": "2026-11-20"
   },
   {
-   "baslik": "Congress passes bill to protect older investors from financial fraud",
+   "baslik": "Altında sekiz ayın en sert düşüşü",
+   "kaynak": "Habertürk",
+   "kategori": "makro",
+   "dil": "tr",
+   "yon": "negatif",
+   "etiket": "🔴 Negatif",
+   "sembol": "",
+   "link": "https://www.haberturk.com/ekonomi/altinda-sekiz-ayin-en-sert-haftalik-dususu-3928677",
+   "yayin_tarihi": "2026-11-20T06:01:48+00:00",
+   "tarih": "2026-11-20"
+  },
+  {
+   "baslik": "JPMorgan initiates MSG Rangers stock at Overweight on valuation",
+   "kaynak": "Investing.com",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.investing.com/news/analyst-ratings/jpmorgan-initiates-msg-rangers-stock-at-overweight-on-valuation-93CH-5040727",
+   "yayin_tarihi": "2026-11-20T06:00:51+00:00",
+   "tarih": "2026-11-20"
+  },
+  {
+   "baslik": "Jefferies cuts Bill.com stock rating to hold on TPG acquisition",
+   "kaynak": "Investing.com",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.investing.com/news/analyst-ratings/jefferies-cuts-billcom-stock-rating-to-hold-on-tpg-acquisition-93CH-5040728",
+   "yayin_tarihi": "2026-11-20T06:00:51+00:00",
+   "tarih": "2026-11-20"
+  },
+  {
+   "baslik": "Forget Anthropic: In Europe, the IPO hype is about a blue lagoon",
    "kaynak": "CNBC Dünya",
    "kategori": "global",
    "dil": "en",
    "yon": "notr",
    "etiket": "⚪ Nötr",
    "sembol": "",
-   "link": "https://www.cnbc.com/2026/11/19/financial-exploitation-prevention-act-older-investors-fraud.html",
-   "yayin_tarihi": "2026-11-19T22:23:29+00:00",
+   "link": "https://www.cnbc.com/2026/11/20/anthropic-ipo-iceland-blue-lagoon.html",
+   "yayin_tarihi": "2026-11-20T06:00:01+00:00",
+   "tarih": "2026-11-20"
+  },
+  {
+   "baslik": "AI is changing software engineering — and some developers miss the struggle",
+   "kaynak": "CNBC Dünya",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "negatif",
+   "etiket": "🔴 Negatif",
+   "sembol": "",
+   "link": "https://www.cnbc.com/2026/11/20/ai-coding-tools-software-engineers.html",
+   "yayin_tarihi": "2026-11-20T06:00:01+00:00",
+   "tarih": "2026-11-20"
+  },
+  {
+   "baslik": "Küresel borsalarda satış dalgası",
+   "kaynak": "Bloomberg HT",
+   "kategori": "bist",
+   "dil": "tr",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.bloomberght.com/kuresel-borsalarda-satis-dalgasi-3795224",
+   "yayin_tarihi": "2026-11-20T05:56:14+00:00",
+   "tarih": "2026-11-20"
+  },
+  {
+   "baslik": "Fed yetkililerinden enflasyonla mücadelede şahin mesajlar",
+   "kaynak": "Bloomberg HT",
+   "kategori": "bist",
+   "dil": "tr",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.bloomberght.com/fed-yetkililerinden-enflasyonla-mucadelede-sahin-mesajlar-3795223",
+   "yayin_tarihi": "2026-11-20T05:53:31+00:00",
+   "tarih": "2026-11-20"
+  },
+  {
+   "baslik": "SPK’dan Peker GYO’daki Tera paylarına yeni karar: Neler değişiyor?",
+   "kaynak": "Paratic",
+   "kategori": "makro",
+   "dil": "tr",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://paratic.com/spkdan-peker-gyodaki-tera-paylarina-yeni-karar-neler-degisiyor/",
+   "yayin_tarihi": "2026-11-20T05:51:22+00:00",
+   "tarih": "2026-11-20"
+  },
+  {
+   "baslik": "Stocks, gold and silver fall after blockbuster Anthropic IPO",
+   "kaynak": "Euronews",
+   "kategori": "altin-maden",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "GC=F",
+   "link": "",
+   "yayin_tarihi": "2026-11-20T05:48:38+00:00",
+   "tarih": "2026-11-20"
+  },
+  {
+   "baslik": "Apple'dan OpenAI ve Anthropic'e rakip yapay zeka ajanı",
+   "kaynak": "Bloomberg HT",
+   "kategori": "bist",
+   "dil": "tr",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.bloomberght.com/appledan-openai-ve-anthropice-rakip-yapay-zeka-ajani-3795221",
+   "yayin_tarihi": "2026-11-20T05:46:27+00:00",
+   "tarih": "2026-11-20"
+  },
+  {
+   "baslik": "Çin kredi faiz oranlarını sabit tuttu",
+   "kaynak": "Bloomberg HT",
+   "kategori": "bist",
+   "dil": "tr",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.bloomberght.com/cin-kredi-faiz-oranlarini-sabit-tuttu-3795220",
+   "yayin_tarihi": "2026-11-20T05:43:44+00:00",
+   "tarih": "2026-11-20"
+  },
+  {
+   "baslik": "Yapay zekâ endişeleri doları 19 ayın zirvesine taşıdı",
+   "kaynak": "Bloomberg HT",
+   "kategori": "bist",
+   "dil": "tr",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.bloomberght.com/yapay-zek-endiseleri-dolari-19-ayin-zirvesine-tasidi-3795219",
+   "yayin_tarihi": "2026-11-20T05:37:54+00:00",
+   "tarih": "2026-11-20"
+  },
+  {
+   "baslik": "Borsa İstanbul Şirket Haberleri (20 Kasım) - Borsa Gundem",
+   "kaynak": "Google News · TR Borsa",
+   "kategori": "bist",
+   "dil": "tr",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://news.google.com/rss/articles/CBMifkFVX3lxTE4wQUdoQU10NW5nNTI1TUlsR3loYnJ5LTRaQ3BPaTUxbVBNZjc0MV9DWkVmYkVUejE0eVp6RENSSVpuZzFuWHcyVlhmTFZxNVI2UDI4a200bWMwNG9hQ1RTc21LbzZpc1JGWlFMSWQwRV9CRTZMSU4xcVduSWs3UQ?oc=5",
+   "yayin_tarihi": "2026-11-20T05:18:00+00:00",
+   "tarih": "2026-11-20"
+  },
+  {
+   "baslik": "Seabridge Gold (TSX:SEA) Stock Looks Fully Priced As Its 78% Run Meets Fresh Risk",
+   "kaynak": "Simply Wall St.",
+   "kategori": "altin-maden",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "GC=F",
+   "link": "",
+   "yayin_tarihi": "2026-11-20T05:15:28+00:00",
+   "tarih": "2026-11-20"
+  },
+  {
+   "baslik": "U.K.-India trade deal faces a stiff test over Scotch whisky import taxes",
+   "kaynak": "CNBC Dünya",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.cnbc.com/2026/11/20/uk-india-trade-scotch-whisky-tariffs.html",
+   "yayin_tarihi": "2026-11-20T05:09:52+00:00",
+   "tarih": "2026-11-20"
+  },
+  {
+   "baslik": "Petrolde düşüş beklentisi",
+   "kaynak": "Bloomberg HT",
+   "kategori": "bist",
+   "dil": "tr",
+   "yon": "negatif",
+   "etiket": "🔴 Negatif",
+   "sembol": "",
+   "link": "https://www.bloomberght.com/petrolde-dusus-beklentisi-3795217",
+   "yayin_tarihi": "2026-11-20T05:04:34+00:00",
+   "tarih": "2026-11-20"
+  },
+  {
+   "baslik": "Gold slides to 14-mth low, set for weekly drop amid Fed hike bets",
+   "kaynak": "Investing.com",
+   "kategori": "altin-maden",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "GC=F",
+   "link": "",
+   "yayin_tarihi": "2026-11-20T05:02:03+00:00",
+   "tarih": "2026-11-20"
+  },
+  {
+   "baslik": "Gold and Silver Shed $1 Trillion in Six Hours. What Turned Gold Around Last Time?",
+   "kaynak": "BeInCrypto",
+   "kategori": "altin-maden",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "SI=F",
+   "link": "",
+   "yayin_tarihi": "2026-11-20T05:00:00+00:00",
+   "tarih": "2026-11-20"
+  },
+  {
+   "baslik": "Anthropic IPO 'exactly what the markets need,' but analysts warn of volatility",
+   "kaynak": "CNBC Dünya",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.cnbc.com/2026/11/20/anthropic-ipo-stocks-market.html",
+   "yayin_tarihi": "2026-11-20T04:51:28+00:00",
+   "tarih": "2026-11-20"
+  },
+  {
+   "baslik": "Motorinde 6 lirayı aşan indirim",
+   "kaynak": "Bloomberg HT",
+   "kategori": "bist",
+   "dil": "tr",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.bloomberght.com/motorine-indirim-geldi-3795216",
+   "yayin_tarihi": "2026-11-20T04:45:09+00:00",
+   "tarih": "2026-11-20"
+  },
+  {
+   "baslik": "Fed'den faiz politikasında net iletişim vurgusu",
+   "kaynak": "Bloomberg HT",
+   "kategori": "bist",
+   "dil": "tr",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.bloomberght.com/fedden-faiz-politikasinda-net-iletisim-vurgusu-3795215",
+   "yayin_tarihi": "2026-11-20T04:34:21+00:00",
+   "tarih": "2026-11-20"
+  },
+  {
+   "baslik": "SPK'dan Peker GYO paylarına yönelik yeni karar",
+   "kaynak": "Habertürk",
+   "kategori": "makro",
+   "dil": "tr",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.haberturk.com/ekonomi/spk-dan-peker-gyo-paylarina-yonelik-yeni-karar-3928662",
+   "yayin_tarihi": "2026-11-20T04:32:26+00:00",
+   "tarih": "2026-11-20"
+  },
+  {
+   "baslik": "Asya borsalarında 2020'den bu yana en sert haftalık düşüş",
+   "kaynak": "Bloomberg HT",
+   "kategori": "bist",
+   "dil": "tr",
+   "yon": "negatif",
+   "etiket": "🔴 Negatif",
+   "sembol": "",
+   "link": "https://www.bloomberght.com/asya-borsalarinda-2020-den-bu-yana-en-sert-haftalik-dusus-3795214",
+   "yayin_tarihi": "2026-11-20T04:22:53+00:00",
+   "tarih": "2026-11-20"
+  },
+  {
+   "baslik": "Motorine indirim geldi",
+   "kaynak": "Habertürk",
+   "kategori": "makro",
+   "dil": "tr",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.haberturk.com/ekonomi/son-dakika-motorine-dev-indirim-geldi-iste-guncel-20-kasim-2026-motorin-benzin-ve-lpg-fiyatlari-3928661",
+   "yayin_tarihi": "2026-11-20T04:20:48+00:00",
+   "tarih": "2026-11-20"
+  },
+  {
+   "baslik": "Anthropic hisseleri rekor halka arzın ardından geriledi",
+   "kaynak": "Bloomberg HT",
+   "kategori": "bist",
+   "dil": "tr",
+   "yon": "pozitif",
+   "etiket": "🟢 Pozitif",
+   "sembol": "",
+   "link": "https://www.bloomberght.com/anthropic-hisseleri-rekor-halka-arzin-ardindan-yuzde-5-geriledi-3795213",
+   "yayin_tarihi": "2026-11-20T04:13:08+00:00",
+   "tarih": "2026-11-20"
+  },
+  {
+   "baslik": "Altında sekiz ayın en sert haftalık kaybı",
+   "kaynak": "Bloomberg HT",
+   "kategori": "bist",
+   "dil": "tr",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.bloomberght.com/altinda-sekiz-ayin-en-sert-haftalik-kaybi-3795205",
+   "yayin_tarihi": "2026-11-20T04:01:30+00:00",
+   "tarih": "2026-11-20"
+  },
+  {
+   "baslik": "Senate passes BAAJA permitting reform bill backed by AI, energy sectors",
+   "kaynak": "CNBC Dünya",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.cnbc.com/2026/11/20/baaja-bill-senate-passes-permitting-reform.html",
+   "yayin_tarihi": "2026-11-20T03:56:17+00:00",
+   "tarih": "2026-11-20"
+  },
+  {
+   "baslik": "SoftBank plunges over 16% as AI sell-off hits Asian tech stocks following Anthropic debut",
+   "kaynak": "CNBC Dünya",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.cnbc.com/2026/11/20/softbank-ai-tech-stocks-slide-anthropic-debut.html",
+   "yayin_tarihi": "2026-11-20T03:30:34+00:00",
+   "tarih": "2026-11-20"
+  },
+  {
+   "baslik": "Commerce approved sales of more than 879,000 AI chips to Chinese companies, Rep. Mast says",
+   "kaynak": "CNBC Dünya",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.cnbc.com/2026/11/19/nvidia-amd-china-chip-sales-congress.html",
+   "yayin_tarihi": "2026-11-20T00:53:55+00:00",
+   "tarih": "2026-11-20"
+  },
+  {
+   "baslik": "AMD dives on short seller report of alleged China exposure",
+   "kaynak": "CNBC Dünya",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.cnbc.com/2026/11/19/amd-falls-on-short-seller-report-of-alleged-china-exposure.html",
+   "yayin_tarihi": "2026-11-20T00:08:34+00:00",
+   "tarih": "2026-11-20"
+  },
+  {
+   "baslik": "Anthropic was supposed to save the AI trade. What went wrong?",
+   "kaynak": "CNBC Dünya",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.cnbc.com/2026/11/19/anthropic-ipo-ai-stocks-selloff.html",
+   "yayin_tarihi": "2026-11-20T00:00:38+00:00",
+   "tarih": "2026-11-20"
+  },
+  {
+   "baslik": "Gold Set for Worst Week Since March on Hawkish Fed, AI Selloff",
+   "kaynak": "Bloomberg",
+   "kategori": "altin-maden",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "SI=F",
+   "link": "",
+   "yayin_tarihi": "2026-11-19T23:56:03+00:00",
+   "tarih": "2026-11-19"
+  },
+  {
+   "baslik": "Gap names new Athleta CEO, lowers full-year guidance",
+   "kaynak": "CNBC Ekonomi",
+   "kategori": "makro",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://www.cnbc.com/2026/11/19/gap-gap-q3-2026-earnings.html",
+   "yayin_tarihi": "2026-11-19T23:54:20+00:00",
+   "tarih": "2026-11-19"
+  },
+  {
+   "baslik": "California attorney general issues Nvidia subpoena in probe of China chip diversion",
+   "kaynak": "CNBC Dünya",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "negatif",
+   "etiket": "🔴 Negatif",
+   "sembol": "",
+   "link": "https://www.cnbc.com/2026/11/19/nvidia-california-bonta-subpoena-china-chips.html",
+   "yayin_tarihi": "2026-11-19T23:21:23+00:00",
    "tarih": "2026-11-19"
   },
   {
@@ -8149,246 +8545,6 @@
    "sembol": "",
    "link": "https://www.haberturk.com/ekonomi/new-york-borsasinda-anthropic-etkisi-sert-dususle-kapandi-3928642",
    "yayin_tarihi": "2026-11-19T22:19:08+00:00",
-   "tarih": "2026-11-19"
-  },
-  {
-   "baslik": "Stock Market Today, Nov. 19: Dow Plunges 1,100 Points as the S&P 500 Suffers Its 6th Straight Day of Losses",
-   "kaynak": "Motley Fool",
-   "kategori": "altin-maden",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "GC=F",
-   "link": "",
-   "yayin_tarihi": "2026-11-19T22:10:02+00:00",
-   "tarih": "2026-11-19"
-  },
-  {
-   "baslik": "Marimaca Copper Confirms Continuity of Copper Mineralization at Pampa Medina in Chile",
-   "kaynak": "MT Newswires",
-   "kategori": "altin-maden",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "SI=F",
-   "link": "",
-   "yayin_tarihi": "2026-11-19T22:06:32+00:00",
-   "tarih": "2026-11-19"
-  },
-  {
-   "baslik": "SPK'dan Peker GYO paylarına yönelik yeni karar",
-   "kaynak": "Bloomberg HT",
-   "kategori": "bist",
-   "dil": "tr",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.bloomberght.com/spk-dan-peker-gyo-paylarina-yonelik-yeni-karar-3795200",
-   "yayin_tarihi": "2026-11-19T22:00:40+00:00",
-   "tarih": "2026-11-19"
-  },
-  {
-   "baslik": "Commerce approved sales of more than 879,000 AI chips to Chinese companies, Rep. Mast says",
-   "kaynak": "CNBC Dünya",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.cnbc.com/2026/11/19/nvidia-amd-china-chip-sales-congress.html",
-   "yayin_tarihi": "2026-11-19T21:43:30+00:00",
-   "tarih": "2026-11-19"
-  },
-  {
-   "baslik": "Intuit to sell Mailchimp to Bending Spoons for $3.68 billion",
-   "kaynak": "CNBC Dünya",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.cnbc.com/2026/11/19/intuit-mailchimp-sale-bending-spoons.html",
-   "yayin_tarihi": "2026-11-19T21:40:31+00:00",
-   "tarih": "2026-11-19"
-  },
-  {
-   "baslik": "TSX Closer: Index Plunges to Six-Month Low as Technology And Metal Stocks Drag",
-   "kaynak": "MT Newswires",
-   "kategori": "altin-maden",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "GC=F",
-   "link": "",
-   "yayin_tarihi": "2026-11-19T21:32:28+00:00",
-   "tarih": "2026-11-19"
-  },
-  {
-   "baslik": "Anthropic'in halka arzına Japonya'da üç kattan fazla talep",
-   "kaynak": "Bloomberg HT",
-   "kategori": "bist",
-   "dil": "tr",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.bloomberght.com/anthropic-in-halka-arzina-japonya-da-uc-kattan-fazla-talep-3795199",
-   "yayin_tarihi": "2026-11-19T21:30:33+00:00",
-   "tarih": "2026-11-19"
-  },
-  {
-   "baslik": "Gap names new Athleta CEO, lowers full-year guidance",
-   "kaynak": "CNBC Ekonomi",
-   "kategori": "makro",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.cnbc.com/2026/11/19/gap-gap-q3-2026-earnings.html",
-   "yayin_tarihi": "2026-11-19T21:22:23+00:00",
-   "tarih": "2026-11-19"
-  },
-  {
-   "baslik": "Anthropic IPO: Investors who flip the stock may face brokerage penalty",
-   "kaynak": "CNBC Dünya",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.cnbc.com/2026/11/19/anthropic-ipo-flipping-rules.html",
-   "yayin_tarihi": "2026-11-19T21:16:41+00:00",
-   "tarih": "2026-11-19"
-  },
-  {
-   "baslik": "AMD dives on short-seller report of alleged China exposure",
-   "kaynak": "CNBC Dünya",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.cnbc.com/2026/11/19/amd-falls-on-short-seller-report-of-alleged-china-exposure.html",
-   "yayin_tarihi": "2026-11-19T21:14:46+00:00",
-   "tarih": "2026-11-19"
-  },
-  {
-   "baslik": "Pentagon: Savaşının maliyeti 48,3 milyar dolara ulaştı",
-   "kaynak": "Bloomberg HT",
-   "kategori": "bist",
-   "dil": "tr",
-   "yon": "negatif",
-   "etiket": "🔴 Negatif",
-   "sembol": "",
-   "link": "https://www.bloomberght.com/pentagon-savasinin-maliyeti-48-3-milyar-dolara-ulasti-3795198",
-   "yayin_tarihi": "2026-11-19T21:14:18+00:00",
-   "tarih": "2026-11-19"
-  },
-  {
-   "baslik": "Resmi Gazete'de bugün (20.11.2026)",
-   "kaynak": "Bloomberg HT",
-   "kategori": "bist",
-   "dil": "tr",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.bloomberght.com/resmi-gazete-de-bugun-20112026-3795197",
-   "yayin_tarihi": "2026-11-19T21:08:37+00:00",
-   "tarih": "2026-11-19"
-  },
-  {
-   "baslik": "Stanley Druckenmiller dumps entire $120M Alphabet stake to buy gold mining stock",
-   "kaynak": "TheStreet",
-   "kategori": "altin-maden",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "GC=F",
-   "link": "",
-   "yayin_tarihi": "2026-11-19T21:03:00+00:00",
-   "tarih": "2026-11-19"
-  },
-  {
-   "baslik": "Palo Alto stock jumps on earnings beat and company's big bet on securing open-weight models",
-   "kaynak": "CNBC Dünya",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "pozitif",
-   "etiket": "🟢 Pozitif",
-   "sembol": "",
-   "link": "https://www.cnbc.com/2026/11/19/palo-alto-networks-earnings-applied-compute.html",
-   "yayin_tarihi": "2026-11-19T21:00:57+00:00",
-   "tarih": "2026-11-19"
-  },
-  {
-   "baslik": "Market Storylines: Chip Giant Earnings Beat, AI IPO's + Equity Selloff",
-   "kaynak": "NYSE",
-   "kategori": "altin-maden",
-   "dil": "en",
-   "yon": "pozitif",
-   "etiket": "🟢 Pozitif",
-   "sembol": "GC=F",
-   "link": "",
-   "yayin_tarihi": "2026-11-19T20:50:16+00:00",
-   "tarih": "2026-11-19"
-  },
-  {
-   "baslik": "Amazon app warns New York of higher costs if Mamdani delivery law passes",
-   "kaynak": "CNBC Dünya",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.cnbc.com/2026/11/19/amazon-nyc-delivery-protection-act.html",
-   "yayin_tarihi": "2026-11-19T20:46:23+00:00",
-   "tarih": "2026-11-19"
-  },
-  {
-   "baslik": "Prediction: Silver Will Be Worth This Much By the End of 2027",
-   "kaynak": "Motley Fool",
-   "kategori": "altin-maden",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "SI=F",
-   "link": "",
-   "yayin_tarihi": "2026-11-19T20:46:02+00:00",
-   "tarih": "2026-11-19"
-  },
-  {
-   "baslik": "Fed'de kemer sıkma: Çalışanlara yüzde 1 zam",
-   "kaynak": "Bloomberg HT",
-   "kategori": "bist",
-   "dil": "tr",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.bloomberght.com/fed-de-kemer-sikma-calisanlara-yuzde-1-zam-3795196",
-   "yayin_tarihi": "2026-11-19T20:40:42+00:00",
-   "tarih": "2026-11-19"
-  },
-  {
-   "baslik": "Türkiye'nin ilk insansız savaş uçağı KIZILELMA envantere girdi",
-   "kaynak": "Bloomberg HT",
-   "kategori": "bist",
-   "dil": "tr",
-   "yon": "negatif",
-   "etiket": "🔴 Negatif",
-   "sembol": "",
-   "link": "https://www.bloomberght.com/turkiye-nin-ilk-insansiz-savas-ucagi-kizilelma-envantere-girdi-3795195",
-   "yayin_tarihi": "2026-11-19T20:21:39+00:00",
-   "tarih": "2026-11-19"
-  },
-  {
-   "baslik": "Trump'tan İran mesajı: Acelem yok",
-   "kaynak": "Bloomberg HT",
-   "kategori": "bist",
-   "dil": "tr",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.bloomberght.com/trump-tan-iran-mesaji-acelem-yok-3795194",
-   "yayin_tarihi": "2026-11-19T20:01:21+00:00",
    "tarih": "2026-11-19"
   },
   {
@@ -8416,30 +8572,6 @@
    "tarih": "2026-11-19"
   },
   {
-   "baslik": "Gemini, Mac üzerinde uygulamaları kullanabilecek",
-   "kaynak": "Bloomberg HT",
-   "kategori": "bist",
-   "dil": "tr",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.bloomberght.com/gemini-mac-uzerinde-uygulamalari-kullanabilecek-3795193",
-   "yayin_tarihi": "2026-11-19T19:43:28+00:00",
-   "tarih": "2026-11-19"
-  },
-  {
-   "baslik": "Trump bought Nvidia, Palantir, SpaceX in September as federal deals, White House ties grew",
-   "kaynak": "CNBC Dünya",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.cnbc.com/2026/11/19/trump-nvidia-spacex-palantir-stock-trades-september.html",
-   "yayin_tarihi": "2026-11-19T19:43:08+00:00",
-   "tarih": "2026-11-19"
-  },
-  {
    "baslik": "BofA’dan THYAO paylarında 628 milyon TL’lik alım",
    "kaynak": "Paratic",
    "kategori": "makro",
@@ -8449,18 +8581,6 @@
    "sembol": "",
    "link": "https://paratic.com/bofadan-thyao-paylarinda-628-milyon-tllik-alim/",
    "yayin_tarihi": "2026-11-19T19:42:38+00:00",
-   "tarih": "2026-11-19"
-  },
-  {
-   "baslik": "Fed/Goolsbee: Tarifelerin enflasyona etkisinin kalıcılığından endişeliyim",
-   "kaynak": "Bloomberg HT",
-   "kategori": "bist",
-   "dil": "tr",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.bloomberght.com/fedgoolsbee-tarifelerin-enflasyona-etkisinin-kaliciligindan-endiseliyim-3795190",
-   "yayin_tarihi": "2026-11-19T19:36:47+00:00",
    "tarih": "2026-11-19"
   },
   {
@@ -8476,42 +8596,6 @@
    "tarih": "2026-11-19"
   },
   {
-   "baslik": "Gold, Silver Futures Extend Losses",
-   "kaynak": "The Wall Street Journal",
-   "kategori": "altin-maden",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "SI=F",
-   "link": "",
-   "yayin_tarihi": "2026-11-19T19:09:00+00:00",
-   "tarih": "2026-11-19"
-  },
-  {
-   "baslik": "Fon soruşturmasında gözaltına alınan 7 zanlıya adli kontrol istemi",
-   "kaynak": "Bloomberg HT",
-   "kategori": "bist",
-   "dil": "tr",
-   "yon": "negatif",
-   "etiket": "🔴 Negatif",
-   "sembol": "",
-   "link": "https://www.bloomberght.com/fon-sorusturmasinda-gozaltina-alinan-7-zanliya-adli-kontrol-istemi-3795189",
-   "yayin_tarihi": "2026-11-19T19:08:24+00:00",
-   "tarih": "2026-11-19"
-  },
-  {
-   "baslik": "Amid recent banking outages, should you start carrying cash again? Top advisors weigh in",
-   "kaynak": "CNBC Dünya",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.cnbc.com/2026/11/19/banking-outages-emergency-cash.html",
-   "yayin_tarihi": "2026-11-19T19:06:56+00:00",
-   "tarih": "2026-11-19"
-  },
-  {
    "baslik": "ATP Yazılım (ATATP) pay geri alım programını sonlandırdı",
    "kaynak": "Paratic",
    "kategori": "makro",
@@ -8521,18 +8605,6 @@
    "sembol": "",
    "link": "https://paratic.com/atp-yazilim-atatp-pay-geri-alim-programini-sonlandirdi/",
    "yayin_tarihi": "2026-11-19T19:04:39+00:00",
-   "tarih": "2026-11-19"
-  },
-  {
-   "baslik": "Jensen Huang's — and Nvidia's — legal exposure balloons",
-   "kaynak": "CNBC Dünya",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.cnbc.com/2026/11/19/nvidia-jensen-huang-legal.html",
-   "yayin_tarihi": "2026-11-19T18:44:34+00:00",
    "tarih": "2026-11-19"
   },
   {
@@ -8548,18 +8620,6 @@
    "tarih": "2026-11-19"
   },
   {
-   "baslik": "Şi, ABD ve Rusya'ya çatışmadan kaçınma ve işbirliği çağrısı yaptı",
-   "kaynak": "Bloomberg HT",
-   "kategori": "bist",
-   "dil": "tr",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.bloomberght.com/si-abd-ve-rusya-ya-catismadan-kacinma-ve-isbirligi-cagrisi-yapti-3795188",
-   "yayin_tarihi": "2026-11-19T18:34:25+00:00",
-   "tarih": "2026-11-19"
-  },
-  {
    "baslik": "Global Yatırım Holding limanlarında yolcu hareketleri yüzde 21 arttı",
    "kaynak": "Paratic",
    "kategori": "makro",
@@ -8569,18 +8629,6 @@
    "sembol": "",
    "link": "https://paratic.com/global-yatirim-holding-limanlarinda-yolcu-hareketleri-yuzde-21-artti/",
    "yayin_tarihi": "2026-11-19T18:15:55+00:00",
-   "tarih": "2026-11-19"
-  },
-  {
-   "baslik": "Microsoft CEO'su Nadella: Çalışanlar, yapay zeka temsilcilerini yönetecek",
-   "kaynak": "Bloomberg HT",
-   "kategori": "bist",
-   "dil": "tr",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.bloomberght.com/microsoft-ceo-su-nadella-calisanlar-yapay-zeka-temsilcilerini-yonetecek-3795184",
-   "yayin_tarihi": "2026-11-19T17:55:02+00:00",
    "tarih": "2026-11-19"
   },
   {
@@ -8680,18 +8728,6 @@
    "tarih": "2026-11-19"
   },
   {
-   "baslik": "Borsa İstanbul’dan KLSYN, BIGEN ve DSTKF paylarına işlem yasağı",
-   "kaynak": "Paratic",
-   "kategori": "makro",
-   "dil": "tr",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://paratic.com/borsa-istanbuldan-klsyn-bigen-ve-dstkf-paylarina-islem-yasagi/",
-   "yayin_tarihi": "2026-11-19T15:45:08+00:00",
-   "tarih": "2026-11-19"
-  },
-  {
    "baslik": "Borsa günü düşüşle tamamladı - Anadolu Ajansı",
    "kaynak": "Google News · TR Borsa",
    "kategori": "bist",
@@ -8713,18 +8749,6 @@
    "sembol": "",
    "link": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNTmFjMGpqenN3TmdBZFhxNlplSE5Ka2tMUWQ2R04wM0ZRd2lWMXlzeDRtbEo0U2duTnlLV1R3TlczU0dvUVhzcW1WR3hnWl85UEl0eXhkQkRreTdGSmcyZ25rbW5JVDZKbmt4Vks5YkplOEkyNU9IMjJEdXV3ZjZpNUhhQmZoSDJOdkVkR3FvM3V4NE1DZEp6QTZORDYwTVZPX3BITGU0QmZnMlJ5MS1vNHpra2g4QQ?oc=5",
    "yayin_tarihi": "2026-11-19T15:22:09+00:00",
-   "tarih": "2026-11-19"
-  },
-  {
-   "baslik": "Borsa İstanbul günü düşüşle tamamladı - Borsa Gundem",
-   "kaynak": "Google News · TR Borsa",
-   "kategori": "bist",
-   "dil": "tr",
-   "yon": "negatif",
-   "etiket": "🔴 Negatif",
-   "sembol": "",
-   "link": "https://news.google.com/rss/articles/CBMifEFVX3lxTE5xRkEwMnc2LXZhUkc0MXNKOWJTekdQbk9hR2lhNmlqUTFsZHFMT1FGZGtMdFBsbHdWRWNHQVdFWHZWN1R1WURoQi1zWVJKamw5RGJiTWRfdkdCSl9scE9WWFB6aEM3NjVnRDZzMV9pelRzQnE4VThHbDNycGQ?oc=5",
-   "yayin_tarihi": "2026-11-19T15:10:00+00:00",
    "tarih": "2026-11-19"
   },
   {
@@ -8752,18 +8776,6 @@
    "tarih": "2026-11-19"
   },
   {
-   "baslik": "KAP *** BORSA İSTANBUL A.Ş. *** İşlem İptali - GZT",
-   "kaynak": "Google News · TR Borsa",
-   "kategori": "bist",
-   "dil": "tr",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://news.google.com/rss/articles/CBMijAFBVV95cUxPc1k3REJja0IydDNtYW5CX0RkOHlkN0ZnMmZ6eWZ4Wmo5eThGVDhqeWNzbDZNLUtPUmVCaU4wczB1RVJ3YVRzNEtrOGVQYXRhZVd4dzBCNzBJVVhRME40bkJqQzk4MUtoNUloTm5UM0hMakpSLVdQRWtFUmpGWHZTT0MxcGxPdHZWZVg0QQ?oc=5",
-   "yayin_tarihi": "2026-11-19T14:36:00+00:00",
-   "tarih": "2026-11-19"
-  },
-  {
    "baslik": "Heinz’in Yeni Lezzetleri İstanbul’da Tanıtıldı",
    "kaynak": "Fortune TR",
    "kategori": "makro",
@@ -8785,18 +8797,6 @@
    "sembol": "",
    "link": "https://www.haberturk.com/ekonomi/tmsf-guvencesiyle-insa-edilen-bayrampasa-modern-bolgenin-yeni-yasam-merkezi-olmayi-hedefliyor-3928444",
    "yayin_tarihi": "2026-11-19T14:16:35+00:00",
-   "tarih": "2026-11-19"
-  },
-  {
-   "baslik": "Kash Patel skips House hearing after Mar-a-Lago gala with $50,000 access",
-   "kaynak": "CNBC Dünya",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.cnbc.com/2026/11/18/kash-patel-hearing-mar-a-lago-gala.html",
-   "yayin_tarihi": "2026-11-19T14:15:18+00:00",
    "tarih": "2026-11-19"
   },
   {
@@ -8848,18 +8848,6 @@
    "tarih": "2026-11-19"
   },
   {
-   "baslik": "Akkuyu NGS'de 1. güç ünitesinde son testler başladı",
-   "kaynak": "Habertürk",
-   "kategori": "makro",
-   "dil": "tr",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.haberturk.com/ekonomi/akkuyu-ngs-de-1-guc-unitesinde-son-testler-basladi-3928536",
-   "yayin_tarihi": "2026-11-19T12:30:23+00:00",
-   "tarih": "2026-11-19"
-  },
-  {
    "baslik": "Euro Bölgesi'nde yıllık enflasyon son 3 yılın zirvesinde",
    "kaynak": "Habertürk",
    "kategori": "makro",
@@ -8881,18 +8869,6 @@
    "sembol": "",
    "link": "https://www.haberturk.com/ekonomi/oruc-reis-pakistan-da-ikinci-yurt-disi-gorevi-3928532",
    "yayin_tarihi": "2026-11-19T12:22:17+00:00",
-   "tarih": "2026-11-19"
-  },
-  {
-   "baslik": "Hazine ve Maliye Bakanlığı'ndan yeşil tahvil ihracı",
-   "kaynak": "Habertürk",
-   "kategori": "makro",
-   "dil": "tr",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://www.haberturk.com/ekonomi/hazine-ve-maliye-bakanligi-ndan-yesil-tahvil-ihraci-3928524",
-   "yayin_tarihi": "2026-11-19T12:10:17+00:00",
    "tarih": "2026-11-19"
   },
   {
@@ -8920,15 +8896,15 @@
    "tarih": "2026-11-19"
   },
   {
-   "baslik": "Merkez Bankası rezervlerinde düşüş",
-   "kaynak": "Habertürk",
-   "kategori": "makro",
-   "dil": "tr",
-   "yon": "negatif",
-   "etiket": "🔴 Negatif",
+   "baslik": "APEC final day in photos: Trump, Xi and Putin shake hands; Takaichi kept at a distance",
+   "kaynak": "CNBC Dünya",
+   "kategori": "global",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
    "sembol": "",
-   "link": "https://www.haberturk.com/ekonomi/merkez-bankasi-rezervlerinde-dusus-3928521",
-   "yayin_tarihi": "2026-11-19T11:58:20+00:00",
+   "link": "https://www.cnbc.com/2026/11/19/trump-xi-putin-photos-us-china-russia-trilateral-.html",
+   "yayin_tarihi": "2026-11-19T10:54:07+00:00",
    "tarih": "2026-11-19"
   },
   {
@@ -9011,20 +8987,8 @@
    "yon": "notr",
    "etiket": "⚪ Nötr",
    "sembol": "",
-   "link": "https://news.google.com/rss/articles/CBMidEFVX3lxTE1RQ1ZUT1g3a3NBNE13M1dzT1l6R1hvY1ZfZjJXYlRLbTVlcGtaWUJ0RTN4cV9xQlFjcFVMRDNhRXBENHJKS1IydTFwcm8zbmtjeFNMcE1KYU1nR2xfYzlEbUMyWTdUaHlBYl94dENJUUZLVXg5?oc=5",
+   "link": "https://news.google.com/rss/articles/CBMiekFVX3lxTE1QQzFDYzdiYl83X0h5UkMyUnNBNW40SXY0UmFWVXVrU1FvUko2NjAyby1qazN5cV9zZldvdWhIWS1PRDFxTDBBb01KWmFtWW1MeEc4SUR5WjRKNWxaeEdBZVpvbnZyN040cE1lUEU1MkdDbDFMal92UkNB?oc=5",
    "yayin_tarihi": "2026-11-19T07:03:17+00:00",
-   "tarih": "2026-11-19"
-  },
-  {
-   "baslik": "Borsa güne yükselişle başladı - TRT Haber",
-   "kaynak": "Google News · TR Borsa",
-   "kategori": "bist",
-   "dil": "tr",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://news.google.com/rss/articles/CBMihwFBVV95cUxNeEZKZWozeWluWXVWRms3NVZnSnVkd3hQeTF3ZWx3X2JIVWJSbHEyR2stcG5PZkE4MmdsX3pYbGNjVDZYMTJlZkJ0YnJ4V3RLcGliYVZLRFE3UjhWX2FHZXpRazdCV1p0YnY5NnVBazZ5Tm9LRXVRdzREamhsRng5bkNhamhvRU0?oc=5",
-   "yayin_tarihi": "2026-11-19T07:02:00+00:00",
    "tarih": "2026-11-19"
   },
   {
@@ -9061,18 +9025,6 @@
    "sembol": "",
    "link": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxNMURDRmgwNzQzQ19DeUJTOWNKdE1MRDVsc2t0T2JCWm1BVlhCcXBiRFpBbjNRRHhUeERINXlTUUx2RHI4MTVTYnVXbTdpeDJkN2xERV9ncmhlWGw4eWc3dkJpNkx6NkhaRXRHMzNRWG1VMUlSUi1qTGc3Mk5ZRllFY0tSdDdVd0pIT3pxUTA1VnF1Q3NaR2NlNFBJcnlQa3ZqUS1lLXZVU1JlS2ZiNFpHdnV1NjQ2NndQYUZXVTBOWFg?oc=5",
    "yayin_tarihi": "2026-11-18T23:47:00+00:00",
-   "tarih": "2026-11-18"
-  },
-  {
-   "baslik": "Trading Day: Markets mixed in a Nvidia, Anthropic, minutes swirl - KFGO",
-   "kaynak": "Google News · Global",
-   "kategori": "global",
-   "dil": "en",
-   "yon": "notr",
-   "etiket": "⚪ Nötr",
-   "sembol": "",
-   "link": "https://news.google.com/rss/articles/CBMilAFBVV95cUxOc1NKZEJiTW81Mm1oR2xLWjVsMmx5WmVXcGZkcVVrNW5HN2JzbkdzUGpUUXRocHY1ZnltUGRtdnBQbXRKX2U5a05oa2FxRHZqYUpKNlFkWUNtTzl0c19hZnNTV0FpQUV1dE5NeFdqckNDbXM4dzJXSWYzemtoRWRiV0YtcG9vcDBmdnAxUHQyY3N5Z2Zx?oc=5",
-   "yayin_tarihi": "2026-11-18T22:23:57+00:00",
    "tarih": "2026-11-18"
   },
   {
@@ -9136,6 +9088,18 @@
    "tarih": "2026-11-18"
   },
   {
+   "baslik": "Borsa günü düşüşle kapattı - TRT Haber",
+   "kaynak": "Google News · TR Borsa",
+   "kategori": "bist",
+   "dil": "tr",
+   "yon": "negatif",
+   "etiket": "🔴 Negatif",
+   "sembol": "",
+   "link": "https://news.google.com/rss/articles/CBMigwFBVV95cUxNQnpRZkFRdFpPZDBubXpmR3ZVTVI1OWszellDWlJfWmEyMUxZc0VTUzMwSVJaNkJHUndJclBMUXBreE9UMkhjclJOX3VXUFlzWUViNXVMeDF1WGlMVnBScGFjSnpsazFoMnpPNEo3Q3VUVmN0QTV4X0Y5Z3c1WEpPd1lyUQ?oc=5",
+   "yayin_tarihi": "2026-11-18T15:23:00+00:00",
+   "tarih": "2026-11-18"
+  },
+  {
    "baslik": "Hims & Hers launches new peptide treatments — while admitting there's more to learn about efficacy",
    "kaynak": "CNBC Ekonomi",
    "kategori": "makro",
@@ -9145,6 +9109,18 @@
    "sembol": "",
    "link": "https://www.cnbc.com/2026/11/18/hims-hers-peptides-plus-treatments.html",
    "yayin_tarihi": "2026-11-18T14:02:52+00:00",
+   "tarih": "2026-11-18"
+  },
+  {
+   "baslik": "Sessizliğini koruyor: Erişah Arıcan hakkındaki iddialar neler? - DW.com",
+   "kaynak": "Google News · TR Borsa",
+   "kategori": "bist",
+   "dil": "tr",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://news.google.com/rss/articles/CBMiswFBVV95cUxOSENaVFNob2piRVJQSHhEM0ZwM0QyZ2E5WTJLbktlN2ZuOGMtWGVPOU1Yc1Nfc2tTNlVjQ2lrWjhFdTBRUVdlMzN6WDlqMnFZRFpmUHE1WFhLZERERzBrX3lOTDVFcTRSd3dGYVBGQXZDcXVFU2J1NU04TklYRlNjTzZCRWFhLW11cUlzTV92UXJVbUh4bWFlem5KVkViUVY3SzhjdnVlTUc3WW5HSDJpNWc2UdIBswFBVV95cUxOOG9TRDhsUTU5azR2d1RiMWdjZlNtLTBsRHl1Mmh4bGpkWTA4RDlHUEF4d1Q3LU9ybG1RTGRyMkxpNkx2aDJqaEVoLXIyUVIwQnNleW5uWWNHeWxGZnFyeEM1VDBYTFdqVVhOX1gySEE1YnNSMlRXb1FnTFFvZThfUEVaYWFqM29zOERDZVpGVU1icHdkWXFleVV3Z0ViRmx4eERkZF9USjFzS3FBeFlUT3gyVQ?oc=5",
+   "yayin_tarihi": "2026-11-18T13:23:12+00:00",
    "tarih": "2026-11-18"
   },
   {
@@ -9206,6 +9182,30 @@
    "link": "https://www.cnbc.com/2026/11/17/2026-election-political-ad-spending.html",
    "yayin_tarihi": "2026-11-17T14:00:02+00:00",
    "tarih": "2026-11-17"
+  },
+  {
+   "baslik": "JPMorgan'dan Borsa İstanbul hisselerine \"olumlu\" not! - Haber 7",
+   "kaynak": "Google News · TR Borsa",
+   "kategori": "bist",
+   "dil": "tr",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "",
+   "link": "https://news.google.com/rss/articles/CBMirgFBVV95cUxQaWNxMW9VdUpKdkxLQ3FSbFNfTXVhV1dYVjVXRFFHY2EydEtDcDBIS3VwMjZ4amRNTElYUlRJMnZaVnZxaFFQSU1CZ1RvSXJWWHB4NWoza3dRWEV2ZEdmdUtrYXpnQmhad0hrcUYyR1FWR0tkSVJtbHhKb2c0dXlEUm5RQWthLVl3ZXZXSlJWTlN2Q0ZsNFNCdkZ4VUExaUttbjVWak9qdWFWRTNnVXfSAaIBQVVfeXFMTVpKRkxqZzNZbVpYSlhYV1BQcnNRRkRIdVFiMHJBbEgzVzI1SWJTbFVUWnNfN3lwOGhJQVYxVC1GUjUyX2RFZ1Rvd2llNFQxR1JCeUhFRFdVeFRGMUk3WFVLSXQ1NVZBb2hlaHhIcndXQXpNbnBhNFJHRTAtMlI2Q3Awd2tGbG5fWkV5OXBTREt4MXkxZFVsN1NxNlVLc0p6YWN3?oc=5",
+   "yayin_tarihi": "2026-11-17T09:44:00+00:00",
+   "tarih": "2026-11-17"
+  },
+  {
+   "baslik": "Missed Turkiye Garanti Bankasi's Rally? Here's The Bet Holders Made",
+   "kaynak": "Simply Wall St.",
+   "kategori": "bist",
+   "dil": "en",
+   "yon": "notr",
+   "etiket": "⚪ Nötr",
+   "sembol": "GARAN",
+   "link": "",
+   "yayin_tarihi": "2026-11-17T08:09:37+00:00",
+   "tarih": "2026-11-17"
   }
  ],
  "fonlar": {
@@ -9229,10 +9229,10 @@
      }
     ],
     "getiri": {
-     "1A": -7.433,
-     "3A": -43.8094,
-     "6A": -37.6458,
-     "1Y": 0.3692
+     "1A": -4.3943,
+     "3A": -44.9458,
+     "6A": -38.4418,
+     "1Y": -0.7895
     }
    },
    {
@@ -9270,10 +9270,10 @@
      }
     ],
     "getiri": {
-     "1A": -0.688,
-     "3A": -1.7299,
-     "6A": 13.3681,
-     "1Y": 36.976
+     "1A": 1.4841,
+     "3A": -3.2453,
+     "6A": 12.9452,
+     "1Y": 34.3557
     }
    },
    {
@@ -9315,15 +9315,15 @@
      }
     ],
     "getiri": {
-     "1A": -5.7368,
-     "3A": -7.8576,
-     "6A": -6.7867,
-     "1Y": 1.8096
+     "1A": -6.4129,
+     "3A": -8.444,
+     "6A": -7.4969,
+     "1Y": -0.8432
     }
    },
    {
     "kod": "TTP",
-    "tarih": "2026-11-19",
+    "tarih": "2026-11-20",
     "hisse_agirlik": 0.0,
     "varliklar": [
      {
@@ -9336,55 +9336,55 @@
      }
     ],
     "getiri": {
-     "1A": 2.5815,
-     "3A": 6.2143,
-     "6A": 12.5488,
-     "1Y": 24.004
+     "1A": 2.2233,
+     "3A": 6.1956,
+     "6A": 12.5995,
+     "1Y": 24.016
     }
    },
    {
     "kod": "AVT",
-    "tarih": "2026-11-19",
+    "tarih": "2026-11-20",
     "hisse_agirlik": 0.0,
     "varliklar": [
      {
       "sinif": "Government Bonds",
-      "agirlik": 43.98
+      "agirlik": 42.72
      },
      {
       "sinif": "Commercial Paper",
-      "agirlik": 22.26
+      "agirlik": 23.54
      },
      {
       "sinif": "Corporate Bonds",
-      "agirlik": 16.92
+      "agirlik": 14.58
      },
      {
       "sinif": "Reverse Repo",
-      "agirlik": 7.03
+      "agirlik": 8.55
      },
      {
       "sinif": "TL Deposits",
-      "agirlik": 5.38
+      "agirlik": 4.57
      },
      {
       "sinif": "Government Sukuk (TRY)",
-      "agirlik": 3.33
-     },
-     {
-      "sinif": "Treasury Bills",
-      "agirlik": 0.91
+      "agirlik": 2.92
      },
      {
       "sinif": "Corporate Sukuk",
-      "agirlik": 0.19
+      "agirlik": 2.32
+     },
+     {
+      "sinif": "Treasury Bills",
+      "agirlik": 0.8
      }
     ],
     "getiri": {
-     "1A": 3.0572,
-     "3A": 9.4248,
-     "6A": 20.3226,
-     "1Y": 44.6518
+     "1A": 3.0606,
+     "3A": 9.4058,
+     "6A": 20.4422,
+     "1Y": 44.6622
     }
    }
   ],
@@ -9397,131 +9397,131 @@
      {
       "kod": "TTA",
       "ad": "İŞ PORTFÖY ALTIN FONU",
-      "boyut_m": 22865.0,
+      "boyut_m": 22670.0,
       "getiri": {
-       "1A": -5.74,
-       "3A": -7.86,
-       "6A": -6.79,
-       "YTD": -6.31,
-       "1Y": 1.81,
-       "3Y": 192.27
+       "1A": -6.41,
+       "3A": -8.44,
+       "6A": -7.5,
+       "YTD": -7.03,
+       "1Y": -0.84,
+       "3Y": 190.05
       }
      },
      {
       "kod": "PTN",
       "ad": "PHİLLİP PORTFÖY ALTIN FONU",
-      "boyut_m": 791.0,
+      "boyut_m": 785.0,
       "getiri": {
-       "1A": -5.98,
-       "3A": -7.57,
-       "6A": -5.95,
-       "YTD": 3.45,
-       "1Y": 11.35,
+       "1A": -6.52,
+       "3A": -8.67,
+       "6A": -6.68,
+       "YTD": 2.65,
+       "1Y": 8.68,
        "3Y": null
       }
      },
      {
       "kod": "GGK",
       "ad": "INVEO PORTFÖY ALTIN FON",
-      "boyut_m": 1644.0,
+      "boyut_m": 1623.0,
       "getiri": {
-       "1A": -6.12,
-       "3A": -7.78,
-       "6A": -6.88,
-       "YTD": -0.81,
-       "1Y": 7.23,
-       "3Y": 227.92
+       "1A": -6.94,
+       "3A": -8.01,
+       "6A": -7.65,
+       "YTD": -1.63,
+       "1Y": 4.29,
+       "3Y": 225.19
       }
      },
      {
       "kod": "NAU",
       "ad": "NEO PORTFÖY ALTIN FONU",
-      "boyut_m": 1144.0,
+      "boyut_m": 1133.0,
       "getiri": {
-       "1A": -6.33,
-       "3A": -8.63,
-       "6A": -8.82,
-       "YTD": -2.94,
-       "1Y": 4.35,
-       "3Y": null
-      }
-     },
-     {
-      "kod": "NAK",
-      "ad": "NEO PORTFÖY ALTIN KATILIM FONU",
-      "boyut_m": 109.0,
-      "getiri": {
-       "1A": -6.52,
-       "3A": -8.12,
-       "6A": -7.11,
-       "YTD": null,
-       "1Y": null,
+       "1A": -7.23,
+       "3A": -9.05,
+       "6A": -9.62,
+       "YTD": -3.78,
+       "1Y": 1.44,
        "3Y": null
       }
      },
      {
       "kod": "DBA",
       "ad": "DENİZ PORTFÖY ALTIN FONU",
-      "boyut_m": 8529.0,
+      "boyut_m": 8434.0,
       "getiri": {
-       "1A": -6.53,
-       "3A": -8.31,
-       "6A": -7.01,
-       "YTD": 1.53,
-       "1Y": 9.44,
-       "3Y": 220.07
+       "1A": -7.31,
+       "3A": -8.45,
+       "6A": -7.72,
+       "YTD": 0.75,
+       "1Y": 6.73,
+       "3Y": 217.62
       }
      },
      {
-      "kod": "UP1",
-      "ad": "ÜNLÜ PORTFÖY ALTIN FONU",
-      "boyut_m": 1026.0,
+      "kod": "NAK",
+      "ad": "NEO PORTFÖY ALTIN KATILIM FONU",
+      "boyut_m": 108.0,
       "getiri": {
-       "1A": -6.57,
-       "3A": -8.91,
-       "6A": -7.32,
-       "YTD": -1.18,
-       "1Y": 7.64,
-       "3Y": 237.26
-      }
-     },
-     {
-      "kod": "OJK",
-      "ad": "QNB PORTFÖY ALTIN FONU",
-      "boyut_m": 40749.0,
-      "getiri": {
-       "1A": -6.59,
-       "3A": -8.19,
-       "6A": -6.27,
-       "YTD": 2.18,
-       "1Y": 10.72,
-       "3Y": 242.43
+       "1A": -7.33,
+       "3A": -8.33,
+       "6A": -7.87,
+       "YTD": null,
+       "1Y": null,
+       "3Y": null
       }
      },
      {
       "kod": "MKG",
       "ad": "AKTİF PORTFÖY ALTIN KATILIM FONU",
-      "boyut_m": 1192.0,
+      "boyut_m": 1183.0,
       "getiri": {
-       "1A": -6.63,
-       "3A": -8.6,
-       "6A": -7.03,
-       "YTD": 0.75,
-       "1Y": 8.94,
-       "3Y": 239.84
+       "1A": -7.39,
+       "3A": -9.01,
+       "6A": -7.73,
+       "YTD": -0.01,
+       "1Y": 6.36,
+       "3Y": 237.27
+      }
+     },
+     {
+      "kod": "UP1",
+      "ad": "ÜNLÜ PORTFÖY ALTIN FONU",
+      "boyut_m": 1015.0,
+      "getiri": {
+       "1A": -7.39,
+       "3A": -9.84,
+       "6A": -8.23,
+       "YTD": -2.16,
+       "1Y": 5.26,
+       "3Y": 233.91
+      }
+     },
+     {
+      "kod": "OJK",
+      "ad": "QNB PORTFÖY ALTIN FONU",
+      "boyut_m": 40337.0,
+      "getiri": {
+       "1A": -7.4,
+       "3A": -8.34,
+       "6A": -7.01,
+       "YTD": 1.37,
+       "1Y": 7.93,
+       "3Y": 239.72
       }
      },
      {
       "kod": "HBF",
       "ad": "HSBC PORTFÖY ALTIN FONU",
-      "boyut_m": 5453.0,
+      "boyut_m": 5400.0,
       "getiri": {
-       "1A": -6.65,
-       "3A": -8.56,
-       "6A": -7.24,
-       "YTD": 0.14,
-       "1Y": 8.89,
-       "3Y": 232.36
+       "1A": -7.43,
+       "3A": -9.11,
+       "6A": -8.04,
+       "YTD": -0.71,
+       "1Y": 6.23,
+       "3Y": 229.53
       }
      }
     ]
@@ -9532,133 +9532,133 @@
     "fon_sayisi": 170,
     "top": [
      {
-      "kod": "AFS",
-      "ad": "AK PORTFÖY SAĞLIK SEKTÖRÜ YABANCI HİSSE SENEDİ FONU",
-      "boyut_m": 1229.0,
+      "kod": "RHI",
+      "ad": "RE-PIE PORTFÖY BİRİNCİ HİSSE SENEDİ (TL) FONU (HİSSE SENEDİ YOĞUN FON)",
+      "boyut_m": 74.0,
       "getiri": {
-       "1A": 5.35,
-       "3A": 13.53,
-       "6A": 33.03,
-       "YTD": 33.38,
-       "1Y": 37.27,
-       "3Y": 120.92
+       "1A": 3.72,
+       "3A": -4.17,
+       "6A": 1.66,
+       "YTD": 39.05,
+       "1Y": 45.04,
+       "3Y": null
       }
      },
      {
-      "kod": "RHI",
-      "ad": "RE-PIE PORTFÖY BİRİNCİ HİSSE SENEDİ (TL) FONU (HİSSE SENEDİ YOĞUN FON)",
-      "boyut_m": 73.0,
+      "kod": "AFS",
+      "ad": "AK PORTFÖY SAĞLIK SEKTÖRÜ YABANCI HİSSE SENEDİ FONU",
+      "boyut_m": 1195.0,
       "getiri": {
-       "1A": 2.93,
-       "3A": -2.7,
-       "6A": 1.76,
-       "YTD": 39.18,
-       "1Y": 48.06,
-       "3Y": null
+       "1A": 3.29,
+       "3A": 8.45,
+       "6A": 29.89,
+       "YTD": 30.23,
+       "1Y": 33.22,
+       "3Y": 115.71
       }
      },
      {
       "kod": "UPH",
       "ad": "ÜNLÜ PORTFÖY HİSSE SENEDİ (TL) FONU(HİSSE SENEDİ YOĞUN FON)",
-      "boyut_m": 77.0,
+      "boyut_m": 76.0,
       "getiri": {
-       "1A": 2.03,
-       "3A": -4.24,
-       "6A": -5.96,
-       "YTD": 13.77,
-       "1Y": 22.25,
-       "3Y": 83.45
+       "1A": 3.02,
+       "3A": -6.76,
+       "6A": -6.37,
+       "YTD": 13.27,
+       "1Y": 19.23,
+       "3Y": 82.65
       }
      },
      {
-      "kod": "ADP",
-      "ad": "AK PORTFÖY BIST BANKA ENDEKSİ HİSSE SENEDİ (TL) FONU (HİSSE SENEDİ YOĞUN FON)",
-      "boyut_m": 3914.0,
+      "kod": "BUY",
+      "ad": "AK PORTFÖY BÜYÜYEN ŞİRKETLER HİSSE SENEDİ (TL) FONU (HİSSE SENEDİ YOĞUN FON)",
+      "boyut_m": 264.0,
       "getiri": {
-       "1A": 1.38,
-       "3A": 3.56,
-       "6A": -2.32,
-       "YTD": 0.33,
-       "1Y": 13.95,
-       "3Y": 124.48
-      }
-     },
-     {
-      "kod": "BIY",
-      "ad": "AZİMUT PORTFÖY BIST 100 DIŞI ŞİRKETLER HİSSE SENEDİ FONU (HİSSE SENEDİ YOĞUN FON)",
-      "boyut_m": 54.0,
-      "getiri": {
-       "1A": 1.08,
-       "3A": -47.48,
-       "6A": -43.42,
-       "YTD": -29.53,
-       "1Y": null,
-       "3Y": null
-      }
-     },
-     {
-      "kod": "YZH",
-      "ad": "TEB PORTFÖY BIST BANKA ENDEKSİ HİSSE SENEDİ FONU (HİSSE SENEDİ YOĞUN)",
-      "boyut_m": 550.0,
-      "getiri": {
-       "1A": 1.05,
-       "3A": 2.37,
-       "6A": -4.08,
-       "YTD": -1.25,
-       "1Y": 12.74,
-       "3Y": 118.63
-      }
-     },
-     {
-      "kod": "BFT",
-      "ad": "AZİMUT PORTFÖY BANKA VE FİNANS SEKTÖRÜ HİSSE SENEDİ FONU (HİSSE SENEDİ YOĞUN FON)",
-      "boyut_m": 241.0,
-      "getiri": {
-       "1A": 1.02,
-       "3A": 2.08,
-       "6A": 1.18,
-       "YTD": 4.53,
-       "1Y": 14.18,
-       "3Y": null
-      }
-     },
-     {
-      "kod": "TAU",
-      "ad": "İŞ PORTFÖY BIST BANKA ENDEKSİ HİSSE SENEDİ (TL) FONU (HİSSE SENEDİ YOĞUN FON)",
-      "boyut_m": 2203.0,
-      "getiri": {
-       "1A": 0.78,
-       "3A": 1.56,
-       "6A": -4.66,
-       "YTD": -2.41,
-       "1Y": 11.25,
-       "3Y": 121.99
+       "1A": 3.01,
+       "3A": -19.01,
+       "6A": -18.44,
+       "YTD": 1.12,
+       "1Y": 6.77,
+       "3Y": 8.7
       }
      },
      {
       "kod": "ACC",
       "ad": "İSTANBUL PORTFÖY DÖRDÜNCÜ HİSSE SENEDİ FONU (HİSSE SENEDİ YOĞUN)",
-      "boyut_m": 92.0,
+      "boyut_m": 91.0,
       "getiri": {
-       "1A": 0.76,
-       "3A": -9.81,
-       "6A": -9.88,
-       "YTD": 16.41,
-       "1Y": 24.87,
-       "3Y": 112.0
+       "1A": 2.87,
+       "3A": -11.62,
+       "6A": -10.15,
+       "YTD": 16.07,
+       "1Y": 21.8,
+       "3Y": 111.38
       }
      },
      {
-      "kod": "ASJ",
-      "ad": "AKTİF PORTFÖY HİSSE SENEDİ (TL) FONU (HİSSE SENEDİ YOĞUN FON)",
-      "boyut_m": 51.0,
+      "kod": "KTI",
+      "ad": "AZİMUT PORTFÖY KATILIM HİSSE SENEDİ FONU (HİSSE SENEDİ YOĞUN FON)",
+      "boyut_m": 95.0,
       "getiri": {
-       "1A": 0.7,
-       "3A": -7.25,
-       "6A": -4.66,
-       "YTD": 20.35,
-       "1Y": 25.13,
-       "3Y": 94.64
+       "1A": 2.36,
+       "3A": -19.39,
+       "6A": -11.42,
+       "YTD": 13.63,
+       "1Y": 17.23,
+       "3Y": null
+      }
+     },
+     {
+      "kod": "FUA",
+      "ad": "AK PORTFÖY İHRACATÇI ŞİRKETLER HİSSE SENEDİ (TL) FONU (HİSSE SENEDİ YOĞUN FON)",
+      "boyut_m": 259.0,
+      "getiri": {
+       "1A": 1.82,
+       "3A": -16.87,
+       "6A": -13.07,
+       "YTD": 5.94,
+       "1Y": 11.29,
+       "3Y": 29.3
+      }
+     },
+     {
+      "kod": "SSS",
+      "ad": "YAPI KREDİ PORTFÖY SAVUNMA SANAYİİ ŞİRKETLERİ ENDEKSİ HİSSE SENEDİ FONU (HİSSE SENEDİ YOĞUN FON)",
+      "boyut_m": 178.0,
+      "getiri": {
+       "1A": 1.68,
+       "3A": -14.14,
+       "6A": -13.85,
+       "YTD": 5.19,
+       "1Y": 8.18,
+       "3Y": null
+      }
+     },
+     {
+      "kod": "GSP",
+      "ad": "AZİMUT PYŞ KAR PAYI ÖDEYEN HİSSE SENEDİ FONU (HİSSE SENEDİ YOĞUN FON)",
+      "boyut_m": 3750.0,
+      "getiri": {
+       "1A": 1.63,
+       "3A": -8.66,
+       "6A": -4.42,
+       "YTD": 29.53,
+       "1Y": 29.19,
+       "3Y": 132.88
+      }
+     },
+     {
+      "kod": "ADP",
+      "ad": "AK PORTFÖY BIST BANKA ENDEKSİ HİSSE SENEDİ (TL) FONU (HİSSE SENEDİ YOĞUN FON)",
+      "boyut_m": 3924.0,
+      "getiri": {
+       "1A": 1.58,
+       "3A": 1.68,
+       "6A": -1.9,
+       "YTD": 0.76,
+       "1Y": 10.93,
+       "3Y": 125.44
       }
      }
     ]
@@ -9671,131 +9671,131 @@
      {
       "kod": "IRY",
       "ad": "INVEO PORTFÖY PARA PİYASASI (TL) FONU",
-      "boyut_m": 1701.0,
+      "boyut_m": 1696.0,
       "getiri": {
        "1A": 3.25,
-       "3A": 9.86,
-       "6A": 21.49,
-       "YTD": 40.7,
-       "1Y": 47.51,
-       "3Y": 266.51
+       "3A": 9.87,
+       "6A": 21.62,
+       "YTD": 40.85,
+       "1Y": 47.56,
+       "3Y": 266.91
       }
      },
      {
       "kod": "PRD",
       "ad": "PİRAMİT PORTFÖY PARA PİYASASI (TL) FONU",
-      "boyut_m": 622.0,
+      "boyut_m": 624.0,
       "getiri": {
-       "1A": 3.19,
-       "3A": 10.09,
-       "6A": 21.98,
-       "YTD": 40.42,
-       "1Y": 47.52,
+       "1A": 3.18,
+       "3A": 10.08,
+       "6A": 22.1,
+       "YTD": 40.57,
+       "1Y": 47.51,
        "3Y": null
       }
      },
      {
       "kod": "RBP",
       "ad": "RE-PIE PORTFÖY BİRİNCİ PARA PİYASASI (TL) FONU",
-      "boyut_m": 319.0,
+      "boyut_m": 323.0,
       "getiri": {
        "1A": 3.16,
-       "3A": 9.95,
-       "6A": 22.16,
-       "YTD": 42.44,
-       "1Y": 49.44,
-       "3Y": null
-      }
-     },
-     {
-      "kod": "PPI",
-      "ad": "YAPI KREDİ PORTFÖY ÜÇÜNCÜ PARA PİYASASI (TL) FONU",
-      "boyut_m": 7235.0,
-      "getiri": {
-       "1A": 3.13,
-       "3A": 9.59,
-       "6A": 20.34,
-       "YTD": 38.53,
-       "1Y": 45.11,
+       "3A": 9.93,
+       "6A": 22.28,
+       "YTD": 42.58,
+       "1Y": 49.42,
        "3Y": null
       }
      },
      {
       "kod": "HVT",
       "ad": "ALLBATROSS PORTFÖY BİRİNCİ PARA PİYASASI (TL) FONU",
-      "boyut_m": 599.0,
+      "boyut_m": 605.0,
       "getiri": {
        "1A": 3.13,
-       "3A": 10.1,
-       "6A": 21.91,
-       "YTD": 43.04,
-       "1Y": 51.0,
-       "3Y": 274.96
+       "3A": 10.07,
+       "6A": 22.04,
+       "YTD": 43.18,
+       "1Y": 51.02,
+       "3Y": 275.34
+      }
+     },
+     {
+      "kod": "PPI",
+      "ad": "YAPI KREDİ PORTFÖY ÜÇÜNCÜ PARA PİYASASI (TL) FONU",
+      "boyut_m": 6220.0,
+      "getiri": {
+       "1A": 3.13,
+       "3A": 9.57,
+       "6A": 20.46,
+       "YTD": 38.66,
+       "1Y": 45.12,
+       "3Y": null
       }
      },
      {
       "kod": "SPP",
       "ad": "SPARTA PORTFÖY BİRİNCİ PARA PİYASASI (TL) FONU",
-      "boyut_m": 308.0,
+      "boyut_m": 305.0,
       "getiri": {
        "1A": 3.12,
-       "3A": 9.79,
-       "6A": 21.69,
-       "YTD": 40.89,
-       "1Y": 47.63,
+       "3A": 9.78,
+       "6A": 21.81,
+       "YTD": 41.04,
+       "1Y": 47.64,
        "3Y": null
       }
      },
      {
       "kod": "IOO",
       "ad": "İŞ PORTFÖY İKİNCİ PARA PİYASASI (TL) FONU",
-      "boyut_m": 34669.0,
+      "boyut_m": 34238.0,
       "getiri": {
-       "1A": 3.1,
-       "3A": 9.71,
-       "6A": 20.59,
-       "YTD": 38.72,
-       "1Y": 45.19,
-       "3Y": 259.21
+       "1A": 3.11,
+       "3A": 9.67,
+       "6A": 20.72,
+       "YTD": 38.87,
+       "1Y": 45.21,
+       "3Y": 259.59
       }
      },
      {
       "kod": "ZBJ",
       "ad": "ZİRAAT PORTFÖY BAŞAK PARA PİYASASI (TL) FONU",
-      "boyut_m": 61773.0,
+      "boyut_m": 64568.0,
       "getiri": {
        "1A": 3.09,
-       "3A": 9.6,
-       "6A": 20.93,
-       "YTD": 39.76,
-       "1Y": 46.32,
-       "3Y": 262.78
+       "3A": 9.59,
+       "6A": 21.05,
+       "YTD": 39.9,
+       "1Y": 46.31,
+       "3Y": 263.14
       }
      },
      {
       "kod": "GPZ",
       "ad": "GARANTİ PORTFÖY ÜÇÜNCÜ PARA PİYASASI FONU",
-      "boyut_m": 4884.0,
+      "boyut_m": 4906.0,
       "getiri": {
-       "1A": 3.08,
-       "3A": 9.72,
-       "6A": 20.89,
-       "YTD": 39.24,
-       "1Y": 45.78,
+       "1A": 3.09,
+       "3A": 9.7,
+       "6A": 21.01,
+       "YTD": 39.38,
+       "1Y": 45.79,
        "3Y": null
       }
      },
      {
-      "kod": "BGP",
-      "ad": "AK PORTFÖY ÜÇÜNCÜ PARA PİYASASI (TL) FONU",
-      "boyut_m": 74779.0,
+      "kod": "CFO",
+      "ad": "ROTA PORTFÖY İKİNCİ PARA PİYASASI FONU",
+      "boyut_m": 1604.0,
       "getiri": {
        "1A": 3.07,
-       "3A": 9.57,
-       "6A": 20.76,
-       "YTD": 39.28,
-       "1Y": 45.88,
-       "3Y": 264.38
+       "3A": 9.51,
+       "6A": 20.94,
+       "YTD": 39.69,
+       "1Y": 46.09,
+       "3Y": null
       }
      }
     ]
@@ -9808,27 +9808,27 @@
      {
       "kod": "BRR",
       "ad": "AK PORTFÖY İKİNCİ KISA VADELİ BORÇLANMA ARAÇLARI (TL) FONU",
-      "boyut_m": 4433.0,
+      "boyut_m": 4535.0,
       "getiri": {
-       "1A": 3.28,
-       "3A": 10.36,
-       "6A": 21.67,
-       "YTD": 39.68,
-       "1Y": 46.42,
+       "1A": 3.29,
+       "3A": 10.29,
+       "6A": 21.81,
+       "YTD": 39.84,
+       "1Y": 46.49,
        "3Y": null
       }
      },
      {
       "kod": "OSL",
       "ad": "OSMANLI PORTFÖY KISA VADELİ BORÇLANMA ARAÇLARI (TL) FONU",
-      "boyut_m": 1506.0,
+      "boyut_m": 1503.0,
       "getiri": {
-       "1A": 3.09,
-       "3A": 9.44,
-       "6A": 20.38,
-       "YTD": 38.34,
+       "1A": 3.1,
+       "3A": 9.41,
+       "6A": 20.49,
+       "YTD": 38.47,
        "1Y": 44.83,
-       "3Y": 238.76
+       "3Y": 239.07
       }
      },
      {
@@ -9836,51 +9836,77 @@
       "ad": "FİBA PORTFÖY KISA VADELİ BORÇLANMA ARAÇLARI (TL) FONU",
       "boyut_m": 306.0,
       "getiri": {
-       "1A": 3.06,
-       "3A": 9.11,
-       "6A": 19.42,
-       "YTD": 35.41,
-       "1Y": 41.89,
-       "3Y": 227.42
+       "1A": 3.09,
+       "3A": 9.08,
+       "6A": 19.52,
+       "YTD": 35.54,
+       "1Y": 41.91,
+       "3Y": 227.72
       }
      },
      {
       "kod": "IKV",
       "ad": "İŞ PORTFÖY İKİNCİ KISA VADELİ BORÇLANMA ARAÇLARI (TL) FONU",
-      "boyut_m": 975.0,
+      "boyut_m": 990.0,
       "getiri": {
-       "1A": 3.04,
-       "3A": 9.36,
-       "6A": 19.94,
-       "YTD": 36.84,
-       "1Y": 43.24,
+       "1A": 3.02,
+       "3A": 9.32,
+       "6A": 20.02,
+       "YTD": 36.94,
+       "1Y": 43.21,
        "3Y": null
       }
      },
      {
-      "kod": "OKP",
-      "ad": "OYAK PORTFÖY BİRİNCİ KISA VADELİ BORÇLANMA ARAÇLARI (TL) FONU",
-      "boyut_m": 80.0,
+      "kod": "YHT",
+      "ad": "YAPI KREDİ PORTFÖY KISA VADELİ BORÇLANMA ARAÇLARI (TL) FONU",
+      "boyut_m": 4322.0,
       "getiri": {
-       "1A": 2.99,
-       "3A": 9.36,
-       "6A": 20.06,
-       "YTD": 38.09,
-       "1Y": 44.43,
-       "3Y": 253.5
+       "1A": 3.01,
+       "3A": 9.06,
+       "6A": 19.38,
+       "YTD": 35.86,
+       "1Y": 42.33,
+       "3Y": 229.92
       }
      },
      {
       "kod": "DBK",
       "ad": "DENİZ PORTFÖY KISA VADELİ BORÇLANMA ARAÇLARI (TL) FONU",
-      "boyut_m": 894.0,
+      "boyut_m": 909.0,
       "getiri": {
-       "1A": 2.99,
-       "3A": 9.2,
-       "6A": 19.98,
-       "YTD": 37.59,
-       "1Y": 44.3,
-       "3Y": 239.99
+       "1A": 3.0,
+       "3A": 9.19,
+       "6A": 20.09,
+       "YTD": 37.72,
+       "1Y": 44.27,
+       "3Y": 240.32
+      }
+     },
+     {
+      "kod": "OKP",
+      "ad": "OYAK PORTFÖY BİRİNCİ KISA VADELİ BORÇLANMA ARAÇLARI (TL) FONU",
+      "boyut_m": 81.0,
+      "getiri": {
+       "1A": 3.0,
+       "3A": 9.35,
+       "6A": 20.18,
+       "YTD": 38.23,
+       "1Y": 44.45,
+       "3Y": 253.85
+      }
+     },
+     {
+      "kod": "YAE",
+      "ad": "YAPI KREDİ PORTFÖY TLREF'E ENDEKSLİ BORÇLANMA ARAÇLARI (TL) FONU",
+      "boyut_m": 67.0,
+      "getiri": {
+       "1A": 2.98,
+       "3A": 8.8,
+       "6A": 18.86,
+       "YTD": null,
+       "1Y": null,
+       "3Y": null
       }
      },
      {
@@ -9889,24 +9915,11 @@
       "boyut_m": 111.0,
       "getiri": {
        "1A": 2.98,
-       "3A": 9.24,
-       "6A": 19.98,
-       "YTD": 38.16,
-       "1Y": 44.53,
-       "3Y": 234.04
-      }
-     },
-     {
-      "kod": "YHT",
-      "ad": "YAPI KREDİ PORTFÖY KISA VADELİ BORÇLANMA ARAÇLARI (TL) FONU",
-      "boyut_m": 4248.0,
-      "getiri": {
-       "1A": 2.98,
-       "3A": 9.07,
-       "6A": 19.25,
-       "YTD": 35.72,
-       "1Y": 42.3,
-       "3Y": 229.57
+       "3A": 9.21,
+       "6A": 20.09,
+       "YTD": 38.29,
+       "1Y": 44.51,
+       "3Y": 234.35
       }
      },
      {
@@ -9915,24 +9928,11 @@
       "boyut_m": 122.0,
       "getiri": {
        "1A": 2.97,
-       "3A": 9.38,
-       "6A": 20.24,
-       "YTD": 38.51,
-       "1Y": 44.78,
-       "3Y": 249.89
-      }
-     },
-     {
-      "kod": "YAE",
-      "ad": "YAPI KREDİ PORTFÖY TLREF'E ENDEKSLİ BORÇLANMA ARAÇLARI (TL) FONU",
-      "boyut_m": 67.0,
-      "getiri": {
-       "1A": 2.96,
-       "3A": 8.82,
-       "6A": 18.74,
-       "YTD": null,
-       "1Y": null,
-       "3Y": null
+       "3A": 9.37,
+       "6A": 20.35,
+       "YTD": 38.64,
+       "1Y": 44.77,
+       "3Y": 250.22
       }
      }
     ]
@@ -9943,50 +9943,11 @@
     "fon_sayisi": 81,
     "top": [
      {
-      "kod": "ARL",
-      "ad": "AK PORTFÖY BİRİNCİ FON SEPETİ FONU",
-      "boyut_m": 4057.0,
-      "getiri": {
-       "1A": 4.39,
-       "3A": 8.76,
-       "6A": 14.45,
-       "YTD": 31.06,
-       "1Y": 37.05,
-       "3Y": 206.18
-      }
-     },
-     {
-      "kod": "ARM",
-      "ad": "AK PORTFÖY İKİNCİ FON SEPETİ FONU",
-      "boyut_m": 2895.0,
-      "getiri": {
-       "1A": 4.33,
-       "3A": 6.78,
-       "6A": 9.75,
-       "YTD": 25.88,
-       "1Y": 32.98,
-       "3Y": 181.69
-      }
-     },
-     {
-      "kod": "ODV",
-      "ad": "AK PORTFÖY ÜÇÜNCÜ FON SEPETİ FONU",
-      "boyut_m": 1478.0,
-      "getiri": {
-       "1A": 4.05,
-       "3A": 4.26,
-       "6A": 3.92,
-       "YTD": 19.25,
-       "1Y": 27.29,
-       "3Y": 154.07
-      }
-     },
-     {
       "kod": "ICO",
       "ad": "İNCİR PORTFÖY BİRİNCİ FON SEPETİ FONU",
       "boyut_m": 105.0,
       "getiri": {
-       "1A": 2.88,
+       "1A": 2.79,
        "3A": null,
        "6A": null,
        "YTD": null,
@@ -9995,81 +9956,120 @@
       }
      },
      {
-      "kod": "TCF",
-      "ad": "TEB PORTFÖY ÜÇÜNCÜ FON SEPETİ FONU",
-      "boyut_m": 2749.0,
-      "getiri": {
-       "1A": 2.65,
-       "3A": 8.19,
-       "6A": 18.15,
-       "YTD": 36.52,
-       "1Y": 42.82,
-       "3Y": 238.24
-      }
-     },
-     {
       "kod": "OLE",
       "ad": "OSMANLI PORTFÖY BİRİNCİ FON SEPETİ FONU",
-      "boyut_m": 522.0,
+      "boyut_m": 531.0,
       "getiri": {
-       "1A": 2.63,
-       "3A": 9.18,
+       "1A": 2.53,
+       "3A": 9.06,
        "6A": 20.42,
-       "YTD": 39.95,
-       "1Y": 46.57,
-       "3Y": 256.17
-      }
-     },
-     {
-      "kod": "NBO",
-      "ad": "NEO PORTFÖY BORÇLANMA ARACI FONLARI FON SEPETİ FONU",
-      "boyut_m": 1294.0,
-      "getiri": {
-       "1A": 2.5,
-       "3A": 8.88,
-       "6A": 20.22,
-       "YTD": 41.77,
-       "1Y": 48.63,
-       "3Y": null
-      }
-     },
-     {
-      "kod": "IRF",
-      "ad": "İSTANBUL PORTFÖY BİRİNCİ FON SEPETİ FONU",
-      "boyut_m": 277.0,
-      "getiri": {
-       "1A": 2.17,
-       "3A": -10.94,
-       "6A": 1.4,
-       "YTD": 19.74,
-       "1Y": 26.45,
-       "3Y": 162.07
-      }
-     },
-     {
-      "kod": "NHP",
-      "ad": "NEO PORTFÖY BİRİNCİ FON SEPETİ FONU",
-      "boyut_m": 845.0,
-      "getiri": {
-       "1A": 1.87,
-       "3A": 3.14,
-       "6A": 6.59,
-       "YTD": 19.28,
-       "1Y": 24.96,
-       "3Y": 161.53
+       "YTD": 39.94,
+       "1Y": 46.42,
+       "3Y": 256.16
       }
      },
      {
       "kod": "ILZ",
       "ad": "İŞ PORTFÖY TEMKİNLİ FON SEPETİ FONU",
-      "boyut_m": 974.0,
+      "boyut_m": 971.0,
       "getiri": {
-       "1A": 1.61,
-       "3A": 6.39,
-       "6A": 15.43,
-       "YTD": 20.69,
-       "1Y": 34.19,
-       "3Y": 213.28
+       "1A": 2.48,
+       "3A": 5.96,
+       "6A": 15.12,
+       "YTD": 20.37,
+       "1Y": 33.27,
+       "3Y": 212.44
+      }
+     },
+     {
+      "kod": "OLD",
+      "ad": "QNB PORTFÖY TEMİZ ENERJİ VE SU FON SEPETİ FONU",
+      "boyut_m": 108.0,
+      "getiri": {
+       "1A": 2.45,
+       "3A": -6.64,
+       "6A": -5.05,
+       "YTD": 8.1,
+       "1Y": 11.58,
+       "3Y": 70.51
+      }
+     },
+     {
+      "kod": "IAM",
+      "ad": "İŞ PORTFÖY AGRESİF FON SEPETİ FONU",
+      "boyut_m": 65.0,
+      "getiri": {
+       "1A": 1.72,
+       "3A": -1.56,
+       "6A": 3.27,
+       "YTD": 16.57,
+       "1Y": 22.24,
+       "3Y": null
+      }
+     },
+     {
+      "kod": "IPG",
+      "ad": "İŞ PORTFÖY ATAK FON SEPETİ FONU",
+      "boyut_m": 351.0,
+      "getiri": {
+       "1A": 1.72,
+       "3A": 1.83,
+       "6A": 9.46,
+       "YTD": 15.98,
+       "1Y": 27.03,
+       "3Y": 143.5
+      }
+     },
+     {
+      "kod": "HTK",
+      "ad": "QNB PORTFÖY HAVACILIK VE SAVUNMA TEKNOLOJİLERİ FON SEPETİ FONU",
+      "boyut_m": 80.0,
+      "getiri": {
+       "1A": 0.62,
+       "3A": -12.61,
+       "6A": null,
+       "YTD": null,
+       "1Y": null,
+       "3Y": null
+      }
+     },
+     {
+      "kod": "AHV",
+      "ad": "AZİMUT PORTFÖY DENGELİ FON SEPETİ FONU",
+      "boyut_m": 129.0,
+      "getiri": {
+       "1A": 0.45,
+       "3A": 0.5,
+       "6A": 7.99,
+       "YTD": 29.37,
+       "1Y": 34.67,
+       "3Y": 170.5
+      }
+     },
+     {
+      "kod": "FFP",
+      "ad": "QNB PORTFÖY FON SEPETİ FONU",
+      "boyut_m": 1719.0,
+      "getiri": {
+       "1A": 0.27,
+       "3A": 0.82,
+       "6A": 6.13,
+       "YTD": 16.57,
+       "1Y": 26.64,
+       "3Y": 176.31
+      }
+     },
+     {
+      "kod": "KKH",
+      "ad": "İŞ PORTFÖY DENGELİ FON SEPETİ FONU",
+      "boyut_m": 479.0,
+      "getiri": {
+       "1A": -0.09,
+       "3A": 2.01,
+       "6A": 9.13,
+       "YTD": 14.41,
+       "1Y": 27.31,
+       "3Y": 164.3
       }
      }
     ]
@@ -10080,51 +10080,38 @@
     "fon_sayisi": 151,
     "top": [
      {
-      "kod": "GZY",
-      "ad": "GARANTİ PORTFÖY TURİZM VE SEYAHAT SEKTÖRÜ DEĞİŞKEN FON",
-      "boyut_m": 75.0,
-      "getiri": {
-       "1A": 10.8,
-       "3A": 3.72,
-       "6A": 18.26,
-       "YTD": 16.8,
-       "1Y": 30.68,
-       "3Y": 146.13
-      }
-     },
-     {
       "kod": "TGR",
       "ad": "AK PORTFÖY TURİZM VE SEYAHAT SEKTÖRÜ DEĞİŞKEN FON",
       "boyut_m": 103.0,
       "getiri": {
-       "1A": 7.41,
-       "3A": 0.91,
-       "6A": 12.32,
-       "YTD": 12.12,
-       "1Y": 20.96,
-       "3Y": 109.02
+       "1A": 9.5,
+       "3A": 0.34,
+       "6A": 12.38,
+       "YTD": 12.19,
+       "1Y": 19.68,
+       "3Y": 109.14
       }
      },
      {
-      "kod": "GZG",
-      "ad": "GARANTİ PORTFÖY SAĞLIK VE GENETİK TEKNOLOJİLERİ DEĞİŞKEN FON",
-      "boyut_m": 377.0,
+      "kod": "GPG",
+      "ad": "INVEO PORTFÖY BİRİNCİ DEĞİŞKEN FON",
+      "boyut_m": 932.0,
       "getiri": {
-       "1A": 5.9,
-       "3A": 2.12,
-       "6A": 25.68,
-       "YTD": 37.41,
-       "1Y": 43.78,
-       "3Y": 139.82
+       "1A": 6.38,
+       "3A": -3.1,
+       "6A": 22.19,
+       "YTD": 36.91,
+       "1Y": 48.38,
+       "3Y": 177.12
       }
      },
      {
       "kod": "SGK",
       "ad": "EMAA BLUE PORTFÖY BİYOTEKNOLOJİ VE SAĞLIK SEKTÖRÜ DEĞİŞKEN FON",
-      "boyut_m": 216.0,
+      "boyut_m": 215.0,
       "getiri": {
-       "1A": 5.23,
-       "3A": 0.52,
+       "1A": 6.06,
+       "3A": -1.16,
        "6A": null,
        "YTD": null,
        "1Y": null,
@@ -10136,20 +10123,59 @@
       "ad": "ROTA PORTFÖY İLAÇ VE MEDİKAL TEKNOLOJİLERİ DEĞİŞKEN FON",
       "boyut_m": 51.0,
       "getiri": {
-       "1A": 4.03,
-       "3A": -4.56,
-       "6A": 13.83,
-       "YTD": 26.52,
-       "1Y": 33.89,
-       "3Y": 145.04
+       "1A": 4.38,
+       "3A": -6.96,
+       "6A": 12.92,
+       "YTD": 25.52,
+       "1Y": 32.22,
+       "3Y": 143.1
       }
      },
      {
-      "kod": "VPD",
-      "ad": "V PORTFÖY BİRİNCİ DEĞİŞKEN FON",
-      "boyut_m": 167.0,
+      "kod": "IPB",
+      "ad": "İSTANBUL PORTFÖY BİRİNCİ DEĞİŞKEN FON",
+      "boyut_m": 560.0,
       "getiri": {
-       "1A": 3.31,
+       "1A": 3.7,
+       "3A": -19.03,
+       "6A": -13.36,
+       "YTD": 8.04,
+       "1Y": 11.08,
+       "3Y": 100.01
+      }
+     },
+     {
+      "kod": "HPO",
+      "ad": "HSBC PORTFÖY ÇOKLU VARLIK BİRİNCİ DEĞİŞKEN FON",
+      "boyut_m": 1335.0,
+      "getiri": {
+       "1A": 2.94,
+       "3A": 8.43,
+       "6A": 18.06,
+       "YTD": 34.69,
+       "1Y": 41.16,
+       "3Y": 207.49
+      }
+     },
+     {
+      "kod": "TND",
+      "ad": "İŞ PORTFÖY TTF TENİSE DESTEK DEĞİŞKEN FON",
+      "boyut_m": 186.0,
+      "getiri": {
+       "1A": 2.91,
+       "3A": 9.18,
+       "6A": 20.17,
+       "YTD": 38.06,
+       "1Y": 44.09,
+       "3Y": null
+      }
+     },
+     {
+      "kod": "ETN",
+      "ad": "EMAA BLUE PORTFÖY TEMKİNLİ DEĞİŞKEN FON",
+      "boyut_m": 321.0,
+      "getiri": {
+       "1A": 2.81,
        "3A": null,
        "6A": null,
        "YTD": null,
@@ -10158,55 +10184,29 @@
       }
      },
      {
-      "kod": "HPO",
-      "ad": "HSBC PORTFÖY ÇOKLU VARLIK BİRİNCİ DEĞİŞKEN FON",
-      "boyut_m": 1333.0,
+      "kod": "FNO",
+      "ad": "QNB PORTFÖY BİRİNCİ DEĞİŞKEN FON",
+      "boyut_m": 8925.0,
       "getiri": {
-       "1A": 2.94,
-       "3A": 8.39,
-       "6A": 17.95,
-       "YTD": 34.57,
-       "1Y": 41.25,
-       "3Y": 207.21
-      }
-     },
-     {
-      "kod": "TND",
-      "ad": "İŞ PORTFÖY TTF TENİSE DESTEK DEĞİŞKEN FON",
-      "boyut_m": 186.0,
-      "getiri": {
-       "1A": 2.92,
-       "3A": 9.24,
-       "6A": 20.11,
-       "YTD": 37.99,
-       "1Y": 44.16,
-       "3Y": null
+       "1A": 2.8,
+       "3A": 1.59,
+       "6A": 10.37,
+       "YTD": 18.99,
+       "1Y": 27.49,
+       "3Y": 184.44
       }
      },
      {
       "kod": "TE4",
       "ad": "TEB PORTFÖY BİRİNCİ DEĞİŞKEN FON",
-      "boyut_m": 1654.0,
+      "boyut_m": 1651.0,
       "getiri": {
-       "1A": 2.84,
-       "3A": 8.64,
-       "6A": 18.74,
-       "YTD": 37.83,
-       "1Y": 44.76,
-       "3Y": 197.81
-      }
-     },
-     {
-      "kod": "FNO",
-      "ad": "QNB PORTFÖY BİRİNCİ DEĞİŞKEN FON",
-      "boyut_m": 8949.0,
-      "getiri": {
-       "1A": 2.83,
-       "3A": 3.07,
-       "6A": 10.43,
-       "YTD": 19.06,
-       "1Y": 28.05,
-       "3Y": 184.6
+       "1A": 2.67,
+       "3A": 8.44,
+       "6A": 18.71,
+       "YTD": 37.8,
+       "1Y": 44.57,
+       "3Y": 197.73
       }
      }
     ]
@@ -10219,79 +10219,66 @@
      {
       "kod": "PHF",
       "ad": "PİRAMİT PORTFÖY BİST 50 DIŞI ŞİRKETLER HİSSE SENEDİ SERBEST FON (HİSSE SENEDİ YOĞUN FON)",
-      "boyut_m": 201.0,
+      "boyut_m": 199.0,
       "getiri": {
-       "1A": 26.47,
-       "3A": 61.13,
-       "6A": 66.95,
-       "YTD": 48.88,
+       "1A": 33.5,
+       "3A": 55.3,
+       "6A": 64.86,
+       "YTD": 47.02,
        "1Y": null,
        "3Y": null
-      }
-     },
-     {
-      "kod": "SBH",
-      "ad": "SPARTA PORTFÖY BİRİNCİ HİSSE SENEDİ SERBEST (TL) FON (HİSSE SENEDİ YOĞUN FON)",
-      "boyut_m": 181.0,
-      "getiri": {
-       "1A": 8.03,
-       "3A": -3.53,
-       "6A": -4.74,
-       "YTD": 20.01,
-       "1Y": 31.08,
-       "3Y": null
-      }
-     },
-     {
-      "kod": "PPS",
-      "ad": "PHİLLİP PORTFÖY BİRİNCİ SERBEST FON",
-      "boyut_m": 354.0,
-      "getiri": {
-       "1A": 5.16,
-       "3A": 14.29,
-       "6A": 7.85,
-       "YTD": 9.2,
-       "1Y": 10.9,
-       "3Y": 206.53
       }
      },
      {
       "kod": "DHV",
       "ad": "DENİZ PORTFÖY BİRİNCİ HİSSE SENEDİ SERBEST (TL) FON (HİSSE SENEDİ YOĞUN FON)",
-      "boyut_m": 339.0,
+      "boyut_m": 342.0,
       "getiri": {
-       "1A": 4.89,
-       "3A": -27.57,
-       "6A": -14.97,
-       "YTD": 70.09,
+       "1A": 13.84,
+       "3A": -26.58,
+       "6A": -14.16,
+       "YTD": 71.71,
        "1Y": null,
        "3Y": null
       }
      },
      {
+      "kod": "IHC",
+      "ad": "INVEO PORTFÖY INTER SERBEST FON",
+      "boyut_m": 352.0,
+      "getiri": {
+       "1A": 5.12,
+       "3A": -3.39,
+       "6A": 25.2,
+       "YTD": 41.98,
+       "1Y": 54.06,
+       "3Y": 186.87
+      }
+     },
+     {
       "kod": "DNM",
       "ad": "QNB PORTFÖY DİNAMİK DAĞILIMLI SERBEST (DÖVİZ) FON",
-      "boyut_m": 1210.0,
+      "boyut_m": 1208.0,
       "getiri": {
-       "1A": 4.78,
-       "3A": 7.18,
-       "6A": 15.09,
-       "YTD": 19.92,
-       "1Y": 26.72,
+       "1A": 4.82,
+       "3A": 6.29,
+       "6A": 15.18,
+       "YTD": 20.01,
+       "1Y": 26.45,
        "3Y": null
       }
      },
      {
       "kod": "GZM",
       "ad": "GLOBAL MD PORTFÖY DURU SERBEST FON",
-      "boyut_m": 577.0,
+      "boyut_m": 592.0,
       "getiri": {
-       "1A": 4.73,
-       "3A": 13.77,
-       "6A": 32.67,
-       "YTD": 82.94,
-       "1Y": 84.15,
-       "3Y": 64.44
+       "1A": 4.56,
+       "3A": 13.74,
+       "6A": 32.76,
+       "YTD": 83.07,
+       "1Y": 88.38,
+       "3Y": 64.56
       }
      },
      {
@@ -10299,24 +10286,24 @@
       "ad": "GLOBAL MD PORTFÖY BERRAK SERBEST FON",
       "boyut_m": 466.0,
       "getiri": {
-       "1A": 4.49,
-       "3A": 12.94,
-       "6A": 30.37,
-       "YTD": 72.51,
-       "1Y": 87.96,
+       "1A": 4.22,
+       "3A": 12.77,
+       "6A": 30.29,
+       "YTD": 72.41,
+       "1Y": 87.43,
        "3Y": null
       }
      },
      {
-      "kod": "GRL",
-      "ad": "QNB PORTFÖY AGRESİF SERBEST FON",
-      "boyut_m": 132.0,
+      "kod": "MUT",
+      "ad": "GARANTİ PORTFÖY MUTLAK GETİRİ HEDEFLİ HİSSE SENEDİ SERBEST FON (HİSSE SENEDİ YOĞUN FON)",
+      "boyut_m": 708.0,
       "getiri": {
-       "1A": 3.68,
-       "3A": -0.8,
-       "6A": 3.71,
-       "YTD": 19.04,
-       "1Y": 25.89,
+       "1A": 3.64,
+       "3A": 8.1,
+       "6A": 17.52,
+       "YTD": 27.02,
+       "1Y": 33.88,
        "3Y": null
       }
      },
@@ -10326,10 +10313,10 @@
       "boyut_m": 3220.0,
       "getiri": {
        "1A": 3.6,
-       "3A": 11.4,
-       "6A": 24.28,
-       "YTD": 47.14,
-       "1Y": 55.48,
+       "3A": 11.39,
+       "6A": 24.42,
+       "YTD": 47.3,
+       "1Y": 55.41,
        "3Y": null
       }
      },
@@ -10340,10 +10327,23 @@
       "getiri": {
        "1A": 3.55,
        "3A": 11.34,
-       "6A": 24.92,
-       "YTD": 48.77,
-       "1Y": 58.16,
-       "3Y": 281.75
+       "6A": 25.06,
+       "YTD": 48.94,
+       "1Y": 58.17,
+       "3Y": 282.17
+      }
+     },
+     {
+      "kod": "GRL",
+      "ad": "QNB PORTFÖY AGRESİF SERBEST FON",
+      "boyut_m": 131.0,
+      "getiri": {
+       "1A": 3.49,
+       "3A": -3.02,
+       "6A": 3.67,
+       "YTD": 18.99,
+       "1Y": 25.87,
+       "3Y": null
       }
      }
     ]
@@ -10356,33 +10356,33 @@
      {
       "kod": "FCK",
       "ad": "ONE PORTFÖY ÇOKLU VARLIK KATILIM FONU",
-      "boyut_m": 337.0,
+      "boyut_m": 334.0,
       "getiri": {
-       "1A": 3.28,
-       "3A": -15.17,
-       "6A": -21.02,
-       "YTD": 0.58,
-       "1Y": 2.91,
+       "1A": 4.02,
+       "3A": -17.54,
+       "6A": -21.93,
+       "YTD": -0.59,
+       "1Y": 2.49,
        "3Y": null
       }
      },
      {
       "kod": "PRR",
       "ad": "INVEO PORTFÖY PARA PİYASASI KATILIM (TL) FONU",
-      "boyut_m": 237.0,
+      "boyut_m": 240.0,
       "getiri": {
        "1A": 3.07,
-       "3A": 9.59,
-       "6A": 20.69,
-       "YTD": 38.54,
-       "1Y": 44.77,
+       "3A": 9.58,
+       "6A": 20.81,
+       "YTD": 38.68,
+       "1Y": 44.76,
        "3Y": null
       }
      },
      {
       "kod": "VKK",
       "ad": "VAKIF KATILIM PORTFÖY KİRA SERTİFİKALARI KATILIM FONU",
-      "boyut_m": 259.0,
+      "boyut_m": 263.0,
       "getiri": {
        "1A": 3.04,
        "3A": 9.34,
@@ -10395,62 +10395,62 @@
      {
       "kod": "NSP",
       "ad": "NUROL PORTFÖY PARA PİYASASI KATILIM FONU",
-      "boyut_m": 802.0,
+      "boyut_m": 806.0,
       "getiri": {
-       "1A": 3.03,
-       "3A": 9.59,
-       "6A": 20.78,
-       "YTD": 39.25,
-       "1Y": 45.67,
+       "1A": 3.02,
+       "3A": 9.58,
+       "6A": 20.9,
+       "YTD": 39.39,
+       "1Y": 45.66,
        "3Y": null
       }
      },
      {
       "kod": "GPN",
       "ad": "GARANTİ PORTFÖY PARA PİYASASI KATILIM (TL) FONU",
-      "boyut_m": 6425.0,
+      "boyut_m": 6521.0,
       "getiri": {
        "1A": 3.02,
-       "3A": 9.52,
-       "6A": 20.68,
-       "YTD": 38.79,
-       "1Y": 45.14,
+       "3A": 9.5,
+       "6A": 20.8,
+       "YTD": 38.92,
+       "1Y": 45.13,
        "3Y": null
       }
      },
      {
       "kod": "AIS",
       "ad": "AK PORTFÖY PARA PİYASASI KATILIM FONU",
-      "boyut_m": 9933.0,
+      "boyut_m": 10102.0,
       "getiri": {
-       "1A": 3.02,
-       "3A": 9.53,
-       "6A": 20.59,
-       "YTD": 39.3,
-       "1Y": 45.8,
-       "3Y": 221.49
+       "1A": 3.01,
+       "3A": 9.51,
+       "6A": 20.71,
+       "YTD": 39.43,
+       "1Y": 45.78,
+       "3Y": 221.79
       }
      },
      {
       "kod": "RBT",
       "ad": "ALBARAKA PORTFÖY KİRA SERTİFİKALARI  KATILIM FONU",
-      "boyut_m": 1294.0,
+      "boyut_m": 1297.0,
       "getiri": {
-       "1A": 3.02,
-       "3A": 9.69,
-       "6A": 21.16,
-       "YTD": 38.98,
-       "1Y": 45.42,
-       "3Y": 225.3
+       "1A": 3.01,
+       "3A": 9.66,
+       "6A": 21.27,
+       "YTD": 39.11,
+       "1Y": 45.41,
+       "3Y": 225.6
       }
      },
      {
       "kod": "EP1",
       "ad": "EMLAK KATILIM PORTFÖY PARA PİYASASI KATILIM (TL) FONU",
-      "boyut_m": 15869.0,
+      "boyut_m": 15976.0,
       "getiri": {
-       "1A": 3.0,
-       "3A": 9.49,
+       "1A": 2.99,
+       "3A": 9.48,
        "6A": null,
        "YTD": null,
        "1Y": null,
@@ -10460,26 +10460,26 @@
      {
       "kod": "MPF",
       "ad": "AKTİF PORTFÖY KISA VADELİ KİRA SERTİFİKASI KATILIM (TL) FONU",
-      "boyut_m": 1690.0,
+      "boyut_m": 1620.0,
       "getiri": {
-       "1A": 3.0,
-       "3A": 9.28,
-       "6A": 19.88,
-       "YTD": 36.94,
-       "1Y": 43.01,
-       "3Y": 223.15
+       "1A": 2.99,
+       "3A": 9.26,
+       "6A": 19.99,
+       "YTD": 37.06,
+       "1Y": 42.99,
+       "3Y": 223.44
       }
      },
      {
       "kod": "PPK",
       "ad": "QNB PORTFÖY PARA PİYASASI KATILIM (TL) FONU",
-      "boyut_m": 5577.0,
+      "boyut_m": 5552.0,
       "getiri": {
-       "1A": 2.98,
-       "3A": 9.42,
-       "6A": 20.44,
-       "YTD": 38.58,
-       "1Y": 44.92,
+       "1A": 2.97,
+       "3A": 9.41,
+       "6A": 20.55,
+       "YTD": 38.71,
+       "1Y": 44.9,
        "3Y": null
       }
      }
@@ -10491,107 +10491,107 @@
     "fon_sayisi": 8,
     "top": [
      {
-      "kod": "IKL",
-      "ad": "İŞ PORTFÖY SAĞLIK ŞİRKETLERİ KARMA FON",
-      "boyut_m": 317.0,
+      "kod": "IJB",
+      "ad": "İŞ PORTFÖY DİJİTAL OYUN SEKTÖRÜ KARMA FON",
+      "boyut_m": 197.0,
       "getiri": {
-       "1A": 4.48,
-       "3A": 9.27,
-       "6A": 24.31,
-       "YTD": 28.14,
-       "1Y": 33.8,
-       "3Y": 146.63
+       "1A": 4.8,
+       "3A": 6.35,
+       "6A": 20.34,
+       "YTD": 19.64,
+       "1Y": 19.61,
+       "3Y": 171.7
       }
      },
      {
-      "kod": "IJB",
-      "ad": "İŞ PORTFÖY DİJİTAL OYUN SEKTÖRÜ KARMA FON",
-      "boyut_m": 195.0,
+      "kod": "IKL",
+      "ad": "İŞ PORTFÖY SAĞLIK ŞİRKETLERİ KARMA FON",
+      "boyut_m": 316.0,
       "getiri": {
-       "1A": 3.08,
-       "3A": 5.77,
-       "6A": 19.45,
-       "YTD": 18.77,
-       "1Y": 18.79,
-       "3Y": 169.71
+       "1A": 3.61,
+       "3A": 6.04,
+       "6A": 22.91,
+       "YTD": 26.7,
+       "1Y": 31.83,
+       "3Y": 143.85
       }
      },
      {
       "kod": "YAK",
       "ad": "YAPI KREDİ PORTFÖY KARMA FON",
-      "boyut_m": 1091.0,
+      "boyut_m": 1088.0,
       "getiri": {
-       "1A": 1.17,
-       "3A": 1.61,
-       "6A": 8.26,
-       "YTD": 22.09,
-       "1Y": 32.58,
-       "3Y": 131.73
+       "1A": 1.66,
+       "3A": 0.37,
+       "6A": 8.04,
+       "YTD": 21.84,
+       "1Y": 31.33,
+       "3Y": 131.25
       }
      },
      {
       "kod": "KRR",
       "ad": "İŞ PORTFÖY KARMA FON",
-      "boyut_m": 19.0,
+      "boyut_m": 18.0,
       "getiri": {
-       "1A": 0.59,
-       "3A": -1.73,
-       "6A": 1.41,
+       "1A": 1.46,
+       "3A": -4.12,
+       "6A": 0.98,
        "YTD": null,
        "1Y": null,
        "3Y": null
       }
      },
      {
-      "kod": "IKP",
-      "ad": "İŞ PORTFÖY YENİLENEBİLİR ENERJİ KARMA FON",
-      "boyut_m": 847.0,
+      "kod": "ITP",
+      "ad": "İŞ PORTFÖY TEKNOLOJİ KARMA FON",
+      "boyut_m": 931.0,
       "getiri": {
-       "1A": -5.03,
-       "3A": -9.34,
-       "6A": -7.7,
-       "YTD": 22.38,
-       "1Y": 26.9,
-       "3Y": 184.74
+       "1A": -3.71,
+       "3A": -1.98,
+       "6A": 6.71,
+       "YTD": 30.27,
+       "1Y": 36.77,
+       "3Y": 223.61
       }
      },
      {
-      "kod": "ITP",
-      "ad": "İŞ PORTFÖY TEKNOLOJİ KARMA FON",
-      "boyut_m": 921.0,
+      "kod": "IKP",
+      "ad": "İŞ PORTFÖY YENİLENEBİLİR ENERJİ KARMA FON",
+      "boyut_m": 833.0,
       "getiri": {
-       "1A": -5.03,
-       "3A": -3.01,
-       "6A": 5.68,
-       "YTD": 29.02,
-       "1Y": 34.94,
-       "3Y": 220.49
+       "1A": -3.94,
+       "3A": -8.69,
+       "6A": -7.67,
+       "YTD": 22.43,
+       "1Y": 26.47,
+       "3Y": 184.85
       }
      },
      {
       "kod": "IJP",
       "ad": "İŞ PORTFÖY BLOCKCHAİN TEKNOLOJİLERİ KARMA FON",
-      "boyut_m": 514.0,
+      "boyut_m": 513.0,
       "getiri": {
-       "1A": -5.27,
-       "3A": -5.73,
-       "6A": 2.77,
-       "YTD": 24.85,
-       "1Y": 33.62,
-       "3Y": 213.01
+       "1A": -4.6,
+       "3A": -5.06,
+       "6A": 2.92,
+       "YTD": 25.03,
+       "1Y": 33.69,
+       "3Y": 213.45
       }
      },
      {
       "kod": "IPJ",
       "ad": "İŞ PORTFÖY ELEKTRİKLİ ARAÇLAR KARMA FON",
-      "boyut_m": 1009.0,
+      "boyut_m": 1010.0,
       "getiri": {
-       "1A": -6.93,
-       "3A": -11.11,
-       "6A": -10.91,
-       "YTD": 15.9,
-       "1Y": 21.12,
-       "3Y": 131.82
+       "1A": -6.42,
+       "3A": -10.07,
+       "6A": -10.67,
+       "YTD": 16.22,
+       "1Y": 21.11,
+       "3Y": 132.45
       }
      }
     ]
@@ -10602,7 +10602,7 @@
    "ort_hisse_agirlik": 35.0,
    "max_hisse_agirlik": 93.6
   },
-  "tarih": "2026-11-19",
+  "tarih": "2026-11-20",
   "kaynak": "TEFAS (borsapy)",
   "taranan": 946,
   "senaryolar": [
@@ -10622,27 +10622,27 @@
       "kod": "IRY",
       "ad": "INVEO PORTFÖY PARA PİYASASI (TL) FONU",
       "tip": "Para Piyasası Şemsiye Fonu",
-      "boyut_m": 1701.0,
+      "boyut_m": 1696.0,
       "getiri": {
        "1A": 3.25,
-       "3A": 9.86,
-       "6A": 21.49,
-       "YTD": 40.7,
-       "1Y": 47.51,
-       "3Y": 266.51
+       "3A": 9.87,
+       "6A": 21.62,
+       "YTD": 40.85,
+       "1Y": 47.56,
+       "3Y": 266.91
       }
      },
      {
       "kod": "PRD",
       "ad": "PİRAMİT PORTFÖY PARA PİYASASI (TL) FONU",
       "tip": "Para Piyasası Şemsiye Fonu",
-      "boyut_m": 622.0,
+      "boyut_m": 624.0,
       "getiri": {
-       "1A": 3.19,
-       "3A": 10.09,
-       "6A": 21.98,
-       "YTD": 40.42,
-       "1Y": 47.52,
+       "1A": 3.18,
+       "3A": 10.08,
+       "6A": 22.1,
+       "YTD": 40.57,
+       "1Y": 47.51,
        "3Y": null
       }
      },
@@ -10650,27 +10650,13 @@
       "kod": "RBP",
       "ad": "RE-PIE PORTFÖY BİRİNCİ PARA PİYASASI (TL) FONU",
       "tip": "Para Piyasası Şemsiye Fonu",
-      "boyut_m": 319.0,
+      "boyut_m": 323.0,
       "getiri": {
        "1A": 3.16,
-       "3A": 9.95,
-       "6A": 22.16,
-       "YTD": 42.44,
-       "1Y": 49.44,
-       "3Y": null
-      }
-     },
-     {
-      "kod": "PPI",
-      "ad": "YAPI KREDİ PORTFÖY ÜÇÜNCÜ PARA PİYASASI (TL) FONU",
-      "tip": "Para Piyasası Şemsiye Fonu",
-      "boyut_m": 7235.0,
-      "getiri": {
-       "1A": 3.13,
-       "3A": 9.59,
-       "6A": 20.34,
-       "YTD": 38.53,
-       "1Y": 45.11,
+       "3A": 9.93,
+       "6A": 22.28,
+       "YTD": 42.58,
+       "1Y": 49.42,
        "3Y": null
       }
      },
@@ -10678,28 +10664,42 @@
       "kod": "HVT",
       "ad": "ALLBATROSS PORTFÖY BİRİNCİ PARA PİYASASI (TL) FONU",
       "tip": "Para Piyasası Şemsiye Fonu",
-      "boyut_m": 599.0,
+      "boyut_m": 605.0,
       "getiri": {
        "1A": 3.13,
-       "3A": 10.1,
-       "6A": 21.91,
-       "YTD": 43.04,
-       "1Y": 51.0,
-       "3Y": 274.96
+       "3A": 10.07,
+       "6A": 22.04,
+       "YTD": 43.18,
+       "1Y": 51.02,
+       "3Y": 275.34
+      }
+     },
+     {
+      "kod": "PPI",
+      "ad": "YAPI KREDİ PORTFÖY ÜÇÜNCÜ PARA PİYASASI (TL) FONU",
+      "tip": "Para Piyasası Şemsiye Fonu",
+      "boyut_m": 6220.0,
+      "getiri": {
+       "1A": 3.13,
+       "3A": 9.57,
+       "6A": 20.46,
+       "YTD": 38.66,
+       "1Y": 45.12,
+       "3Y": null
       }
      },
      {
       "kod": "IOO",
       "ad": "İŞ PORTFÖY İKİNCİ PARA PİYASASI (TL) FONU",
       "tip": "Para Piyasası Şemsiye Fonu",
-      "boyut_m": 34669.0,
+      "boyut_m": 34238.0,
       "getiri": {
-       "1A": 3.1,
-       "3A": 9.71,
-       "6A": 20.59,
-       "YTD": 38.72,
-       "1Y": 45.19,
-       "3Y": 259.21
+       "1A": 3.11,
+       "3A": 9.67,
+       "6A": 20.72,
+       "YTD": 38.87,
+       "1Y": 45.21,
+       "3Y": 259.59
       }
      }
     ]
@@ -10720,69 +10720,69 @@
       "kod": "PAL",
       "ad": "AK PORTFÖY ALTINCI SERBEST(DÖVİZ) FON",
       "tip": "Serbest Şemsiye Fonu",
-      "boyut_m": 147817.0,
+      "boyut_m": 149757.0,
       "getiri": {
-       "1A": 2.38,
-       "3A": 6.36,
-       "6A": 12.97,
-       "YTD": 21.37,
-       "1Y": 23.58,
-       "3Y": 98.03
+       "1A": 2.21,
+       "3A": 6.38,
+       "6A": 13.04,
+       "YTD": 21.44,
+       "1Y": 23.6,
+       "3Y": 98.15
       }
      },
      {
       "kod": "KZL",
       "ad": "KUVEYT TÜRK PORTFÖY ALTIN KATILIM FONU",
       "tip": "Katılım Şemsiye Fonu",
-      "boyut_m": 69635.0,
+      "boyut_m": 68644.0,
       "getiri": {
-       "1A": -6.75,
-       "3A": -8.53,
-       "6A": -7.2,
-       "YTD": 1.32,
-       "1Y": 9.19,
-       "3Y": 243.01
+       "1A": -7.64,
+       "3A": -8.75,
+       "6A": -8.04,
+       "YTD": 0.4,
+       "1Y": 6.04,
+       "3Y": 239.9
       }
      },
      {
       "kod": "OJK",
       "ad": "QNB PORTFÖY ALTIN FONU",
       "tip": "Kıymetli Madenler Şemsiye Fonu",
-      "boyut_m": 40749.0,
+      "boyut_m": 40337.0,
       "getiri": {
-       "1A": -6.59,
-       "3A": -8.19,
-       "6A": -6.27,
-       "YTD": 2.18,
-       "1Y": 10.72,
-       "3Y": 242.43
+       "1A": -7.4,
+       "3A": -8.34,
+       "6A": -7.01,
+       "YTD": 1.37,
+       "1Y": 7.93,
+       "3Y": 239.72
       }
      },
      {
       "kod": "TTA",
       "ad": "İŞ PORTFÖY ALTIN FONU",
       "tip": "Kıymetli Madenler Şemsiye Fonu",
-      "boyut_m": 22865.0,
+      "boyut_m": 22670.0,
       "getiri": {
-       "1A": -5.74,
-       "3A": -7.86,
-       "6A": -6.79,
-       "YTD": -6.31,
-       "1Y": 1.81,
-       "3Y": 192.27
+       "1A": -6.41,
+       "3A": -8.44,
+       "6A": -7.5,
+       "YTD": -7.03,
+       "1Y": -0.84,
+       "3Y": 190.05
       }
      },
      {
       "kod": "HTS",
       "ad": "HSBC PORTFÖY ALTINCI SERBEST (DÖVİZ) FON",
       "tip": "Serbest Şemsiye Fonu",
-      "boyut_m": 4602.0,
+      "boyut_m": 4507.0,
       "getiri": {
-       "1A": -3.87,
-       "3A": -3.13,
-       "6A": 5.63,
-       "YTD": 21.45,
-       "1Y": 26.61,
+       "1A": -6.66,
+       "3A": -5.11,
+       "6A": 3.53,
+       "YTD": 19.03,
+       "1Y": 23.91,
        "3Y": null
       }
      },
@@ -10790,14 +10790,14 @@
       "kod": "GGK",
       "ad": "INVEO PORTFÖY ALTIN FON",
       "tip": "Kıymetli Madenler Şemsiye Fonu",
-      "boyut_m": 1644.0,
+      "boyut_m": 1623.0,
       "getiri": {
-       "1A": -6.12,
-       "3A": -7.78,
-       "6A": -6.88,
-       "YTD": -0.81,
-       "1Y": 7.23,
-       "3Y": 227.92
+       "1A": -6.94,
+       "3A": -8.01,
+       "6A": -7.65,
+       "YTD": -1.63,
+       "1Y": 4.29,
+       "3Y": 225.19
       }
      }
     ]
@@ -10818,84 +10818,84 @@
       "kod": "MMH",
       "ad": "AKTİF PORTFÖY BIST 30 ENDEKSİ HİSSE SENEDİ (TL) FONU (HİSSE SENEDİ YOĞUN FON)",
       "tip": "Hisse Senedi Şemsiye Fonu",
-      "boyut_m": 180.0,
+      "boyut_m": 179.0,
       "getiri": {
-       "1A": -0.61,
-       "3A": -6.61,
-       "6A": -5.87,
-       "YTD": 20.89,
-       "1Y": 27.93,
-       "3Y": 98.88
+       "1A": 0.95,
+       "3A": -9.74,
+       "6A": -6.47,
+       "YTD": 20.13,
+       "1Y": 24.55,
+       "3Y": 97.62
       }
      },
      {
       "kod": "AKU",
       "ad": "AK PORTFÖY BIST 30 ENDEKSİ HİSSE SENEDİ (TL) FONU (HİSSE SENEDİ YOĞUN FON)",
       "tip": "Hisse Senedi Şemsiye Fonu",
-      "boyut_m": 2258.0,
+      "boyut_m": 2242.0,
       "getiri": {
-       "1A": -0.68,
-       "3A": -8.7,
-       "6A": -5.43,
-       "YTD": 22.61,
-       "1Y": 29.65,
-       "3Y": 89.39
+       "1A": 0.76,
+       "3A": -11.93,
+       "6A": -6.07,
+       "YTD": 21.79,
+       "1Y": 26.56,
+       "3Y": 88.11
       }
      },
      {
       "kod": "GAE",
       "ad": "GARANTİ PORTFÖY BİST30 ENDEKSİ HİSSE SENEDİ (TL) FONU (HİSSE SENEDİ YOĞUN FON)",
       "tip": "Hisse Senedi Şemsiye Fonu",
-      "boyut_m": 1283.0,
+      "boyut_m": 1271.0,
       "getiri": {
-       "1A": -1.15,
-       "3A": -10.56,
-       "6A": -10.32,
-       "YTD": 16.78,
-       "1Y": 22.68,
-       "3Y": 82.12
+       "1A": 0.45,
+       "3A": -13.69,
+       "6A": -10.95,
+       "YTD": 15.97,
+       "1Y": 19.5,
+       "3Y": 80.85
       }
      },
      {
       "kod": "YEF",
       "ad": "YAPI KREDİ PORTFÖY BIST 30 ENDEKSİ HİSSE SENEDİ FONU (HİSSE SENEDİ YOĞUN FON)",
       "tip": "Hisse Senedi Şemsiye Fonu",
-      "boyut_m": 1645.0,
+      "boyut_m": 1631.0,
       "getiri": {
-       "1A": -1.47,
-       "3A": -11.21,
-       "6A": -8.47,
-       "YTD": 18.54,
-       "1Y": 25.18,
-       "3Y": 95.35
+       "1A": 0.06,
+       "3A": -14.24,
+       "6A": -9.16,
+       "YTD": 17.66,
+       "1Y": 22.19,
+       "3Y": 93.89
       }
      },
      {
       "kod": "HBU",
       "ad": "HSBC PORTFÖY BİST 30 ENDEKSİ HİSSE SENEDİ FONU (HİSSE SENEDİ YOĞUN FON)",
       "tip": "Hisse Senedi Şemsiye Fonu",
-      "boyut_m": 425.0,
+      "boyut_m": 421.0,
       "getiri": {
-       "1A": -1.56,
-       "3A": -12.37,
-       "6A": -11.74,
-       "YTD": 16.88,
-       "1Y": 23.24,
-       "3Y": 82.33
+       "1A": 0.01,
+       "3A": -15.69,
+       "6A": -12.44,
+       "YTD": 15.95,
+       "1Y": 19.85,
+       "3Y": 80.89
       }
      },
      {
       "kod": "TIE",
       "ad": "İŞ PORTFÖY BIST 30 ENDEKSİ HİSSE SENEDİ (TL) FONU (HİSSE SENEDİ YOĞUN FON)",
       "tip": "Hisse Senedi Şemsiye Fonu",
-      "boyut_m": 1690.0,
+      "boyut_m": 1674.0,
       "getiri": {
-       "1A": -1.7,
-       "3A": -12.73,
-       "6A": -12.03,
-       "YTD": 15.2,
-       "1Y": 21.5,
-       "3Y": 80.5
+       "1A": -0.15,
+       "3A": -15.89,
+       "6A": -12.71,
+       "YTD": 14.31,
+       "1Y": 18.16,
+       "3Y": 79.1
       }
      }
     ]
@@ -10919,13 +10919,13 @@
       "kod": "BRR",
       "ad": "AK PORTFÖY İKİNCİ KISA VADELİ BORÇLANMA ARAÇLARI (TL) FONU",
       "tip": "Borçlanma Araçları Şemsiye Fonu",
-      "boyut_m": 4433.0,
+      "boyut_m": 4535.0,
       "getiri": {
-       "1A": 3.28,
-       "3A": 10.36,
-       "6A": 21.67,
-       "YTD": 39.68,
-       "1Y": 46.42,
+       "1A": 3.29,
+       "3A": 10.29,
+       "6A": 21.81,
+       "YTD": 39.84,
+       "1Y": 46.49,
        "3Y": null
       }
      },
@@ -10933,27 +10933,27 @@
       "kod": "OSL",
       "ad": "OSMANLI PORTFÖY KISA VADELİ BORÇLANMA ARAÇLARI (TL) FONU",
       "tip": "Borçlanma Araçları Şemsiye Fonu",
-      "boyut_m": 1506.0,
+      "boyut_m": 1503.0,
       "getiri": {
-       "1A": 3.09,
-       "3A": 9.44,
-       "6A": 20.38,
-       "YTD": 38.34,
+       "1A": 3.1,
+       "3A": 9.41,
+       "6A": 20.49,
+       "YTD": 38.47,
        "1Y": 44.83,
-       "3Y": 238.76
+       "3Y": 239.07
       }
      },
      {
       "kod": "IKV",
       "ad": "İŞ PORTFÖY İKİNCİ KISA VADELİ BORÇLANMA ARAÇLARI (TL) FONU",
       "tip": "Borçlanma Araçları Şemsiye Fonu",
-      "boyut_m": 975.0,
+      "boyut_m": 990.0,
       "getiri": {
-       "1A": 3.04,
-       "3A": 9.36,
-       "6A": 19.94,
-       "YTD": 36.84,
-       "1Y": 43.24,
+       "1A": 3.02,
+       "3A": 9.32,
+       "6A": 20.02,
+       "YTD": 36.94,
+       "1Y": 43.21,
        "3Y": null
       }
      },
@@ -10961,14 +10961,14 @@
       "kod": "DBK",
       "ad": "DENİZ PORTFÖY KISA VADELİ BORÇLANMA ARAÇLARI (TL) FONU",
       "tip": "Borçlanma Araçları Şemsiye Fonu",
-      "boyut_m": 894.0,
+      "boyut_m": 909.0,
       "getiri": {
-       "1A": 2.99,
-       "3A": 9.2,
-       "6A": 19.98,
-       "YTD": 37.59,
-       "1Y": 44.3,
-       "3Y": 239.99
+       "1A": 3.0,
+       "3A": 9.19,
+       "6A": 20.09,
+       "YTD": 37.72,
+       "1Y": 44.27,
+       "3Y": 240.32
       }
      }
     ]
@@ -10981,64 +10981,52 @@
     "sirala": "6A",
     "kapsam": "Yabancı hisse / Amerikan teknoloji BYF",
     "not": "TL getiri = dolar getirisi + kur. TFF %99 BYF sepeti (dağınık), YAY %96 yabancı hisse, AFT teknolojiye tam gömülü (düşüş/toparlanma en sert).",
-    "adet": 4,
+    "adet": 3,
     "esik_mn": 300,
-    "buyukluk_disi": [],
+    "buyukluk_disi": [
+     "GUH"
+    ],
     "fonlar": [
      {
       "kod": "TFF",
       "ad": "TEB PORTFÖY AMERİKA TEKNOLOJİ YABANCI BYF FON SEPETİ FONU",
       "tip": "Fon Sepeti Şemsiye Fonu",
-      "boyut_m": 1121.0,
+      "boyut_m": 1137.0,
       "getiri": {
-       "1A": -8.99,
-       "3A": -5.91,
-       "6A": 4.24,
-       "YTD": 29.04,
-       "1Y": 33.95,
-       "3Y": 180.17
-      }
-     },
-     {
-      "kod": "GUH",
-      "ad": "GARANTİ PORTFÖY YABANCI TEKNOLOJİ HİSSE SENEDİ FONU",
-      "tip": "Hisse Senedi Şemsiye Fonu",
-      "boyut_m": 3965.0,
-      "getiri": {
-       "1A": -14.39,
-       "3A": -13.91,
-       "6A": -5.94,
-       "YTD": 24.74,
-       "1Y": 32.78,
-       "3Y": 188.07
+       "1A": -7.2,
+       "3A": -3.49,
+       "6A": 5.89,
+       "YTD": 31.07,
+       "1Y": 37.92,
+       "3Y": 184.6
       }
      },
      {
       "kod": "YAY",
       "ad": "YAPI KREDİ PORTFÖY YABANCI TEKNOLOJİ SEKTÖRÜ HİSSE SENEDİ FONU",
       "tip": "Hisse Senedi Şemsiye Fonu",
-      "boyut_m": 10626.0,
+      "boyut_m": 10927.0,
       "getiri": {
-       "1A": -13.09,
-       "3A": -15.29,
-       "6A": -6.66,
-       "YTD": 23.06,
-       "1Y": 30.95,
-       "3Y": 188.45
+       "1A": -11.07,
+       "3A": -11.01,
+       "6A": -4.04,
+       "YTD": 26.51,
+       "1Y": 35.57,
+       "3Y": 196.54
       }
      },
      {
       "kod": "AFT",
       "ad": "AK PORTFÖY YENİ TEKNOLOJİLER YABANCI HİSSE SENEDİ FONU",
       "tip": "Hisse Senedi Şemsiye Fonu",
-      "boyut_m": 13745.0,
+      "boyut_m": 14067.0,
       "getiri": {
-       "1A": -13.35,
-       "3A": -15.32,
-       "6A": -15.79,
-       "YTD": -2.02,
-       "1Y": 5.51,
-       "3Y": 164.78
+       "1A": -11.38,
+       "3A": -11.99,
+       "6A": -13.81,
+       "YTD": 0.28,
+       "1Y": 8.68,
+       "3Y": 171.0
       }
      }
     ]
@@ -11061,7 +11049,7 @@
       "tip": "Değişken Şemsiye Fonu",
       "boyut_m": 50.0,
       "getiri": {
-       "1A": -8.29,
+       "1A": -6.65,
        "3A": null,
        "6A": null,
        "YTD": null,
@@ -11073,10 +11061,10 @@
       "kod": "YZT",
       "ad": "AK PORTFÖY YAPAY ZEKA TEKNOLOJİLERİ ŞİRKETLERİ DEĞİŞKEN FON",
       "tip": "Değişken Şemsiye Fonu",
-      "boyut_m": 648.0,
+      "boyut_m": 655.0,
       "getiri": {
-       "1A": -10.8,
-       "3A": -13.56,
+       "1A": -8.44,
+       "3A": -12.36,
        "6A": null,
        "YTD": null,
        "1Y": null,
@@ -11093,9 +11081,10 @@
     "sirala": "6A",
     "kapsam": "Sağlık-genetik, dijital oyun, robotik, savunma",
     "not": "Tema fonları küçük (IRO 5 mn TL = sığ fiyatlama). GZG sağlık-genetik, IJB oyun, DHT/SSS havacılık-savunma.",
-    "adet": 3,
+    "adet": 2,
     "esik_mn": 100,
     "buyukluk_disi": [
+     "GZG",
      "IRO",
      "RPM",
      "DHT",
@@ -11103,44 +11092,30 @@
     ],
     "fonlar": [
      {
-      "kod": "GZG",
-      "ad": "GARANTİ PORTFÖY SAĞLIK VE GENETİK TEKNOLOJİLERİ DEĞİŞKEN FON",
-      "tip": "Değişken Şemsiye Fonu",
-      "boyut_m": 377.0,
-      "getiri": {
-       "1A": 5.9,
-       "3A": 2.12,
-       "6A": 25.68,
-       "YTD": 37.41,
-       "1Y": 43.78,
-       "3Y": 139.82
-      }
-     },
-     {
       "kod": "IJB",
       "ad": "İŞ PORTFÖY DİJİTAL OYUN SEKTÖRÜ KARMA FON",
       "tip": "Karma Şemsiye Fonu",
-      "boyut_m": 195.0,
+      "boyut_m": 197.0,
       "getiri": {
-       "1A": 3.08,
-       "3A": 5.77,
-       "6A": 19.45,
-       "YTD": 18.77,
-       "1Y": 18.79,
-       "3Y": 169.71
+       "1A": 4.8,
+       "3A": 6.35,
+       "6A": 20.34,
+       "YTD": 19.64,
+       "1Y": 19.61,
+       "3Y": 171.7
       }
      },
      {
       "kod": "SSS",
       "ad": "YAPI KREDİ PORTFÖY SAVUNMA SANAYİİ ŞİRKETLERİ ENDEKSİ HİSSE SENEDİ FONU (HİSSE SENEDİ YOĞUN FON)",
       "tip": "Hisse Senedi Şemsiye Fonu",
-      "boyut_m": 179.0,
+      "boyut_m": 178.0,
       "getiri": {
-       "1A": -0.35,
-       "3A": -12.34,
+       "1A": 1.68,
+       "3A": -14.14,
        "6A": -13.85,
        "YTD": 5.19,
-       "1Y": 8.73,
+       "1Y": 8.18,
        "3Y": null
       }
      }
@@ -11234,7 +11209,7 @@
    "sembol": "ANSGR",
    "fk": 2.8,
    "pddd": 1.0,
-   "temettu": 6.4,
+   "temettu": 6.3,
    "skor": 5
   },
   {
@@ -11246,9 +11221,9 @@
   },
   {
    "sembol": "BRYAT",
-   "fk": 7.2,
+   "fk": 7.1,
    "pddd": 0.95,
-   "temettu": 14.0,
+   "temettu": 14.1,
    "skor": 4
   },
   {
@@ -11256,6 +11231,13 @@
    "fk": 5.4,
    "pddd": 1.06,
    "temettu": 3.3,
+   "skor": 3
+  },
+  {
+   "sembol": "CWENE",
+   "fk": 9.0,
+   "pddd": 0.78,
+   "temettu": null,
    "skor": 3
   },
   {
@@ -11267,7 +11249,7 @@
   },
   {
    "sembol": "DOHOL",
-   "fk": 5.3,
+   "fk": 5.4,
    "pddd": 0.41,
    "temettu": null,
    "skor": 3
@@ -11276,14 +11258,14 @@
    "sembol": "DOAS",
    "fk": 176.8,
    "pddd": 0.32,
-   "temettu": 26.0,
+   "temettu": 26.1,
    "skor": 3
   },
   {
    "sembol": "ECILC",
    "fk": null,
    "pddd": 0.44,
-   "temettu": 3.7,
+   "temettu": 3.8,
    "skor": 3
   },
   {
@@ -11302,7 +11284,7 @@
   },
   {
    "sembol": "AEFES",
-   "fk": 10.2,
+   "fk": 10.1,
    "pddd": 0.67,
    "temettu": 2.1,
    "skor": 2
@@ -11327,17 +11309,19 @@
    "pddd": 0.87,
    "temettu": null,
    "skor": 2
-  },
-  {
-   "sembol": "BERA",
-   "fk": null,
-   "pddd": 0.23,
-   "temettu": null,
-   "skor": 2
   }
  ],
  "sinyal_gecmisi": {
   "kayitlar": [
+   {
+    "tarih": "2026-11-20",
+    "sembol": "ENERY",
+    "sinyal": "DİKKAT_AL",
+    "skor": 3,
+    "giris": 14.82,
+    "guncel": 14.82,
+    "getiri": 0.0
+   },
    {
     "tarih": "2026-11-19",
     "sembol": "ENERY",
@@ -11499,95 +11483,14 @@
     "giris": 275.25,
     "guncel": 291.5,
     "getiri": 5.9
-   },
-   {
-    "tarih": "2026-10-06",
-    "sembol": "BRSAN",
-    "sinyal": "DİKKAT_AL",
-    "skor": 3,
-    "giris": 679.0,
-    "guncel": 625.5,
-    "getiri": -7.9
-   },
-   {
-    "tarih": "2026-10-06",
-    "sembol": "EKGYO",
-    "sinyal": "DİKKAT_AL",
-    "skor": 3,
-    "giris": 19.75,
-    "guncel": 17.75,
-    "getiri": -10.1
-   },
-   {
-    "tarih": "2026-10-06",
-    "sembol": "ENJSA",
-    "sinyal": "DİKKAT_AL",
-    "skor": 3,
-    "giris": 111.6,
-    "guncel": 113.2,
-    "getiri": 1.4
-   },
-   {
-    "tarih": "2026-10-06",
-    "sembol": "ENERY",
-    "sinyal": "DİKKAT_AL",
-    "skor": 3,
-    "giris": 13.82,
-    "guncel": 14.82,
-    "getiri": 7.2
-   },
-   {
-    "tarih": "2026-10-06",
-    "sembol": "MIATK",
-    "sinyal": "DİKKAT_AL",
-    "skor": 3,
-    "giris": 30.24,
-    "guncel": 23.46,
-    "getiri": -22.4
-   },
-   {
-    "tarih": "2026-10-06",
-    "sembol": "MPARK",
-    "sinyal": "DİKKAT_AL",
-    "skor": 3,
-    "giris": 429.0,
-    "guncel": 441.75,
-    "getiri": 3.0
-   },
-   {
-    "tarih": "2026-10-06",
-    "sembol": "TAVHL",
-    "sinyal": "DİKKAT_AL",
-    "skor": 3,
-    "giris": 275.5,
-    "guncel": 291.5,
-    "getiri": 5.8
-   },
-   {
-    "tarih": "2026-10-06",
-    "sembol": "OTKAR",
-    "sinyal": "DİKKAT_AL",
-    "skor": 2,
-    "giris": 341.25,
-    "guncel": 324.75,
-    "getiri": -4.8
-   },
-   {
-    "tarih": "2026-10-06",
-    "sembol": "PASEU",
-    "sinyal": "DİKKAT_AL",
-    "skor": 2,
-    "giris": 41.4,
-    "guncel": 39.06,
-    "getiri": -5.7
    }
   ],
-  "basari_orani": 48,
-  "toplam": 27,
-  "pozitif": 13
+  "basari_orani": 47,
+  "toplam": 19,
+  "pozitif": 9
  },
  "gece_analizi": {
-  "tarih": "19.11.2026 22:52",
+  "tarih": "20.11.2026 06:38",
   "guclu_al": [
    {
     "sembol": "ENERY",
@@ -11660,22 +11563,7 @@
     "rsi": 29.0
    }
   ],
-  "yarin_yuksek_onem": [
-   {
-    "tarih": "20.11",
-    "saat": "10:00",
-    "ulke": "Türkiye",
-    "onem": "high",
-    "olay": "İş Dünyası Güveni (-)"
-   },
-   {
-    "tarih": "20.11",
-    "saat": "10:00",
-    "ulke": "Türkiye",
-    "onem": "high",
-    "olay": "Tüketici Güveni (-)"
-   }
-  ]
+  "yarin_yuksek_onem": []
  },
  "ict_tarama": {
   "mss_yukari": [
@@ -12358,7 +12246,7 @@
   "islenen": 100,
   "al_sayisi": 1,
   "sat_sayisi": 8,
-  "hesap_tarihi": "19.11.2026 22:52",
+  "hesap_tarihi": "20.11.2026 06:38",
   "kural": "MSS ±2, displacement ±1, fiyat FVG/OB bölgesi içinde ±1, likidite süpürmesi ±1, değer alanı dışı ±1. Skor ≥3 AL, ≤-3 SAT."
  },
  "genislik": {
@@ -12369,6 +12257,6 @@
   "dusen": 59,
   "yeni_zirve_52h": 0,
   "yeni_dip_52h": 4,
-  "tarih": "2026-11-18"
+  "tarih": "2026-11-19"
  }
 }
