@@ -1,103 +1,103 @@
 {
- "uretildi": "2026-11-25T17:01:21+00:00",
+ "uretildi": "2026-11-25T18:31:23+00:00",
  "kaynak": "gold-api.com spot (manşet) · GC=F COMEX vadeli (tarihsel seri) · doviz.com takvim",
  "fiyat": {
-  "ons": 3457.1,
-  "kaynak_tipi": "spot",
-  "vadeli_ons": 3479.0,
-  "spot": 3457.1,
-  "spot_guncelleme": "2026-11-25T17:00:46Z",
-  "gram_tl": 5632.21,
-  "usdtry": 50.6729,
+  "ons": 3564.2,
+  "kaynak_tipi": "vadeli",
+  "vadeli_ons": 3564.2,
+  "spot": null,
+  "spot_guncelleme": "",
+  "gram_tl": 5806.67,
+  "usdtry": 50.6727,
   "performans": {
-   "1g": -2.33,
-   "1h": -7.03,
-   "2h": -13.04,
-   "1a": -14.62,
-   "3a": -25.41,
-   "6a": -22.68,
-   "1y": -15.03
+   "1g": 0.06,
+   "1h": -4.75,
+   "2h": -10.91,
+   "1a": -12.53,
+   "3a": -23.58,
+   "6a": -20.78,
+   "1y": -12.95
   },
   "son_tarih": "2026-11-25"
  },
  "vital": {
-  "son": 3479.0,
-  "ma20": 3868.54,
-  "ma50": 4063.26,
-  "ma200": 4422.69,
+  "son": 3564.2,
+  "ma20": 3872.8,
+  "ma50": 4064.97,
+  "ma200": 4423.12,
   "trend": "ZAYIF / AŞAĞI",
   "trend_skor": -2,
-  "rsi": 27.4,
-  "rsi_yorum": "27 — aşırı satım bölgesi, tepki potansiyeli",
+  "rsi": 30.2,
+  "rsi_yorum": "30 — negatif momentum",
   "atr": 111.16,
-  "atr_yuzde": 3.2,
+  "atr_yuzde": 3.12,
   "h52": 5586.2,
   "l52": 3453.8,
-  "konum_52h": 1.2,
+  "konum_52h": 5.2,
   "konum_yorum": "dip bölgesi"
  },
  "seviyeler": {
   "destek": [
    {
+    "seviye": 3500,
+    "mesafe_pct": -1.8,
+    "tip": "yuvarlak"
+   },
+   {
     "seviye": 3453.8,
-    "mesafe_pct": -0.72,
+    "mesafe_pct": -3.1,
     "tip": "52h dip"
    },
    {
     "seviye": 3400,
-    "mesafe_pct": -2.27,
+    "mesafe_pct": -4.61,
     "tip": "yuvarlak"
    },
    {
     "seviye": 3353.4,
-    "mesafe_pct": -3.61,
+    "mesafe_pct": -5.91,
     "tip": "salınım dibi"
-   },
-   {
-    "seviye": 3300,
-    "mesafe_pct": -5.15,
-    "tip": "yuvarlak"
    }
   ],
   "direnc": [
    {
-    "seviye": 3500,
-    "mesafe_pct": 0.6,
-    "tip": "yuvarlak"
-   },
-   {
-    "seviye": 3509.9,
-    "mesafe_pct": 0.89,
-    "tip": "salınım tepesi"
-   },
-   {
-    "seviye": 3534.1,
-    "mesafe_pct": 1.58,
-    "tip": "salınım tepesi"
-   },
-   {
     "seviye": 3600,
-    "mesafe_pct": 3.48,
+    "mesafe_pct": 1.0,
     "tip": "yuvarlak"
+   },
+   {
+    "seviye": 3700,
+    "mesafe_pct": 3.81,
+    "tip": "yuvarlak"
+   },
+   {
+    "seviye": 3800,
+    "mesafe_pct": 6.62,
+    "tip": "yuvarlak"
+   },
+   {
+    "seviye": 3872.8,
+    "mesafe_pct": 8.66,
+    "tip": "MA20"
    }
   ]
  },
  "senaryo": {
-  "gectmis": "Son 1 yılda ons 3,454$ (11.2026) ile 5,586$ (01.2026) arasında salındı; şu an 3,479$ — yıllık zirvenin %38 altında, yıllık aralığın %1'inde.",
-  "durum": "Trend ZAYIF / AŞAĞI, RSI 27, yıllık aralığın %1'inde (dip bölgesi). Günlük oynaklık (ATR) 111$ ≈ %3.2.",
+  "gectmis": "Son 1 yılda ons 3,454$ (11.2026) ile 5,586$ (01.2026) arasında salındı; şu an 3,564$ — yıllık zirvenin %36 altında, yıllık aralığın %5'inde.",
+  "durum": "Trend ZAYIF / AŞAĞI, RSI 30, yıllık aralığın %5'inde (dip bölgesi). Günlük oynaklık (ATR) 111$ ≈ %3.1.",
   "bias": "AYI",
   "bias_skor": -4,
   "yukari": {
-   "tetik": 3600,
-   "hedef": null,
-   "gecersiz": 3544.4,
-   "metin": "Direnç kırılımı henüz yok."
+   "tetik": 3700,
+   "hedef": 3872.8,
+   "gecersiz": 3644.4,
+   "metin": "Fiyat 3,700$ direncini (+3.8%) kırıp üstünde kapanırsa ilk hedef 3,873$."
   },
   "asagi": {
-   "tetik": 3400,
-   "hedef": null,
-   "gecersiz": 3455.6,
-   "metin": "Destek kırılımı henüz yok."
+   "tetik": 3500,
+   "hedef": 3353.4,
+   "gecersiz": 3555.6,
+   "metin": "3,500$ desteği (-1.8%) kaybedilirse sıradaki destek 3,353$."
   }
  },
  "kritik_gunler": [
@@ -262,6 +262,12 @@
    "yayin_tarihi": "Wed, 25 Nov 2026 12:23:12 GMT"
   },
   {
+   "baslik": "Ons altın için 5 bin dolar tahmini - Diken",
+   "kaynak": "Google News · altın",
+   "link": "https://news.google.com/rss/articles/CBMibEFVX3lxTE1JY1JrOVgydE85bHpZbXVOOVUtYTlYbkM4a1hZSjdwT2Y2Q3YwRU9NMEI5dFRiUjh6S0R0WjFScWxIbkhYMVN0M1dEdVhBdW1JNUx2ekx2azczeWdLYUs3YUdYMF8zMFNlVFpSMA?oc=5",
+   "yayin_tarihi": "Wed, 25 Nov 2026 05:34:22 GMT"
+  },
+  {
    "baslik": "Altın son 15 ayın dibine indi - A Para",
    "kaynak": "Google News · altın",
    "link": "https://news.google.com/rss/articles/CBMifkFVX3lxTFBlR29yYlVQNHFfTW1JRl9aRGU4MkE4SFhGUXgza1dTbnFhNXloNjB0amRuQXF2emswTU9rbHlMRkNkdHFqQTU2WkEyUFFDdEVROUdySVo4Z2JCTjVuenUyam5SUlhEcWJWOVNwU0xTTFhxbnJyRHlGMEoyZ2V2dw?oc=5",
@@ -272,12 +278,6 @@
    "kaynak": "Google News · altın",
    "link": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxQRG1WaGNoLTVTcnNDcmFOaEJuMzlTYnpqY2hEUHpzWnU5WVo0QmMxQ3NveWVwY3BQbkdrbWZ5UUdmeG4xajgzTzQ0azlCRThxU0xfWHZaeHlFX1ZfeGdadEY4WDdhUmFDLXYxTm9mVzBlcVRYaG1Da1RJRTlySEw0RzJjUDZ1a2ExRFllZzNIa2d4c2xlSzhoOVpIWS1TZEZZNGZaZkRwOEZjcEk?oc=5",
    "yayin_tarihi": "Wed, 25 Nov 2026 12:05:00 GMT"
-  },
-  {
-   "baslik": "Ons altın için 5 bin dolar tahmini - Diken",
-   "kaynak": "Google News · altın",
-   "link": "https://news.google.com/rss/articles/CBMibEFVX3lxTE1JY1JrOVgydE85bHpZbXVOOVUtYTlYbkM4a1hZSjdwT2Y2Q3YwRU9NMEI5dFRiUjh6S0R0WjFScWxIbkhYMVN0M1dEdVhBdW1JNUx2ekx2azczeWdLYUs3YUdYMF8zMFNlVFpSMA?oc=5",
-   "yayin_tarihi": "Wed, 25 Nov 2026 05:34:22 GMT"
   },
   {
    "baslik": "Altın yatırımcısına kötü haber! İşte sert düşüşün 3 nedeni - Uzmanpara",
@@ -301,23 +301,23 @@
    "baslik": "PCE Inflation Rises to 3.8% as Stocks, Gold and Silver Weaken - FXEmpire",
    "kaynak": "Google News · gold",
    "link": "https://news.google.com/rss/articles/CBMirwFBVV95cUxPdmlzQWFUTkt4SXk0RTNNSzdudnc0X0stelRZTVhSZ0Y0SFRpLVJDU1h4TUJuOHpDWVYySUx0ZzhxWi1ITHFEdXpfRjk5c09UaXpySXhDT3ljT2g1SXU2RGtsb2pFblVJOVpFNENHNUFiekFURFpic0RmRUJCREltcUsxM1Jtcmp6eWpTVzJQaDBxM1pReDdtUFZ4UnBvQ1ZYUXlhcTlBaHlxd3BfV2lZ?oc=5",
-   "yayin_tarihi": "Wed, 25 Nov 2026 13:41:22 GMT"
+   "yayin_tarihi": "Wed, 25 Nov 2026 13:46:56 GMT"
   },
   {
-   "baslik": "Gold Price Forecast: XAU/USD Breaks Multi-Year Uptrend in Worst Week Since March - FOREX.com",
+   "baslik": "Gold price could drop $300 if $3,500/oz fails, and buyers might hold off until the Fed – Walsh Trading’s Lusk - Kitco",
    "kaynak": "Google News · gold",
-   "link": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxPdTN2V3pKZHZxLTUzYVBKbEFOR3NKQlFVa3ZBRDBXVWMxWGFTTk1fVm81dE9zMFl2U2FmaDAzaVpDR3VXSGpnSUliTHB0UUZjN0RyODEyeHIzbHhTM1BlcFJHdU1iZUFMV3hDay1GbkZQeVB2T3g2aFhpc05vSldHSTFEaEEtRzRXSENOSnBUQ3N1VXpIVlJnWTQ0SE1IQ1NNc2Z1SFN6VXotbktSV0Y4a1lDWE5MLXpfZDhEMjhtU1d5Y2ZtM1Q0aldDX21Mc09ZelhB?oc=5",
-   "yayin_tarihi": "Sun, 22 Nov 2026 06:35:57 GMT"
+   "link": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxQY1gxakxUOS1VZGh6VUEwdDhhdDAySkdGT3JQU2pUMnVXN2RiNFRHV3g1MEtsaEtfQUVVNGNPRnJTSVJiSGdVTmRFVVVGLTZhcG1jenZPb2JKYWtweUltNi1fLWlFSXVlVWFPNEU2aHlPSkNkUFQyaDEyZlAwVy1waVFZY0dtSGtGTUVUOWw4eUFTRTJ5RENUVUw4Qk9nMFJKbGNTamNHU3F6NDEydHZHU3RLMUhXb2NGd2Jz?oc=5",
+   "yayin_tarihi": "Fri, 20 Nov 2026 20:12:13 GMT"
   },
   {
-   "baslik": "Why Is Gold Falling Today? Gold Drops Below $3,500 as Dollar Strengthens - Coinpaper",
+   "baslik": "Gold (XAU/AED) Price Forecast in UAE: 2026, 2027 and Next 5 Years Predictions (AED per troy ounce and per gram) - LiteFinance",
    "kaynak": "Google News · gold",
-   "link": "https://news.google.com/rss/articles/CBMinwFBVV95cUxNTHkyeGVlT3dUVVJXSnJWVzdZSGNiRmRIcG1BbF9jS0pqMXdqQWk0bXZfQ2dpVllabXZPaElCYVBkMDI2Y2t6VzNkX0xnUU5rODhydVJsVGhnMDduWmlrMlVBdmJhSURXTkZGekwyM0lNbW1nN1BqbEV6LWs5N01kUF9LTnFWWFBMa1VBMHpfQ0YxazhVcWxCNk5oa3lrT0E?oc=5",
-   "yayin_tarihi": "Wed, 25 Nov 2026 12:39:54 GMT"
+   "link": "https://news.google.com/rss/articles/CBMijwFBVV95cUxQR2J0QWIwQ080MWpCSDRfWGx6TVVEdFVNWXhUbXIzMTJUX0E0cFJkWXpSZnFUSkpGQkZOVVpIbGJCTmxaY2ZoRUVNMW5HWTVRX29NbEhpWHZfR21heUgybzd5V0phT0xYWGdqZkpzMjMtUDV2N0ljbU0tM3VjLWtOc0t6clRweFdkeExPUThIZw?oc=5",
+   "yayin_tarihi": "Wed, 25 Nov 2026 15:43:01 GMT"
   }
  ],
  "makro": {
-  "uretildi": "2026-11-25T17:01:14+00:00",
+  "uretildi": "2026-11-25T18:31:11+00:00",
   "seriler": {
    "DGS2": {
     "son": 4.63,
@@ -364,7 +364,7 @@
     "tarih": "2026-11-25",
     "degisim_5g": 0.0,
     "degisim_20g": 0.0,
-    "korelasyon_60g": -0.556,
+    "korelasyon_60g": -0.562,
     "korelasyon_gun": 60,
     "degisim_20g_pct": 0.0,
     "ad": "Fed üst bant"
@@ -374,7 +374,7 @@
     "tarih": "2026-11-25",
     "degisim_5g": 0.0,
     "degisim_20g": 0.0,
-    "korelasyon_60g": -0.556,
+    "korelasyon_60g": -0.562,
     "korelasyon_gun": 60,
     "degisim_20g_pct": 0.0,
     "ad": "Fed alt bant"
@@ -382,24 +382,24 @@
   },
   "piyasa": {
    "dxy": {
-    "son": 103.763,
+    "son": 103.556,
     "tarih": "2026-11-25",
-    "degisim_5g": -0.097,
-    "degisim_20g": 1.573,
-    "korelasyon_60g": -0.893,
+    "degisim_5g": -0.304,
+    "degisim_20g": 1.366,
+    "korelasyon_60g": -0.895,
     "korelasyon_gun": 60,
-    "degisim_20g_pct": 1.539,
+    "degisim_20g_pct": 1.337,
     "ad": "DXY · dolar endeksi",
     "sembol": "DX-Y.NYB"
    },
    "brent": {
-    "son": 89.78,
+    "son": 90.25,
     "tarih": "2026-11-25",
-    "degisim_5g": -2.17,
-    "degisim_20g": -25.54,
-    "korelasyon_60g": 0.333,
+    "degisim_5g": -1.7,
+    "degisim_20g": -25.07,
+    "korelasyon_60g": 0.326,
     "korelasyon_gun": 60,
-    "degisim_20g_pct": -22.147,
+    "degisim_20g_pct": -21.74,
     "ad": "Brent (ICE, BZ=F)",
     "sembol": "BZ=F",
     "not": "BZ=F Brent vadeli; WTI ayrı seridir, karıştırılmaz."
@@ -430,8 +430,8 @@
    "kaynak": "FRED FEDTARMD (SEP medyan fed funds projeksiyonu)",
    "piyasa_ima": {
     "yillar": {
-     "2026": 4.04,
-     "2027": 4.385,
+     "2026": 4.045,
+     "2027": 4.44,
      "2028": 4.32
     },
     "kontratlar": [
@@ -442,73 +442,73 @@
      },
      {
       "ay": "2026-12",
-      "fiyat": 95.96,
-      "ima": 4.04
+      "fiyat": 95.955,
+      "ima": 4.045
      },
      {
       "ay": "2027-01",
-      "fiyat": 95.87,
-      "ima": 4.13
+      "fiyat": 95.865,
+      "ima": 4.135
      },
      {
       "ay": "2027-02",
-      "fiyat": 95.745,
-      "ima": 4.255
+      "fiyat": 95.725,
+      "ima": 4.275
      },
      {
       "ay": "2027-03",
-      "fiyat": 95.68,
-      "ima": 4.32
+      "fiyat": 95.655,
+      "ima": 4.345
      },
      {
       "ay": "2027-04",
-      "fiyat": 95.605,
-      "ima": 4.395
+      "fiyat": 95.575,
+      "ima": 4.425
      },
      {
       "ay": "2027-05",
+      "fiyat": 95.525,
+      "ima": 4.475
+     },
+     {
+      "ay": "2027-06",
+      "fiyat": 95.48,
+      "ima": 4.52
+     },
+     {
+      "ay": "2027-07",
+      "fiyat": 95.465,
+      "ima": 4.535
+     },
+     {
+      "ay": "2027-08",
+      "fiyat": 95.465,
+      "ima": 4.535
+     },
+     {
+      "ay": "2027-09",
+      "fiyat": 95.47,
+      "ima": 4.53
+     },
+     {
+      "ay": "2027-10",
+      "fiyat": 95.48,
+      "ima": 4.52
+     },
+     {
+      "ay": "2027-11",
+      "fiyat": 95.525,
+      "ima": 4.475
+     },
+     {
+      "ay": "2027-12",
       "fiyat": 95.56,
       "ima": 4.44
      },
      {
-      "ay": "2027-06",
-      "fiyat": 95.52,
-      "ima": 4.48
-     },
-     {
-      "ay": "2027-07",
-      "fiyat": 95.5,
-      "ima": 4.5
-     },
-     {
-      "ay": "2027-08",
-      "fiyat": 95.51,
-      "ima": 4.49
-     },
-     {
-      "ay": "2027-09",
-      "fiyat": 95.515,
-      "ima": 4.485
-     },
-     {
-      "ay": "2027-10",
-      "fiyat": 95.52,
-      "ima": 4.48
-     },
-     {
-      "ay": "2027-11",
-      "fiyat": 95.555,
-      "ima": 4.445
-     },
-     {
-      "ay": "2027-12",
-      "fiyat": 95.615,
-      "ima": 4.385
-     },
-     {
       "ay": "2028-01",
-      "fiyat": 95.615,
-      "ima": 4.385
+      "fiyat": 95.585,
+      "ima": 4.415
      },
      {
       "ay": "2028-02",
@@ -518,7 +518,7 @@
     ],
     "kaynak": "vadeli"
    },
-   "makas_bp": 29,
+   "makas_bp": 34,
    "makas_yil": 2027,
    "yorum": "Piyasa Fed’in kendi projeksiyonundan şahin. Güvercin bir SEP altına pozitif sürpriz olur."
   },
@@ -526,7 +526,7 @@
    "tarih": "09.12.2026",
    "saat_tsi": "22:00",
    "kalan_gun": 14,
-   "kalan_saat": 338.0,
+   "kalan_saat": 336.5,
    "sep": true,
    "epok": 1796842800,
    "metin": "Sonraki FOMC: 09.12.2026 22:00 TSİ · 14 gün · SEP/dot plot VAR",
@@ -580,21 +580,21 @@
     "kaynak": "FRED DFII10 20g"
    },
    "dxy": {
-    "deger": 1.54,
+    "deger": 1.34,
     "birim": "%",
     "puan": -1,
     "esik": 1.0,
     "kaynak": "DX-Y.NYB 20g"
    },
    "dot_makas": {
-    "deger": 29,
+    "deger": 34,
     "birim": "bp",
     "puan": 1,
     "esik": 25,
     "kaynak": "dot plot makası"
    },
    "brent": {
-    "deger": -22.15,
+    "deger": -21.74,
     "birim": "%",
     "puan": -1,
     "esik": 10.0,
@@ -609,11 +609,11 @@
   "liste": [
    {
     "ad": "Fiyatlanmış",
-    "kosul": "FOMC piyasa beklentisi kadar hareket eder ve dot medyanı piyasa ima patikasına ±25 bp yakın (makas 29 bp)",
+    "kosul": "FOMC piyasa beklentisi kadar hareket eder ve dot medyanı piyasa ima patikasına ±25 bp yakın (makas 34 bp)",
     "tetik": "makas ±25 bp içinde",
     "bant": [
-     3230.4,
-     3727.6
+     3315.6,
+     3812.8
     ],
     "k": 1.0,
     "vurgu": null,
@@ -627,8 +627,8 @@
     "kosul": "Beklentiden büyük artırım VEYA 2027 dot medyanı +25 bp ve üstü yukarı revize",
     "tetik": "dot revizyonu ≥ +25 bp",
     "bant": [
-     3230.4,
-     3727.6
+     3315.6,
+     3812.8
     ],
     "k": -1.0,
     "vurgu": "alt",
@@ -642,8 +642,8 @@
     "kosul": "Artırım beklentinin altında VEYA 2027 dot medyanı ≥25 bp aşağı revize",
     "tetik": "dot revizyonu ≤ −25 bp",
     "bant": [
-     3230.4,
-     3727.6
+     3315.6,
+     3812.8
     ],
     "k": 1.0,
     "vurgu": "üst",
@@ -654,15 +654,15 @@
    },
    {
     "ad": "Jeopolitik şok",
-    "kosul": "Brent 5 günde ≥%15 VE reel faiz düşüyor (Brent 5g -2.36%, reel 10Y 20g 13.0 bp)",
+    "kosul": "Brent 5 günde ≥%15 VE reel faiz düşüyor (Brent 5g -1.85%, reel 10Y 20g 13.0 bp)",
     "tetik": "Brent 5g ≥ +%15 + reel faiz ↓",
     "bant": [
-     2981.9,
-     3976.1
+     3067.1,
+     4061.3
     ],
     "bant_gosterim": [
-     3976.1,
-     3976.1
+     4061.3,
+     4061.3
     ],
     "k": 2.0,
     "vurgu": "üst",
@@ -676,8 +676,8 @@
     "kosul": "Şahin sürpriz ile jeopolitik şok aynı anda — ikisi birleştirilmez, ayrı izlenir",
     "tetik": "dot ↑ ≥25 bp VE Brent 5g ≥ +%15",
     "bant": [
-     3230.4,
-     3727.6
+     3315.6,
+     3812.8
     ],
     "k": 1.0,
     "vurgu": null,
@@ -697,11 +697,11 @@
  "gram_ayrisim": {
   "donemler": {
    "1g": {
-    "ons_pct": -2.327,
-    "kur_pct": 0.146,
-    "gram_pct": -2.181,
-    "ons_pay": 106.7,
-    "kur_pay": -6.7,
+    "ons_pct": 0.065,
+    "kur_pct": 0.143,
+    "gram_pct": 0.208,
+    "ons_pay": 31.2,
+    "kur_pay": 68.8,
     "bas_tarih": "2026-11-24",
     "son_tarih": "2026-11-25",
     "bar": 1,
@@ -709,11 +709,11 @@
     "not": null
    },
    "1h": {
-    "ons_pct": -7.026,
-    "kur_pct": 0.468,
-    "gram_pct": -6.558,
-    "ons_pay": 107.1,
-    "kur_pay": -7.1,
+    "ons_pct": -4.749,
+    "kur_pct": 0.465,
+    "gram_pct": -4.284,
+    "ons_pay": 110.9,
+    "kur_pay": -10.9,
     "bas_tarih": "2026-11-18",
     "son_tarih": "2026-11-25",
     "bar": 5,
@@ -721,11 +721,11 @@
     "not": null
    },
    "1a": {
-    "ons_pct": -14.617,
-    "kur_pct": 1.795,
-    "gram_pct": -12.822,
-    "ons_pay": 114.0,
-    "kur_pay": -14.0,
+    "ons_pct": -12.526,
+    "kur_pct": 1.792,
+    "gram_pct": -10.734,
+    "ons_pay": 116.7,
+    "kur_pay": -16.7,
     "bas_tarih": "2026-10-27",
     "son_tarih": "2026-11-25",
     "bar": 21,
@@ -734,8 +734,8 @@
    }
   },
   "kur_trend": {
-   "aylik_kayip_pct": 1.677,
-   "toplam_pct": 5.031,
+   "aylik_kayip_pct": 1.676,
+   "toplam_pct": 5.028,
    "gun": 63,
    "ilk_tarih": "2026-08-31",
    "son_tarih": "2026-11-25"
@@ -751,26 +751,26 @@
   "kur_tutarlilik": {
    "var": false,
    "uyarilar": [],
-   "aylik_pct": 1.677,
+   "aylik_pct": 1.676,
    "kat": 3.0,
-   "esik_pct": 5.031
+   "esik_pct": 5.028
   },
   "gercek_kontrol": {
-   "gercek_pct": -13.085,
-   "yaklasik_pct": -12.823,
-   "sapma_pct": 0.2624,
-   "tolerans_pct": 0.3935,
-   "capraz_pct": 0.2624,
+   "gercek_pct": -10.959,
+   "yaklasik_pct": -10.735,
+   "sapma_pct": 0.2245,
+   "tolerans_pct": 0.3367,
+   "capraz_pct": 0.2245,
    "kabul": true,
    "bar": 21,
    "bas_tarih": "2026-10-27",
    "son_tarih": "2026-11-25",
    "gram_bas": 6521.37,
-   "gram_son": 5668.06,
+   "gram_son": 5806.69,
    "ons_bas": 4074.6,
-   "ons_son": 3479.0,
+   "ons_son": 3564.2,
    "kur_bas": 49.7809,
-   "kur_son": 50.6744
+   "kur_son": 50.6729
   }
  },
  "karne": {
